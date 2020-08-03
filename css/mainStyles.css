@@ -1,0 +1,136 @@
+* {
+    box-sizing: border-box; /* Width and height will include dimensions of borders and padding. */
+}
+
+/* Style of the body */
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 2rem;
+	background: white;
+}
+
+/* Link styles */
+a:link {
+    text-decoration: none;
+	color: rgba(65,65,65,1.00);
+}
+a:visited {
+	color: rgba(65,65,65,1.00);
+}
+a:hover {
+	color: black;
+	text-decoration: underline;
+}
+/* Current page link */
+a.current_page {
+	color: black;
+}
+
+/* Header styles */
+/* Header */
+header {
+    padding: 0 0 1rem 0;
+    text-align: left;
+}
+/* Logo */
+.logo {
+	margin: auto;
+	font-family: 'Playfair Display', serif;
+}
+header a:link {
+	color: black;
+}
+header a:visited {
+	color: black;
+}
+header a:hover {
+	text-decoration: none;
+}
+
+/* Flexbox styles */
+/* 1 - Column container */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+/* Create two unequal columns that sits next to each other */
+/* 2.1 - Sidebar/left-column */
+.side {
+    flex: 1 ;
+}
+/* 2.2 - Main column */
+.main {
+    flex: 3;
+    padding: 1rem;
+    background: mediumaquamarine;
+}
+.image_main {
+	height: 500px;
+	background: url("../img/image.jpeg") no-repeat center;
+	background-size: contain;
+}
+
+/* Navigation bar styles (child of left column)*/
+nav {
+    display: flex;
+    flex-direction: column;
+}
+.projects:hover::after {
+	content: " ↓";
+}
+.dropdown_content {
+	display: none;
+}
+.dropdown:hover .dropdown_content {
+	display: flex;
+	flex-direction: column;
+	padding: 0.5rem 0;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+
+    background: white;
+}
+
+/* Responsive layout */
+@media (max-width: 700px){
+	.main {
+		flex: 2.5;
+	}
+}
+@media screen and (max-width : 550px ){
+	.row {
+		flex-direction: column;
+	}
+	nav {
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+	nav a {
+		text-align: center;
+		margin: 1rem;
+	}
+	.projects:hover::after {
+		content: "";
+	}
+	.dropdown:hover .dropdown_content {
+		display: none;
+	}
+}
+@media screen and (max-width: 400px) {
+	.image_main {
+		height: 200px;
+	}
+	nav {
+		flex-direction: column;
+	}
+	nav a {
+		margin: .5rem;
+	}
+	.dropdown:hover .dropdown_content {
+		display: none;
+	}
+}
