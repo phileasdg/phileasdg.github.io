@@ -95,11 +95,6 @@ footer {
 }
 
 /* Responsive layout */
-@media (max-width: 700px){
-	.main {
-		flex: 2.5;
-	}
-}
 @media screen and (orientation: portrait) {
 	.row {
 		flex-direction: column;
@@ -118,6 +113,11 @@ footer {
 	}
 	.dropdown:hover .dropdown_content {
 		display: none;
+	}
+}
+@media (max-width: 700px){
+	.main {
+		flex: 2.5;
 	}
 }
 @media screen and (max-width : 550px) {
