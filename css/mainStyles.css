@@ -100,7 +100,27 @@ footer {
 		flex: 2.5;
 	}
 }
-@media screen and (max-width : 550px ){
+@media screen and (max-width : 700px) and (orientation: portrait) {
+	.row {
+		flex-direction: column;
+	}
+	nav {
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+	nav a {
+		text-align: center;
+		margin: 1rem;
+	}
+	.projects:hover::after {
+		content: "";
+	}
+	.dropdown:hover .dropdown_content {
+		display: none;
+	}
+}
+@media screen and (max-width : 550px) {
 	.row {
 		flex-direction: column;
 	}
