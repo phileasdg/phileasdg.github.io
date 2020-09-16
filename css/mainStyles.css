@@ -37,6 +37,15 @@ header {
 	margin: auto;
 	font-family: 'Playfair Display', serif;
 }
+.nowrap {
+	white-space: nowrap;
+}
+header h1 {
+	font-size: 3.3vw;
+}
+.logo_subtitle {
+	font-size: 1.3vw;
+}
 header a:link {
 	color: black;
 }
@@ -95,7 +104,7 @@ footer {
 }
 
 /* Responsive layout */
-@media screen and (orientation: portrait) {
+/* @media screen and (orientation: portrait) {
 	.row {
 		flex-direction: column;
 	}
@@ -114,13 +123,25 @@ footer {
 	.dropdown:hover .dropdown_content {
 		display: none;
 	}
-}
-@media (max-width: 700px){
+} */
+@media (max-width: 900px){
+	header h1 {
+		font-size: 4vw;
+	}
+	.logo_subtitle {
+		font-size: 1.6vw;
+	}
 	.main {
 		flex: 2.5;
 	}
 }
 @media screen and (max-width : 550px) {
+	header h1 {
+		font-size: 8vw;
+	}
+	.logo_subtitle {
+		font-size: 3.2vw;
+	}
 	.row {
 		flex-direction: column;
 	}
