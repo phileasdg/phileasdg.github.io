@@ -1,15 +1,17 @@
 * {
     box-sizing: border-box; /* Width and height will include dimensions of borders and padding. */
 }
+
 /* Style of the body */
 body {
     font-family: 'Montserrat', sans-serif;
     margin: 2rem;
     background: white;
 }
-/* Link styles */
+
+/* Link and icon styles */
 a:not(.logo):not(.logo_subtitle) {
-	font-size: 16px;
+    font-size: 16px;
 }
 a:link {
     text-decoration: none;
@@ -22,9 +24,15 @@ a:hover {
     color: black;
     text-decoration: underline;
 }
+
 /* Current page link */
 a.current_page {
     color: black;
+}
+.social-icon {
+    height: 16px;
+    width: 16px;
+    overflow: visible;
 }
 /* Header styles */
 /* Header */
@@ -55,6 +63,7 @@ header a:visited {
 header a:hover {
     text-decoration: none;
 }
+
 /* Flexbox styles */
 /* 1 - Column container */
 .row {
@@ -93,11 +102,22 @@ nav {
     flex-direction: column;
     padding: 0.5rem 0;
 }
+
 /* Footer */
 footer {
     text-align: center;
     background: white;
 }
+footer ul {
+    list-style-type: none;
+}
+footer ul li {
+    display: inline;
+}
+footer a:hover {
+    text-decoration: none;
+}
+
 /* Responsive layout */
 /* @media screen and (orientation: portrait) {
 	.row {
