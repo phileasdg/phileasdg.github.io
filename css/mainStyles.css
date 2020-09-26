@@ -1,31 +1,31 @@
 * {
     box-sizing: border-box; /* Width and height will include dimensions of borders and padding. */
 }
-
 /* Style of the body */
 body {
     font-family: 'Montserrat', sans-serif;
     margin: 2rem;
-	background: white;
+    background: white;
 }
-
 /* Link styles */
+a:not(.logo):not(.logo_subtitle) {
+	font-size: 16px;
+}
 a:link {
     text-decoration: none;
-	color: rgba(65,65,65,1.00);
+    color: rgba(65, 65, 65, 1.00);
 }
 a:visited {
-	color: rgba(65,65,65,1.00);
+    color: rgba(65, 65, 65, 1.00);
 }
 a:hover {
-	color: black;
-	text-decoration: underline;
+    color: black;
+    text-decoration: underline;
 }
 /* Current page link */
 a.current_page {
-	color: black;
+    color: black;
 }
-
 /* Header styles */
 /* Header */
 header {
@@ -34,28 +34,27 @@ header {
 }
 /* Logo */
 .logo {
-	margin: auto;
-	font-family: 'Playfair Display', serif;
+    margin: auto;
+    font-family: 'Playfair Display', serif;
 }
 .nowrap {
-	white-space: nowrap;
+    white-space: nowrap;
 }
 header h1 {
-	font-size: 3.3vw;
+    font-size: 3.3vw;
 }
 .logo_subtitle {
-	font-size: 1.3vw;
+    font-size: 1.3vw;
 }
 header a:link {
-	color: black;
+    color: black;
 }
 header a:visited {
-	color: black;
+    color: black;
 }
 header a:hover {
-	text-decoration: none;
+    text-decoration: none;
 }
-
 /* Flexbox styles */
 /* 1 - Column container */
 .row {
@@ -65,7 +64,7 @@ header a:hover {
 /* Create two unequal columns that sits next to each other */
 /* 2.1 - Sidebar/left-column */
 .side {
-    flex: 1 ;
+    flex: 1;
 }
 /* 2.2 - Main column */
 .main {
@@ -74,35 +73,31 @@ header a:hover {
     background: mediumaquamarine;
 }
 .image_main {
-	height: 500px;
-	background: url("../img/image.jpeg") no-repeat center;
-	background-size: contain;
+    height: 500px;
+    background: url("../img/image.jpeg") no-repeat center;
+    background-size: contain;
 }
-
 /* Navigation bar styles (child of left column)*/
 nav {
     display: flex;
     flex-direction: column;
 }
 .projects:hover::after {
-	content: " ↓";
+    content: " ↓";
 }
 .dropdown_content {
-	display: none;
+    display: none;
 }
 .dropdown:hover .dropdown_content {
-	display: flex;
-	flex-direction: column;
-	padding: 0.5rem 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 0;
 }
-
 /* Footer */
 footer {
     text-align: center;
-
     background: white;
 }
-
 /* Responsive layout */
 /* @media screen and (orientation: portrait) {
 	.row {
@@ -124,54 +119,54 @@ footer {
 		display: none;
 	}
 } */
-@media (max-width: 900px){
-	header h1 {
-		font-size: 4vw;
-	}
-	.logo_subtitle {
-		font-size: 1.6vw;
-	}
-	.main {
-		flex: 2.5;
-	}
+@media (max-width: 900px) {
+    header h1 {
+        font-size: 4vw;
+    }
+    .logo_subtitle {
+        font-size: 1.6vw;
+    }
+    .main {
+        flex: 2.5;
+    }
 }
 @media screen and (max-width : 550px) {
-	header h1 {
-		font-size: 8vw;
-	}
-	.logo_subtitle {
-		font-size: 3.2vw;
-	}
-	.row {
-		flex-direction: column;
-	}
-	nav {
-		flex-direction: row;
-		justify-content: space-between;
-		align-items: center;
-	}
-	nav a {
-		text-align: center;
-		margin: 1rem;
-	}
-	.projects:hover::after {
-		content: "";
-	}
-	.dropdown:hover .dropdown_content {
-		display: none;
-	}
+    header h1 {
+        font-size: 8vw;
+    }
+    .logo_subtitle {
+        font-size: 3.2vw;
+    }
+    .row {
+        flex-direction: column;
+    }
+    nav {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    nav a {
+        text-align: center;
+        margin: 1rem;
+    }
+    .projects:hover::after {
+        content: "";
+    }
+    .dropdown:hover .dropdown_content {
+        display: none;
+    }
 }
 @media screen and (max-width: 400px) {
-	.image_main {
-		height: 200px;
-	}
-	nav {
-		flex-direction: column;
-	}
-	nav a {
-		margin: .5rem;
-	}
-	.dropdown:hover .dropdown_content {
-		display: none;
-	}
+    .image_main {
+        height: 200px;
+    }
+    nav {
+        flex-direction: column;
+    }
+    nav a {
+        margin: .5rem;
+    }
+    .dropdown:hover .dropdown_content {
+        display: none;
+    }
 }
