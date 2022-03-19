@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="https:// phileasdg.github.io/phileasdg.github.io/sitemap.xsl"?>
+<?xml-stylesheet type="text/xsl" href="https:// phileasdg.github.io/sitemap.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 <url>
-<loc>https:// phileasdg.github.io/phileasdg.github.io/</loc>
+<loc>https:// phileasdg.github.io/</loc>
 </url>
 <url>
-<loc>https:// phileasdg.github.io/phileasdg.github.io/a-few-words-about-me/</loc>
+<loc>https:// phileasdg.github.io/a-few-words-about-me/</loc>
 <lastmod>2022-03-19T17:57:09-04:00</lastmod>
 <image:image>
-<image:loc>https:// phileasdg.github.io/phileasdg.github.io/media/posts/6/profile-banner-pier.jpg</image:loc>
+<image:loc>https:// phileasdg.github.io/media/posts/6/profile-banner-pier.jpg</image:loc>
 <image:title><![CDATA[]]></image:title>
 </image:image>
 </url>
 <url>
-<loc>https:// phileasdg.github.io/phileasdg.github.io/inquiries/</loc>
+<loc>https:// phileasdg.github.io/inquiries/</loc>
 <lastmod>2022-03-19T16:38:41-04:00</lastmod>
 <image:image>
-<image:loc>https:// phileasdg.github.io/phileasdg.github.io/media/posts/1/profile-banner-lighthouse.jpg</image:loc>
+<image:loc>https:// phileasdg.github.io/media/posts/1/profile-banner-lighthouse.jpg</image:loc>
 <image:title><![CDATA[]]></image:title>
 </image:image>
 </url>
 <url>
-<loc>https:// phileasdg.github.io/phileasdg.github.io/phileas-dazeley-gaist/</loc>
+<loc>https:// phileasdg.github.io/phileas-dazeley-gaist/</loc>
 <lastmod>2022-03-19T17:26:26-04:00</lastmod>
 </url>
 <url>
-<loc>https:// phileasdg.github.io/phileasdg.github.io/phileas-dazeley-gaist-2/</loc>
+<loc>https:// phileasdg.github.io/phileas-dazeley-gaist-2/</loc>
 <lastmod>2022-03-19T18:15:48-04:00</lastmod>
 </url>
 <url>
-<loc>https:// phileasdg.github.io/phileasdg.github.io/resume-2/</loc>
+<loc>https:// phileasdg.github.io/resume-2/</loc>
 <lastmod>2022-03-19T16:37:38-04:00</lastmod>
 <image:image>
-<image:loc>https:// phileasdg.github.io/phileasdg.github.io/media/posts/5/profile-banner-calm.png</image:loc>
+<image:loc>https:// phileasdg.github.io/media/posts/5/profile-banner-calm.png</image:loc>
 <image:title><![CDATA[]]></image:title>
 </image:image>
 </url>
