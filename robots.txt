@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https:// phileasdg.github.io/phileasdg.github.io/sitemap.xml
