@@ -1,0 +1,1010 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+    <title>Phileas Dazeley-Gaist</title>
+    <link href="https://phileasdg.github.io/phileas-dazeley-gaist/feed.xml" rel="self" />
+    <link href="https://phileasdg.github.io/phileas-dazeley-gaist" />
+    <updated>2023-07-31T12:39:40-04:00</updated>
+    <author>
+        <name>Phileas Dazeley-Gaist</name>
+    </author>
+    <id>https://phileasdg.github.io/phileas-dazeley-gaist</id>
+
+    <entry>
+        <title>Remote Sensing for the Wolfram Language</title>
+        <author>
+            <name>Phileas Dazeley-Gaist</name>
+        </author>
+        <link href="https://phileasdg.github.io/phileas-dazeley-gaist/remote-sensing-for-the-wolfram-language/"/>
+        <id>https://phileasdg.github.io/phileas-dazeley-gaist/remote-sensing-for-the-wolfram-language/</id>
+        <media:content url="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/BlogHeader-2.png" medium="image" />
+            <category term="Wolfram Language"/>
+            <category term="Programming"/>
+            <category term="GIS"/>
+
+        <updated>2023-07-21T21:39:56-04:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/BlogHeader-2.png" alt="" />
+                    Some Context This summer, I was fortunate to attend the Wolfram Summer&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/BlogHeader-2.png" class="type:primaryImage" alt="" /></p>
+                <h2>Some Context</h2>
+<p>This summer, I was fortunate to attend the Wolfram Summer School at Bentley University in Waltham MA. It was a fast-paced, intense, challenging and exciting experience, and I am grateful to all who contributed to making it such a motivating and worthwhile three weeks. </p>
+<p>The Wolfram Summer School is an educational program hosted by Wolfram Research, the company behind Wolfram Alpha, Mathematica, and the Wolfram Language. It brings together students once a year to explore cutting-edge computational topics, problem-solving techniques, and hands-on projects using Wolfram tech. Students engage in collaborative learning, work on their projects with industry experts, and develop practical skills in computational thinking and programming. </p>
+<p>At the heart of the program for each student is their summer school project. Students at the Wolfram Summer School choose (or are sometimes assigned) a project to work on in meetings with Stephen Wolfram and their summer school mentors. For my project, I decided to build as versatile and robust a remote sensing tool as I could for the Wolfram Language. </p>
+<p>My project progressed quickly throughout the program with the help and guidance of my project mentor, <a href="https://christopherwolfram.com/" target="_blank" rel="noopener">Christopher Wolfram</a>, whose support was crucial to my success. At the end of the summer school, I delivered a presentation on my work, as well as a <a href="https://community.wolfram.com/groups/-/m/t/2959942">post on the Wolfram Community forum</a>, and a <a href="https://resources.wolframcloud.com/PacletRepository/resources/PhileasDazeleyGaist/RemoteSensing/">Wolfram Language paclet: RemoteSensing</a>. </p>
+<p>You can also view other WSS projects <a href="https://www.wolframcloud.com/obj/microsites/summerschool/projects.html">here</a>.</p>
+<h2>The RemoteSensing Paclet</h2>
+<p><strong>Just a heads up: </strong>If you decide to try my paclet, be aware that it is and will likely continue to be a bit of a <em>work-in-progress</em>. I have found it to be quite robust, but you may encounter bugs, as well as service outages from the NASA GIBS and AppEEARS APIs. If you encounter issues with my paclet, including bugs or unclear documentation, please do not hesitate to contact me so that I may address them!</p>
+<p><strong>What is the RemoteSensing Paclet? </strong><span class="cc6" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">The </span><a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://resources.wolframcloud.com/PacletRepository/resources/PhileasDazeleyGaist/RemoteSensing/" target="_blank" data-testid="ButtonBoxView" rel="noopener" style="font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);"><span class="cc8" data-native-text="true">RemoteSensing paclet</span></a><span class="cc6" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true"> contains various functions that allow you make requests to the GIBS and A</span><span class="cc7" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">ρρ</span><span class="cc6" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">EEARS APIs for geographic products from various US federal agencies, and work with the returned data in the Wolfram Language. The RemoteSensing GIBS functions can be used with </span><span class="cc28" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">GeoImage</span><span class="cc6" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true"> and </span><span class="cc28" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">GeoGraphics</span><span class="cc6" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true"> through the </span><span class="cc28" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">GeoServer</span><span class="cc6" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true"> option, while the A</span><span class="cc7" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">ρρ</span><span class="cc6" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">EEARS functions can be used to request scientific grade geographic data product samples.</span></p>
+<h3>Installation</h3>
+<p>To install the RemoteSensing paclet to your version of Wolfram Language, you'll need to run the following lines of code:</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/Screenshot-2023-07-21-at-18.46.45.png" alt="" width="1290" height="318" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-18.46.45-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-18.46.45-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-18.46.45-md.png 768w"></figure>
+<p>The second line is not strictly necessary, but it will help you to make sure the paclet installed correctly, and you have the latest version (1.0.3 as of Jul 21 2023, when I am writing this blog post). </p>
+<h3>Example Usage</h3>
+<p>Once you have the paclet installed and imported into your active kernel session, it's ready to use! So let's see some simple examples of what that can look like.</p>
+<p>Please note: Admittedly, this short blog post leaves out a fairly large number of things you can do with the RemoteSensing paclet. If you'd like to know more about what is possible with it (including making timelapse animations with NASA imagery), I strongly suggest you take a look at my <a href="https://community.wolfram.com/groups/-/m/t/2959942">Wolfram Community post</a> about RemoteSensing, and the <a href="https://resources.wolframcloud.com/PacletRepository/resources/PhileasDazeleyGaist/RemoteSensing/">RemoteSensing paclet repository page</a>.</p>
+<h4>GIBS</h4>
+<p><span class="cc4" data-native-text="true">The NASA GIBS (Global Imagery Browse Services) API is a web service provided by NASA used to access and retrieve satellite imagery and related data. The API provides an interface to access a vast collection of global Earth science data through WMTS (Web Map Tile Service).</span><br><span class="cc4" data-native-text="true">​</span><span class="cc4" data-native-text="true">​</span><br><span class="cc4" data-native-text="true">GIBS provides raster tiles, which can be useful for visualisation and data exploration, but should be avoided for serious research, as it does not provide access to the raw layer data. Its advantages are that is is fast, pretty robust, and very flexible.</span></p>
+<p>To request GIBS data using the RemoteSensing paclet, you'll make use of the following functions:</p>
+<ol>
+<li><code>GIBSData</code> which retrieves information about available GIBS layers.</li>
+<li><code style="font-weight: var(--font-weight-normal);">GIBSGeoServer</code> which builds a <code>GeoServer</code> request template for a layer.</li>
+</ol>
+<p>Here's an example showing how you might use them: </p>
+<p>Find a layer of interest:</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/Screenshot-2023-07-21-at-20.21.34.png" alt="" width="1352" height="198" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-20.21.34-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-20.21.34-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-20.21.34-md.png 768w"></figure>
+<p>Consult information about the layer:</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/Screenshot-2023-07-21-at-20.22.02.png" alt="" width="519" height="187" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-20.22.02-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-20.22.02-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-20.22.02-md.png 768w"></figure>
+<p>Visualise layer using either <code>GeoGraphics</code> or <code>GeoImage</code>:</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/Screenshot-2023-07-21-at-20.23.39.png" alt="" width="1376" height="384" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-20.23.39-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-20.23.39-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-20.23.39-md.png 768w"></figure>
+<p>Customise your visualisation as you might with any other <code>GeoGraphics</code> or <code>GeoImage</code> plot:</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/Screenshot-2023-07-21-at-20.24.07.png" alt="" width="1316" height="584" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-20.24.07-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-20.24.07-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-20.24.07-md.png 768w"></figure>
+<p>And there you go! You've made a visualisation using a NASA GIBS WMTS product.</p>
+<h4><span class="cc6" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit;" data-native-text="true">A</span><span class="cc7" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit;" data-native-text="true">ρρ</span><span class="cc6" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit;" data-native-text="true">EEARS</span></h4>
+<p><span class="cc4" data-native-text="true">A</span><span class="cc5" data-native-text="true">ρρ</span><span class="cc4" data-native-text="true">EEARS is a geographic data access service provided by NASA. </span><span class="cc4" data-native-text="true">The </span><a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://appeears.earthdatacloud.nasa.gov/" target="_blank" data-testid="ButtonBoxView" rel="noopener"><span class="cc6" data-native-text="true">A</span><span class="cc7" data-native-text="true">ρρ</span><span class="cc6" data-native-text="true">EEARS website</span></a><span class="cc4" data-native-text="true"> describes it like so: “The Application for Extracting and Exploring Analysis Ready Samples (A</span><span class="cc5" data-native-text="true">ρρ</span><span class="cc4" data-native-text="true">EEARS) offers a simple and efficient way to access and transform geospatial data from a variety of federal data archives. A</span><span class="cc5" data-native-text="true">ρρ</span><span class="cc4" data-native-text="true">EEARS enables users to subset geospatial datasets using spatial, temporal, and band/layer parameters.”</span><br><span class="cc4" data-native-text="true">​</span><br><span class="cc4" data-native-text="true">A<span class="cc5" data-native-text="true">ρρ</span>EEARS requires you to be signed in on </span><a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://www.earthdata.nasa.gov/" target="_blank" data-testid="ButtonBoxView" rel="noopener"><span class="cc6" data-native-text="true">NASA EarthData</span></a><span class="cc4" data-native-text="true">. Fortunately, it’s quite easy (and most importantly, free) to register an account, and the RemoteSensing paclet provides tools to log you in programmatically.</span><br><span class="cc4" data-native-text="true">​</span><br><span class="cc4" data-native-text="true">A</span><span class="cc5" data-native-text="true">ρρ</span><span class="cc4" data-native-text="true">EEARS allows you to access the real recorded data values for any available remote sensing product it offers. This makes it an appropriate tool to use if you are in need of accurate data for analysis or other scientific research. However, it is not so good for data exploration, as it can be fairly slow depending on the scale of the task and the availability of the API, and it will often return large numbers of heavy files. Use A</span><span class="cc5" data-native-text="true">ρρ</span><span class="cc4" data-native-text="true">EEARS if you already know what you want, and you need precise and accurate data.</span></p>
+<p>To request <span class="cc4" data-native-text="true">A</span><span class="cc5" data-native-text="true">ρρ</span><span class="cc4" data-native-text="true">EEARS</span> data using the RemoteSensing paclet, you'll make use of the following functions:</p>
+<ol>
+<li><code>AppEEARSData</code> which retrieves information about available <span class="cc4" data-native-text="true">A</span><span class="cc5" data-native-text="true">ρρ</span><span class="cc4" data-native-text="true">EEARS</span> products and layers.</li>
+<li><code style="font-weight: var(--font-weight-normal);">AppEEARSImages</code> which makes a request to <span class="cc4" data-native-text="true">A</span><span class="cc5" data-native-text="true">ρρ</span><span class="cc4" data-native-text="true">EEARS and returns the resulting data when it completes.</span></li>
+</ol>
+<p>Now, the <span class="cc4" data-native-text="true">A</span><span class="cc5" data-native-text="true">ρρ</span><span class="cc4" data-native-text="true">EEARS workflow is a little different because depending on your task, you might prefer to make an A<span class="cc5" data-native-text="true">ρρ</span>EEARS request and work with it asynchronously. This is a little more involved, and although I will not show examples of it here, you can find some in my <a href="https://community.wolfram.com/groups/-/m/t/2959942">community post</a>, and the <a href="https://resources.wolframcloud.com/PacletRepository/resources/PhileasDazeleyGaist/RemoteSensing/">paclet documentation</a>.</span></p>
+<p>Get a list of available A<span class="cc5" data-native-text="true">ρρ</span>EEARS products with <code>AppEEARSData</code>:</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/Screenshot-2023-07-21-at-21.29.03.png" alt="" width="1538" height="114" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-21.29.03-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-21.29.03-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-21.29.03-md.png 768w"></figure>
+<p>Get information about a product:</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/Screenshot-2023-07-21-at-21.28.21.png" alt="" width="625" height="452" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-21.28.21-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-21.28.21-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-21.28.21-md.png 768w"></figure>
+<p>The above dataset contains the names of available <span class="cc4" data-native-text="true">A<span class="cc5" data-native-text="true">ρρ</span>EEARS</span> layers for the MYDO9GA product. Now, to request information about a specific layer, you might do this:</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/Screenshot-2023-07-21-at-21.27.33.png" alt="" width="617" height="565" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-21.27.33-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-21.27.33-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-21.27.33-md.png 768w"></figure>
+<p>And you might make a request for <span class="cc4" data-native-text="true">A<span class="cc5" data-native-text="true">ρρ</span>EEARS</span> imagery using <code style="font-weight: var(--font-weight-normal);">AppEEARSImages</code> <span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">like this (note that this might take some time to process)</span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">:</span></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/Screenshot-2023-07-21-at-21.27.00.png" alt="" width="580" height="607" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-21.27.00-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-21.27.00-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/28/responsive/Screenshot-2023-07-21-at-21.27.00-md.png 768w"></figure>
+<h2>Closing thoughts</h2>
+<p>If you've read this far, I hope this blog post has inspired you to try <a href="https://resources.wolframcloud.com/PacletRepository/resources/PhileasDazeleyGaist/RemoteSensing/">my paclet</a> for yourself. Just take a chance to mess around with it! I am actively working to maintain and improve it, and I am always excited to receive <a href="https://phileasdg.github.io/phileas-dazeley-gaist/inquiries/">feedback</a> about my work! If you find bugs or have suggestions for its improvement, please don't hesitate to be in touch with me! I look forward to your notes! </p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Economic Uses of Selected Species in the Family Lamiaceae</title>
+        <author>
+            <name>Phileas Dazeley-Gaist</name>
+        </author>
+        <link href="https://phileasdg.github.io/phileas-dazeley-gaist/economic-uses-of-selected-species-in-the-family-lamiaceae/"/>
+        <id>https://phileasdg.github.io/phileas-dazeley-gaist/economic-uses-of-selected-species-in-the-family-lamiaceae/</id>
+        <media:content url="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27/De_Historia_stirpium_commentarii_insignes_...Fuchs_Leonhart_bpt6k1511104z_510.jpg" medium="image" />
+            <category term="Undergraduate work"/>
+
+        <updated>2023-03-28T11:10:59-04:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27/De_Historia_stirpium_commentarii_insignes_...Fuchs_Leonhart_bpt6k1511104z_510.jpg" alt="" />
+                    Something a little different I wrote this short essay for a college&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27/De_Historia_stirpium_commentarii_insignes_...Fuchs_Leonhart_bpt6k1511104z_510.jpg" class="type:primaryImage" alt="" /></p>
+                <h2>Something a little different</h2>
+<p>I wrote this short essay for a college course on Economic Botany while in my penultimate term at College of the Atlantic. This was something new to me: it was the first time I ever took interest in botanical studies. Thankfully, I did enjoy the course, and it gave me the opportunity to learn about the cultural and economic uses of many plants that I find interesting or are dear to me. In what follows, then, I hope to excite your curiosity about the diverse uses and ethnobotanical histories of plants.</p>
+<h2>Introduction to the Lamiaceae Family</h2>
+<p>Lamiaceae (also Labiatae in older literature, or colloquially the mint family) is an expansive family of flowering plants made up of 250 genera and over 7000 species (Stankovic, 2020).</p>
+<figure class="post__image align-center" ><figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27//map1.png" alt="Figure 1: Worldwide Lamiaceae distribution (GBIF Backbone Taxonomy, n.d.)" width="908" height="454" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27//responsive/map1-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27//responsive/map1-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27//responsive/map1-md.png 768w"></figure>
+<figcaption >Figure 1: Worldwide Lamiaceae distribution (GBIF Backbone Taxonomy, n.d.)</figcaption>
+</figure>
+<p>Lamiaceae species have square stems and usually opposite leaves (Glimn-Lacy &amp; Kaufman, 2006). They occupy a wide range of habitats, and many have cosmopolitan distributions (Stankovic, 2020). Most are herbs and shrubs, although the family also contains a few trees and vines (Glimn-Lacy &amp; Kaufman, 2006). These plants are most frequently aromatic, and many are used in cooking and perfumery (Stankovic, 2020). Many plants in the Lamiaceae also have potent antioxidant, antimicrobial, and antiviral properties, and are used in pesticide and pharmaceutical industries (Ibid.).</p>
+<p>The Lamiaceae Family contains numerous species with great sociocultural and economic importance. In ancient Greece and Rome, mint plants (the genus <em>Mentha</em>) were used in funerary rites (Miller, 2020). Biblical reference to mint suggests that it was highly valued and used as ‘tithes by the Pharisees along with anise and cumin’ (<em>English Standard Version Bible</em>, 2018, Matthew. 23). Marjoram (<em>Origanum majorana</em>) has ethnomedicinal uses in Iran, Azerbaijan, England, Egypt, India, Austria, Turkey, and Morocco (Bina &amp; Rahimi, 2017), while garden sage (<em>Salvia officinalis</em>) does in much of India and Southeast Asia, Europe, Mediterranean countries, and Latin America (Sharma et al., 2019).</p>
+<p>This paper will survey three different kinds of economic uses for three different plants in the Lamiaceae family: teak (<em>Tectona grandis</em>), chia (<em>Salvia hispanica</em>), and rosemary (<em>Salvia rosmarinus</em>).</p>
+<h2>Teak (<em>Tectona grandis</em>)</h2>
+<p>Teak (<em>Tectona grandis</em>) is a large deciduous tree native to the tropical regions of South and Southeast Asia (Moya et al., 2014). It grows naturally in India, Laos, Myanmar, and Thailand and is cultivated in tropical climates worldwide primarily for high-end timber (Ibid.).</p>
+<figure class="post__image align-center" ><figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27//map2.png" alt="Figure 2: Worldwide distribution of teak (GBIF Backbone Taxonomy, n.d.)" width="928" height="462" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27//responsive/map2-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27//responsive/map2-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27//responsive/map2-md.png 768w"></figure>
+<figcaption >Figure 2: Worldwide distribution of teak (GBIF Backbone Taxonomy, n.d.)</figcaption>
+</figure>
+<p>Like most other Lamiaceae species, teak tree leaves alternate in opposite facing pairs (Rahman, 2003). These are generally elliptic or obovate (think of the outline of an egg with the narrow side at the base of the leaf) (Ibid.). Teak trees flower from June to August or September (depending on climate and region) in 60 cm to 90 cm long densely branched inflorescences of radially symmetrical pale white flowers with 5 to 6 stamens (Rahman, 2003). They are known to grow up to 50 m tall and over 60 cm in diameter (Ibid.) although plantation trees are typically cut down before they reach this height and girth (Agri Farming, 2015).</p>
+<p>Teak wood is famously used in boatbuilding for its combination of strength, flexibility, and resistance to rot and pests (Rahman, 2003). The wood’s density and grain make it easy to work with (Ibid.), and, furthermore, it dries without losing its shape, is almost fully impermeable, and the oleoresins it contains protect metal nails, bolts, and other metal parts from rust and erosion at sea (Aubaile-Sallenave, 2021). There is archaeological evidence that teak wood was used for boat construction as early as the first century BCE: excavations in Pattanam, in the Indian State of Kerala recovered remains of a wooden boat almost 6 m long, with teak wood bollards (Sidebotham, 2011). By the sixth century BCE, teak wood’s use in ship building was widespread throughout China, Persia, and the Arabian Peninsula (Aubaile-Sallenave, 2021). In the latter, it was used extensively in mosques and other religious buildings, including Masjid al-Haram, and the holiest monument in Islam, the Ka’bah (Ibid.).</p>
+<p>The history of teak exploitation is deeply entwined with the history of European colonialism. Over the course of several centuries, European chartered companies such as the British Borneo company exploited teak in Southeast Asia, often at great cost to the indigenous populations and governments (Saha, 2016). In colonial Burma, the teak trade saw startling mortality rates from anthrax outbreaks, and widespread opium addiction in elephants and their riders (Ibid.). The extensive British exploitation of Indian teak from 1793 to 1815 gave the British navy a military advantage over its neighbours (Sérougne, 2020) which the British empire pressed against France during the seven Anglo-French wars of this period (Ibid.).</p>
+<figure class="post__image align-center" ><figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27//teak-felling.jpg" alt="Figure 3: Workers in colonial Burma felling a teak tree (Saha, 2016) " width="441" height="564" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27//responsive/teak-felling-xs.jpg 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27//responsive/teak-felling-sm.jpg 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27//responsive/teak-felling-md.jpg 768w"></figure>
+<figcaption >Figure 3: Workers in colonial Burma felling a teak tree (Saha, 2016) </figcaption>
+</figure>
+<p>Due to the wood’s high price, its primary use until the mid-20th century remained in large shipbuilding projects (Aubaile-Sallenave, 2021), and to this day, it is considered a luxurious wood. Although its contemporary uses in boat building are greatly diminished (Ibid), it is now broadly used to manufacture consumer goods and infrastructure. For example, to make high-end furniture, or, in India and Bangladesh to build bridges, telephone poles, and railway sleeper wagons (Rahman, 2003).</p>
+<p>Modern commercialised teak is primarily sourced from plantations which are grown worldwide in tropical climates (The Wood Database, n.d.). There are currently at least thirteen major teak cultivars (Agri Farming, 2018). Despite the success of teak silvicultural practices, old-growth teak is still sought after for its supposed superior quality (Salopek, 2020). Historical and present-day logging of natural teak forests has caused extensive deforestation (United Nations, 2012). In 2012, prompted by the continued dwindling of natural old-growth teak forests in the tree’s native range, the United Nations Food and Agriculture Organization called for countries to implement measures to preserve natural teak forests (Ibid.). Despite legal measures in Myanmar, India, Thailand, and Laos which outlaw the felling and export of natural forest-grown teak wood (Pradhan, 2015), illegal logging continues to threaten the sustainability of teak forests in Southeast Asia (Salopek, 2020).</p>
+<h2>Chia (<em>Salvia hispanica</em>)</h2>
+<p>Chia (<em>Salvia hispanica</em>) is an annual herbaceous plant indigenous to southern Mexico and Guatemala (Motyka et al., 2022). It grows in tropical and subtropical climates, especially in mountainous areas with acidic loam soils and good drainage (Ibid.). Chia is cultivated industrially in Central and North, South America, Europe, and Australia (Ibid), primarily for the culinary uses of its seeds (Knez Hrnčič et al., 2019). Several cultivars of Chia exist (Atamian, n.d.), although documentation regarding them is rather scarce. Yue et al., 2022 refers to six of them, and the University of Kentucky’s Centre for Crop Diversification has patented “long day length flowering lines of chia capable of producing seed in the Commonwealth and the Midwest (University of Kentucky, n.d.)”.</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27/map3.png" alt="Figure 4: Worldwide distribution of chia (GBIF Backbone Taxonomy, n.d.)" width="1092" height="540" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27/responsive/map3-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27/responsive/map3-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27/responsive/map3-md.png 768w"><figcaption>
+<p>Figure 4: Worldwide distribution of chia (GBIF Backbone Taxonomy, n.d.)</p>
+</figcaption></figure>
+<p>Chia plants grow to a height of up of 60 cm in optimal conditions (Agri Farming, 2018), with opposite decussate<a href="#_ftn1" name="_ftnref1">[1]</a> elongated and serrated lime-green leaves, each 3 cm to 5 cm wide by 4 cm to 8 cm long (Motyka et al., 2022). They flower approximately four months after germination, usually in the late spring or summer (Agri Farming, 2018) in whorls of small purple or white flowers (Motyka et al., 2022). Chia seeds are 1 mm to 2 mm long, oval, and vary in shade from white to black (Ibid.). They can be uniform or speckled (Ibid.). They are notoriously hydrophilic, able to absorb water up to 12 times their own mass, which encases them in a gelatinous substance called mucilage (Ibid.).</p>
+<p>Chia was an important crop in pre-Columbian Mesoamerican societies, with many culinary, religious, medicinal, and artistic uses (Knez Hrnčič et al., 2019). These uses were almost completely lost during colonial rule (Anacleto et al., 2018). This survey will focus on the food uses of the chia plant, which we can break up into the following categories: whole seeds, seed flour, seed mucilage, and seed oil, the first three of which at least were known by pre-Colombian Mesoamerican peoples (Ibid.). Among other culinary practices, the Aztecs frequently roasted and ground the seeds into a flour called Chianpinolli which could be incorporated into tortillas, tamales, and beverages called Chianatoles (Ibid.).</p>
+<figure class="post__image align-center" ><figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27/chia-2.png" alt="Figure 5: Illustration from the Florentine Codex (c. 1575–1577 or 1578–1580) depicting women grinding seeds of chia to make chiapinolli. Reproduced from Knez Hrnčič et al., 2019." width="493" height="316" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27/responsive/chia-2-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27/responsive/chia-2-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27/responsive/chia-2-md.png 768w"></figure>
+<figcaption >
+<p>Figure 5: Illustration from the Florentine Codex (c. 1575–1577 or 1578–1580) depicting<br>women grinding seeds of chia to make chiapinolli. Reproduced from Knez Hrnčič et al., 2019.</p>
+</figcaption>
+</figure>
+<p>Chia’s use declined sharply throughout the seventeenth, eighteenth, and nineteenth centuries with the decline of the Mexica population under colonial Spanish rule, the repossession of chia’s cultivated area by other plants and animal species imported by European colonists, and the dietary changes of indigenous peoples caused by the “availability of new food products” (Anacleto et al., 2018). In <em>The chia (Salvia hispanica): past, present and future of an ancient Mexican crop</em>, Anacleto et al. (2018) write, “In only three centuries the chia crop [had] almost become an unknown specie[s]”, and “The damage caused by the Spanish domination was so extensive, that after cultivating 30,000 ha of chia in 1550, this area decreased to a few hectares in 1810”.</p>
+<p>Thanks to the work a small number of farmers in the Mexican States of Jalisco, Guerrero, and Puebla who demonstrated the feasibility of commercial chia cultivation from the 1930s to the 1990s, and growing interest worldwide for sources of omega-3 fatty acids, interest in chia resurged in the late 1990s and 2000s (Anacleto et al., 2018). Marketed as a superfood (The Nutrition Source – Harvard School of Public Health, 2018), chia seed exploded in worldwide popularity starting in 2010 (Anacleto et al., 2018). Its common contemporary culinary uses include making drinks, puddings, replacing eggs in baking, and in salads (The Nutrition Source – Harvard School of Public Health, 2018).</p>
+<h2>Rosemary (<em>Salvia rosmarinus</em>)</h2>
+<p>Rosemary (<em>Salvia rosmarinus</em>, or <em>Rosmarinus officinalis</em> in older literature) is a fragrant and flavourful winter-hardy evergreen shrub (Leplat, 2017). It grows natively in southern Europe and the Mediterranean region (Kew, n.d.) and is cultivated worldwide in Mediterranean and temperate climates as a herb used in flavouring, perfumery, and medicine (Leplat, 2017). In its southern European native range, rosemary is easily wild crafted<a href="#_ftn1" name="_ftnref1">[2]</a> and is a prevalent garden herb (Ibid.). There are at least 20 cultivars of the plant, characterised by different taste profiles and yields of medicinal components (Ibid.). Most commercialised rosemary is now cultivated (Ibid.).</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27/map4.png" alt="Figure 6: Worldwide distribution of rosemary (GBIF Backbone Taxonomy, n.d.)" width="942" height="468" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27/responsive/map4-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27/responsive/map4-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/27/responsive/map4-md.png 768w"><figcaption>
+<p>Figure 6: Worldwide distribution of rosemary (GBIF Backbone Taxonomy, n.d.)</p>
+</figcaption></figure>
+<p>Rosemary typically grows to between 50 cm and 2 m tall, and spreads 1 m to 2 m horizontally (Ibid.). Its leaves are dark green, needle-like, sessile<a href="#_ftn1" name="_ftnref1">[3]</a>, and opposite decussate (Ibid.). Its leaves and stems are covered with a relatively thick and mostly gas- and water-impermeable cuticle, which helps the plant conserve moisture (Ibid.). Rosemary flowers in spring and early summer<a href="#_ftn2" name="_ftnref2">[4]</a> (Kew, n.d.) in small groupings of three to four blue and white flowers near the top of the bush’s branches, at the base of some of the top leaves (Leplat, 2017).</p>
+<p>While rosemary’s primary economic usage is as a flavouring, this survey will focus on its historical and contemporary medicinal uses. Recorded medicinal uses of rosemary date back at least to early classical antiquity (Leclerc, 1930). These early uses were often related to the plant’s religious associations. For example, in ancient Greece and Rome, where rosemary was used in funerary rites (Leplat, 2017), the Ancient Greeks and Romans interpreted the plant’s sturdy evergreen leaves as a symbol of immortality and memory beyond death, and used it as a herbal tonic to stimulate and promote memory (Ibid.). This use persists to this day, notably in Greek schools, where students drink rosemary tea or burn rosemary as incense in preparation for exams (Ibid.). Other ancient Greek and Roman uses of the plant included treatments against epilepsy, jaundice, and as a digestive aid (Leplat, 2017).</p>
+<p>Pre-Islamic Arabs used rosemary as a diuretic, an emmenagogue<a href="#_ftn3" name="_ftnref3">[5]</a>, and as treatment to ease flatulence (Leclerc, 1930). In the fourth century AD, Arab scholars developed the process of steam distillation to extract herb essential oils (Leplat, 2017). The process reached western Europe in the twelfth century, and with it, the practice of extracting essential oil from rosemary (Ibid.). The latter fell in and out of fashion several times in subsequent centuries, reaching the peak of its European therapeutic reputation throughout the seventeenth century (Leclerc, 1930). Rosemary essential oil was then considered a panacea (Ibid.). Paraphrasing Leclerc: Rosemary essential oil was believed to spread its fragrance and spirituous parts<a href="#_ftn4" name="_ftnref4">[6]</a> throughout the body, chasing away putrid and deadly vapours, to defend the heart against all miasmas, to make digestion perfect, comfort the languishing stomach, excite the appetite, stop vomiting, sharpen memory, awaken intelligence, chase away sadness, cause sleep, chase away winds, encourage conception, and open the ways to all excretions<a href="#_ftn5" name="_ftnref5">[7]</a>. Leclerc notes facetiously, “We can say seriously, in all of nature there is no remedy of such power.”<a href="#_ftn6" name="_ftnref6">[8]</a></p>
+<p>The main contemporary ethnopharmacological uses of rosemary are to prevent spasms, as an analgaesic or anti-inflammatory, to treat anxiety, and to boost memory (Ghasemzadeh Rahbardar &amp; Hosseinzadeh, 2020). Note worthily, these uses of rosemary are supported by recent scientific research, which finds that three of the plant’s chemical components, rosmarinic acid, carnosic acid, and rosemary essential oil provide, “promising natural medicines in the treatment of the nervous system pathological conditions including anxiety, depression, Alzheimer’s disease, epilepsy, Parkinson’s disease, and withdrawal syndrome” (Ibid.), although the study presently cited does stress the need for continued research.</p>
+<h2>Closing thoughts</h2>
+<p>This paper surveyed three plants from the Lamiaceae family and the economic uses of each. In this exploration, I hope to have highlighted the importance of the historical and cultural uses of these (and other) plants. Ethnobotanical relationships to plants, and culturally situated plant uses are the reward of centuries of empirical knowledge transfer and trial-and-error experimentations. These plants of the Lamiaceae family have been used by humans for millennia, and although their contemporary usages have changed, they remain of great cultural, historical, and economic importance.</p>
+<h2>Footnotes</h2>
+<p><a href="#_ftnref1" name="_ftn1">[1]</a> “Leaves arranged along the stem in pairs, each pair at right angles to the pair next above or below.” (BIOTIK, n.d.)<br><a href="#_ftnref1" name="_ftn1">[2]</a> I base this on my personal experience growing up in the plant’s endemic European range.<br><a href="#_ftnref1" name="_ftn1">[3]</a> With no stalk.<br><a href="#_ftnref2" name="_ftn2">[4]</a> Although in ideal conditions, it is known to flower year-round (Leplat,2017).<br><a href="#_ftnref3" name="_ftn3">[5]</a> A substance used to promote or increase menstrual flow.<br><a href="#_ftnref4" name="_ftn4">[6]</a> “parties spiritueuses” (Leclerc, 1930)<br><a href="#_ftnref5" name="_ftn5">[7]</a> In French: “…répandant dans tout le corps son parfum et ses parties spiritueuses, elle chasse les vapeurs putrides et nocies et défend le cœur contre tous les miasmes.[…] rend la digestion parfaite, récrée et réconforte les estomacs languissants […] excite l’appétit, arrête le vomissement, aiguise la mémoire, provoque le sommeil, rend allègre, chasse la tristesse, éveille l’intelligence, […] chasse les vents, libère les oppilations, favorise la conception, expulse les sueurs et l’urine, ouvre les voies à toutes les excretions” (Leclerc, 1930)<br><a href="#_ftnref6" name="_ftn6">[8]</a> In French: “On peut le dire sérieusement, dans toute la nature il n’est pas de remède d’une telle puissance” (Leclerc, 1930)</p>
+<h2>Literature Cited</h2>
+<p>Agri Farming. (2015, March 17). <em>Teak Wood Farming (Sagwan), Planting, Care, Harvesting</em>. Agri Farming. <a href="https://www.agrifarming.in/teak-wood-farming">https://www.agrifarming.in/teak-wood-farming</a></p>
+<p>Agri Farming. (2018a, July 14). <em>Teak Wood Farming Project Report, Cost and Profit | Agri Farming</em>. <a href="https://www.agrifarming.in/teak-wood-farming-project-report-cost-and-profit">https://www.agrifarming.in/teak-wood-farming-project-report-cost-and-profit</a></p>
+<p>Agri Farming. (2018b, September 21). <em>Chia Seeds Cultivation (Sabja), Farming Practices | Agri Farming</em>. <a href="https://www.agrifarming.in/chia-seeds-cultivation-sabja-farming">https://www.agrifarming.in/chia-seeds-cultivation-sabja-farming</a></p>
+<p>Anacleto, S., Ruiz-Ibarra, G., René, R., de la Torre, R.— R., Reyna, R., &amp; López, A. (2018). The chia (Salvia hispanica): Past, present and future of an ancient Mexican crop. <em>Australian Journal of Crop Science</em>, <em>12</em>, 1626–1632. <a href="https://doi.org/10.21475/ajcs.18.12.10.p1202">https://doi.org/10.21475/ajcs.18.12.10.p1202</a></p>
+<p>Aubaile-Sallenave, F. (2021). Le teck, Tectona grandis L.f., chez les Arabo-Musulmans du Moyen-Âge. <em>Revue d’ethnoécologie</em>, <em>20</em>, Article 20. <a href="https://doi.org/10.4000/ethnoecologie.8651">https://doi.org/10.4000/ethnoecologie.8651</a></p>
+<p>Bina, F., &amp; Rahimi, R. (2017). Sweet Marjoram: A Review of Ethnopharmacology, Phytochemistry, and Biological Activities. <em>Journal of Evidence-Based Complementary &amp; Alternative Medicine</em>, <em>22</em>(1), 175–185. <a href="https://doi.org/10.1177/2156587216650793">https://doi.org/10.1177/2156587216650793</a></p>
+<p>BIOTIK. (n.d.). <em>Opposite-decussate</em>. Retrieved 9 March 2023, from <a href="http://biotik.org/india/defs/opposite-decussate_en.html">http://biotik.org/india/defs/opposite-decussate_en.html</a></p>
+<p>Cahill, J. (2003). Ethnobotany of Chia, Salvia hispanica L. (Lamiaceae). <em>Economic Botany</em>, <em>57</em>, 604–618. <a href="https://doi.org/10.1663/0013-0001(2003)057%5B0604:EOCSHL%5D2.0.CO;2">https://doi.org/10.1663/0013-0001(2003)057%5B0604:EOCSHL%5D2.0.CO;2</a></p>
+<p><em>English Standard Version Bible</em>. (2018). Crossway.</p>
+<p>Ghasemzadeh Rahbardar, M., &amp; Hosseinzadeh, H. (2020). Therapeutic effects of rosemary (Rosmarinus officinalis L.) and its active constituents on nervous system disorders. <em>Iranian Journal of Basic Medical Sciences</em>, <em>23</em>(9), 1100–1112. <a href="https://doi.org/10.22038/ijbms.2020.45269.10541">https://doi.org/10.22038/ijbms.2020.45269.10541</a></p>
+<p>Glimn-Lacy, J., &amp; Kaufman, P. B. (2006). <em>Botany Illustrated: Introduction to Plants, Major Groups, Flowering Plant Families</em> (2nd edition). Springer.</p>
+<p>Kew. (n.d.). <em>Rosemary–Salvia rosmarinus | Plants | Kew</em>. Retrieved 9 March 2023, from <a href="https://www.kew.org/plants/rosemary">https://www.kew.org/plants/rosemary</a></p>
+<p>Knez Hrnčič, M., Ivanovski, M., Cör, D., &amp; Knez, Ž. (2019). Chia Seeds (Salvia Hispanica L.): An Overview–Phytochemical Profile, Isolation Methods, and Application. <em>Molecules</em>, <em>25</em>(1), 11. <a href="https://doi.org/10.3390/molecules25010011">https://doi.org/10.3390/molecules25010011</a></p>
+<p>Leclerc, H. (1870-1955) A. du texte. (1930). <em>Histoire du romarin / par le Dr Henri Leclerc</em>. <a href="https://gallica.bnf.fr/ark:/12148/bpt6k859325t">https://gallica.bnf.fr/ark:/12148/bpt6k859325t</a></p>
+<p>Leplat, M. (2017). <em>Le romarin, Rosmarinus officinalis L., une Lamiacée médicinale de la garrigue provençale</em>. 227.</p>
+<p>McVicar, J. (2004). <em>La passion des herbes: Aromatiques, culinaires, médicinales, cosmétiques et comment les cultiver</em> (L. M. Michel, Trans.). Guy Saint-Jean.</p>
+<p>Miller, A. (2020, April 1). <em>Plant of the Month: Mint</em>. JSTOR Daily. <a href="https://daily.jstor.org/plant-of-the-month-mint/">https://daily.jstor.org/plant-of-the-month-mint/</a></p>
+<p>Motyka, S., Koc, K., Ekiert, H., Blicharska, E., Czarnek, K., &amp; Szopa, A. (2022). The Current State of Knowledge on Salvia hispanica and Salviae hispanicae semen (Chia Seeds). <em>Molecules</em>, <em>27</em>(4), Article 4. <a href="https://doi.org/10.3390/molecules27041207">https://doi.org/10.3390/molecules27041207</a></p>
+<p>Moya, R., Bond, B., &amp; Quesada, H. (2014). A review of heartwood properties of Tectona grandis trees from fast-growth plantations. <em>Wood Science and Technology</em>, <em>48</em>(2), 411–433. <a href="https://doi.org/10.1007/s00226-014-0618-3">https://doi.org/10.1007/s00226-014-0618-3</a></p>
+<p>Pradhan, S. (2015). <em>Teakwood–All hail the king of hardwoods</em>. <a href="https://www.thedollarbusiness.com/magazine/teakwood-all-hail-the-king-of-hardwoods/11308">https://www.thedollarbusiness.com/magazine/teakwood-all-hail-the-king-of-hardwoods/11308</a></p>
+<p>Rahman, P. D. M. A. (2003). <em>Teak (Tectona grandis) Monograph (BSc Hons Final Year Project Thesis) (ix +69 pages) as pdf</em>. <a href="https://www.academia.edu/43449357/Teak_Tectona_grandis_Monograph_BSc_Hons_Final_Year_Project_Thesis_ix_69_pages_as_pdf">https://www.academia.edu/43449357/Teak_Tectona_grandis_Monograph_BSc_Hons_Final_Year_Project_Thesis_ix_69_pages_as_pdf</a></p>
+<p>Saha, J. (2016, March 23). Teak and Photography in Colonial Burma. <em>Colonizing Animals</em>. <a href="https://colonizinganimals.blog/2016/03/23/teak-and-photography-in-colonial-burma/">https://colonizinganimals.blog/2016/03/23/teak-and-photography-in-colonial-burma/</a></p>
+<p>Salopek, P. (2020, May 8). <em>After a century of logging, Myanmar struggles to preserve its teak groves</em>. History. <a href="https://www.nationalgeographic.com/history/article/after-century-logging-myanmar-struggles-preserve-teak-groves">https://www.nationalgeographic.com/history/article/after-century-logging-myanmar-struggles-preserve-teak-groves</a></p>
+<p>Schneider, A. (2003). <em>Arbres et Arbustes Thérapeutiques</em> (L’HOMME edition). DE L HOMME.</p>
+<p>Sérougne, L. (2020). À la conquête du teck. Guerres, impérialisme forestier et construction navale en Inde (1793-1815). <em>Annales historiques de la Révolution française</em>, <em>399</em>(1), 123–152. Cairn.info.</p>
+<p>Sharma, Y., Fagan, J., &amp; Schaefer, J. (2019). <em>Ethnobotany, phytochemistry, cultivation and medicinal properties of Garden sage (Salvia officinalis L.)</em>. 3139–3148.</p>
+<p>Sidebotham, S. E. (2011). <em>Berenike and the Ancient Maritime Spice Route</em>. University of California Press.</p>
+<p>Stankovic, M. (2020). <em>Lamiaceae Species: Biology, Ecology and Practical Uses</em>. MDPI.</p>
+<p>The Nutrition Source – Harvard School of Public Health. (2018, March 19). <em>Chia Seeds</em>. The Nutrition Source. <a href="https://www.hsph.harvard.edu/nutritionsource/food-features/chia-seeds/">https://www.hsph.harvard.edu/nutritionsource/food-features/chia-seeds/</a></p>
+<p>The Wood Database. (n.d.). <em>Teak</em>. Retrieved 23 February 2023, from <a href="https://www.wood-database.com/teak/">https://www.wood-database.com/teak/</a></p>
+<p>United Nations. (2012, March 26). <em>UN food agency calls for measures to preserve natural teak forests | UN News</em>. United Nations. <a href="https://news.un.org/en/story/2012/03/407272">https://news.un.org/en/story/2012/03/407272</a></p>
+<p>University of Kentucky Center for Crop Diversification. (n.d.). <em>Chia</em>. Retrieved 3 April 2023, from <a href="https://www.uky.edu/ccd/production/crop-resources/gffof/chia">https://www.uky.edu/ccd/production/crop-resources/gffof/chia</a></p>
+<p>Yue, G. H., Lai, C. C., Lee, M., Wang, L., &amp; Song, Z. J. (2022). Developing first microsatellites and analysing genetic diversity in six chia (Salvia hispanica L.) cultivars. <em>Genetic Resources and Crop Evolution</em>, <em>69</em>(3), 1303–1312. <a href="https://doi.org/10.1007/s10722-021-01305-2">https://doi.org/10.1007/s10722-021-01305-2</a></p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>HEE: Mathematics as Human Ecology</title>
+        <author>
+            <name>Phileas Dazeley-Gaist</name>
+        </author>
+        <link href="https://phileasdg.github.io/phileas-dazeley-gaist/mathematics-as-human-ecology/"/>
+        <id>https://phileasdg.github.io/phileas-dazeley-gaist/mathematics-as-human-ecology/</id>
+        <media:content url="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26/poster-2.png" medium="image" />
+            <category term="Wolfram Language"/>
+            <category term="Undergraduate work"/>
+
+        <updated>2023-07-21T20:34:14-04:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26/poster-2.png" alt="" />
+                    Foreword The Human Ecology Essay (HEE) is a senior year graduation requirement&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26/poster-2.png" class="type:primaryImage" alt="" /></p>
+                <h2>Foreword</h2>
+<p>The Human Ecology Essay (HEE) is a senior year graduation requirement at College of the Atlantic. It is an opportunity to reflect on one's learning journey at the college and to share one's unique perspectives on human ecological investigations and practices. Each year, College of the Atlantic publishes a selection of these short essays. This is mine.</p>
+<h2>Introduction</h2>
+<p>I address this essay to the mathematically sceptical human ecologists. Those that would prefer not to think about maths if they can prevent it. In the next few pages, I hope to plant a grain in your mind:</p>
+<p class="align-center"><em>Mathematics and ontology of mathematics <strong>are</strong> human ecology.</em></p>
+<p>I will introduce you to a selection of mathematical tools and topics which I find personally exciting and stimulating as a young human ecologist; subjects that showcase how diverse and surprising mathematics can be. These are subjects that may not <em>feel like maths.</em></p>
+<p>I will not explain any of these topics thoroughly. Rather, I hope to discuss them broadly, drawing on the human ecological ethos to make them feel grounded, relevant, and stirring to you, especially if you (<em>*gasp</em>) don’t usually like thinking about maths. In the process I hope to convey my vision of human ecology and mathematics by example.</p>
+<h2>What is Maths Anyway?</h2>
+<p>The opening paragraph of the Introduction section to the <em>Princeton Companion to Mathematics</em> titled “What is mathematics about?” begins:</p>
+<blockquote>
+<p>“It is notoriously hard to give a satisfactory answer to the question, “What is mathematics?” The approach of this book is not to try.”</p>
+</blockquote>
+<p>Because it’s so difficult to pin down exactly what maths is, it is often conceptually explained by drawing attention to the mathematician's raw materials (numbers, sets, relationships...) and conceptual tools (counting, ordering, functions...). This can be an excellent approach as it captures the blurriness of the boundaries between mathematics and other areas of knowledge, but it can also highlight how abstract and divorced from day-to-day human experiences and intuitions the subject <em>can</em> be.</p>
+<p>There is ongoing debate about the nature of mathematics and its relationship to human experience. While mathematics is an essential part of human culture and some of the earliest known writings are records of mathematical computation (<em>Mathematical Treasure: Clay Tablets from Sumer</em>, n.d.), many other living things perform what we might recognise as mathematical activities. Slime moulds can solve mazes (Nakagaki et al., 2000), crows can count and understand the concept of zero (<em>Animals Can Count and Use Zero. How Far Does Their Number Sense Go?</em>, 2021), and some fish have even shown ability to perform addition and subtraction (<em>Universität Bonn: Fish Can Calculate</em>, n.d.). For examples of mathematical processes, we needn't even look to living things. It seems that mathematics has an uncanny ability to predict or explain physical phenomena, from the motion of planets to climate change and ocean circulation. Eugene P. Wigner explored this tendency in his 1960 paper: <em>The Unreasonable Effectiveness of Mathematics in the Natural Sciences</em>.</p>
+<p>I bring up these examples to suggest that mathematics is not simply a toolbox of abstract operations and raw materials. It is a powerful and mysterious way of observing and describing the world. In its most general form, I believe maths is all about seeing and understanding patterns and relationships between things (we can discuss the specific nature of these things another time). How could an undertaking of this nature not reflect our environmentally embedded experiences? Ontological questions about mathematics demand that we think about our lived experiences, our environments, our biology, the ecology of our species, and our relationships to all of these. What does it mean to do maths? Why do we do it? How do mathematical insights frame human experiences and affect human decision making? What can mathematics tell us about our relationships to one another, to our environments, our thoughts, lived experiences, and the behaviours of our institutions and societies? A lot (I bet). Mathematics is one of the lenses through which we make sense of the world around us.<strong> It is an inherently human-ecological practice. </strong></p>
+<h2>A Brief Note on Maths and Computers</h2>
+<p>If you do maths regularly, you probably do at least some of it with the help of a computer. In fact, since the democratisation of personal computing, the use of computers to do maths has all but replaced traditional pen-and-paper mathematics in most contexts. Computers can automate tedious calculations and open previously inaccessible realms of mathematical exploration. They can also be used to solve problems that would be difficult or impossible for humans to tackle on their own. For this reason, my mathematical explorations all make use of machine computation, although they do not require a computer to reproduce. Let’s get started!</p>
+<h2>L-Systems</h2>
+<p>In 1968, Aristid Lindenmayer proposed a method to model the branching patterns produced by various species of growing algae. His approach consisted of iteratively applying a substitution rule to a string of characters representing plant algal cells (Lindenmayer, 1968). L-systems have proved to be useful in modelling many biological phenomena. Most famously, they have been used to model the growth of plants, but L-systems are used in fields as diverse as architecture, music composition, and weaving (Goel &amp; Rozenhal, 1991).</p>
+<p>Imagine a string of characters or a single character such as “B”. Suppose we want to transform this object according to the following rule:</p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26//rule.png" alt="" width="225" height="30" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26//responsive/rule-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26//responsive/rule-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26//responsive/rule-md.png 768w"></figure>
+<p>We can apply this rule to “B” by replacing every A with AA and every B with A[+B]-B. Starting with “B”, what happens when we apply the substitution rule three times? As we go, we get:</p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26/rules.png" alt="" width="587" height="117" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26/responsive/rules-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26/responsive/rules-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26/responsive/rules-md.png 768w"></figure>
+<p>Let’s interpret the final transformed string as instructions to draw a tree: Start at any point on the page. This is the base of your tree. As you read through the string, refer to the following table for specific instructions.</p>
+<table style="height: 291px; width: 703px;" width="703">
+<tbody>
+<tr>
+<td style="width: 351px;">
+<p>A</p>
+</td>
+<td style="width: 351px;">
+<p>Draw a branch</p>
+</td>
+</tr>
+<tr>
+<td style="width: 351px;">
+<p>B</p>
+</td>
+<td style="width: 351px;">
+<p>Draw a branch with leaves</p>
+</td>
+</tr>
+<tr>
+<td style="width: 351px;">
+<p>[+A or [+B</p>
+</td>
+<td style="width: 351px;">
+<p>Start a new branch leaning to the right from the end of the last branch you drew</p>
+</td>
+</tr>
+<tr>
+<td style="width: 351px;">
+<p>]-A or ]-B</p>
+</td>
+<td style="width: 351px;">
+<p>Start a new branch leaning to the left from branching point one level back from the last branch you drew</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>By the end, you should have one of these (try it and find out which one 😁):</p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26/Screenshot-2023-02-23-at-13.49.09.png" alt="" width="396" height="95" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26/responsive/Screenshot-2023-02-23-at-13.49.09-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26/responsive/Screenshot-2023-02-23-at-13.49.09-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26/responsive/Screenshot-2023-02-23-at-13.49.09-md.png 768w"></figure>
+<p>Isn’t it fascinating and exciting to see that such a simple process can capture the branching patterns in the growth of plants? Doesn’t it animate you with wonder and curiosity?</p>
+<h2>Graphs and Networks</h2>
+<p>In 1636, Leonard Euler published <em>Solutio problematis ad geometriam situs pertinentis</em>, in which he presented a solution to the problem of the seven bridges of Königsberg. The problem was to find a walk through the city, crossing each of its seven bridges exactly once. The techniques Euler used to prove that such a path could not exist laid the foundations of what is now called graph theory (Biggs et al., 1999). Graph theory is the study of networks. It is used to model relationships between objects, and its insights have many applications from studying social networks, disease spread, or internet usage, to city sprawl, efficient transportation, food chains, and brains.</p>
+<p>At its core, a graph is a bunch of points (called vertices) that are connected by lines (called edges) to each other in an arbitrary way. For example: Some of my friends know each other, and all my friends have other friends that I have never met. Suppose I was to make a graph where all of us were points connected by lines to our respective friends, it might look something like this:</p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26/g1.png" alt="" width="337" height="230" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26/responsive/g1-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26/responsive/g1-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26/responsive/g1-md.png 768w"></figure>
+<p>There are many directions one might go from here. Maybe we want to know the fastest ways for gossip to spread throughout the network; to do this, we would compute the “betweenness centrality” of the graph, a measure of how often a node is on the shortest path between two other nodes. The nodes with highest betweenness centrality are the ones which have the most influence on the flow of information through the network (<em>Betweenness Centrality - Neo4j Graph Data Science</em>, n.d.).</p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26/Screenshot-2023-02-23-at-13.51.13.png" alt="" width="1004" height="384" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26/responsive/Screenshot-2023-02-23-at-13.51.13-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26/responsive/Screenshot-2023-02-23-at-13.51.13-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/26/responsive/Screenshot-2023-02-23-at-13.51.13-md.png 768w"></figure>
+<p>Another thing we might do is look for communities in the network. Communities are “subset[s] of nodes within the graph such that connections between the nodes are denser than connections with the rest of the network” (Radicchi et al., 2004). These communities are easier to analyse qualitatively. For instance, one might contain my friends from college, another might be family friends, or maybe friends from high school.</p>
+<p>Again, isn’t this amazing? With very little information about the connections between just a few people we can start to draw a picture of meaningful properties of their shared social network. Just consider what this might tell you about the connections in your own life, not just to other people, but the connections you find between things that you experience.</p>
+<h2>Closing Thoughts</h2>
+<p>How do L-systems help us to think about plants? How do graphs help us think about social networks? How does mathematical thinking affect our interpretation and relationships to our experiences and environments? There is no single answer to these questions, but mathematics can help us to explore all of them in new ways.</p>
+<p>It's important to strike a balance between overreliance on mathematics, and over reluctance to use it. While the former can lead to a lack of flexibility in problem solving, the latter can also be dangerous. Consider the mathematical models used to predict the effects of climate change on the environment. These are indispensable tools, but they should be used in dialogue with other perspectives such as lived experiences from the communities already affected or predicted to be affected by climate change, and ethical considerations regarding proposed climate change responses.</p>
+<p>Mathematics provides a framework for interpreting the world around us systematically, and a language to share these interpretations. It primes us to appreciate our experiences in new ways. It is a vast interdisciplinary landscape of secrets and possibilities waiting to be explored that may reveal as much about the world as it does about our own minds. As human ecologists, then, we should all be very interested in maths.</p>
+<h2>Sources Cited</h2>
+<p><em>Animals Can Count and Use Zero. How Far Does Their Number Sense Go?</em> (2021, August 9). Quanta Magazine. <a href="https://www.quantamagazine.org/animals-can-count-and-use-zero-how-far-does-their-number-sense-go-20210809/">https://www.quantamagazine.org/animals-can-count-and-use-zero-how-far-does-their-number-sense-go-20210809/</a></p>
+<p><em>Betweenness Centrality—Neo4j Graph Data Science</em>. (n.d.). Neo4j Graph Data Platform. Retrieved 22 February 2023, from <a href="https://neo4j.com/docs/graph-data-science/2.3/algorithms/betweenness-centrality/">https://neo4j.com/docs/graph-data-science/2.3/algorithms/betweenness-centrality/</a></p>
+<p>Biggs, N. L., Lloyd, E. K., &amp; Wilson, R. J. (1999). <em>Graph Theory 1736-1936</em> (New edition). Clarendon Press.</p>
+<p>Goel, N. S., &amp; Rozenhal, I. (1991). Some Non-Biological Applications of L-Systems. <em>International Journal of General Systems</em>, <em>18</em>(4), 321–405. <a href="https://doi.org/10.1080/03081079108935155">https://doi.org/10.1080/03081079108935155</a></p>
+<p>Gowers, T., Barrow-Green, J., &amp; Leader, I. (2010). <em>The Princeton Companion to Mathematics</em>. Princeton University Press.</p>
+<p>Lindenmayer, A. (1968). Mathematical models for cellular interactions in development I. Filaments with one-sided inputs. <em>Journal of Theoretical Biology</em>, <em>18</em>(3), 280–299. <a href="https://doi.org/10.1016/0022-5193(68)90079-9">https://doi.org/10.1016/0022-5193(68)90079-9</a></p>
+<p><em>LSystem | Wolfram Function Repository</em>. (n.d.). Retrieved 21 February 2023, from <a href="https://resources.wolframcloud.com/FunctionRepository/resources/LSystem/">https://resources.wolframcloud.com/FunctionRepository/resources/LSystem/</a></p>
+<p><em>Mathematical Treasure: Clay Tablets from Sumer</em>. (n.d.). Mathematical Association of America. Retrieved 20 February 2023, from <a href="https://www.maa.org/press/periodicals/convergence/mathematical-treasure-clay-tablets-from-sumer">https://www.maa.org/press/periodicals/convergence/mathematical-treasure-clay-tablets-from-sumer</a></p>
+<p>Nakagaki, T., Yamada, H., &amp; Tóth, Á. (2000). Maze-solving by an amoeboid organism. <em>Nature</em>, <em>407</em>(6803), Article 6803. <a href="https://doi.org/10.1038/35035159">https://doi.org/10.1038/35035159</a></p>
+<p>Radicchi, F., Castellano, C., Cecconi, F., Loreto, V., &amp; Parisi, D. (2004). Defining and identifying communities in networks. <em>Proceedings of the National Academy of Sciences</em>, <em>101</em>(9), 2658–2663. <a href="https://doi.org/10.1073/pnas.0400054101">https://doi.org/10.1073/pnas.0400054101</a></p>
+<p><em>Study shows: Fish can calculate</em>. (n.d.). Universität Bonn. Retrieved 20 February 2023, from <a href="https://www.uni-bonn.de/en/news/060-2022">https://www.uni-bonn.de/en/news/060-2022</a></p>
+<p>Wigner, E. P. (1960). The unreasonable effectiveness of mathematics in the natural sciences. Richard courant lecture in mathematical sciences delivered at New York University, May 11, 1959. <em>Communications on Pure and Applied Mathematics</em>, <em>13</em>(1), 1–14. <a href="https://doi.org/10.1002/cpa.3160130102">https://doi.org/10.1002/cpa.3160130102</a></p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Featured in The Wrack Line (NOAA)</title>
+        <author>
+            <name>Phileas Dazeley-Gaist</name>
+        </author>
+        <link href="https://phileasdg.github.io/phileas-dazeley-gaist/featured-in-the-wrack-line-noaa/"/>
+        <id>https://phileasdg.github.io/phileas-dazeley-gaist/featured-in-the-wrack-line-noaa/</id>
+        <media:content url="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/unnamed-2.png" medium="image" />
+            <category term="Undergraduate work"/>
+            <category term="GIS"/>
+
+        <updated>2023-07-21T21:41:51-04:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/unnamed-2.png" alt="" />
+                    Just a few days ago, I was featured in The Wrack Line,&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/unnamed-2.png" class="type:primaryImage" alt="" /></p>
+                <div style="overflow: hidden;">
+<div style="margin: 0; padding: 0; width: 100%!important;">
+<p>Just a few days ago, I was featured in The Wrack Line, NOAA's Marine Debris Monitoring and Assessment Project newsletter, for my work as an undergraduate data science intern with the MDMAP team over this last summer. This was a really amazing internship, and I definitely plan to blog about it here sometime (I have a lot to say about bow ties in geopolygons), but I'm holding off for now to complete other projects.</p>
+<p>As a Managing Marine Debris Data for Community Use NOAA data science intern, I worked on many exciting projects ranging from data wrangling marine debris survey data to performing quality control checks on the <a href="https://mdmap.orr.noaa.gov/">MDMAP interactive map and open database</a>. One of my favourite tasks was helping to fix errors in beach site geopolygon data, which when poorly defined displayed crossing paths (bow ties). It was a challenging problem, but I found it incredibly rewarding to apply my skills in maths, R, and data analysis to find solutions! In the end, my approach used a mix of linear algebra, calculus, trig, GIS, and tidyverse to correct polygons, accounting for the orientation of the section of their corresponding coastline and the indices of the crossing edges.<br><br>Working on this project also gave me the opportunity to explore new visualisations, many of which I had to design from scratch to help visualise aspects of the problem at hand, and to help communicate my solutions. For me, this was a great way to see the impact of my work and understand the value of the data I was working with. <br><br>Overall, my time as a NOAA MDMAP intern was incredibly valuable. I learned so much, worked with a dedicated team, and had the chance to make a meaningful contribution to work I find important and compelling. I am grateful for the experience and the opportunities it provided. Working with a US federal scientific institution like NOAA was a truly special experience, and I am so thankful for the valuable lessons and skills I gained during my time as an intern.</p>
+<p>Anyway... I've embedded the newsletter here in case you'd like to read it, I hope you enjoy!</p>
+<h2>The Wrack Line: Fall 2022</h2>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/unnamed.png" alt="" width="600" height="300" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed-md.png 768w"></figure>
+<p><em style="color: #3a3a3a; font-family: 'Helvetica Neue', Helvetica, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: var(--font-weight-normal);">The Wrack Line is a newsletter for partners, participants, and data users of NOAA's Marine Debris Monitoring and Assessment Project (MDMAP).Thank you for reading! </em></p>
+</div>
+<div style="margin: 0; padding: 0; width: 100%!important;">
+<div class="m_-2332561867194686856govd_hr" style="padding: 0px;">
+<div> </div>
+<div class="m_-2332561867194686856govd_hr_inner"><span style="color: #0688cb; font-family: helvetica; font-size: 21px; letter-spacing: var(--letter-spacing);">Mobile Data Entry with Internet Access</span></div>
+<div>
+<table style="border-collapse: collapse; width: 100%;" border="1">
+<tbody>
+<tr>
+<td style="width: 49.9288%;"><figure class="post__image"><img loading="lazy"  style="width: 297px; height: 223px; float: left;" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24//unnamed.jpg" alt="" width="297" height="223" align="left" hspace="7" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24//responsive/unnamed-xs.jpg 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24//responsive/unnamed-sm.jpg 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24//responsive/unnamed-md.jpg 768w"></figure></td>
+<td style="width: 49.9288%;">
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left">For those who would prefer entering data on the beach rather than using datasheets, the <a href="https://lnks.gd/l/eyJhbGciOiJIUzI1NiJ9.eyJidWxsZXRpbl9saW5rX2lkIjoxMDAsInVyaSI6ImJwMjpjbGljayIsImJ1bGxldGluX2lkIjoiMjAyMjEyMTMuNjgxMjA1NTEiLCJ1cmwiOiJodHRwczovL21kbWFwLm9yci5ub2FhLmdvdi8_dXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPUdvdkRlbGl2ZXJ5In0.g-M57zxaQL3etCEqHgYRwtexk3W25i6g9LpGhF8HXyk/s/2580731833/br/150277375178-l" title="data entry" rel="noopener" style="color: #ec3f13; text-decoration: underline;" target="_blank" data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://lnks.gd/l/eyJhbGciOiJIUzI1NiJ9.eyJidWxsZXRpbl9saW5rX2lkIjoxMDAsInVyaSI6ImJwMjpjbGljayIsImJ1bGxldGluX2lkIjoiMjAyMjEyMTMuNjgxMjA1NTEiLCJ1cmwiOiJodHRwczovL21kbWFwLm9yci5ub2FhLmdvdi8_dXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPUdvdkRlbGl2ZXJ5In0.g-M57zxaQL3etCEqHgYRwtexk3W25i6g9LpGhF8HXyk/s/2580731833/br/150277375178-l&amp;source=gmail&amp;ust=1671464435964000&amp;usg=AOvVaw2Xtk77Wmav-XFYuMAU8cps">data entry website</a> works on any device but does require internet access.</p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left"> </p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left">At left: Elena Aguilar, graduate student with San Diego State University, tests mobile MDMAP data entry (Credit: NOAA).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="m_-2332561867194686856govd_hr" style="padding: 0px;">
+<div class="m_-2332561867194686856govd_hr_inner"><span style="color: #0688cb; font-family: helvetica; font-size: 21px; letter-spacing: var(--letter-spacing);">With Student Help, All MDMAP Data in One Place</span></div>
+<div>
+<table style="border-collapse: collapse; width: 100%;" border="1">
+<tbody>
+<tr>
+<td style="width: 49.9288%;"><figure class="post__image"><img loading="lazy"  style="width: 296px; height: 222px; float: left;" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24//unnamed2.jpg" alt="" width="296" height="222" align="left" hspace="7" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24//responsive/unnamed2-xs.jpg 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24//responsive/unnamed2-sm.jpg 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24//responsive/unnamed2-md.jpg 768w"></figure></td>
+<td style="width: 49.9288%;">
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left">We are so excited to now have the full MDMAP dataset available in one place! If you collected data using the accumulation method, those data can now be viewed alongside other MDMAP data in the visualizations and downloaded via data exports in a single spreadsheet. This integration represents over 4,400 surveys. </p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left"> </p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left">This effort was supported by summer intern Phileas Dazeley-Gaist. Phileas is student at College of the Atlantic. Over the course of 10 weeks, they applied and honed their coding skills by helping enter data, performing quality control checks, and cleaning the MDMAP dataset. Of their internship experience, Phileas shared that they "most enjoyed developing visualizations of the data to better explore problems and communicate  solutions, all while making a  meaningful contribution to important and compelling work." Thank you Phileas!</p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left"> </p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left">Above: Phileas is at home in front of screens full of code and data (Credit: Phileas Dazely-Gaist).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="m_-2332561867194686856govd_hr" style="padding: 0px;"><span style="color: #0688cb; font-family: helvetica; font-size: 21px; letter-spacing: var(--letter-spacing); font-weight: var(--font-weight-normal);">MDMAP Data in Action</span></div>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left">We are often asked how MDMAP data are used, so we posted <a href="https://lnks.gd/l/eyJhbGciOiJIUzI1NiJ9.eyJidWxsZXRpbl9saW5rX2lkIjoxMDgsInVyaSI6ImJwMjpjbGljayIsImJ1bGxldGluX2lkIjoiMjAyMjEyMTMuNjgxMjA1NTEiLCJ1cmwiOiJodHRwczovL21hcmluZWRlYnJpcy5ub2FhLmdvdi9tb25pdG9yaW5nL2hvdy1hcmUtbWRtYXAtZGF0YS11c2VkP3V0bV9tZWRpdW09ZW1haWwmdXRtX3NvdXJjZT1Hb3ZEZWxpdmVyeSJ9.jSEFEIllbcnDVzSOXpYuIu9q9JAzcDQd9YWnhOB3D5s/s/2580731833/br/150277375178-l" style="color: #ec3f13; text-decoration: underline;" target="_blank" data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://lnks.gd/l/eyJhbGciOiJIUzI1NiJ9.eyJidWxsZXRpbl9saW5rX2lkIjoxMDgsInVyaSI6ImJwMjpjbGljayIsImJ1bGxldGluX2lkIjoiMjAyMjEyMTMuNjgxMjA1NTEiLCJ1cmwiOiJodHRwczovL21hcmluZWRlYnJpcy5ub2FhLmdvdi9tb25pdG9yaW5nL2hvdy1hcmUtbWRtYXAtZGF0YS11c2VkP3V0bV9tZWRpdW09ZW1haWwmdXRtX3NvdXJjZT1Hb3ZEZWxpdmVyeSJ9.jSEFEIllbcnDVzSOXpYuIu9q9JAzcDQd9YWnhOB3D5s/s/2580731833/br/150277375178-l&amp;source=gmail&amp;ust=1671464435964000&amp;usg=AOvVaw2RAVb8T5gKTafOcEWRJdb2" rel="noopener">a list of examples here</a>.</p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left">Each newsletter, we also feature at least one recent use of the data.</p>
+<table style="border-collapse: collapse; width: 100%;" border="1">
+<tbody>
+<tr>
+<td style="width: 49.9288%;">
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left"><strong><em>MDMAP at the 7th International Marine Debris Conference</em></strong></p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left"> </p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left">Hosted in Busan, South Korea, from September 18-23, 2022, the 7th International Marine Debris Conference brought together policy makers, researchers, advocacy leaders, and educators from around the world to discuss new developments and future directions for addressing marine debris. Monitoring was the focus of 17 dedicated sessions. The importance of and need for consistent, harmonized data for tracking and informing prevention progress was a common message throughout the conference.</p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left">Results from MDMAP made appearances in at least six talks, including:</p>
+</td>
+<td style="width: 49.9288%;"><figure class="post__image"><img loading="lazy"  style="width: 348px; height: 223px; float: right;" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/unnamed5.jpg" alt="" width="348" height="223" align="right" hspace="7" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed5-xs.jpg 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed5-sm.jpg 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed5-md.jpg 768w"></figure></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;"><em>NOAA’s Marine Debris Monitoring and Assessment Project: Adapting for Local to National Scales of Inference and Impact </em>(Hillary Burgess, NOAA Marine Debris Program) during session<em> Stories and Lessons from Around the World: How Monitoring Can Help Inform Actions to Tackle Marine Litter</em></li>
+<li style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" aria-level="1"><em>Inventories of Marine Litter and Meso Plastics, a Reliable Method for Determining Pollution in Marine-coastal Ecosystems</em> (Denise Delvalle-Borrero, Technological University of Panama) during session <em>Stories and Lessons from Around the World: How Monitoring Can Help Inform Actions to Tackle Marine Litter</em></li>
+<li style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" aria-level="1"><em>Using Scientific Knowledge to Influence Public Policy in the United States</em> (Nancy Wallace, NOAA MDP) during session <em>Science to Policy</em></li>
+<li style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" aria-level="1"><em>How We Count Counts: Examining Influences on Detection during Shoreline Surveys of Marine Debris </em>(Hillary Burgess, NOAA MDP) during session <em>Design, Statistical Analyses and Methods Standardization for Macrolitter Surveys</em></li>
+<li style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" aria-level="1"><em>Progress Toward Meaningful Monitoring: Confronting the Challenges of Survey Design and Reporting</em>  (Amy V. Uhrin, NOAA MDP) during session <em>The future of the Science of Monitoring</em></li>
+<li style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" aria-level="1"><em>Decline in Marine Debris Abundance on Hawaiian Shores Noted through Observational Data and Interpreted using a Dynamic Model of Pacific Ocean Circulation</em> (Carl Berg, Kauai Chapter of Surfrider Foundation) during session <em>Integrated Marine Debris Observing System </em></li>
+</ul>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left">Above: Marine Debris Program Science Team Staff at the 7th International Marine Debris Conference from left to right: Carlie Herring (Research Coordinator), Amy V. Uhrin (Chief Scientist), and Hillary Burgess (Monitoring Coordinator) (Credit: NOAA).</p>
+<table style="border-collapse: collapse; width: 100%;" border="1">
+<tbody>
+<tr>
+<td style="width: 49.9288%;"><a href="https://lnks.gd/l/eyJhbGciOiJIUzI1NiJ9.eyJidWxsZXRpbl9saW5rX2lkIjoxMDksInVyaSI6ImJwMjpjbGljayIsImJ1bGxldGluX2lkIjoiMjAyMjEyMTMuNjgxMjA1NTEiLCJ1cmwiOiJodHRwczovL3d3dy5zY2llbmNlZGlyZWN0LmNvbS9zY2llbmNlL2FydGljbGUvcGlpL1MwMjY5NzQ5MTIyMDEwNzY0P3V0bV9tZWRpdW09ZW1haWwmdXRtX3NvdXJjZT1Hb3ZEZWxpdmVyeSJ9.OTCKRtQ4wW5pYj8mWgivxFjSuAxU5qowzI8IzLUFcZM/s/2580731833/br/150277375178-l" rel="noopener noreferrer" style="color: #1d5782; text-decoration: underline;" target="_blank" data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://lnks.gd/l/eyJhbGciOiJIUzI1NiJ9.eyJidWxsZXRpbl9saW5rX2lkIjoxMDksInVyaSI6ImJwMjpjbGljayIsImJ1bGxldGluX2lkIjoiMjAyMjEyMTMuNjgxMjA1NTEiLCJ1cmwiOiJodHRwczovL3d3dy5zY2llbmNlZGlyZWN0LmNvbS9zY2llbmNlL2FydGljbGUvcGlpL1MwMjY5NzQ5MTIyMDEwNzY0P3V0bV9tZWRpdW09ZW1haWwmdXRtX3NvdXJjZT1Hb3ZEZWxpdmVyeSJ9.OTCKRtQ4wW5pYj8mWgivxFjSuAxU5qowzI8IzLUFcZM/s/2580731833/br/150277375178-l&amp;source=gmail&amp;ust=1671464435964000&amp;usg=AOvVaw19jdQtK7QmHcewsE98zyuo"><figure class="post__image"><img loading="lazy"  style="width: 389px; height: 220px; float: left;" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/unnamed6.jpg" alt="" width="389" height="220" align="left" hspace="7" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed6-xs.jpg 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed6-sm.jpg 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed6-md.jpg 768w"></figure></a></td>
+<td style="width: 49.9288%;">
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left"><strong><em>New publication on Shoreline Monitoring</em></strong></p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left"> </p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left">A  <a href="https://lnks.gd/l/eyJhbGciOiJIUzI1NiJ9.eyJidWxsZXRpbl9saW5rX2lkIjoxMTAsInVyaSI6ImJwMjpjbGljayIsImJ1bGxldGluX2lkIjoiMjAyMjEyMTMuNjgxMjA1NTEiLCJ1cmwiOiJodHRwczovL3d3dy5zY2llbmNlZGlyZWN0LmNvbS9zY2llbmNlL2FydGljbGUvcGlpL1MwMjY5NzQ5MTIyMDEwNzY0P3V0bV9tZWRpdW09ZW1haWwmdXRtX3NvdXJjZT1Hb3ZEZWxpdmVyeSJ9.wwnzjEKUiRfSm4anacmpLSAZPllZz0uQEsG0FeX1cWM/s/2580731833/br/150277375178-l" rel="noopener" style="color: #ec3f13; text-decoration: underline;" target="_blank" data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://lnks.gd/l/eyJhbGciOiJIUzI1NiJ9.eyJidWxsZXRpbl9saW5rX2lkIjoxMTAsInVyaSI6ImJwMjpjbGljayIsImJ1bGxldGluX2lkIjoiMjAyMjEyMTMuNjgxMjA1NTEiLCJ1cmwiOiJodHRwczovL3d3dy5zY2llbmNlZGlyZWN0LmNvbS9zY2llbmNlL2FydGljbGUvcGlpL1MwMjY5NzQ5MTIyMDEwNzY0P3V0bV9tZWRpdW09ZW1haWwmdXRtX3NvdXJjZT1Hb3ZEZWxpdmVyeSJ9.wwnzjEKUiRfSm4anacmpLSAZPllZz0uQEsG0FeX1cWM/s/2580731833/br/150277375178-l&amp;source=gmail&amp;ust=1671464435964000&amp;usg=AOvVaw2bPe6wk7O_um7GBxKpBigc">new publication</a> in the journal Environmental Pollution entitled “Towards a North Pacific long-term monitoring program for ocean plastic pollution: A systematic review and recommendations for shorelines” reviews published data (including from MDMAP!) on shoreline debris abundances a<a href="https://lnks.gd/l/eyJhbGciOiJIUzI1NiJ9.eyJidWxsZXRpbl9saW5rX2lkIjoxMTEsInVyaSI6ImJwMjpjbGljayIsImJ1bGxldGluX2lkIjoiMjAyMjEyMTMuNjgxMjA1NTEiLCJ1cmwiOiJodHRwczovL3d3dy5zY2llbmNlZGlyZWN0LmNvbS9zY2llbmNlL2FydGljbGUvcGlpL1MwMjY5NzQ5MTIyMDEwNzY0P3V0bV9tZWRpdW09ZW1haWwmdXRtX3NvdXJjZT1Hb3ZEZWxpdmVyeSJ9.jBi2sJtTtZMISi5fn5nt-KpqLqcV3NN3RYCi8N3bXSY/s/2580731833/br/150277375178-l" rel="noopener" style="color: #ec3f13; text-decoration: underline;" target="_blank" data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://lnks.gd/l/eyJhbGciOiJIUzI1NiJ9.eyJidWxsZXRpbl9saW5rX2lkIjoxMTEsInVyaSI6ImJwMjpjbGljayIsImJ1bGxldGluX2lkIjoiMjAyMjEyMTMuNjgxMjA1NTEiLCJ1cmwiOiJodHRwczovL3d3dy5zY2llbmNlZGlyZWN0LmNvbS9zY2llbmNlL2FydGljbGUvcGlpL1MwMjY5NzQ5MTIyMDEwNzY0P3V0bV9tZWRpdW09ZW1haWwmdXRtX3NvdXJjZT1Hb3ZEZWxpdmVyeSJ9.jBi2sJtTtZMISi5fn5nt-KpqLqcV3NN3RYCi8N3bXSY/s/2580731833/br/150277375178-l&amp;source=gmail&amp;ust=1671464435965000&amp;usg=AOvVaw2BYzAad9g-USJPi0YKAJep"></a>cross the North Pacific Ocean and makes recommendations for harmonizing monitoring efforts in this region. NOAA Marine Debris Program staff Amy V. Uhrin and Hillary Burgess are co-authors together with researchers from the Korea Marine Litter Institute, the Republic of Korea Naval Academy, and NOAA National Marine Fisheries Service Southeast Fisheries Science Center. The research team examined data and methods from 81 papers documenting shoreline debris in the North Pacific. </p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="m_-2332561867194686856govd_hr" style="padding: 0px;">
+<div class="m_-2332561867194686856govd_hr_inner"><span style="color: #0688cb; font-family: helvetica; font-size: 21px; letter-spacing: var(--letter-spacing);">Data Visualizations: Time Series</span></div>
+</div>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left">Is the amount of marine debris changing over time?  Use interactive time series graphs to find out! These graphs display the number of marine debris items per month per 100 meters of shoreline. Data can be either an individual site or a group of sites that you have selected.</p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left"> </p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left"><em><strong>For a single site: </strong></em>Click "visualize" from any MDMAP site page. If more than one survey protocol has been used at that site, they will appear on the same graph as separate series.</p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left"> </p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left"><em><strong>Averaged among a selection of sites:</strong> </em>Click "visualize" from the MDMAP home page. The default view when not logged-in is all MDMAP data. When logged-in, the default view is "my sites." </p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left"> </p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left">Filter results using the search and filter bar to the left. Options include site names, states, countries, or participating organizations that survey multiple sites. You can add multiple filters. Remove filters using the "x" next to the filter. Try searching for "Galveston Bay Foundation" or "Texas" then click "<a href="https://lnks.gd/l/eyJhbGciOiJIUzI1NiJ9.eyJidWxsZXRpbl9saW5rX2lkIjoxMTIsInVyaSI6ImJwMjpjbGljayIsImJ1bGxldGluX2lkIjoiMjAyMjEyMTMuNjgxMjA1NTEiLCJ1cmwiOiJodHRwczovL21kbWFwLm9yci5ub2FhLmdvdi92aXN1YWxpemU_dXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPUdvdkRlbGl2ZXJ5In0.wLo4s8k6oWGErEHicMMI6UEBJ79JSLVPEkJX1hqcb0w/s/2580731833/br/150277375178-l" style="color: #ec3f13; text-decoration: underline;" target="_blank" data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://lnks.gd/l/eyJhbGciOiJIUzI1NiJ9.eyJidWxsZXRpbl9saW5rX2lkIjoxMTIsInVyaSI6ImJwMjpjbGljayIsImJ1bGxldGluX2lkIjoiMjAyMjEyMTMuNjgxMjA1NTEiLCJ1cmwiOiJodHRwczovL21kbWFwLm9yci5ub2FhLmdvdi92aXN1YWxpemU_dXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPUdvdkRlbGl2ZXJ5In0.wLo4s8k6oWGErEHicMMI6UEBJ79JSLVPEkJX1hqcb0w/s/2580731833/br/150277375178-l&amp;source=gmail&amp;ust=1671464435965000&amp;usg=AOvVaw3u_AWPW4uQgVOG3cu0gOjM" rel="noopener">visualize</a>."</p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left"> </p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left">Grouping data from multiple sites is a powerful tool. However, be careful about drawing conclusions if data collection is sparse or inconsistent, and if the sites within the selection differed over time. As MDMAP grows and we have more data, the collective dataset will become more and more useful!</p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left"> </p>
+<a href="https://lnks.gd/l/eyJhbGciOiJIUzI1NiJ9.eyJidWxsZXRpbl9saW5rX2lkIjoxMTMsInVyaSI6ImJwMjpjbGljayIsImJ1bGxldGluX2lkIjoiMjAyMjEyMTMuNjgxMjA1NTEiLCJ1cmwiOiJodHRwczovL21kbWFwLm9yci5ub2FhLmdvdi92aXN1YWxpemU_dXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPUdvdkRlbGl2ZXJ5In0.9g2Kqolq0mO8O_YAEHsMjFiOnhpFT_tvdp3GdM34KX0/s/2580731833/br/150277375178-l" rel="noopener noreferrer" style="color: #1d5782; text-decoration: underline;" target="_blank" data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://lnks.gd/l/eyJhbGciOiJIUzI1NiJ9.eyJidWxsZXRpbl9saW5rX2lkIjoxMTMsInVyaSI6ImJwMjpjbGljayIsImJ1bGxldGluX2lkIjoiMjAyMjEyMTMuNjgxMjA1NTEiLCJ1cmwiOiJodHRwczovL21kbWFwLm9yci5ub2FhLmdvdi92aXN1YWxpemU_dXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPUdvdkRlbGl2ZXJ5In0.9g2Kqolq0mO8O_YAEHsMjFiOnhpFT_tvdp3GdM34KX0/s/2580731833/br/150277375178-l&amp;source=gmail&amp;ust=1671464435965000&amp;usg=AOvVaw304qyS_0wNKET9gKtE57Pq"><figure class="post__image align-center"><img loading="lazy"  style="width: 560px; height: 245px;" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/unnamed7.png" alt="" width="560" height="245" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed7-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed7-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed7-md.png 768w"></figure></a>
+<p style="width: 100%; text-align: left; font-size: 8pt; font-style: italic; font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; color: #3a3a3a; line-height: 17px; margin: 0; padding: 0;" align="left">In the example above, data are filtered by “Texas” and all debris is displayed. Hovering over each point on the number of sites and surveys contributing to the average on display. Data can be filtered by country, state, or public groups. When logged-in, you can also filter by “my sites” or “my groups.”</p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left"> </p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left">Standard deviations are shown for surveys that sub-sampled within the survey site, using either the Standing Stock or MDMAP 2.0 protocols.</p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left"> </p>
+<p style="font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; text-align: left; margin: 0; padding: 0;" align="left">The default display is to all debris items. Filter by material or item type to look at specific categories!<br><br></p>
+<div class="m_-2332561867194686856govd_hr" style="padding: 0px;">
+<div class="m_-2332561867194686856govd_hr_inner"><span style="color: #0688cb; font-family: helvetica; font-size: 21px; letter-spacing: var(--letter-spacing);">Participant Highlights</span></div>
+</div>
+<div class="m_-2332561867194686856govd_hr" style="padding: 0px;">
+<div class="m_-2332561867194686856govd_hr_inner">
+<table style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal); width: 100%;" border="0" width="100%" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td style="width: 33.0956%;"><figure class="post__image"><img loading="lazy"  style="width: 233px; height: 173px;" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/unnamed8.jpg" alt="" width="233" height="173" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed8-xs.jpg 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed8-sm.jpg 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed8-md.jpg 768w"></figure></td>
+<td style="width: 66.9044%;">
+<p style="text-align: left; font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; margin: 0; padding: 0;" align="left">During the Chesapeake Bay Foundation's fall student leadership conference near Lorton, Virginia, high schoolers did an MDMAP survey along the Potomac River. The students learned about scientific data collection and discussed the issues of plastics and marine debris in the Chesapeake Bay (Credit: Kassie Fenn).</p>
+</td>
+</tr>
+<tr>
+<td style="width: 33.0956%;"><figure class="post__image"><img loading="lazy"  style="width: 234px; height: 177px;" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/unnamed9.jpg" alt="" width="234" height="177" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed9-xs.jpg 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed9-sm.jpg 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed9-md.jpg 768w"></figure></td>
+<td style="width: 66.9044%;">
+<p style="text-align: left; font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; margin: 0; padding: 0;" align="left">AO Latinoamérica, an ocean education and stewardship volunteer organization based in Ensenada, Mexico established the first MDMAP site on the Baja peninsula: Playa Pacifica. Bienvenida al equipo! (Credit: Fernando Castillo).</p>
+</td>
+</tr>
+<tr>
+<td style="width: 33.0956%;"><figure class="post__image"><img loading="lazy"  style="width: 234px; height: 271px;" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/unnamed10.jpg" alt="" width="234" height="271" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed10-xs.jpg 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed10-sm.jpg 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed10-md.jpg 768w"></figure></td>
+<td style="width: 66.9044%;">
+<p style="text-align: left; font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; margin: 0; padding: 0;" align="left">NOAA Marine Debris Program staff Mark Manuel, Amy Gohres, and Shanelle Naone hosted an MDMAP training for the Mariana Islands Nature Alliance. Ten participants spent a half day learning the ropes of MDMAP and established the first MDMAP sites on the Northern Mariana Islands. We warmly welcome to the team! At left, trainees sort, count, and categorize debris (Credit: NOAA).</p>
+</td>
+</tr>
+<tr>
+<td class="m_-2332561867194686856gd_combo_image_cell" style="width: 33.0956%;" width="232"><figure class="post__image"><img loading="lazy"  style="width: 232px; height: 138px;" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/unnamed11.jpg" alt="" width="232" height="138" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed11-xs.jpg 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed11-sm.jpg 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed11-md.jpg 768w"></figure></td>
+<td class="m_-2332561867194686856gd_combo_text_cell" style="width: 66.9044%;">
+<p style="text-align: left; font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; margin: 0; padding: 0;" align="left">During a creative writing and art retreat hosted by Heart of Cartm, participants conducted an MDMAP survey near Manzanita, Oregon. They then used the debris to create works of art. The retreat hosted people from diverse geography and professions united by a common interest in ocean health (Credit: Denise Harrington).</p>
+</td>
+</tr>
+<tr>
+<td style="width: 33.0956%;"><figure class="post__image"><img loading="lazy"  style="width: 233px; height: 175px;" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/unnamed12.jpg" alt="" width="233" height="175" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed12-xs.jpg 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed12-sm.jpg 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/24/responsive/unnamed12-md.jpg 768w"></figure></td>
+<td style="width: 66.9044%;">
+<p style="text-align: left; font-family: Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif!important; font-size: 14px; color: #3a3a3a; line-height: 17px; margin: 0; padding: 0;" align="left">At left, 11th grade students from the Taipei European School survey Venice beach on the coral island of XiaoLiuQiu in Taiwan. Through MDMAP, students learned science concepts, data collection skills, and explored the issue and solutions to marine debris (Credit: Nans Bujan).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Digital Image Feedback Synthesis</title>
+        <author>
+            <name>Phileas Dazeley-Gaist</name>
+        </author>
+        <link href="https://phileasdg.github.io/phileas-dazeley-gaist/digital-image-feedback-synthesis/"/>
+        <id>https://phileasdg.github.io/phileas-dazeley-gaist/digital-image-feedback-synthesis/</id>
+        <media:content url="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/Screenshot-2022-12-08-at-23.12.15.png" medium="image" />
+            <category term="Wolfram Language"/>
+            <category term="Undergraduate work"/>
+            <category term="Programming"/>
+            <category term="Art?"/>
+
+        <updated>2023-07-21T20:33:40-04:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/Screenshot-2022-12-08-at-23.12.15.png" alt="" />
+                    Update: You can read an expanded exploration of this project at this&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/Screenshot-2022-12-08-at-23.12.15.png" class="type:primaryImage" alt="" /></p>
+                <h2>Update:</h2>
+<p>You can read an expanded exploration of this project at <a href="https://community.wolfram.com/groups/-/m/t/2816083" target="_blank" rel="noopener">this Wolfram community forum page</a>. If you're interested in interacting directly with my code, that's the place. ;) If not, feel free to keep reading on! :) </p>
+<h2>Pre(r)amble</h2>
+<figure class="post__image">I still haven't found the best way to share Mathematica projects, which is a shame because it has quickly become my favourite prototyping and computational exploration programming language. Somehow, linking to Mathematica notebooks in the cloud just doesn't feel right. It feels like cheating, like I'm getting away with a pretend blog post. It's all pretty silly, but there you go. <br><br>Just a couple days ago, I wrote a notebook implementing a video feedback synthesis process diagram by José María Castelo from his project [MorphogenCV](https://github.com/jmcastelo/MorphogenCV). <br><br>Here is José's diagram: <br><br><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23//image.png" alt="" width="449" height="824" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23//responsive/image-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23//responsive/image-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23//responsive/image-md.png 768w"></figure><br><br>In this blog post, I'm going to write about this implementation and the cool things it does. I'll explore the code, providing explanations and code output as examples. Note: In this project, I wrote my code above all to be readable. It is quite slow, and I may rewrite it some day to be much faster. There are many obvious ways it could be improved, but I am satisfied now with how easy it is to parse when reading.</p>
+<h2>Video Feedback</h2>
+<p>Video feedback is a unique visual phenomenon that occurs when a video camera is pointed at a monitor displaying the camera's own output. This creates a feedback loop, resulting in a pattern of video distortion and abstraction. By following José's diagram, we will be able to create a Mathematica function that can simulate this phenomenon and produce really cool video feedback patterns. Let's begin.</p>
+<h2>Understanding the process</h2>
+<p>José's diagram allows us to break the feedback synthesis into discrete steps for each recursion. These are:</p>
+<ol>
+<li>Preprocessing the input image by equalizing its histogram and optionally shifting the image hue.</li>
+<li>Make three copies of the preprocessed input, and process them according to three different processes. The first process applies contrast, brightness, sharpening, rotating, and resizing adjustments to the copy. The second applies two blurring adjustments to the copy. Lastly, the third applies contrast, brightness, erosion, and blur to the copy.</li>
+<li>Blend the processed copies</li>
+</ol>
+<h2>Implementation</h2>
+<p>Let's see what this looks like in practice! First, let's define an input image:</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/Screenshot-2022-12-08-at-22.01.52.png" alt="" width="214" height="115" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-08-at-22.01.52-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-08-at-22.01.52-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-08-at-22.01.52-md.png 768w"></figure>
+<p>Let's preprocess the image: </p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/Screenshot-2022-12-09-at-17.59.13.png" alt="" width="697" height="276" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-17.59.13-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-17.59.13-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-17.59.13-md.png 768w"></figure>
+<p>Now, let's take the prepared image, and apply the processes described in the previous section to three separate copies:</p>
+<p>The first process: </p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/Screenshot-2022-12-09-at-18.00.13.png" alt="" width="694" height="270" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.00.13-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.00.13-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.00.13-md.png 768w"></figure>
+<p>The second process: </p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/Screenshot-2022-12-09-at-18.00.42.png" alt="" width="698" height="213" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.00.42-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.00.42-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.00.42-md.png 768w"></figure>
+<p>The third process:</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/Screenshot-2022-12-09-at-18.01.11.png" alt="" width="693" height="302" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.01.11-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.01.11-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.01.11-md.png 768w"></figure>
+<p>Finally, we blend the resulting images together:</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/Screenshot-2022-12-09-at-18.15.41.png" alt="" width="693" height="309" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.15.41-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.15.41-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.15.41-md.png 768w"></figure>
+<p>Here is a visualisation of the steps of the process: </p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/Screenshot-2022-12-09-at-18.16.52.png" alt="" width="698" height="165" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.16.52-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.16.52-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.16.52-md.png 768w"></figure>
+<p>All that's left to do is tie these steps together in a function:</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/Screenshot-2022-12-09-at-18.18.03.png" alt="" width="696" height="537" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.18.03-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.18.03-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.18.03-md.png 768w"></figure>
+<p>Let's visualise the first few iterations of feedback from a starting image at some arbitrary settings:</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/Screenshot-2022-12-09-at-18.19.36.png" alt="" width="696" height="234" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.19.36-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.19.36-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.19.36-md.png 768w"></figure>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/Screenshot-2022-12-09-at-18.20.34.png" alt="" width="696" height="446" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.20.34-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.20.34-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.20.34-md.png 768w"></figure>
+<p>Then let's visualise the result after many iterations starting from the same input.</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/Screenshot-2022-12-09-at-18.22.42.png" alt="" width="694" height="245" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.22.42-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.22.42-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.22.42-md.png 768w"></figure>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/Screenshot-2022-12-09-at-18.25.43.png" alt="" width="697" height="382" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.25.43-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.25.43-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.25.43-md.png 768w"></figure>
+<p>Here are some examples of output I got from playing around with the settings for a bit:</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/Screenshot-2022-12-09-at-18.26.26.png" alt="" width="696" height="358" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.26.26-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.26.26-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.26.26-md.png 768w"></figure>
+<p>You get these interesting stripy shapes for even very simple inputs, for instance: </p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/Screenshot-2022-12-09-at-18.28.21.png" alt="" width="695" height="372" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.28.21-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.28.21-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.28.21-md.png 768w"></figure>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/Screenshot-2022-12-09-at-18.28.41.png" alt="" width="1336" height="738" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.28.41-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.28.41-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/responsive/Screenshot-2022-12-09-at-18.28.41-md.png 768w"></figure>
+<p>I hope this exploration was fun! I'll end this post with a gallery of curated outputs from playing around with different inputs and settings: </p>
+<div class="gallery-wrapper"><div class="gallery"  data-is-empty="false" data-translation="Add images" data-columns="3">
+<figure class="gallery__item"><a href="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/gallery/pattern1-3.png" data-size="1000x992"><img loading="lazy" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/gallery/pattern1-3-thumbnail.png" alt="" width="768" height="762"></a></figure>
+<figure class="gallery__item"><a href="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/gallery/pattern2-3.png" data-size="1000x992"><img loading="lazy" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/gallery/pattern2-3-thumbnail.png" alt="" width="768" height="762"></a></figure>
+<figure class="gallery__item"><a href="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/gallery/pattern3-3.png" data-size="1000x992"><img loading="lazy" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/gallery/pattern3-3-thumbnail.png" alt="" width="768" height="762"></a></figure>
+<figure class="gallery__item"><a href="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/gallery/pattern4-3.png" data-size="1000x992"><img loading="lazy" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/gallery/pattern4-3-thumbnail.png" alt="" width="768" height="762"></a></figure>
+<figure class="gallery__item"><a href="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/gallery/pattern5-3.png" data-size="1000x992"><img loading="lazy" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/gallery/pattern5-3-thumbnail.png" alt="" width="768" height="762"></a></figure>
+<figure class="gallery__item"><a href="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/gallery/pattern6-3.png" data-size="1000x1000"><img loading="lazy" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/gallery/pattern6-3-thumbnail.png" alt="" width="768" height="768"></a></figure>
+<figure class="gallery__item"><a href="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/gallery/pattern7-3.png" data-size="1000x1000"><img loading="lazy" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/gallery/pattern7-3-thumbnail.png" alt="" width="768" height="768"></a></figure>
+<figure class="gallery__item"><a href="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/gallery/pattern8-3.png" data-size="1000x1000"><img loading="lazy" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/gallery/pattern8-3-thumbnail.png" alt="" width="768" height="768"></a></figure>
+<figure class="gallery__item"><a href="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/gallery/pattern9-3.png" data-size="1000x1000"><img loading="lazy" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/23/gallery/pattern9-3-thumbnail.png" alt="" width="768" height="768"></a></figure>
+</div></div>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Video Feedback, Emergence, and Poetry</title>
+        <author>
+            <name>Phileas Dazeley-Gaist</name>
+        </author>
+        <link href="https://phileasdg.github.io/phileas-dazeley-gaist/recursive-poetry/"/>
+        <id>https://phileasdg.github.io/phileas-dazeley-gaist/recursive-poetry/</id>
+        <media:content url="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/20/Screenshot-2022-11-21-at-21.05.40.png" medium="image" />
+            <category term="Undergraduate work"/>
+            <category term="Programming"/>
+            <category term="Art?"/>
+
+        <updated>2022-11-21T21:08:06-05:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/20/Screenshot-2022-11-21-at-21.05.40.png" alt="" />
+                    I submitted the following short video as part of a midterm for&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/20/Screenshot-2022-11-21-at-21.05.40.png" class="type:primaryImage" alt="" /></p>
+                <p>I submitted the following short video as part of a midterm for a course on Chaos and Fractals in my junior year of undergrad. In it, I play with video feedback generated by pointing my laptop webcam to a television in College of the Atlantic's Thorndike Library Seminar Room while trying to express my admiration for emergence in complex systems, and making a connection to poetry.</p>
+<p>I controlled the video stream using OpenCV in Python, which allowed me to manipulate various properties of the image, like hue, saturation, whether of not to invert the image, tile, translate, rotate, or mirror it, etc. In the recordings of video feedback streams that you will see in this video, I vary the following image properties:</p>
+<ul>
+<li>monochrome/colour</li>
+<li>no inverting/inverting</li>
+<li>no mirroring/mirroring</li>
+<li>hue shifts</li>
+</ul>
+<p>The result is this pretty cute and fun video which I hope you will enjoy:</p>
+<figure class="post__video"><iframe loading="lazy" width="560" height="314" src="https://www.youtube.com/embed/mBQfjY_g-pI" allowfullscreen="allowfullscreen" data-mce-fragment="1"></iframe></figure>
+<p> </p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Digital Double, Reflections on Digital Selfhood.</title>
+        <author>
+            <name>Phileas Dazeley-Gaist</name>
+        </author>
+        <link href="https://phileasdg.github.io/phileas-dazeley-gaist/digital-double-reflections-on-digital-selfhood/"/>
+        <id>https://phileasdg.github.io/phileas-dazeley-gaist/digital-double-reflections-on-digital-selfhood/</id>
+        <media:content url="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/17/Screenshot-2022-08-12-at-01.07.35.png" medium="image" />
+            <category term="Undergraduate work"/>
+            <category term="Programming"/>
+            <category term="Max msp jitter"/>
+            <category term="Art?"/>
+
+        <updated>2022-12-09T09:26:45-05:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/17/Screenshot-2022-08-12-at-01.07.35.png" alt="" />
+                    Digital Double – Interactive Stochastic Video-Art Piece I was thrilled this last Spring to&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/17/Screenshot-2022-08-12-at-01.07.35.png" class="type:primaryImage" alt="" /></p>
+                <h2 class="p1"><span class="s1">Digital Double</span><span class="s2"> </span><span class="s1">–</span><span class="s2"> </span><span class="s1">Interactive Stochastic Video-Art Piece</span></h2>
+<p class="p2"><span class="s1">I was thrilled this last Spring to have the opportunity to exhibit my art installation ‘Digital Double’ at College of the Atlantic as part of the College’s end of year musical and artistic programming. This was, coincidentally, my very first exhibit; putting it together was a challenging, at times frustrating, but ultimately enlightening and extremely rewarding experience, which I will try my best to relate some highlights from in this blog post.</span></p>
+<h2 class="p1"><span class="s1">What is a digital double?</span></h2>
+<p class="p4"><span class="s1">What’s a digital double in the first place? Your digital double is your online persona</span><span class="s3"> </span><span class="s1">–</span><span class="s3"> </span><span class="s1">the version of you that exists in the digital world. It includes everything from your social media profiles to your online banking information. Due to the ever-increasing ubiquity of the internet, our digital doubles are steadily becoming more and more important in our everyday lives. What you post online, who you add to your friends, and what you search are among a vast number of actions that affect your digital double and those of people in your close (and sometimes not so close) online social graph. Our digital doubles mediate and incarnate our online interactions in the digital world. We affect our doubles, and they affect us. But what is the nature of our relationships with these digital representations of us?</span></p>
+<p class="p4"><span class="s1">There is no single answer to this question. Our relationships with our digital doubles depend on a variety of factors, including our individual personalities and the specific context in which we interact with our machines and online spaces. In general, however, we can say that our relationship with our digital doubles is complex and often contradictory. On the one hand, we rely on our digital doubles to help us navigate the digital world and to manage our online identities. On the other hand, we may be worried about the loss of privacy and control that comes with having a digital double.</span></p>
+<p class="p4"><span class="s1">In some contexts, the digital double may appear alien, entirely external and Other. In others, the digital double may come to feel like a close friend or even a part of the self. The digital double is always changing, growing, and evolving along with the technology that creates and sustains it, and ourselves. As our relationships with our digital doubles continue to evolve, so too will our understandings of what it means to be human in the digital age.</span></p>
+<h2 class="p1"><span class="s1">Origins of the Project</span></h2>
+<p class="p2"><span class="s1">It was questioning digital selfhood and the notion of the digital double in a course on the history of video art with Professor Colin Capers that led me in my first year at College of the Atlantic to draft a short video art installation project exploring the relationship between people and their machines. The project was designed as a multi-projector set up in an empty room; Four projectors, one at each corner of the room projecting diagonally past one another to the opposite corner. In the centre of the room, by a tower connected to an early 2,000s CRT monitor, a chair on which visitors could sit and face distorted parodic representations of the digital double of an unknown internet user (I like the French ‘internaute’).</span></p>
+<p class="p2"><span class="s1">Beyond the draught, the project lay dormant for almost three years until I registered last Spring to Critical Making and New Media Art, with Quran Karriem, visiting faculty from Duke University, and Musicianship, with Professor Jonathan Henderson, with the intent to explore generative aleatoric processes in music and new-media generation. Critical Making and New Media Art focused on the practice of making and the theory of new media art and design, as well as a fair amount of programming in Pure Data and Cycling74’s Max MSP, while Musicianship was a general introduction to musical practice and conventions. I decided to revisit the project and use these classes as an opportunity to actually bring it to fruition.</span></p>
+<h2 class="p1"><span class="s1">Video presentation:</span></h2>
+<p class="p2"><span class="s1">To review my work at the end of the Critical Making and New Media Art course, and as a way of providing an artist’s statement, I produced the following 25-minute video describing the exhibit in detail as well as the rationale behind it.</span></p>
+<figure class="post__video"><iframe loading="lazy" width="560" height="314" src="https://www.youtube.com/embed/rKNGOd5dcow?t=458s" allowfullscreen="allowfullscreen" data-mce-fragment="1"></iframe></figure>
+<h2 class="p1"><span class="s1">Concluding statement and reflection</span></h2>
+<p class="p4"><span class="s1">Overall I am extremely pleased with the final product and the way the exhibit turned out. I was very lucky to have had the opportunity to work with some extremely talented and helpful people, including my classmates, professors, and the staff at the college. I am also grateful to have had the chance to work with some amazing technology, including high-powered projectors and the node-based visual programming tool Max MSP.</span></p>
+<p class="p4"><span class="s1"> </span><span class="s1">There are, of course, always things that could have been done better. In particular, I would have liked to have had more time to fine-tune the visuals and the audio. I would also have liked to have been able to interact with visitors more during the exhibit. As it was, I was only able to talk to a few people during the exhibit itself, as I was busy setting up and taking down the equipment. All in all, however, I am very happy with the way the exhibit turned out, and I am looking forward to future opportunities to exhibit my work.</span></p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Standing Stones and Megaliths of St Just - A GIS project</title>
+        <author>
+            <name>Phileas Dazeley-Gaist</name>
+        </author>
+        <link href="https://phileasdg.github.io/phileas-dazeley-gaist/standing-stones-and-megaliths-of-st-just/"/>
+        <id>https://phileasdg.github.io/phileas-dazeley-gaist/standing-stones-and-megaliths-of-st-just/</id>
+        <media:content url="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/9/menhirs-2.JPG" medium="image" />
+            <category term="Undergraduate work"/>
+            <category term="GIS"/>
+
+        <updated>2023-07-31T12:39:40-04:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/9/menhirs-2.JPG" alt="" />
+                    I constructed the following ESRI ArcGIS StoryMap project for the college course&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/9/menhirs-2.JPG" class="type:primaryImage" alt="" /></p>
+                <p>I constructed the following ESRI ArcGIS StoryMap project for the college course "Geographic Information Systems" taught by Professor Gordon Longsworth at the College of the Atlantic, in Fall 2020. I have embedded it below as a sample of my undergraduate GIS work. </p>
+<p>Follow <a href="https://storymaps.arcgis.com/stories/3edd0a80cd114d02af9bdeb1b446d30b">this link</a> for to see this StoryMap.</p>
+<p> </p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Tracking Icebergs: Exploring the Mathematics of Iceberg Drift and Decay Models</title>
+        <author>
+            <name>Phileas Dazeley-Gaist</name>
+        </author>
+        <link href="https://phileasdg.github.io/phileas-dazeley-gaist/tracking-icebergs/"/>
+        <id>https://phileasdg.github.io/phileas-dazeley-gaist/tracking-icebergs/</id>
+        <media:content url="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/Iceberg_Ilulissat.jpg" medium="image" />
+            <category term="Undergraduate work"/>
+            <category term="GIS"/>
+
+        <updated>2023-07-21T21:42:03-04:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/Iceberg_Ilulissat.jpg" alt="CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid&#x3D;730855" />
+                    I wrote this short essay for the college course "Polar Ecology and&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/Iceberg_Ilulissat.jpg" class="type:primaryImage" alt="CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid&#x3D;730855" /></p>
+                <div class="page" title="Page 1">
+<div class="layoutArea">
+<div class="column">
+<p>I wrote this short essay for the college course "Polar Ecology and Exploration" taught by Professor Sean Todd at College of the Atlantic in Winter 2020. I have reproduced it here as a sample of my undergraduate writing. </p>
+<h2>Introduction</h2>
+<p>This paper will explore and contextualise the principles and methods at the centre of contemporary iceberg drift and decay mathematical models. To do so, it will first examine the incentives for institutional efforts to track drifting icebergs. Secondly, this paper will engage in an extensive introductory exploration of iceberg drift and decay approximation formulas and dynamic and thermodynamic models and assess their respective strengths and limitations. Finally, it will describe the process of running a modern drift and decay model simulation using MATLAB and report the raw simulation results.</p>
+<h3>Incentives for Iceberg tracking</h3>
+<p><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">Icebergs are large masses of freshwater ice that form by breaking apart from a glacier, ice shelf, or larger icebergs, a process known as calving (Iceberg | Ice Formation, n.d.). In the Antarctic Circle, icebergs calve from the floating ice shelves of the Antarctic continent, which results in large and tall icebergs with steep cliff-like sides and flat tops, known as tabular icebergs (Ibid). In the Arctic, icebergs calve from glaciers, particularly those of Greenland (Ibid). NOAA’s National Ocean Service defines minimum characteristics of icebergs (according to the standard set by the International Ice Patrol) as follows:</span></p>
+<div class="page" title="Page 1">
+<div class="layoutArea">
+<div class="column">
+<p>“To be classified as an iceberg, the height of the ice must be greater than 16 feet above sea level and the thickness must be 98-164 feet and the ice must cover an area of at least 5,382 square feet.” (US Department of Commerce, n.d.)</p>
+<p>One incentive for iceberg tracking and monitoring is risk minimisation. While even the smallest ice objects that satisfy these criteria easily pose threats to ships and offshore ventures, among others, larger icebergs, which can reach a freeboard (height above the waterline) of above 100 metres and individual mass exceeding 10,000,000 tonnes (100 times the typical mass of the smallest icebergs) pose additional and greatly increased threats to their surroundings as they drift (Iceberg Classification Systems, n.d.).</p>
+<div class="page" title="Page 1">
+<div class="layoutArea">
+<div class="column">
+<p>Other incentives for iceberg monitoring are scientific: Melting icebergs could contain clues to the processes behind ice-shelf collapse (Icebergs | National <span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">Snow and Ice Data Center, n.d.). If so, their study could contribute to our understanding of global warming. As they melt, icebergs release freshwater into the ocean, suggesting that in large enough numbers, drifting icebergs could affect ocean circulation (Ibid). Furthermore, as they melt, icebergs disperse nutrients into the ocean, leaving trails of nutrient-rich freshwater, which attracts marine life and could therefore be of interest to marine biologists (Ibid).</span></p>
+<div class="page" title="Page 2">
+<div class="layoutArea">
+<div class="column">
+<p>Mathematical iceberg drift and decay models are powerful tools that, given accurate data, can assist researchers and institutions by predicting where they might expect to find icebergs or estimating the future drift of existing icebergs given an initial location to calculate from. These applications are desirable because of the high cost of real-world iceberg tracking, which is typically done via satellite imagery, aerial surveys, and sighting reporting from merchant and scientific ships (Icebergs | National Snow and Ice Data Center, n.d.).</p>
+<div class="page" title="Page 2">
+<div class="layoutArea">
+<div class="column">
+<h2>Drift and Decay</h2>
+<p>While some simple approximation formulas exist to estimate iceberg drift and decay, these tend to produce somewhat caricatured predictions that are unsuitable for most research purposes. Among more complex mathematical models, some are probabilistic, but most sophisticated contemporary models are deterministic and incorporate thermodynamics in their predictions. This section will present iceberg drift and decay approximation methods, explore the principal essential components of these modern models, and assess their strengths and limitations.</p>
+<h3>Approximation Formulas</h3>
+<p>Although they lack precision, approximation rules for iceberg drift and decay are helpful in that they are speedy.</p>
+<p>A frequent estimate of iceberg drift velocity is that it approximately equals 2% of the wind velocity relative to the ocean current (Smith, 1993). The approximation holds true for most cases in the Arctic, where small icebergs and strong winds are common, but does not in the Antarctic, where the combination of weak winds and generally larger icebergs render the effect of wind on iceberg drift negligible (Wagner et al., 2017).</p>
+<p>In their report for the CRREL titled Some Elements of Iceberg Technology, W. F. Weeks and M. Mellor propose the following iceberg ice loss formula:</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/iceberg-figure-1.png" alt="figure 1: Z = K * Delta" width="141" height="45" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/responsive/iceberg-figure-1-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/responsive/iceberg-figure-1-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/responsive/iceberg-figure-1-md.png 768w"></figure>
+<div class="page" title="Page 2">
+<div class="layoutArea">
+<div class="column">
+<p>Where Z is the total ice loss at any point of an iceberg’s journey in metres, ∆ is the sum of mean daily water temperatures around the draught of the iceberg for <span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">every day of an iceberg’s drift in degrees Celsius, and K is a constant ~ 0.12. This formula appears rather infrequently in scientific literature and should be used cautiously.</span></p>
+<div class="page" title="Page 3">
+<div class="layoutArea">
+<div class="column">
+<p>While potentially useful for navigation and small-scale, short-term predictions of iceberg drift and decay, these shortcuts tend to produce skewed results, which can deviate significantly from real-world observations. For this reason, scientists should generally avoid them in research.</p>
+<div class="page" title="Page 3">
+<div class="layoutArea">
+<div class="column">
+<h3>Dynamic and Thermodynamic Models</h3>
+<p>Modelling the dynamics and thermodynamics of icebergs, published in 1997 and co-authored by Grant R. Bigg, Martin R. Wadley, David P. Stevens, and John A. Johnson, is a foundational paper for the admittedly very niche field of iceberg drift modelling. The paper proposes the following momentum equation of horizontal iceberg motion:</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/iceberg-figure-2.png" alt="figure 2: M*(dV_i/dt) = -M*f*k*x*V_i+F_a+F_w+F_i+F_p+F+r" width="844" height="132" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/responsive/iceberg-figure-2-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/responsive/iceberg-figure-2-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/responsive/iceberg-figure-2-md.png 768w"></figure>
+<p>Where M is the iceberg's mass (kg), and V_i is the horizontal velocity (m*s^-1). <span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">The </span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">components of the equation F_a, F_w, F_i, F_p, and F_r are respectively air and wind </span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">drag (F_a), water drag (F_w), sea ice drag (F_i), the horizontal pressure gradient force </span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">the water around the iceberg exerts on the volume that the iceberg displaces (F_p), </span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">water and wave drag (F_w), and the wave radiation force (F_r), while f is the Coriolis </span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">parameter, a value equal to 2Ω * sin phi, where Ω is the rate of rotation of the Earth, and phi is latitude (Holton &amp; Hakim, 2012) (reported in rad*s^-1) (Bigg et al., 1997).</span></p>
+<div class="page" title="Page 3">
+<div class="layoutArea">
+<div class="column">
+<p>Since the mass of an iceberg reduces as the iceberg drifts, melts, and sometimes breaks up into smaller pieces, it is important to note that in practice, the equation described above only reveals an iceberg’s momentum at a given point of its life: it does not account for iceberg decay. The equation returns the momentum of any iceberg given its mass and velocity. However, alone, its applications to iceberg drift modelling are limited because drift is affected by each modelled iceberg’s length, width, and mass (Wagner et al., 2017). To account for the gradual change in mass and dimensions of drifting icebergs, Bigg et al. (1997) describe and propose methods to jointly model iceberg thermodynamics. They write:</p>
+<div class="page" title="Page 3">
+<div class="layoutArea">
+<div class="column">
+<blockquote>
+<p>“The melting of an iceberg constantly changes its mass and shape, and thus must be modelled in any long-term simulation of trajectories... The melting/erosional processes that have been included are ‘basal’ convection or turbulent heat transfer, buoyant <span style="font-family: var(--font-serif); color: var(--text-primary-color); font-size: inherit;">convection, wave erosion, solar and sensible heating, and sublimation.” (p. 117)</span></p>
+</blockquote>
+<div class="page" title="Page 4">
+<div class="layoutArea">
+<div class="column">
+<p>Among the melt processes they list, the dominant three according to Till J. W. Wagner, Rebecca W. Dell, and Ian Eisenman (2017) are wind-driven wave erosion (mechanical) M_e, turbulent basal melt (thermal) – melting at the base of the iceberg; described as turbulent because the melting basal layer is sandwiched between the cold of the ice and the relative warmth of the water, forming a transitional volume of turbulent convection (Ahlers, 2009) – M_b, and thermal sidewall erosion from buoyant convection – erosion of iceberg sidewalls from changes in ice surface temperature due to variations in iceberg buoyancy (Convection, n.d.) – noted M_v. In their paper, An Analytical Model of Iceberg Drift, the authors incorporate these factors in their own iceberg drift and decay model but discard the other thermodynamic factors described by Bigg et al. (1997), which they assert are negligible in comparison to the others. Their formulation of the equations for these three factors are:</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/iceberg-figure-3.png" alt="figure 3" width="1488" height="738" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/responsive/iceberg-figure-3-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/responsive/iceberg-figure-3-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/responsive/iceberg-figure-3-md.png 768w"></figure>
+<div class="page" title="Page 4">
+<div class="layoutArea">
+<div class="column">
+<p>For the purposes of this paper, it will suffice to mention that these equations solve for the changes in mass, length (L), width (W), and height (H) of modelled icebergs, and that the dimensions of modelled icebergs change as</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/iceberg-figure-4.png" alt="figure 4" width="282" height="238" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/responsive/iceberg-figure-4-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/responsive/iceberg-figure-4-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/responsive/iceberg-figure-4-md.png 768w"></figure>
+<div class="page" title="Page 4">
+<div class="layoutArea">
+<div class="column">
+<p>As should be evident, solving these equations requires data on the conditions of any modelled iceberg’s immediate environment, most importantly sea state, sea surface temperature, and atmospheric temperature estimates. Many models, including the one proposed by Wagner et al. (2017) source these data from </p>
+<div class="page" title="Page 5">
+<div class="layoutArea">
+<div class="column">
+<p>NASA’s “Estimating the Circulation and Climate of the Ocean” (ECCO) consortium, or NCAR and UCAR’s Community Climate System Model (CCSM).</p>
+<p>By sequentially solving the iceberg momentum and decay equations, feeding the results of the momentum equation into the decay equations and vice versa, we can calculate and plot the trajectory of an iceberg starting at any given latitudinal and longitudinal coordinates (a monumental task which researchers typically undertake programmatically) (Eisenman et al., 2021). The accuracy of the results produced using this method makes the use of momentum and decay equations in models attractive, and their use is now common in iceberg drift and decay models. Variations of the formulas first described by Bigg et al. (1997) are at the core of many iceberg drift and decay modelling tools today, programs such as MITberg, a MATLAB project developed by Alan Condron at the University of Massachusetts and designed to be used with MIT’s general circulation model (MITgcm), (MITberg: Icebergs and Climate Change, n.d.), itself a program designed to model fluid dynamics in the Earth ocean and atmosphere (MITgcm User Manual, n.d.). Other examples include OpenBerg, a python module for use with the python ocean drift modelling library OpenDrift (Opendrift.Models.Openberg — OpenDrift Documentation, n.d.), Elmer/Ice, an add-on package to the Elmer FEM (finite element method) program, which is designed to model ice dynamics (Elmer Ice - Home, n.d.), and FESOM-IB, a module designed for the Finite-Element/VolumE Sea-ice Ocean Model (Rackow et al., 2013).</p>
+<div class="page" title="Page 5">
+<div class="layoutArea">
+<div class="column">
+<p>The main advantages of dynamic and thermodynamic deterministic models of iceberg drift and decay over approximations and probabilistic models reside in the increased precision and reliability of their results when compared to real-world observational data (for an example, see Figure 1). In fact, they so surpass probabilistic models that these have largely fallen out of use. However, with this gained precision come challenges and drawbacks: high computational power requirements for long time scale or large iceberg sample simulations due to the volume of calculations and data which the models must process with each new drift prediction step, and lower accessibility to laypeople due to the steep learning curves and sometimes high financial costs associated with the use of the frameworks (hardware and software) through which these models are accessible (typical software frameworks are high-level sometimes proprietary programs or programming languages such as MATLAB, which hosts two of the models mentioned in this paper, the Lagrangian model proposed by Wagner et al. (2017), and MITberg)</p>
+<figure class="post__image" ><img loading="lazy" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/iceberg-figure-5.png" alt="figure 5: a) Observed iceberg trajectories using data from the Antarctic Iceberg Tracking Database. b) One-year duration simulated trajectories for 200 icebergs of lengths ranging between 15 and 20 km using the drift and decay model proposed by Wagner et al. (2017). (Journal of Physical Oceanography 47, 7; 10.1175/JPO-D-16-0262.1)" width="1152" height="1232" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/responsive/iceberg-figure-5-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/responsive/iceberg-figure-5-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/responsive/iceberg-figure-5-md.png 768w">
+<figcaption >
+<div class="page" title="Page 6">
+<div class="layoutArea">
+<div class="column">
+<p>a) Observed iceberg trajectories using data from the Antarctic Iceberg Tracking Database.<br>b) One-year duration simulated trajectories for 200 icebergs of lengths ranging between 15 and 20 km using the drift and decay model proposed by Wagner et al. (2017). (Journal of Physical Oceanography 47, 7; 10.1175/JPO-D-16-0262.1)</p>
+</div>
+</div>
+</div>
+</figcaption>
+</figure>
+<div class="page" title="Page 6">
+<div class="layoutArea">
+<div class="column">
+<h2>Running a drift and decay model</h2>
+<p>The model proposed by Wagner et al. (2017) is publicly available at http://eisenman.ucsd.edu/code.html, and as a MATLAB code repository on GitHub. This section will shortly describe the process of setting up and running the model using MATLAB online and report the model output generated using the described setup program parameters.</p>
+<p>After downloading the model repository from GitHub and uploading it to a directory of MATLAB Drive, I accessed the main program by opening the model file named “iceberg_model_WDE17.m”. I then confirmed that my MATLAB license included access to the MATLAB mapping toolbox, which the model requires to generate iceberg drift trail maps (Eisenman et al., 2021). The program code is clear and generously annotated with usage instructions. Its first four sections allow the user to define their own model parameters. Respectively these are: 1) a model data input section where the user can specify the ocean surface and ambient atmospheric temperature data which the model requires <span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">and its source (ECCO or CCSM), 2) an iceberg parameter and analytical expression definition section in which properties such as air density, water density, or C' (see the iceberg decay equations described in section II.0b), 3) a space domain definition section in which the user specifies the area in which the model will compute iceberg trajectories as well as the boundaries for map figure generation, and 4) a run parameter definition section in which the user defines the time step length, the number of iceberg trajectories to compute, iceberg seed locations, seeding spacing, iceberg dimensions, and other settings specific to the desired simulation (Eisenman et al., 2021).</span></p>
+<div class="page" title="Page 7">
+<div class="layoutArea">
+<div class="column">
+<p>For demonstration purposes, I run the model here using mostly default program settings, having only adjusted the number of iceberg trajectories to compute and the iceberg start seeds. The code output reported below are the results of a 1-year-long model projection for 25 icebergs based on 1992 ECCO data:</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p> </p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/iceberg-figure-6.png" alt="Wagner et al. model map output showing iceberg trails grouped by size class." width="1624" height="1014" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/responsive/iceberg-figure-6-xs.png 300w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/responsive/iceberg-figure-6-sm.png 480w ,https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/8/responsive/iceberg-figure-6-md.png 768w"><figcaption>
+<div class="page" title="Page 7">
+<div class="layoutArea">
+<div class="column">
+<p>Wagner et al. model map output showing iceberg trails grouped by size class.</p>
+</div>
+</div>
+</div>
+</figcaption></figure>
+<div class="page" title="Page 8">
+<div class="layoutArea">
+<div class="column">
+<h2>Concluding statement</h2>
+<p>Mathematical models of iceberg drift and decay are incredibly useful tools that can return results accurate enough to have consequential applications to scientific research, navigation, and security monitoring, but their high computing power requirements and relatively low accessibility to laypeople limit their use outside of well-funded research projects and state-run organisations. As a student, the MATLAB licence I bought for this project cost me $125 US, but for commercial or professional uses, the same license would have cost over $2000. Despite their efficacy and reliability, the high financial or material costs of entry and overall complexity of iceberg drift and decay modelling programs remain a major obstacle to their widespread adoption.</p>
+</div>
+</div>
+<div class="layoutArea">
+<div class="column">
+<h2>Sources Cited</h2>
+<p>Ahlers, G. (2009). Turbulent convection. Physics, 2. https://physics.aps.org/articles/v2/74</p>
+<p>Bigg, G. R., Wadley, M. R., Stevens, D. P., &amp; Johnson, J. A. (1997). Modelling the dynamics and thermodynamics of icebergs. Cold Regions Science and Technology, 26(2), 113–135. https://doi.org/10.1016/S0165-232X(97)00012-8</p>
+<p>Convection. (n.d.). Retrieved 4 March 2021, from https://www.chemeurope.com/en/encyclopedia/Convection.html#Buoyancy_induced_ convection_not_due_to_heat</p>
+</div>
+</div>
+</div>
+<div class="page" title="Page 9">
+<div class="layoutArea">
+<div class="column">
+<p>Eisenman, I., Dell, R. W., &amp; Wagner, T. J. W. (2021). Model of iceberg drift and decay (p. 5436915492 Bytes) [Data set]. figshare. https://doi.org/10.6084/M9.FIGSHARE.12857672</p>
+<p>Elmer Ice–Home. (n.d.). Retrieved 4 March 2021, from https://elmerice.elmerfem.org/ Holton, J., &amp; Hakim, G. (2012). An Introduction to Dynamic Meteorology, (5th ed., Vol.88).</p>
+<p>Iceberg | ice formation. (n.d.). Encyclopedia Britannica. Retrieved 4 March 2021, from https://www.britannica.com/science/iceberg</p>
+<p>Iceberg Classification Systems. (n.d.). Retrieved 4 March 2021, from https://www.universalcompendium.com/tables/science/iceb.htm</p>
+<p>MITberg: Icebergs and Climate Change. (n.d.). Retrieved 4 March 2021, from http://www.geo.umass.edu/faculty/condron/MITberg/download.htm</p>
+<p>MITgcm user manual. (n.d.). Retrieved 4 March 2021, from https://mitgcm.readthedocs.io/en/latest/</p>
+<p>opendrift.models.openberg–OpenDrift documentation. (n.d.). Retrieved 4 March 2021, from https://opendrift.github.io/autoapi/opendrift/models/openberg/index.html</p>
+<p>Quick Facts on Icebergs | National Snow and Ice Data Center. (n.d.). Retrieved 4 March 2021, from https://nsidc.org/cryosphere/quickfacts/icebergs.html</p>
+<p>Rackow, T., Wesche, C., Timmermann, R., &amp; Juricke, S. (2013). Modelling Southern Ocean iceberg drift and decay with FESOM-IB. EPIC3European Geophysical Union, Vienna, Austria, 2013-04-07-2013-04-12. European Geophysical Union, Vienna, Austria. https://epic.awi.de/id/eprint/37482/</p>
+<p>Smith, S. D. (1993). Hindcasting iceberg drift using current profiles and winds. Cold Regions Science and Technology, 22(1), 33–45. https://doi.org/10.1016/0165- 232X(93)90044-9</p>
+<p>US Department of Commerce, N. O. and A. A. (n.d.). What is an iceberg? Retrieved 4 March 2021, from https://oceanservice.noaa.gov/facts/iceberg.html</p>
+<p>Wagner, T. J. W., Dell, R. W., &amp; Eisenman, I. (2017). An Analytical Model of Iceberg Drift. Journal of Physical Oceanography, 47(7), 1605–1616. https://doi.org/10.1175/JPO-D-16-0262.1</p>
+<p>Weeks, W. F., &amp; Mellor, M. (1978). SOME ELEMENTS OF ICEBERG TECHNOLOGY. In A. A. Husseiny (Ed.), Iceberg Utilization (pp. 45–98). Pergamon. https://doi.org/10.1016/B978-0-08-022916-4.50015-7</p>
+</div>
+</div>
+</div>
+<p> </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Mathematical Systems Thinking in Human Ecology</title>
+        <author>
+            <name>Phileas Dazeley-Gaist</name>
+        </author>
+        <link href="https://phileasdg.github.io/phileas-dazeley-gaist/mathematical-systems-thinking-for-human-ecology/"/>
+        <id>https://phileasdg.github.io/phileas-dazeley-gaist/mathematical-systems-thinking-for-human-ecology/</id>
+        <media:content url="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/10/lsystem1.png" medium="image" />
+            <category term="Undergraduate work"/>
+
+        <updated>2023-02-28T11:42:52-05:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/10/lsystem1.png" alt="" />
+                    Human Ecology and differential equations A reflection on the places and roles&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/10/lsystem1.png" class="type:primaryImage" alt="" /></p>
+                <div class="page" title="Page 1">
+<div class="section">
+<div class="layoutArea">
+<div class="column">
+<h2>Human Ecology and differential equations</h2>
+<div class="page" title="Page 1">
+<div class="section">
+<div class="layoutArea">
+<div class="column">
+<p>A reflection on the places and roles of mathematics in human ecological undertakings would without a doubt be misleading if it were not to include mention of differential equations and their long history of being used for dynamical systems modelling.</p>
+<p>Differential equations are a classic tool for dynamical systems modelling, as they offer researchers a starting point from which to model real-world interactions in environments without having to know the exact processes that underly them. In essence, they allow researchers to study the dynamics of a system from derivatives of the ”exact processes” functions that compose it, and depending on whether a system of differential equations is solvable, that is to say, whether one can arrive at the definitive ”exact process” functions that the differential equations of the system are derivatives of, they may allow researchers to model a given dynamic system completely.</p>
+<p>Differential equations are the go-to tool for complex dynamical systems modelling and analysis, and are used extensively to model physical, chemical, and purely mathematical processes. From the beginning of the century to the mid-1970s, ecologists, meteorologists, and financiers attempted to apply the same techniques to their fields (see for instance the work of Edward Lorenz or Stephen Smale). Ecologists and social scientists, including human ecologists use these approaches extensively (see An Ecological Introduction, K. E. Boulding, 1950, or Complex ecosystem and sustainable development, Ma Shijun &amp; Wang Rusong, 1990) But while these attempts in some cases revealed new facets of mathematics, they generally failed to do what they set out to achieve. Why?</p>
+<p>The answer lies in the features of naturally occurring systems. In a controlled environment, sets of ”exact processes” functions can be enforced as axioms of a closed system, outside functions apply to a system and manage its behaviour. In that case, systems of differential equations may be an appropriate modelling tool. Sadly, there’s a catch: Most naturally occurring systems are adaptive: as their dynamics evolve, the ”exact processes” functions that constitute an adaptive system change, are in unpredictable and constant flux. The cause for these changes is that the ”exact processes” functions are part of the systems themselves, and dependent on material and relational processes that occur within the respective systems, which are described by other ”exact processes” functions. The interactions between these functions can form extensive networks which describe intricate mixes of flows, stocks, and transformations. Differential equations can model Dynamic Systems but not Adaptive Systems. For this latter type of system, differential equations are of very limited help.</p>
+<div class="page" title="Page 1">
+<div class="section">
+<div class="layoutArea">
+<div class="column">
+<h2>Do we need to model everything?</h2>
+<div class="page" title="Page 1">
+<div class="section">
+<div class="layoutArea">
+<div class="column">
+<p>Before I reflect on other mathematical techniques and philosophies, and how I feel they relate to Human Ecology and could find their place in human ecological dialogue, I would like to consider the modes of <span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">apprehension of the world that emboldened many researcher throughout history to attempt to model the natural world.</span></p>
+<div class="page" title="Page 2">
+<div class="section">
+<div class="layoutArea">
+<div class="column">
+<p>It is not self-evident that the world needs to be modelled. In fact, the world exists already, it’s out there waiting for us, what use is a copy of the process to us if it is only a shadow of the real thing? Why not go out and enjoy it in person? There are so many ways of learning about the world and the systems within it. Often neglected is hands-on learning one can earn from experiencing the world from within: physically and emotionally, to be consumed and surrounded by the experience of being, feeling, seeing, and touching.</p>
+<p>For my part, I like to think that while experiential learning in the world is a primordial need which all should get to experience, there is still a place for analysis, deconstruction, and quantitative reason- ing. For one, all of these things are part of the world too, they are aspects of our environment. If human ecology concerns itself with human-environment interactions and the place of human beings in an ecology, then we should see mathematics mathematics as an essentially human ecological venture. Mathematics are a secretive language of nature which rarely shares its secrets. While counting is not an exclusively human trait, the depth and variety of human counting techniques are unique in the animal world.</p>
+<p>In the natural sciences, I believe the desire to model and replicate nature as an attempt to under- stand it can be traced back to European materialism, utilitarianism, and determinist philosophy of 17th century Europe. These frameworks travelled extensively through trade, and through the colonial rule and subjugation of nation states by European powers, and spread rapidly worldwide. I bring this up not to brush off the desire to model nature as an outdated cultural relic, but to illustrate that it is a worldview that exists in continuity with the cultures and writing of a very small group of people in a very small part of the world, and at a very specific time in history. We are perhaps needlessly limiting ourselves to a relationship to nature which in some capacity must factor in this lens.</p>
+<p>I’ll end on counting as an interesting subject: counting - what counts? Pun intended. Do trees count? Are the processes through which trees grow and multiply, branch, and ache cognisant enough to count as ”counting”? Or are they just material reactions? And does it matter? Can an animate but inorganic process count?</p>
+<div class="page" title="Page 2">
+<div class="section">
+<div class="layoutArea">
+<div class="column">
+<h2>Not-entirely deterministic systems</h2>
+<div class="page" title="Page 2">
+<div class="section">
+<div class="layoutArea">
+<div class="column">
+<p>As a language of nature, mathematics has the enviable property that its descriptions of mathematical phenomena transcend mathematics into all dimensions of the natural world. If a mathematical phenomenon produces a certain type of behaviour, and as observers, we notice a similar phenomenon in nature, we can be quite certain certain that the natural phenomenon is related to the mathematical one. Even though the same process may not be a play in either one, both share a sameness, and this sameness opens a pathway to mathematics ←→ nature exchanges.</p>
+<p>We are used to using mathematics to discover Nature, or using mathematics to explain it, but we hardly ever hear of the reverse: using nature to explore mathematics, to explain mathematics, or even as a map to mathematical exploration.</p>
+<p>I have a strong hunch that mathematics discovered through this process, especially mathematical processes and algorithms discovered through such an approach would replicate the properties of pro- cesses that occur in nature. These processes would often be not entirely deterministic, part of not entirely deterministic systems, of which we understand very little today. Exploration of mathematics through nature might yield (with some luck and creative thinking) insight into the inner functioning of <span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">complex adaptive systems, and help us breakaway from a purely normative or descriptive understand- ing of mathematics which sees mathematics as either dictating nature’s inner workings, or passively reflecting it. Mathematics are a conceptual framework that abstracts relationships that occur in nature, but we only have use for mathematics insofar as they describe the nature that they are a part of. How could nature not describe maths, just as mathematical assertions assert the dynamics, relationships, and laws of nature?</span></p>
+<div class="page" title="Page 3">
+<div class="section">
+<div class="layoutArea">
+<div class="column">
+<h2>Mathematics as a shimmer through a lens</h2>
+<div class="page" title="Page 3">
+<div class="section">
+<div class="layoutArea">
+<div class="column">
+<p>To close this reflection piece, I’d like to consider one outcome of using nature as an exploratory tool for maths: L-systems.</p>
+<p>L-systems are formal systems which use a combination of rules or substitution of symbols of a formal language for others using sometimes deterministic, sometimes stochastic, and sometimes a com- bination of both rules. L-systems were first discovered by Aristid Lindenmayer, a biologist who studied the growth patterns of bacteria such as the <em>Anabaena catenula</em>. Lindenmayer originally intended these systems to provide a formal description of the development of bacteria, and to illustrate the neighbourhood relationships between plant cells. However, they were quickly extended to describe larger organisms with branching structures such as plants.</p>
+<p>The following figures showcase some structures generated through L-systems. As you view them, I would like to invite you to think of them not as a flawed mathematical representation of nature, but as a beautiful human enabled nature-informed representation of maths.</p>
+<div class="gallery-wrapper"><div class="gallery"  data-is-empty="false" data-translation="Add images" data-columns="3">
+<figure class="gallery__item"><a href="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/10/gallery/lsystem1.png" data-size="1802x786"><img loading="lazy" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/10/gallery/lsystem1-thumbnail.png" alt="" width="768" height="335"></a></figure>
+<figure class="gallery__item"><a href="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/10/gallery/lsystem2.png" data-size="1838x1200"><img loading="lazy" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/10/gallery/lsystem2-thumbnail.png" alt="" width="768" height="501"></a></figure>
+<figure class="gallery__item"><a href="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/10/gallery/lsystem3.png" data-size="1202x1146"><img loading="lazy" src="https://phileasdg.github.io/phileas-dazeley-gaist/media/posts/10/gallery/lsystem3-thumbnail.png" alt="" width="768" height="732"></a></figure>
+</div></div>
+<div class="page" title="Page 4">
+<div class="section">
+<div class="layoutArea">
+<div class="column">
+<p><strong>Note:</strong> L-system models generated using Vlab on macOS, generously provided courtesy of the Algorithmic Botany lab at University of Calgary.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+            ]]>
+        </content>
+    </entry>
+</feed>
