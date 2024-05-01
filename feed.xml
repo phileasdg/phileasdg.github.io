@@ -3,7 +3,7 @@
     <title>Phileas Dazeley-Gaist</title>
     <link href="https://phileasdg.github.io/feed.xml" rel="self" />
     <link href="https://phileasdg.github.io" />
-    <updated>2024-05-01T16:50:37-04:00</updated>
+    <updated>2024-05-01T16:54:40-04:00</updated>
     <author>
         <name>Phileas Dazeley-Gaist</name>
     </author>
@@ -17,11 +17,14 @@
         <link href="https://phileasdg.github.io/lotka-volterra-models-in-the-wolfram-language/"/>
         <id>https://phileasdg.github.io/lotka-volterra-models-in-the-wolfram-language/</id>
         <media:content url="https://phileasdg.github.io/media/posts/32/Screenshot-2023-10-11-at-00.12.50.png" medium="image" />
+            <category term="Work at Wolfram"/>
             <category term="Wolfram Language"/>
+            <category term="Programming"/>
+            <category term="Modelling"/>
             <category term="Mathematica"/>
             <category term="Ecology"/>
 
-        <updated>2024-05-01T16:50:37-04:00</updated>
+        <updated>2024-05-01T16:54:40-04:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/32/Screenshot-2023-10-11-at-00.12.50.png" alt="" />

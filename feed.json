@@ -20,12 +20,15 @@
                 "name": "Phileas Dazeley-Gaist"
             },
             "tags": [
+                   "Work at Wolfram",
                    "Wolfram Language",
+                   "Programming",
+                   "Modelling",
                    "Mathematica",
                    "Ecology"
             ],
             "date_published": "2023-10-10T14:21:31-04:00",
-            "date_modified": "2024-05-01T16:50:37-04:00"
+            "date_modified": "2024-05-01T16:54:40-04:00"
         },
         {
             "id": "https://phileasdg.github.io/remote-sensing-for-the-wolfram-language/",
