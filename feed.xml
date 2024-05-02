@@ -3,12 +3,167 @@
     <title>Phileas Dazeley-Gaist</title>
     <link href="https://phileasdg.github.io/feed.xml" rel="self" />
     <link href="https://phileasdg.github.io" />
-    <updated>2024-05-01T16:54:40-04:00</updated>
+    <updated>2024-05-02T10:35:12-04:00</updated>
     <author>
         <name>Phileas Dazeley-Gaist</name>
     </author>
     <id>https://phileasdg.github.io</id>
 
+    <entry>
+        <title>A Dynamical Model of Immune-System Response to mRNA, Live Virus, and Inactivated Vaccines</title>
+        <author>
+            <name>Phileas Dazeley-Gaist</name>
+        </author>
+        <link href="https://phileasdg.github.io/adawdaw/"/>
+        <id>https://phileasdg.github.io/adawdaw/</id>
+        <media:content url="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.14.00.png" medium="image" />
+
+        <updated>2024-05-02T10:35:12-04:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.14.00.png" alt="" />
+                    Note: This post was originally a short technical article I shared on&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.14.00.png" class="type:primaryImage" alt="" /></p>
+                <p class="msg msg--info"><strong>Note: </strong>This post was originally a short technical article I shared on the Wolfram Community forums. If you would like to interact with live demonstrations, or download a wolfram notebook version of this text including the source code, you can access the original <a href="https://community.wolfram.com/groups/-/m/t/3055726">here</a>. </p>
+<p class="msg msg--highlight "><span class="cc1" data-native-text="true"><strong>Source article:</strong> Zhaobin Xu, Jian Song, Hongmei Zhang, Zhenlin Wei, Dongqing Wei, Jacques Demongeot, A Mathematical Model Simulating the Adaptive Immune Response in Various Vaccines and Vaccination Strategies, medRxiv 2023.10.05.23296578. DOI: </span><a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://doi.org/10.1101/2023.10.05.23296578" target="_blank" data-testid="ButtonBoxView" rel="noopener"><span class="cc3" data-native-text="true">https://doi.org/10.1101/2023.10.05.23296578</span></a></p>
+<h2>Introduction:</h2>
+<p><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">The accomplishments of vaccination are undeniable, leading to significant advances in human health. Yet new infectious diseases and evolving pathogens constantly challenge our understanding of vaccine efficacy and immunity. Mathematical modelling is a crucial lens through which we can reach a more comprehensive understanding of these complexities. By simulating the biological responses to vaccines, models can provide critical insights into disease progression, vaccine performance, and optimal strategies for developing vaccines.</span></p>
+<div id="cell-fe47751b-0fbc-4ad3-bab0-ee4f1dd22fb8" class="cell">
+<div class="cell-wrapper">
+<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
+<div class="cell-content">
+<div>
+<div class="native-layout native-layout-simple"><span class="cc6" data-native-text="true">In this short text, we’ll explore an approach to constructing one such model in the Wolfram Language. We will reproduce a compartmental dynamical model of adaptive immune responses to vaccine treatments described in a recent preprint from medRxiv.org: </span><span class="cc14" data-native-text="true">A Mathematical Model Simulating the Adaptive Immune Response in Various Vaccines and Vaccination Strategies</span> <a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://www.medrxiv.org/content/10.1101/2023.10.05.23296578v1" target="_blank" data-testid="ButtonBoxView" rel="noopener"><span class="cc9" data-native-text="true">(Xu et al. 2023)</span></a><span class="cc6" data-native-text="true">. Compartmental models are a class of mathematical models which divide variables of interest into sections or “compartments”. Each compartment represents a specific state within the system being studied. The models track how entities, like cells or molecules, interact within and between these compartments over time.</span></div>
+</div>
+</div>
+</div>
+</div>
+<div id="cell-95dd72c5-3543-4f12-a9d7-8486a64fa8f9" class="cell">
+<div class="cell-wrapper">
+<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
+<div class="cell-content">
+<div class="native-layout native-layout-simple"><span class="cc6" data-native-text="true">The stated goal of the paper is to construct a novel mathematical model to quantitatively research the activation of adaptive immune responses by vaccines. This model is used to simulate and compare the dynamics of antibody levels after administering different types of vaccines (inactivated, attenuated live virus, mRNA), thereby contributing to a better understanding of the mechanisms of various vaccines and vaccination strategies. Through the model, the authors aim to suggest strategies for vaccine design, while providing a comprehensive portrait of the inducible interactions between antibodies and antigens in the immune process.</span></div>
+<h2>Setup</h2>
+<h3>Dependencies</h3>
+<p><span class="cc6" data-native-text="true">We will make use of the </span><a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://resources.wolframcloud.com/PacletRepository/resources/RobertNachbar/CompartmentalModeling/" target="_blank" data-testid="ButtonBoxView" id="aui_3_4_0_1_433" rel="noopener"><span class="cc9" data-native-text="true">CompartmentalModelling</span></a><span class="cc6" data-native-text="true"> paclet. You can install and load the paclet like so:</span></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-09.49.26.png" alt="" width="560" height="178" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-09.49.26-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-09.49.26-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-09.49.26-md.png 768w"></figure>
+<p><span class="cc6" data-native-text="true">You can find documentation for this paclet by following </span><a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://resources.wolframcloud.com/PacletRepository/resources/RobertNachbar/CompartmentalModeling/" target="_blank" data-testid="ButtonBoxView" rel="noopener"><span class="cc9" data-native-text="true">this link</span></a><span class="cc6" data-native-text="true">.</span></p>
+<h3>Paper Tables</h3>
+<p>You can find the definitions for the tables of reactions, reaction variables, and reaction parameters in the original version of this post on <a href="https://community.wolfram.com/groups/-/m/t/3055726">Wolfram Community</a>.</p>
+<h2>Reactions, Parameters, and State Variables of the Model</h2>
+<p>The authors of the paper helpfully provide three tables fully specifying the interactions between state variables (components) of the system, as well as model parameters and initial conditions. I have reproduced these tables below. Note that some parameter values and initial conditions depend on the selected vaccine treatment type. More precisely:</p>
+</div>
+<ul>
+<li>The replication rate of viral antigens, described by parameter k_14 should be set to .3 in the case of a simulation of an attenuated live virus vaccine, and 0 otherwise.</li>
+<li>The initial condition of the state variable x_2 (Antigen) should be set to 10^6 for simulation with an inactivated vaccine, 0 with an mRNA vaccine, and 1 for an attenuated live virus vaccine.</li>
+<li>The initial condition of the state variable x_9 <span class="cc6" data-native-text="true"> (mRNA) should be set to 0 for simulation with an inactivated or attenuated live virus vaccine, and 10^6</span><span class="cc6" data-native-text="true"> for and mRNA vaccine.</span></li>
+</ul>
+<p><span class="cc6" data-native-text="true">For a more in depth explanation of these parameters and initial conditions, please refer to </span><a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://www.medrxiv.org/content/10.1101/2023.10.05.23296578v1" target="_blank" data-testid="ButtonBoxView" rel="noopener"><span class="cc9" data-native-text="true">the paper</span></a><span class="cc6" data-native-text="true">.</span></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.05.51.png" alt="" width="1266" height="1226" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.05.51-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.05.51-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.05.51-md.png 768w"></figure>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.06.39.png" alt="" width="1330" height="1144" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.06.39-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.06.39-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.06.39-md.png 768w"></figure>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.06.54.png" alt="" width="1330" height="578" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.06.54-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.06.54-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.06.54-md.png 768w"></figure>
+<h2>Extracting Model Information</h2>
+<p><span class="cc6" data-native-text="true">We can use tools from the </span><strong><span class="cc39" data-native-text="true">CompartmentalModelling</span></strong><span class="cc6" data-native-text="true"> paclet to extract useful information about the model. For instance, we can use </span><strong><span class="cc39" data-native-text="true">CompartmentalModelGraph</span></strong><span class="cc6" data-native-text="true"> from the CompartmentalModelling paclet to visualise the model’s structure:</span></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.10.06.png" alt="" width="1682" height="840" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.10.06-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.10.06-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.10.06-md.png 768w"></figure>
+<p><span class="cc6" data-native-text="true">The </span><span class="cc39" data-native-text="true">CompartmentalModelling</span><span class="cc6" data-native-text="true"> paclet contains convenient functions to streamline the process of building models. For instance, we can use </span><strong><span class="cc39" data-native-text="true">KineticCompartmentalModel</span></strong><span class="cc6" data-native-text="true"> to generate differential equations for from a list of component transitions (the reactions).</span></p>
+<p><em>Fetch the model data:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.16.18.png" alt="" width="476" height="929" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.16.18-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.16.18-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.16.18-md.png 768w"></figure>
+<p>These data are very useful for quickly building and simulating compartmental models.</p>
+<h2>Numerical Simulations</h2>
+<h3>Preparing Model ODEs</h3>
+<p><span class="cc8" data-native-text="true">Owing to details related to the original code implementation of the model, the authors provide a slightly modified system of ODEs describing the model. This system is reproduced below and numerically approximated using </span><span class="cc42" data-native-text="true">NDSolve</span><span class="cc8" data-native-text="true"> for different vaccine treatments:</span></p>
+<p><em>Reproduce the ODEs from the paper:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.17.43.png" alt="" width="1308" height="484" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.17.43-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.17.43-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.17.43-md.png 768w"></figure>
+<p>Let’s also get some replacement rules to easily convert between the variable names in plain English, and the symbols used in the paper for the model’s system of ODEs.</p>
+<p><em>Plain English variables &lt;--&gt; ODE variables:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.18.28.png" alt="" width="588" height="57" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.18.28-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.18.28-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.18.28-md.png 768w"></figure>
+<h3>Vaccine Treatment Simulations</h3>
+<p>In the paper, the authors model three cases:</p>
+<ol>
+<li>Inactivated Vaccine Simulation</li>
+<li>Attenuated Live Virus Vaccine</li>
+<li>mRNA Vaccine</li>
+</ol>
+<p><span class="cc8" data-native-text="true">These cases are solved numerically in the three following sections. The inactivated vaccine and mRNA vaccines each take two injections, one at one at </span></p>
+<div>
+<div class="lines"><span class="pa ch cc17" data-token-box-id="c2832" data-token-text="t">t</span><span class="pa char cc10" data-token-box-id="c2833" data-token-text="=">=</span><span class="pa ch cc8" data-token-box-id="c2834" data-token-text="0">0</span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">, the other at </span><span class="pa ch cc17" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2841" data-token-text="t">t</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2842" data-token-text="=">=</span><span class="pa ch cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2843" data-token-text="50">50</span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">. The attenuated live-virus vaccine takes a single dose at </span><span class="pa ch cc17" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2850" data-token-text="t">t</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2851" data-token-text="=">=</span><span class="pa ch cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2852" data-token-text="0">0</span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">. The injection dosage is of </span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">6^</span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">10</span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);"> for all simulations.</span></div>
+<h3>1. Inactivated Vaccine Simulation</h3>
+<p>Model-specific parameters and initial conditions:</p>
+<ul>
+<li><span class="cc8" data-native-text="true">Replication rate of viral antigens: </span>k_<span class="pa char cc19" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2605" data-token-text="14">14</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2607" data-token-text="=">=</span><span class="pa ch cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2608" data-token-text="0">0</span></li>
+<li><span class="cc8" data-native-text="true">Antigen = </span>x_<span class="pa char cc19" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2627" data-token-text="2">2</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2629" data-token-text="[">[</span><span class="pa ch cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2630" data-token-text="0">0</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2631" data-token-text="]">]</span><span class="cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true"> = </span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">10^6</span></li>
+<li><span class="cc8" data-native-text="true">mRNA = </span>x_9[<span class="pa ch cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2664" data-token-text="0">0</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2665" data-token-text="]">]</span><span class="cc8" data-native-text="true"> = 0</span></li>
+</ul>
+<p><em>Define model parameters corresponding to the inactivated vaccine setup:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.21.55.png" alt="" width="1484" height="186" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.21.55-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.21.55-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.21.55-md.png 768w"></figure>
+<p><em>Define initial conditions of the system corresponding to the inactivated vaccine setup:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.22.21.png" alt="" width="1414" height="632" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.22.21-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.22.21-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.22.21-md.png 768w"></figure>
+<p><em>Construct the system of equations for NDSolve, with parameter values and initial conditions:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.22.40.png" alt="" width="599" height="29" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.22.40-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.22.40-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.22.40-md.png 768w"></figure>
+<p><em><span class="cc25" data-native-text="true">Solve numerically with NDSolve, from </span></em><span class="pa ch cc47" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2737" data-token-text="t">t</span><span class="pa char cc27" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2738" data-token-text="=">=</span><span class="pa ch cc25" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2739" data-token-text="0">0</span><em><span class="cc25" data-native-text="true"> to </span></em><span class="pa ch cc47" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2746" data-token-text="t">t</span><span class="pa char cc27" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2747" data-token-text="=">=</span><span class="pa ch cc25" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2748" data-token-text="100">100</span><em><span class="cc25" data-native-text="true">:</span></em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.23.23.png" alt="" width="485" height="29" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.23.23-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.23.23-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.23.23-md.png 768w"></figure>
+<p><em>Plot the solution:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.23.50.png" alt="" width="1448" height="642" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.23.50-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.23.50-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.23.50-md.png 768w"></figure>
+<h3>2. Attenuated Live Virus Vaccine</h3>
+<p>Model-specific parameters and initial conditions:</p>
+<ul>
+<li><span class="cc8" data-native-text="true">Replication rate of viral antigens: </span>k_<span class="pa char cc19" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2605" data-token-text="14">14</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2607" data-token-text="=">=</span><span class="pa ch cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2608" data-token-text="0">0.3</span></li>
+<li><span class="cc8" data-native-text="true">Antigen = </span>x_<span class="pa char cc19" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2627" data-token-text="2">2</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2629" data-token-text="[">[</span><span class="pa ch cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2630" data-token-text="0">0</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2631" data-token-text="]">]</span><span class="cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true"> = 1</span></li>
+<li><span class="cc8" data-native-text="true">mRNA = </span>x_9[<span class="pa ch cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2664" data-token-text="0">0</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2665" data-token-text="]">]</span><span class="cc8" data-native-text="true"> = 0</span></li>
+</ul>
+<p><em>Define model parameters corresponding to the inactivated vaccine setup:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.25.32.png" alt="" width="1484" height="194" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.25.32-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.25.32-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.25.32-md.png 768w"></figure>
+<p><em>Define initial conditions of the system corresponding to the inactivated vaccine setup:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.25.49.png" alt="" width="1402" height="638" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.25.49-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.25.49-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.25.49-md.png 768w"></figure>
+<p><em>Construct the system of equations for NDSolve, with parameter values and initial conditions:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.26.00.png" alt="" width="378" height="35" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.26.00-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.26.00-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.26.00-md.png 768w"></figure>
+<p><em><span class="cc25" data-native-text="true">Solve numerically with NDSolve, from </span></em><span class="pa ch cc47" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2737" data-token-text="t">t</span><span class="pa char cc27" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2738" data-token-text="=">=</span><span class="pa ch cc25" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2739" data-token-text="0">0</span><em><span class="cc25" data-native-text="true"> to </span></em><span class="pa ch cc47" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2746" data-token-text="t">t</span><span class="pa char cc27" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2747" data-token-text="=">=</span><span class="pa ch cc25" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2748" data-token-text="100">100</span><em><span class="cc25" data-native-text="true">:</span></em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.26.19.png" alt="" width="494" height="38" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.26.19-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.26.19-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.26.19-md.png 768w"></figure>
+<p><em>Plot the solution:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.26.44.png" alt="" width="1478" height="646" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.26.44-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.26.44-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.26.44-md.png 768w"></figure>
+<h3>3. mRNA Vaccine</h3>
+<p>Model-specific parameters and initial conditions:<br><br>Replication rate of viral antigens: k_14=0<br>Antigen = x_2[0] = 0<br>mRNA = x_9[0] = 10^6</p>
+<p><em>Define model parameters corresponding to the inactivated vaccine setup:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.30.46.png" alt="" width="1492" height="206" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.30.46-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.30.46-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.30.46-md.png 768w"></figure>
+<p><em>Define initial conditions of the system corresponding to the inactivated vaccine setup:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.31.19.png" alt="" width="1398" height="646" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.31.19-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.31.19-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.31.19-md.png 768w"></figure>
+<p><em>Construct the system of equations for NDSolve, with parameter values and initial conditions:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.31.32.png" alt="" width="649" height="37" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.31.32-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.31.32-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.31.32-md.png 768w"></figure>
+<p><em>Solve numerically with NDSolve, from t=0 to t=100:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.31.48.png" alt="" width="519" height="37" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.31.48-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.31.48-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.31.48-md.png 768w"></figure>
+<p><em>Plot the solution:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.32.06.png" alt="" width="1460" height="646" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.32.06-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.32.06-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.32.06-md.png 768w"></figure>
+<h2>Closing Notes</h2>
+<div id="cell-54b896b0-0f0b-4cac-9367-cb44dc59b1b4" class="cell">
+<div class="cell-wrapper">
+<div class="cell-content">
+<div>
+<div> </div>
+<div class="native-layout native-layout-simple"><span class="cc8" data-native-text="true">Through the exploration of this dynamical immune response model, we have seen how mathematical modelling in the Wolfram Language, can be used to derive insights into complex biological systems.</span></div>
+</div>
+</div>
+</div>
+</div>
+<div id="cell-952802b4-cfde-45ea-bf61-c9cfcec97f25" class="cell">
+<div class="cell-wrapper">
+<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
+<div class="cell-content">
+<div>
+<div class="native-layout native-layout-simple"><span class="cc8" data-native-text="true">If you are interested in this work, and would like to learn more, please make sure to give the </span><a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://www.medrxiv.org/content/10.1101/2023.10.05.23296578v1" target="_blank" data-testid="ButtonBoxView" rel="noopener"><span class="cc11" data-native-text="true">source paper </span></a><span class="cc8" data-native-text="true">a read! I primarily intend this post to demonstrate how one might conduct this form of modelling in the Wolfram Language. I also highly encourage you to try Bob Nachbar’s </span><a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://resources.wolframcloud.com/PacletRepository/resources/RobertNachbar/CompartmentalModeling/" target="_blank" data-testid="ButtonBoxView" rel="noopener"><span class="cc61" data-native-text="true">CompartmentalModelling</span></a><span class="cc8" data-native-text="true"> paclet. The </span><span class="cc42" data-native-text="true">CompartmentalModelling</span><span class="cc8" data-native-text="true"> paclet is not just for biologists, but could be a valuable tool for anyone dealing with interconnected systems that can be represented as compartments. </span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>Lotka-Volterra Models in the Wolfram Language</title>
         <author>
@@ -24,7 +179,7 @@
             <category term="Mathematica"/>
             <category term="Ecology"/>
 
-        <updated>2024-05-01T16:54:40-04:00</updated>
+        <updated>2024-05-02T09:47:12-04:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/32/Screenshot-2023-10-11-at-00.12.50.png" alt="" />
@@ -34,7 +189,7 @@
         <content type="html">
             <![CDATA[
                     <p><img src="https://phileasdg.github.io/media/posts/32/Screenshot-2023-10-11-at-00.12.50.png" class="type:primaryImage" alt="" /></p>
-                <p><strong>Note: </strong>This post was originally a short technical article I shared on the Wolfram Community forums. If you would like to interact with live demonstrations, or download a wolfram notebook version of this text including the source code, you can access the original <a href="https://community.wolfram.com/groups/-/m/t/3028599">here</a>. For the sake of brevity and readability, I have omitted most code implementation sections present in the original article. If you are looking to reproduce a function from this article and need the source code, please head to the original post.</p>
+                <p class="msg msg--info"><strong>Note: </strong>This post was originally a short technical article I shared on the Wolfram Community forums. If you would like to interact with live demonstrations, or download a wolfram notebook version of this text including the source code, you can access the original <a href="https://community.wolfram.com/groups/-/m/t/3028599">here</a>. For the sake of brevity and readability, I have omitted most code implementation sections present in the original article. If you are looking to reproduce a function from this article and need the source code, please head to the original post.</p>
 <h2>Introduction: A review of the Lotka-Volterra Model</h2>
 <h3>Overview</h3>
 <div id="cell-c3a94280-e8a4-4954-ac9d-109d26687d61" class="cell">
@@ -905,227 +1060,6 @@
                 <p>I constructed the following ESRI ArcGIS StoryMap project for the college course "Geographic Information Systems" taught by Professor Gordon Longsworth at the College of the Atlantic, in Fall 2020. I have embedded it below as a sample of my undergraduate GIS work. </p>
 <p>Follow <a href="https://storymaps.arcgis.com/stories/3edd0a80cd114d02af9bdeb1b446d30b">this link</a> for to see this StoryMap.</p>
 <p> </p>
-            ]]>
-        </content>
-    </entry>
-    <entry>
-        <title>Tracking Icebergs: Exploring the Mathematics of Iceberg Drift and Decay Models</title>
-        <author>
-            <name>Phileas Dazeley-Gaist</name>
-        </author>
-        <link href="https://phileasdg.github.io/tracking-icebergs/"/>
-        <id>https://phileasdg.github.io/tracking-icebergs/</id>
-        <media:content url="https://phileasdg.github.io/media/posts/8/Iceberg_Ilulissat.jpg" medium="image" />
-            <category term="Undergraduate work"/>
-            <category term="GIS"/>
-
-        <updated>2023-07-21T21:42:03-04:00</updated>
-            <summary>
-                <![CDATA[
-                        <img src="https://phileasdg.github.io/media/posts/8/Iceberg_Ilulissat.jpg" alt="CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid&#x3D;730855" />
-                    I wrote this short essay for the college course "Polar Ecology and&hellip;
-                ]]>
-            </summary>
-        <content type="html">
-            <![CDATA[
-                    <p><img src="https://phileasdg.github.io/media/posts/8/Iceberg_Ilulissat.jpg" class="type:primaryImage" alt="CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid&#x3D;730855" /></p>
-                <div class="page" title="Page 1">
-<div class="layoutArea">
-<div class="column">
-<p>I wrote this short essay for the college course "Polar Ecology and Exploration" taught by Professor Sean Todd at College of the Atlantic in Winter 2020. I have reproduced it here as a sample of my undergraduate writing. </p>
-<h2>Introduction</h2>
-<p>This paper will explore and contextualise the principles and methods at the centre of contemporary iceberg drift and decay mathematical models. To do so, it will first examine the incentives for institutional efforts to track drifting icebergs. Secondly, this paper will engage in an extensive introductory exploration of iceberg drift and decay approximation formulas and dynamic and thermodynamic models and assess their respective strengths and limitations. Finally, it will describe the process of running a modern drift and decay model simulation using MATLAB and report the raw simulation results.</p>
-<h3>Incentives for Iceberg tracking</h3>
-<p><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">Icebergs are large masses of freshwater ice that form by breaking apart from a glacier, ice shelf, or larger icebergs, a process known as calving (Iceberg | Ice Formation, n.d.). In the Antarctic Circle, icebergs calve from the floating ice shelves of the Antarctic continent, which results in large and tall icebergs with steep cliff-like sides and flat tops, known as tabular icebergs (Ibid). In the Arctic, icebergs calve from glaciers, particularly those of Greenland (Ibid). NOAA’s National Ocean Service defines minimum characteristics of icebergs (according to the standard set by the International Ice Patrol) as follows:</span></p>
-<div class="page" title="Page 1">
-<div class="layoutArea">
-<div class="column">
-<p>“To be classified as an iceberg, the height of the ice must be greater than 16 feet above sea level and the thickness must be 98-164 feet and the ice must cover an area of at least 5,382 square feet.” (US Department of Commerce, n.d.)</p>
-<p>One incentive for iceberg tracking and monitoring is risk minimisation. While even the smallest ice objects that satisfy these criteria easily pose threats to ships and offshore ventures, among others, larger icebergs, which can reach a freeboard (height above the waterline) of above 100 metres and individual mass exceeding 10,000,000 tonnes (100 times the typical mass of the smallest icebergs) pose additional and greatly increased threats to their surroundings as they drift (Iceberg Classification Systems, n.d.).</p>
-<div class="page" title="Page 1">
-<div class="layoutArea">
-<div class="column">
-<p>Other incentives for iceberg monitoring are scientific: Melting icebergs could contain clues to the processes behind ice-shelf collapse (Icebergs | National <span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">Snow and Ice Data Center, n.d.). If so, their study could contribute to our understanding of global warming. As they melt, icebergs release freshwater into the ocean, suggesting that in large enough numbers, drifting icebergs could affect ocean circulation (Ibid). Furthermore, as they melt, icebergs disperse nutrients into the ocean, leaving trails of nutrient-rich freshwater, which attracts marine life and could therefore be of interest to marine biologists (Ibid).</span></p>
-<div class="page" title="Page 2">
-<div class="layoutArea">
-<div class="column">
-<p>Mathematical iceberg drift and decay models are powerful tools that, given accurate data, can assist researchers and institutions by predicting where they might expect to find icebergs or estimating the future drift of existing icebergs given an initial location to calculate from. These applications are desirable because of the high cost of real-world iceberg tracking, which is typically done via satellite imagery, aerial surveys, and sighting reporting from merchant and scientific ships (Icebergs | National Snow and Ice Data Center, n.d.).</p>
-<div class="page" title="Page 2">
-<div class="layoutArea">
-<div class="column">
-<h2>Drift and Decay</h2>
-<p>While some simple approximation formulas exist to estimate iceberg drift and decay, these tend to produce somewhat caricatured predictions that are unsuitable for most research purposes. Among more complex mathematical models, some are probabilistic, but most sophisticated contemporary models are deterministic and incorporate thermodynamics in their predictions. This section will present iceberg drift and decay approximation methods, explore the principal essential components of these modern models, and assess their strengths and limitations.</p>
-<h3>Approximation Formulas</h3>
-<p>Although they lack precision, approximation rules for iceberg drift and decay are helpful in that they are speedy.</p>
-<p>A frequent estimate of iceberg drift velocity is that it approximately equals 2% of the wind velocity relative to the ocean current (Smith, 1993). The approximation holds true for most cases in the Arctic, where small icebergs and strong winds are common, but does not in the Antarctic, where the combination of weak winds and generally larger icebergs render the effect of wind on iceberg drift negligible (Wagner et al., 2017).</p>
-<p>In their report for the CRREL titled Some Elements of Iceberg Technology, W. F. Weeks and M. Mellor propose the following iceberg ice loss formula:</p>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/8/iceberg-figure-1.png" alt="figure 1: Z = K * Delta" width="141" height="45" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/8/responsive/iceberg-figure-1-xs.png 300w ,https://phileasdg.github.io/media/posts/8/responsive/iceberg-figure-1-sm.png 480w ,https://phileasdg.github.io/media/posts/8/responsive/iceberg-figure-1-md.png 768w"></figure>
-<div class="page" title="Page 2">
-<div class="layoutArea">
-<div class="column">
-<p>Where Z is the total ice loss at any point of an iceberg’s journey in metres, ∆ is the sum of mean daily water temperatures around the draught of the iceberg for <span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">every day of an iceberg’s drift in degrees Celsius, and K is a constant ~ 0.12. This formula appears rather infrequently in scientific literature and should be used cautiously.</span></p>
-<div class="page" title="Page 3">
-<div class="layoutArea">
-<div class="column">
-<p>While potentially useful for navigation and small-scale, short-term predictions of iceberg drift and decay, these shortcuts tend to produce skewed results, which can deviate significantly from real-world observations. For this reason, scientists should generally avoid them in research.</p>
-<div class="page" title="Page 3">
-<div class="layoutArea">
-<div class="column">
-<h3>Dynamic and Thermodynamic Models</h3>
-<p>Modelling the dynamics and thermodynamics of icebergs, published in 1997 and co-authored by Grant R. Bigg, Martin R. Wadley, David P. Stevens, and John A. Johnson, is a foundational paper for the admittedly very niche field of iceberg drift modelling. The paper proposes the following momentum equation of horizontal iceberg motion:</p>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/8/iceberg-figure-2.png" alt="figure 2: M*(dV_i/dt) = -M*f*k*x*V_i+F_a+F_w+F_i+F_p+F+r" width="844" height="132" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/8/responsive/iceberg-figure-2-xs.png 300w ,https://phileasdg.github.io/media/posts/8/responsive/iceberg-figure-2-sm.png 480w ,https://phileasdg.github.io/media/posts/8/responsive/iceberg-figure-2-md.png 768w"></figure>
-<p>Where M is the iceberg's mass (kg), and V_i is the horizontal velocity (m*s^-1). <span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">The </span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">components of the equation F_a, F_w, F_i, F_p, and F_r are respectively air and wind </span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">drag (F_a), water drag (F_w), sea ice drag (F_i), the horizontal pressure gradient force </span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">the water around the iceberg exerts on the volume that the iceberg displaces (F_p), </span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">water and wave drag (F_w), and the wave radiation force (F_r), while f is the Coriolis </span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">parameter, a value equal to 2Ω * sin phi, where Ω is the rate of rotation of the Earth, and phi is latitude (Holton &amp; Hakim, 2012) (reported in rad*s^-1) (Bigg et al., 1997).</span></p>
-<div class="page" title="Page 3">
-<div class="layoutArea">
-<div class="column">
-<p>Since the mass of an iceberg reduces as the iceberg drifts, melts, and sometimes breaks up into smaller pieces, it is important to note that in practice, the equation described above only reveals an iceberg’s momentum at a given point of its life: it does not account for iceberg decay. The equation returns the momentum of any iceberg given its mass and velocity. However, alone, its applications to iceberg drift modelling are limited because drift is affected by each modelled iceberg’s length, width, and mass (Wagner et al., 2017). To account for the gradual change in mass and dimensions of drifting icebergs, Bigg et al. (1997) describe and propose methods to jointly model iceberg thermodynamics. They write:</p>
-<div class="page" title="Page 3">
-<div class="layoutArea">
-<div class="column">
-<blockquote>
-<p>“The melting of an iceberg constantly changes its mass and shape, and thus must be modelled in any long-term simulation of trajectories... The melting/erosional processes that have been included are ‘basal’ convection or turbulent heat transfer, buoyant <span style="font-family: var(--font-serif); color: var(--text-primary-color); font-size: inherit;">convection, wave erosion, solar and sensible heating, and sublimation.” (p. 117)</span></p>
-</blockquote>
-<div class="page" title="Page 4">
-<div class="layoutArea">
-<div class="column">
-<p>Among the melt processes they list, the dominant three according to Till J. W. Wagner, Rebecca W. Dell, and Ian Eisenman (2017) are wind-driven wave erosion (mechanical) M_e, turbulent basal melt (thermal) – melting at the base of the iceberg; described as turbulent because the melting basal layer is sandwiched between the cold of the ice and the relative warmth of the water, forming a transitional volume of turbulent convection (Ahlers, 2009) – M_b, and thermal sidewall erosion from buoyant convection – erosion of iceberg sidewalls from changes in ice surface temperature due to variations in iceberg buoyancy (Convection, n.d.) – noted M_v. In their paper, An Analytical Model of Iceberg Drift, the authors incorporate these factors in their own iceberg drift and decay model but discard the other thermodynamic factors described by Bigg et al. (1997), which they assert are negligible in comparison to the others. Their formulation of the equations for these three factors are:</p>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/8/iceberg-figure-3.png" alt="figure 3" width="1488" height="738" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/8/responsive/iceberg-figure-3-xs.png 300w ,https://phileasdg.github.io/media/posts/8/responsive/iceberg-figure-3-sm.png 480w ,https://phileasdg.github.io/media/posts/8/responsive/iceberg-figure-3-md.png 768w"></figure>
-<div class="page" title="Page 4">
-<div class="layoutArea">
-<div class="column">
-<p>For the purposes of this paper, it will suffice to mention that these equations solve for the changes in mass, length (L), width (W), and height (H) of modelled icebergs, and that the dimensions of modelled icebergs change as</p>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/8/iceberg-figure-4.png" alt="figure 4" width="282" height="238" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/8/responsive/iceberg-figure-4-xs.png 300w ,https://phileasdg.github.io/media/posts/8/responsive/iceberg-figure-4-sm.png 480w ,https://phileasdg.github.io/media/posts/8/responsive/iceberg-figure-4-md.png 768w"></figure>
-<div class="page" title="Page 4">
-<div class="layoutArea">
-<div class="column">
-<p>As should be evident, solving these equations requires data on the conditions of any modelled iceberg’s immediate environment, most importantly sea state, sea surface temperature, and atmospheric temperature estimates. Many models, including the one proposed by Wagner et al. (2017) source these data from </p>
-<div class="page" title="Page 5">
-<div class="layoutArea">
-<div class="column">
-<p>NASA’s “Estimating the Circulation and Climate of the Ocean” (ECCO) consortium, or NCAR and UCAR’s Community Climate System Model (CCSM).</p>
-<p>By sequentially solving the iceberg momentum and decay equations, feeding the results of the momentum equation into the decay equations and vice versa, we can calculate and plot the trajectory of an iceberg starting at any given latitudinal and longitudinal coordinates (a monumental task which researchers typically undertake programmatically) (Eisenman et al., 2021). The accuracy of the results produced using this method makes the use of momentum and decay equations in models attractive, and their use is now common in iceberg drift and decay models. Variations of the formulas first described by Bigg et al. (1997) are at the core of many iceberg drift and decay modelling tools today, programs such as MITberg, a MATLAB project developed by Alan Condron at the University of Massachusetts and designed to be used with MIT’s general circulation model (MITgcm), (MITberg: Icebergs and Climate Change, n.d.), itself a program designed to model fluid dynamics in the Earth ocean and atmosphere (MITgcm User Manual, n.d.). Other examples include OpenBerg, a python module for use with the python ocean drift modelling library OpenDrift (Opendrift.Models.Openberg — OpenDrift Documentation, n.d.), Elmer/Ice, an add-on package to the Elmer FEM (finite element method) program, which is designed to model ice dynamics (Elmer Ice - Home, n.d.), and FESOM-IB, a module designed for the Finite-Element/VolumE Sea-ice Ocean Model (Rackow et al., 2013).</p>
-<div class="page" title="Page 5">
-<div class="layoutArea">
-<div class="column">
-<p>The main advantages of dynamic and thermodynamic deterministic models of iceberg drift and decay over approximations and probabilistic models reside in the increased precision and reliability of their results when compared to real-world observational data (for an example, see Figure 1). In fact, they so surpass probabilistic models that these have largely fallen out of use. However, with this gained precision come challenges and drawbacks: high computational power requirements for long time scale or large iceberg sample simulations due to the volume of calculations and data which the models must process with each new drift prediction step, and lower accessibility to laypeople due to the steep learning curves and sometimes high financial costs associated with the use of the frameworks (hardware and software) through which these models are accessible (typical software frameworks are high-level sometimes proprietary programs or programming languages such as MATLAB, which hosts two of the models mentioned in this paper, the Lagrangian model proposed by Wagner et al. (2017), and MITberg)</p>
-<figure class="post__image" ><img loading="lazy" src="https://phileasdg.github.io/media/posts/8/iceberg-figure-5.png" alt="figure 5: a) Observed iceberg trajectories using data from the Antarctic Iceberg Tracking Database. b) One-year duration simulated trajectories for 200 icebergs of lengths ranging between 15 and 20 km using the drift and decay model proposed by Wagner et al. (2017). (Journal of Physical Oceanography 47, 7; 10.1175/JPO-D-16-0262.1)" width="1152" height="1232" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/8/responsive/iceberg-figure-5-xs.png 300w ,https://phileasdg.github.io/media/posts/8/responsive/iceberg-figure-5-sm.png 480w ,https://phileasdg.github.io/media/posts/8/responsive/iceberg-figure-5-md.png 768w">
-<figcaption >
-<div class="page" title="Page 6">
-<div class="layoutArea">
-<div class="column">
-<p>a) Observed iceberg trajectories using data from the Antarctic Iceberg Tracking Database.<br>b) One-year duration simulated trajectories for 200 icebergs of lengths ranging between 15 and 20 km using the drift and decay model proposed by Wagner et al. (2017). (Journal of Physical Oceanography 47, 7; 10.1175/JPO-D-16-0262.1)</p>
-</div>
-</div>
-</div>
-</figcaption>
-</figure>
-<div class="page" title="Page 6">
-<div class="layoutArea">
-<div class="column">
-<h2>Running a drift and decay model</h2>
-<p>The model proposed by Wagner et al. (2017) is publicly available at http://eisenman.ucsd.edu/code.html, and as a MATLAB code repository on GitHub. This section will shortly describe the process of setting up and running the model using MATLAB online and report the model output generated using the described setup program parameters.</p>
-<p>After downloading the model repository from GitHub and uploading it to a directory of MATLAB Drive, I accessed the main program by opening the model file named “iceberg_model_WDE17.m”. I then confirmed that my MATLAB license included access to the MATLAB mapping toolbox, which the model requires to generate iceberg drift trail maps (Eisenman et al., 2021). The program code is clear and generously annotated with usage instructions. Its first four sections allow the user to define their own model parameters. Respectively these are: 1) a model data input section where the user can specify the ocean surface and ambient atmospheric temperature data which the model requires <span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">and its source (ECCO or CCSM), 2) an iceberg parameter and analytical expression definition section in which properties such as air density, water density, or C' (see the iceberg decay equations described in section II.0b), 3) a space domain definition section in which the user specifies the area in which the model will compute iceberg trajectories as well as the boundaries for map figure generation, and 4) a run parameter definition section in which the user defines the time step length, the number of iceberg trajectories to compute, iceberg seed locations, seeding spacing, iceberg dimensions, and other settings specific to the desired simulation (Eisenman et al., 2021).</span></p>
-<div class="page" title="Page 7">
-<div class="layoutArea">
-<div class="column">
-<p>For demonstration purposes, I run the model here using mostly default program settings, having only adjusted the number of iceberg trajectories to compute and the iceberg start seeds. The code output reported below are the results of a 1-year-long model projection for 25 icebergs based on 1992 ECCO data:</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<p> </p>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/8/iceberg-figure-6.png" alt="Wagner et al. model map output showing iceberg trails grouped by size class." width="1624" height="1014" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/8/responsive/iceberg-figure-6-xs.png 300w ,https://phileasdg.github.io/media/posts/8/responsive/iceberg-figure-6-sm.png 480w ,https://phileasdg.github.io/media/posts/8/responsive/iceberg-figure-6-md.png 768w"><figcaption>
-<div class="page" title="Page 7">
-<div class="layoutArea">
-<div class="column">
-<p>Wagner et al. model map output showing iceberg trails grouped by size class.</p>
-</div>
-</div>
-</div>
-</figcaption></figure>
-<div class="page" title="Page 8">
-<div class="layoutArea">
-<div class="column">
-<h2>Concluding statement</h2>
-<p>Mathematical models of iceberg drift and decay are incredibly useful tools that can return results accurate enough to have consequential applications to scientific research, navigation, and security monitoring, but their high computing power requirements and relatively low accessibility to laypeople limit their use outside of well-funded research projects and state-run organisations. As a student, the MATLAB licence I bought for this project cost me $125 US, but for commercial or professional uses, the same license would have cost over $2000. Despite their efficacy and reliability, the high financial or material costs of entry and overall complexity of iceberg drift and decay modelling programs remain a major obstacle to their widespread adoption.</p>
-</div>
-</div>
-<div class="layoutArea">
-<div class="column">
-<h2>Sources Cited</h2>
-<p>Ahlers, G. (2009). Turbulent convection. Physics, 2. https://physics.aps.org/articles/v2/74</p>
-<p>Bigg, G. R., Wadley, M. R., Stevens, D. P., &amp; Johnson, J. A. (1997). Modelling the dynamics and thermodynamics of icebergs. Cold Regions Science and Technology, 26(2), 113–135. https://doi.org/10.1016/S0165-232X(97)00012-8</p>
-<p>Convection. (n.d.). Retrieved 4 March 2021, from https://www.chemeurope.com/en/encyclopedia/Convection.html#Buoyancy_induced_ convection_not_due_to_heat</p>
-</div>
-</div>
-</div>
-<div class="page" title="Page 9">
-<div class="layoutArea">
-<div class="column">
-<p>Eisenman, I., Dell, R. W., &amp; Wagner, T. J. W. (2021). Model of iceberg drift and decay (p. 5436915492 Bytes) [Data set]. figshare. https://doi.org/10.6084/M9.FIGSHARE.12857672</p>
-<p>Elmer Ice–Home. (n.d.). Retrieved 4 March 2021, from https://elmerice.elmerfem.org/ Holton, J., &amp; Hakim, G. (2012). An Introduction to Dynamic Meteorology, (5th ed., Vol.88).</p>
-<p>Iceberg | ice formation. (n.d.). Encyclopedia Britannica. Retrieved 4 March 2021, from https://www.britannica.com/science/iceberg</p>
-<p>Iceberg Classification Systems. (n.d.). Retrieved 4 March 2021, from https://www.universalcompendium.com/tables/science/iceb.htm</p>
-<p>MITberg: Icebergs and Climate Change. (n.d.). Retrieved 4 March 2021, from http://www.geo.umass.edu/faculty/condron/MITberg/download.htm</p>
-<p>MITgcm user manual. (n.d.). Retrieved 4 March 2021, from https://mitgcm.readthedocs.io/en/latest/</p>
-<p>opendrift.models.openberg–OpenDrift documentation. (n.d.). Retrieved 4 March 2021, from https://opendrift.github.io/autoapi/opendrift/models/openberg/index.html</p>
-<p>Quick Facts on Icebergs | National Snow and Ice Data Center. (n.d.). Retrieved 4 March 2021, from https://nsidc.org/cryosphere/quickfacts/icebergs.html</p>
-<p>Rackow, T., Wesche, C., Timmermann, R., &amp; Juricke, S. (2013). Modelling Southern Ocean iceberg drift and decay with FESOM-IB. EPIC3European Geophysical Union, Vienna, Austria, 2013-04-07-2013-04-12. European Geophysical Union, Vienna, Austria. https://epic.awi.de/id/eprint/37482/</p>
-<p>Smith, S. D. (1993). Hindcasting iceberg drift using current profiles and winds. Cold Regions Science and Technology, 22(1), 33–45. https://doi.org/10.1016/0165- 232X(93)90044-9</p>
-<p>US Department of Commerce, N. O. and A. A. (n.d.). What is an iceberg? Retrieved 4 March 2021, from https://oceanservice.noaa.gov/facts/iceberg.html</p>
-<p>Wagner, T. J. W., Dell, R. W., &amp; Eisenman, I. (2017). An Analytical Model of Iceberg Drift. Journal of Physical Oceanography, 47(7), 1605–1616. https://doi.org/10.1175/JPO-D-16-0262.1</p>
-<p>Weeks, W. F., &amp; Mellor, M. (1978). SOME ELEMENTS OF ICEBERG TECHNOLOGY. In A. A. Husseiny (Ed.), Iceberg Utilization (pp. 45–98). Pergamon. https://doi.org/10.1016/B978-0-08-022916-4.50015-7</p>
-</div>
-</div>
-</div>
-<p> </p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
             ]]>
         </content>
     </entry>
