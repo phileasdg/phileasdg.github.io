@@ -3,7 +3,7 @@
     <title>Phileas Dazeley-Gaist</title>
     <link href="https://phileasdg.github.io/feed.xml" rel="self" />
     <link href="https://phileasdg.github.io" />
-    <updated>2024-05-20T18:20:27-04:00</updated>
+    <updated>2024-07-26T13:20:40-04:00</updated>
     <author>
         <name>Phileas Dazeley-Gaist</name>
     </author>
@@ -23,15 +23,16 @@
             <category term="Ecology"/>
             <category term="Art?"/>
 
-        <updated>2024-05-20T18:20:27-04:00</updated>
+        <updated>2024-07-26T13:20:40-04:00</updated>
             <summary>
                 <![CDATA[
-                    Introduction The forest fire model is one of the simplest computational models&hellip;
+                    Note: This post was originally a short technical article I shared on&hellip;
                 ]]>
             </summary>
         <content type="html">
             <![CDATA[
-                <h2>Introduction</h2>
+                <p class="msg msg--info"><strong>Note: </strong>This post was originally a short technical article I shared on the Wolfram Community forums. If you would like to interact with live demonstrations, or download a wolfram notebook version of this text including the source code, you can access the original <a href="https://community.wolfram.com/groups/-/m/t/3096615?p_p_auth=jA2YdLGR">here</a>. </p>
+<h2>Introduction</h2>
 <p>The forest fire model is one of the simplest computational models to display self-organised criticality. The model is a probabilistic cellular automaton with the following rules. At each computation/time step:</p>
 <div id="cell-c6d531d9-bde4-e940-8566-2ff3288d6302" class="cell">
 <div class="cell-wrapper">
@@ -63,12 +64,15 @@
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/36/Screenshot-2024-05-08-at-16.39.54.png" alt="" width="553" height="286" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-05-08-at-16.39.54-xs.png 300w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-05-08-at-16.39.54-sm.png 480w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-05-08-at-16.39.54-md.png 768w"></figure>
 <p>You can specify the probabilities that tree cell spontaneously will catch fire, or that a wasteland cell will grow a tree with the <code>"NewFireProb"</code> and <code>"NewTreeProb"</code> options. Likewise, you can specify the maximum number of new fires or trees per step by specifying the options <code>"MaxNewFires"</code> and <code>"MaxNewTrees"</code>.</p>
 <p><em>Compute and animate 200 steps of a forest fire trajectory in a light forest with gaps and clearings:</em></p>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/36/Screenshot-2024-05-20-at-13.14.02.png" alt="" width="452" height="510" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-05-20-at-13.14.02-xs.png 300w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-05-20-at-13.14.02-sm.png 480w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-05-20-at-13.14.02-md.png 768w"></figure>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/36/Screenshot-2024-07-26-at-11.44.00.png" alt="" width="385" height="165" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-11.44.00-xs.png 300w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-11.44.00-sm.png 480w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-11.44.00-md.png 768w"></figure>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/36/ForestFireAnim1.gif" alt="" width="530" height="404"></figure>
 <p><span class="cc3" data-native-text="true">By default, </span><code><span class="cc6" data-native-text="true">“MaxNewFires”</span></code><span class="cc3" data-native-text="true"> and </span><code><span class="cc6" data-native-text="true">“MaxNewTrees”</span></code><span class="cc3" data-native-text="true"> are set to </span><code><span class="cc4" data-native-text="true">∞</span></code><span class="cc3" data-native-text="true">. When this is the case, the occurrence of new fires or trees is determined entirely by the <span class="cc6" data-native-text="true"><code>“NewFireProb”</code></span></span> <span class="cc3" data-native-text="true">and </span><code><span class="cc6" data-native-text="true">“NewTreeProb”</span></code><span class="cc3" data-native-text="true"> options.</span></p>
 <p><em>Compute and animate 200 steps of a forest fire trajectory on a partitioned landscape:</em></p>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/36/Screenshot-2024-05-20-at-13.16.11.png" alt="" width="474" height="494" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-05-20-at-13.16.11-xs.png 300w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-05-20-at-13.16.11-sm.png 480w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-05-20-at-13.16.11-md.png 768w"></figure>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/36/Screenshot-2024-07-26-at-11.46.43.png" alt="" width="370" height="121" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-11.46.43-xs.png 300w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-11.46.43-sm.png 480w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-11.46.43-md.png 768w"></figure>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/36/ForestFireAnim2.gif" alt="" width="529" height="402"></figure>
 <p><em>Compute and animate 200 steps of a forest fire trajectory exhibiting self-organised criticality:</em></p>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/36/Screenshot-2024-05-20-at-13.16.38.png" alt="" width="484" height="589" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-05-20-at-13.16.38-xs.png 300w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-05-20-at-13.16.38-sm.png 480w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-05-20-at-13.16.38-md.png 768w"></figure>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/36/Screenshot-2024-07-26-at-11.50.24.png" alt="" width="390" height="221" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-11.50.24-xs.png 300w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-11.50.24-sm.png 480w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-11.50.24-md.png 768w"></figure>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/36/ForestFireAnim3.gif" alt="" width="529" height="403"></figure>
 <p><em>Produce time-series and phase space plots for the trajectory above:</em></p>
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/36/Screenshot-2024-05-20-at-13.17.34.png" alt="" width="1402" height="976" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-05-20-at-13.17.34-xs.png 300w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-05-20-at-13.17.34-sm.png 480w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-05-20-at-13.17.34-md.png 768w"></figure>
 <h3>One-Dimensional Forest Fires</h3>
@@ -79,7 +83,28 @@
 <div class="cell-content">
 <div>
 <div class="native-layout native-layout-simple"><span class="cc3" data-native-text="true">Following the convention for 1-dimensional cellular automata, we stack the arrays for subsequent time steps vertically and in sequence. In the resulting graphic, space is represented horizontally and time flows vertically from top to bottom.</span></div>
-<div> </div>
+<div>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/36/Screenshot-2024-07-26-at-11.54.01.png" alt="" width="530" height="292" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-11.54.01-xs.png 300w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-11.54.01-sm.png 480w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-11.54.01-md.png 768w"></figure>
+<p>See some one dimensional trajectories in the animation below, or head to <a href="https://community.wolfram.com/groups/-/m/t/3096615">the original post </a>to see an interactive example:</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/36/Screenshot-2024-07-26-at-12.07.29.png" alt="" width="609" height="208" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-12.07.29-xs.png 300w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-12.07.29-sm.png 480w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-12.07.29-md.png 768w"></figure>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/36/ForestFireAnim4-2.gif" alt="" width="434" height="499"></figure>
+<h3>Forest Fires in 3D</h3>
+<p>In three dimensions, we can also define forested landscapes with more complicated topographies, for example, by layering different cell types. </p>
+<p>The following example is of a forested layer on top of a layer of soil. Both layers vary in thickness (check out <a href="https://community.wolfram.com/groups/-/m/t/3096615">the original post</a> for the interactive version).</p>
+<p><em>Three-dimensional forest fire model trajectories through a dense hilly forest.</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/36/Screenshot-2024-07-26-at-13.16.57.png" alt="" width="1378" height="616" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-13.16.57-xs.png 300w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-13.16.57-sm.png 480w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-13.16.57-md.png 768w"></figure>
+<p>Depending on the forest initial configuration, it can be difficult to visualise all cell states at once. This is the case for forest fire trajectories through dense volumes of trees, for example:</p>
+<p><em>Three-dimensional forest fire model trajectories through a cubic forest:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/36/Screenshot-2024-07-26-at-13.17.50.png" alt="" width="1378" height="852" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-13.17.50-xs.png 300w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-13.17.50-sm.png 480w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-13.17.50-md.png 768w"></figure>
+<h3>Closing Note</h3>
+<p>I hope you found these examples interesting and entertaining! The implementation discussed in this short text should in principle work for higher than 3-dimensional arrays but I have not tested it for such cases. If you do, please make sure to share your results in the comment section under this post. In fact, please feel free to share any interesting behaviours you find or modifications you make in the comments! I look forward to hearing your ideas and suggestions! </p>
+<h3>Sources</h3>
+<ul>
+<li><a href="https://en.wikipedia.org/w/index.php?title=Forest-fire_model&amp;oldid=\%201170972820">'Forest-Fire Model'. In Wikipedia, 18 August 2023.</a></li>
+<li><a href="https://mathematica.stackexchange.com/questions/39793/can-you-apply-the-cellular-automata-function-to-a-grid-containing-numbers/39863#39863">E, C. 'Answer to "Can You Apply the Cellular Automata Function to a Grid Containing Numbers?"' Mathematica Stack Exchange, 5 January 2014.</a></li>
+<li><a href="https://www.sciencedirect.com/science/article/abs/pii/037596019090451S?via%3Dihub">Bak, Per, Kan Chen, and Chao Tang. 'A Forest-Fire Model and Some Thoughts on Turbulence'. Physics Letters A 147, no. 5 (16 July 1990): 297\[Dash]300.</a></li>
+</ul>
+</div>
 </div>
 </div>
 </div>
