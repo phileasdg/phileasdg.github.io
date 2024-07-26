@@ -3,7 +3,7 @@
     <title>Phileas Dazeley-Gaist</title>
     <link href="https://phileasdg.github.io/feed.xml" rel="self" />
     <link href="https://phileasdg.github.io" />
-    <updated>2024-07-26T14:02:04-04:00</updated>
+    <updated>2024-07-26T14:09:07-04:00</updated>
     <author>
         <name>Phileas Dazeley-Gaist</name>
     </author>
@@ -16,7 +16,7 @@
         </author>
         <link href="https://phileasdg.github.io/a-forest-fire-model-in-1-2-and-3-dimensions/"/>
         <id>https://phileasdg.github.io/a-forest-fire-model-in-1-2-and-3-dimensions/</id>
-        <media:content url="https://phileasdg.github.io/media/posts/36/Animation1-2.gif" medium="image" />
+        <media:content url="https://phileasdg.github.io/media/posts/36/Animation1.gif" medium="image" />
             <category term="Work at Wolfram"/>
             <category term="Programming"/>
             <category term="Modelling"/>
@@ -24,16 +24,16 @@
             <category term="Ecology"/>
             <category term="Art?"/>
 
-        <updated>2024-07-26T14:02:04-04:00</updated>
+        <updated>2024-07-26T14:09:07-04:00</updated>
             <summary>
                 <![CDATA[
-                        <img src="https://phileasdg.github.io/media/posts/36/Animation1-2.gif" alt="" />
+                        <img src="https://phileasdg.github.io/media/posts/36/Animation1.gif" alt="" />
                     Note: This post was originally a short technical article I shared on&hellip;
                 ]]>
             </summary>
         <content type="html">
             <![CDATA[
-                    <p><img src="https://phileasdg.github.io/media/posts/36/Animation1-2.gif" class="type:primaryImage" alt="" /></p>
+                    <p><img src="https://phileasdg.github.io/media/posts/36/Animation1.gif" class="type:primaryImage" alt="" /></p>
                 <p class="msg msg--info"><strong>Note: </strong>This post was originally a short technical article I shared on the Wolfram Community forums. If you would like to interact with live demonstrations, or download a wolfram notebook version of this text including the source code, you can access the original <a href="https://community.wolfram.com/groups/-/m/t/3096615?p_p_auth=jA2YdLGR">here</a>. </p>
 <h2>Introduction</h2>
 <p>The forest fire model is one of the simplest computational models to display self-organised criticality. The model is a probabilistic cellular automaton with the following rules. At each computation/time step:</p>
