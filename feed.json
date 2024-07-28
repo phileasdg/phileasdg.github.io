@@ -44,11 +44,12 @@
                    "Programming",
                    "Modelling",
                    "Mathematica",
+                   "Environmental Science",
                    "Ecology",
                    "Art?"
             ],
             "date_published": "2024-05-03T17:38:15-04:00",
-            "date_modified": "2024-07-26T14:09:07-04:00"
+            "date_modified": "2024-07-28T04:03:27-04:00"
         },
         {
             "id": "https://phileasdg.github.io/adawdaw/",
@@ -105,10 +106,12 @@
                    "Work at Wolfram",
                    "Wolfram Language",
                    "Programming",
-                   "GIS"
+                   "Mathematica",
+                   "GIS",
+                   "Environmental Science"
             ],
             "date_published": "2023-07-11T23:58:37-04:00",
-            "date_modified": "2024-04-22T21:44:15-04:00"
+            "date_modified": "2024-07-28T04:01:15-04:00"
         },
         {
             "id": "https://phileasdg.github.io/economic-uses-of-selected-species-in-the-family-lamiaceae/",
@@ -121,10 +124,12 @@
                 "name": "Phileas Dazeley-Gaist"
             },
             "tags": [
-                   "Undergraduate work"
+                   "Undergraduate work",
+                   "Environmental Science",
+                   "Ecology"
             ],
             "date_published": "2023-03-10T19:19:31-05:00",
-            "date_modified": "2023-03-28T11:10:59-04:00"
+            "date_modified": "2024-07-28T04:03:49-04:00"
         },
         {
             "id": "https://phileasdg.github.io/mathematics-as-human-ecology/",
