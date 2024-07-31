@@ -3,7 +3,7 @@
     <title>Phileas Dazeley-Gaist</title>
     <link href="https://phileasdg.github.io/feed.xml" rel="self" />
     <link href="https://phileasdg.github.io" />
-    <updated>2024-07-28T13:19:14-04:00</updated>
+    <updated>2024-07-31T15:59:00-04:00</updated>
     <author>
         <name>Phileas Dazeley-Gaist</name>
     </author>
@@ -23,7 +23,7 @@
             <category term="GIS"/>
             <category term="Environmental Science"/>
 
-        <updated>2024-07-28T13:19:14-04:00</updated>
+        <updated>2024-07-31T15:59:00-04:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/37/Hottest-day-on-earth-Social-Media-2.png" alt="" />
@@ -97,7 +97,7 @@
 <p>What were the top 5 hottest recorded days since 1940?</p>
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.25.45.png" alt="" width="276" height="26" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.25.45-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.25.45-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.25.45-md.png 768w"></figure>
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.26.05.png" alt="" width="373" height="155" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.26.05-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.26.05-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.26.05-md.png 768w"></figure>
-<p>Note that the top three hottest days on record were this month.</p>
+<p>Note that the top four hottest days on record were this month.</p>
 <h2>Reproducing the Famous Global Mean Surface Temperature Multi-Year Overlay Plot</h2>
 <p>With the data we have collected, we can now reproduce the now famous year over year plot of global mean surface temperatures from Climate Pulse.</p>
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.26.54.png" alt="" width="2610" height="1398" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.26.54-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.26.54-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.26.54-md.png 768w"></figure>
