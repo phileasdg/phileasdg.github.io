@@ -3,7 +3,7 @@
     <title>Phileas Dazeley-Gaist</title>
     <link href="https://phileasdg.github.io/feed.xml" rel="self" />
     <link href="https://phileasdg.github.io" />
-    <updated>2024-12-16T21:54:57+01:00</updated>
+    <updated>2024-12-22T19:41:43-05:00</updated>
     <author>
         <name>Phileas Dazeley-Gaist</name>
     </author>
@@ -24,7 +24,7 @@
             <category term="Mathematica"/>
             <category term="Art"/>
 
-        <updated>2024-10-24T21:15:01+02:00</updated>
+        <updated>2024-10-24T15:15:01-04:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/41/Mathematical-Marbling-Banner.png" alt="" />
@@ -162,6 +162,7 @@
 <p><em>(Illustration courtesy of Aubrey Jaffer)</em></p>
 <p><span class="cc1" data-native-text="true">Please read Aubrey Jaffer’s website for a </span><a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://people.csail.mit.edu/jaffer/Marbling/Mathematics" target="_blank" data-testid="ButtonBoxView" rel="noopener"><span class="cc4" data-native-text="true">more in-depth explanation</span></a><span class="cc1" data-native-text="true">.</span></p>
 <h3><em>Implementation:</em> tineCircle and combCircle</h3>
+<p>To download the original code, please consult the original post <a href="https://community.wolfram.com/groups/-/m/t/3258063">here</a>.</p>
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/41/Screenshot-2024-12-16-at-21.37.17.png" alt="" width="599" height="584" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/41/responsive/Screenshot-2024-12-16-at-21.37.17-xs.png 300w ,https://phileasdg.github.io/media/posts/41/responsive/Screenshot-2024-12-16-at-21.37.17-sm.png 480w ,https://phileasdg.github.io/media/posts/41/responsive/Screenshot-2024-12-16-at-21.37.17-md.png 768w"></figure>
 <h3>Examples</h3>
 <h4>Distort polygons with a single tine line using tineCircle</h4>
@@ -316,7 +317,7 @@
             <category term="GIS"/>
             <category term="Environmental Science"/>
 
-        <updated>2024-07-28T09:17:34+02:00</updated>
+        <updated>2024-07-28T03:17:34-04:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/37/Hottest-day-on-earth-Social-Media-2.png" alt="" />
@@ -457,7 +458,7 @@
             <category term="Ecology"/>
             <category term="Art"/>
 
-        <updated>2024-05-03T23:38:15+02:00</updated>
+        <updated>2024-05-03T17:38:15-04:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/36/Animation1.gif" alt="" />
@@ -565,7 +566,7 @@
             <category term="Modelling"/>
             <category term="Mathematica"/>
 
-        <updated>2024-05-02T15:44:47+02:00</updated>
+        <updated>2024-05-02T09:44:47-04:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.14.00.png" alt="" />
@@ -726,7 +727,7 @@
             <category term="Mathematica"/>
             <category term="Ecology"/>
 
-        <updated>2023-10-10T20:21:31+02:00</updated>
+        <updated>2023-10-10T14:21:31-04:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/32/Screenshot-2023-10-11-at-00.12.50.png" alt="" />
@@ -975,7 +976,7 @@
             <category term="GIS"/>
             <category term="Environmental Science"/>
 
-        <updated>2023-07-12T05:58:37+02:00</updated>
+        <updated>2023-07-11T23:58:37-04:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/28/BlogHeader-2.png" alt="" />
@@ -1051,7 +1052,7 @@
             <category term="Environmental Science"/>
             <category term="Ecology"/>
 
-        <updated>2023-03-11T01:19:31+01:00</updated>
+        <updated>2023-03-10T19:19:31-05:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/27/De_Historia_stirpium_commentarii_insignes_...Fuchs_Leonhart_bpt6k1511104z_510.jpg" alt="" />
@@ -1160,7 +1161,7 @@
             <category term="Undergraduate work"/>
             <category term="Ecology"/>
 
-        <updated>2023-02-23T19:46:31+01:00</updated>
+        <updated>2023-02-23T13:46:31-05:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/26/poster-2.png" alt="" />
@@ -1272,7 +1273,7 @@
             <category term="Undergraduate work"/>
             <category term="GIS"/>
 
-        <updated>2022-12-18T16:55:40+01:00</updated>
+        <updated>2022-12-18T10:55:40-05:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/24/unnamed-2.png" alt="" />
@@ -1444,7 +1445,7 @@
             <category term="Programming"/>
             <category term="Art"/>
 
-        <updated>2022-12-09T03:57:33+01:00</updated>
+        <updated>2022-12-08T21:57:33-05:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/23/Screenshot-2022-12-08-at-23.12.15.png" alt="" />
