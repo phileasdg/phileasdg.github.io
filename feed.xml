@@ -3,7 +3,7 @@
     <title>Phileas Dazeley-Gaist</title>
     <link href="https://phileasdg.github.io/feed.xml" rel="self" />
     <link href="https://phileasdg.github.io" />
-    <updated>2025-08-15T23:14:50-04:00</updated>
+    <updated>2025-08-16T01:52:38-04:00</updated>
     <author>
         <name>Phileas Dazeley-Gaist</name>
     </author>
@@ -198,23 +198,7 @@
 <p>Define a function to retrieve the contributions of the participants at the nth Delphi process round:</p><pre><code class="language-wl">In[]:= ClearAll[nthRoundContributions]
  nthRoundContributions[participantChats_Dataset, n_Integer?Positive] :=participantChats[All, Select[#[&quot;Messages&quot;], #Role == &quot;Assistant&quot; &amp;][[n]][&quot;Content&quot;][[1]][&quot;Data&quot;] &amp;]
 </code></pre>
-<p>Retrieve the nth round participant contributions:</p><figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/Screenshot-2025-08-15-at-22.55.37.png" alt="" width="1706" height="572"  sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/Screenshot-2025-08-15-at-22.55.37-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/Screenshot-2025-08-15-at-22.55.37-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/Screenshot-2025-08-15-at-22.55.37-md.png 768w"></figure><table>
-<thead>
-<tr>
-<th>Horticulturist</th>
-<th>Landscape architect</th>
-<th>Community organizer</th>
-<th>Environmental scientist</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>As a horticulturist dedicated to promoting sustainable and diverse plant practices, I believe it’s crucial to consider the specific needs of plants in relation to their growing environment. This involves not only understanding the climate and soil conditions in our community but also acknowledging the ecological balance that each garden supports. Here are my perspectives based on the key themes presented:</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<ol>
+<p>Retrieve the nth round participant contributions:</p><figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/Screenshot-2025-08-15-at-22.55.37.png" alt="" width="1706" height="572"  sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/Screenshot-2025-08-15-at-22.55.37-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/Screenshot-2025-08-15-at-22.55.37-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/Screenshot-2025-08-15-at-22.55.37-md.png 768w"></figure><ol>
 <li><strong>Understanding Soil Composition and Local Climate</strong>: The notion that any plant can thrive with enough watering and fertilization overlooks the critical role of soil health and structure. Different plants have varying requirements for soil pH, drainage, and nutrient availability. For example, root vegetables like carrots and beets prefer sandy loam for proper growth, while leafy greens may do better in richer, loamy soils. It is essential to assess soil composition and amend it appropriately before deciding on plant varieties.</li>
 <li><strong>Sustainable Plant Selection</strong>: Emphasizing diversity in our plant selection can encourage resilience against pests and diseases. Instead of exotic plants that may not adapt well to our local conditions, we should focus on selecting a mix of native and well-adapted species. Native plants often require less water and fertilizer and can support local biodiversity by attracting pollinators and beneficial insects. Some great examples include coneflowers and black-eyed Susans, which are visually appealing and attract bees and butterflies while requiring minimal maintenance.</li>
 <li><strong>Balancing Aesthetics and Functionality</strong>: While I understand the desire for ornamental beauty in the garden, it’s important to recognize that aesthetics can coexist with productivity. Many flowering plants are not only attractive but also serve practical purposes. For example, marigolds can deter pests and even help with vegetable production. Incorporating edible ornamental plants, such as kale or swiss chard that have beautiful foliage, can enhance the garden’s visual appeal while contributing to food security.</li>
