@@ -3,7 +3,7 @@
     <title>Phileas Dazeley-Gaist</title>
     <link href="https://phileasdg.github.io/feed.xml" rel="self" />
     <link href="https://phileasdg.github.io" />
-    <updated>2025-08-16T11:34:44-04:00</updated>
+    <updated>2025-08-16T11:39:16-04:00</updated>
     <author>
         <name>Phileas Dazeley-Gaist</name>
     </author>
@@ -175,7 +175,7 @@ Wolfram Community, STAFF PICKS, March 14, 2025
         </author>
         <link href="https://phileasdg.github.io/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/"/>
         <id>https://phileasdg.github.io/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/</id>
-        <media:content url="https://phileasdg.github.io/media/posts/45/6809Bannerimage-CommunityPost-LLMDelphiMethod.png" medium="image" />
+        <media:content url="https://phileasdg.github.io/media/posts/45/Banner-image-Community-Post-LLM-Delphi-Method.png" medium="image" />
             <category term="Work at Wolfram"/>
             <category term="Wolfram Language"/>
             <category term="Modelling"/>
@@ -185,13 +185,13 @@ Wolfram Community, STAFF PICKS, March 14, 2025
         <updated>2025-08-15T22:17:42-04:00</updated>
             <summary>
                 <![CDATA[
-                        <img src="https://phileasdg.github.io/media/posts/45/6809Bannerimage-CommunityPost-LLMDelphiMethod.png" alt="" />
+                        <img src="https://phileasdg.github.io/media/posts/45/Banner-image-Community-Post-LLM-Delphi-Method.png" alt="" />
                     Note: This post was originally a short technical article I shared on&hellip;
                 ]]>
             </summary>
         <content type="html">
             <![CDATA[
-                    <p><img src="https://phileasdg.github.io/media/posts/45/6809Bannerimage-CommunityPost-LLMDelphiMethod.png" class="type:primaryImage" alt="" /></p>
+                    <p><img src="https://phileasdg.github.io/media/posts/45/Banner-image-Community-Post-LLM-Delphi-Method.png" class="type:primaryImage" alt="" /></p>
                 <p><strong>Note:</strong> This post was originally a short technical article I shared on the Wolfram Community forums. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3393596">here</a>. </p><h2 id="introduction">Introduction</h2>
 <h3 id="an-overview-of-the-delphi-method">An Overview of the Delphi Method</h3>
 <p>The Delphi method is a structured communication technique originally designed as a forecasting technique, that relies on a panel of experts. It was developed by the RAND Corporation in the 1950s and 1960s. The method involves multiple rounds of questionnaires or writing prompts sent to a panel of experts. The anonymised responses are aggregated and shared with the group after each round. The experts are encouraged to revise their earlier answers in light of the replies of other members of the panel. With some luck, the answers will converge to consensus over the course of several rounds. The method is widely used for forecasting and decision-making in business and education. </p><p><em>Illustration of one round of the Delphi process:</em></p><pre><code class="language-wl">In[]:= Show[
