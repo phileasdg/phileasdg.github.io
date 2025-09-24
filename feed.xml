@@ -3,7 +3,7 @@
     <title>Phileas Dazeley-Gaist</title>
     <link href="https://phileasdg.github.io/feed.xml" rel="self" />
     <link href="https://phileasdg.github.io" />
-    <updated>2025-09-19T16:03:51-04:00</updated>
+    <updated>2025-09-24T01:28:20+02:00</updated>
     <author>
         <name>Phileas Dazeley-Gaist</name>
     </author>
@@ -23,7 +23,7 @@
             <category term="Environmental Science"/>
             <category term="Ecology"/>
 
-        <updated>2025-08-22T20:06:57-04:00</updated>
+        <updated>2025-08-23T02:06:57+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/49/banner.png" alt="" />
@@ -67,7 +67,7 @@
       {Null, 1}, n]]], 
    AnimationRunning -&gt; False, AnimationTimeIndex -&gt; 5, DefaultDuration -&gt; 10]
 </code></pre>
-<figure class="post__image"><img src="https://phileasdg.github.io/media/posts/49/randomwalk.webp" alt="" width="569" height="864"  sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/49/responsive/randomwalk-xs.webp 300w ,https://phileasdg.github.io/media/posts/49/responsive/randomwalk-sm.webp 480w ,https://phileasdg.github.io/media/posts/49/responsive/randomwalk-md.webp 768w"></figure><p>Okay, so if I were to randomly wander around the garden for a long time, never backtracking, what locations along the path am I likely to spend most of my time in? </p><p>To estimate an answer to this question, we can take a sample of simulated random non-backtracking walks through the garden, and tally the number of visits to each location. We should make the additional assumption that the walks start at one of the garden entrances, chosen at random. Here’s what that looks like with the tallies represented as the sizes of the nodes on the garden path network:</p><figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/49/1rxncra20r6yl.png" alt="" width="2358" height="1488"  sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/49/responsive/1rxncra20r6yl-xs.png 300w ,https://phileasdg.github.io/media/posts/49/responsive/1rxncra20r6yl-sm.png 480w ,https://phileasdg.github.io/media/posts/49/responsive/1rxncra20r6yl-md.png 768w"></figure><figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/49/1ni29au7ly1tt.png" alt="" width="1255" height="948"  sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/49/responsive/1ni29au7ly1tt-xs.png 300w ,https://phileasdg.github.io/media/posts/49/responsive/1ni29au7ly1tt-sm.png 480w ,https://phileasdg.github.io/media/posts/49/responsive/1ni29au7ly1tt-md.png 768w"></figure><p>Of course, this is an approximation and the results are biased by the specific choices involved in my translation of the continuous real-world path into a discrete network representation. That said, it’s a reasonable approximation, and one that matches my personal experience of leisurely strolling through the garden with no clear direction.</p><h4 id="a-short-statistical-tangent">A short statistical tangent</h4>
+<figure class="post__image"><img src="https://phileasdg.github.io/media/posts/49/randomwalk.gif" alt="" width="569" height="864" ></figure><p>Okay, so if I were to randomly wander around the garden for a long time, never backtracking, what locations along the path am I likely to spend most of my time in? </p><p>To estimate an answer to this question, we can take a sample of simulated random non-backtracking walks through the garden, and tally the number of visits to each location. We should make the additional assumption that the walks start at one of the garden entrances, chosen at random. Here’s what that looks like with the tallies represented as the sizes of the nodes on the garden path network:</p><figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/49/1rxncra20r6yl.png" alt="" width="2358" height="1488"  sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/49/responsive/1rxncra20r6yl-xs.png 300w ,https://phileasdg.github.io/media/posts/49/responsive/1rxncra20r6yl-sm.png 480w ,https://phileasdg.github.io/media/posts/49/responsive/1rxncra20r6yl-md.png 768w"></figure><figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/49/1ni29au7ly1tt.png" alt="" width="1255" height="948"  sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/49/responsive/1ni29au7ly1tt-xs.png 300w ,https://phileasdg.github.io/media/posts/49/responsive/1ni29au7ly1tt-sm.png 480w ,https://phileasdg.github.io/media/posts/49/responsive/1ni29au7ly1tt-md.png 768w"></figure><p>Of course, this is an approximation and the results are biased by the specific choices involved in my translation of the continuous real-world path into a discrete network representation. That said, it’s a reasonable approximation, and one that matches my personal experience of leisurely strolling through the garden with no clear direction.</p><h4 id="a-short-statistical-tangent">A short statistical tangent</h4>
 <p>Across trajectories, the distribution of path-location visit frequencies looks like this:</p><pre><code class="language-wl">In[]:= Histogram[
    Flatten[Map[Values@*Normal@*Counts, walks]], 
    ChartStyle -&gt; Lighter[StandardBlue, .5]]
@@ -114,7 +114,7 @@
      ] 
     ]], {{radius, 5}, 0, 10}, SaveDefinitions -&gt; True]
 </code></pre>
-<figure class="post__image"><img src="https://phileasdg.github.io/media/posts/49/1rs758hzqi6w9.webp" alt="" width="500" height="undefined"  sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/49/responsive/1rs758hzqi6w9-xs.webp 300w ,https://phileasdg.github.io/media/posts/49/responsive/1rs758hzqi6w9-sm.webp 480w ,https://phileasdg.github.io/media/posts/49/responsive/1rs758hzqi6w9-md.webp 768w"></figure><p>Since we can now estimate spatial networks of plant interactions based on distance, we can also apply community detection methods to these networks to make estimates of where interactions concentrate in the network at different scales:</p><figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/49/0ydgmlj7ow2fk.png" alt="" width="2014" height="726"  sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/49/responsive/0ydgmlj7ow2fk-xs.png 300w ,https://phileasdg.github.io/media/posts/49/responsive/0ydgmlj7ow2fk-sm.png 480w ,https://phileasdg.github.io/media/posts/49/responsive/0ydgmlj7ow2fk-md.png 768w"></figure><figure class="post__image"><img src="https://phileasdg.github.io/media/posts/49/1betucekiu8z2.webp" alt="" width="500" height="undefined"  sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/49/responsive/1betucekiu8z2-xs.webp 300w ,https://phileasdg.github.io/media/posts/49/responsive/1betucekiu8z2-sm.webp 480w ,https://phileasdg.github.io/media/posts/49/responsive/1betucekiu8z2-md.webp 768w"></figure><p>This spatial network analysis reveals how the Sunken Garden’s plant communities might emerge at different interaction scales. For radii under approximately 1.75 feet, there are no detected communities, as no plants are within that distance of one another. At radii between two and three feet, we see tightly clustered micro-communities. For radii between four and five feet, we find medium-sized communities that overlap meaningfully with the intentional design and pattern of the garden. At this scale, the garden path seems to contribute to delineating the community structure. As we increase the interaction radius to six to ten feet, these smaller communities merge. For a radius of ten feet, there are four detected communities, two of which cover the majority of the garden:</p><figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/49/0zb92jxye00nb.png" alt="" width="500" height="undefined"  sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/49/responsive/0zb92jxye00nb-xs.png 300w ,https://phileasdg.github.io/media/posts/49/responsive/0zb92jxye00nb-sm.png 480w ,https://phileasdg.github.io/media/posts/49/responsive/0zb92jxye00nb-md.png 768w"></figure><p>The modularity-based community detection shows that even under our simplified assumption of uniform distance-based interactions, the garden shows clear spatial clustering that changes meaningfully with scale. At intermediate scales, the communities appear to align with the garden’s major design elements—the central beds, perimeter plantings, and transitional zones.</p><p>Of course, our linear distance model is a deliberate oversimplification. In reality, plant interactions depend on species compatibility, root systems, light requirements, soil preferences, and many other factors that vary between species pairs. Some plants are natural companions that thrive in close proximity, while others compete aggressively or have allelopathic effects on their neighbors.</p><p>Despite these limitations, the spatial community analysis shows how computational methods can reveal organizational patterns in designed landscapes that might not be immediately apparent. The scale-dependent nature of the detected communities suggests that the Sunken Garden operates as a multi-layered spatial system. The alignment of intermediate-scale communities with major design elements reflects the fact that the garden’s layout creates natural zones of interaction.</p><h3 id="plant-data-analysis">Plant data analysis</h3>
+<figure class="post__image"><img src="https://phileasdg.github.io/media/posts/49/1rs758hzqi6w9.gif" alt="" width="500" height="undefined" ></figure><p>Since we can now estimate spatial networks of plant interactions based on distance, we can also apply community detection methods to these networks to make estimates of where interactions concentrate in the network at different scales:</p><figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/49/0ydgmlj7ow2fk.png" alt="" width="2014" height="726"  sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/49/responsive/0ydgmlj7ow2fk-xs.png 300w ,https://phileasdg.github.io/media/posts/49/responsive/0ydgmlj7ow2fk-sm.png 480w ,https://phileasdg.github.io/media/posts/49/responsive/0ydgmlj7ow2fk-md.png 768w"></figure><figure class="post__image"><img src="https://phileasdg.github.io/media/posts/49/1betucekiu8z2.gif" alt="" width="500" height="undefined" ></figure><p>This spatial network analysis reveals how the Sunken Garden’s plant communities might emerge at different interaction scales. For radii under approximately 1.75 feet, there are no detected communities, as no plants are within that distance of one another. At radii between two and three feet, we see tightly clustered micro-communities. For radii between four and five feet, we find medium-sized communities that overlap meaningfully with the intentional design and pattern of the garden. At this scale, the garden path seems to contribute to delineating the community structure. As we increase the interaction radius to six to ten feet, these smaller communities merge. For a radius of ten feet, there are four detected communities, two of which cover the majority of the garden:</p><figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/49/0zb92jxye00nb.png" alt="" width="500" height="undefined"  sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/49/responsive/0zb92jxye00nb-xs.png 300w ,https://phileasdg.github.io/media/posts/49/responsive/0zb92jxye00nb-sm.png 480w ,https://phileasdg.github.io/media/posts/49/responsive/0zb92jxye00nb-md.png 768w"></figure><p>The modularity-based community detection shows that even under our simplified assumption of uniform distance-based interactions, the garden shows clear spatial clustering that changes meaningfully with scale. At intermediate scales, the communities appear to align with the garden’s major design elements—the central beds, perimeter plantings, and transitional zones.</p><p>Of course, our linear distance model is a deliberate oversimplification. In reality, plant interactions depend on species compatibility, root systems, light requirements, soil preferences, and many other factors that vary between species pairs. Some plants are natural companions that thrive in close proximity, while others compete aggressively or have allelopathic effects on their neighbors.</p><p>Despite these limitations, the spatial community analysis shows how computational methods can reveal organizational patterns in designed landscapes that might not be immediately apparent. The scale-dependent nature of the detected communities suggests that the Sunken Garden operates as a multi-layered spatial system. The alignment of intermediate-scale communities with major design elements reflects the fact that the garden’s layout creates natural zones of interaction.</p><h3 id="plant-data-analysis">Plant data analysis</h3>
 <p>I reached out to some contacts at the college for information about the garden plants that I could add to the garden website. [<strong>Name</strong>], the current Sunken Garden curator shared a species information booklet he wrote with me, the Edible Plant List of the Sunken Garden, which contained all sorts of helpful information about the plants. I used OCR alongside a mix of methods to extract the data from the booklet, and convert them to a JSON dataset, which I’ve reproduced here:</p><figure class="post__image"><img src="https://phileasdg.github.io/media/posts/49/0krwxhsw9rjxb.png" alt="" width="831" height="39"  sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/49/responsive/0krwxhsw9rjxb-xs.png 300w ,https://phileasdg.github.io/media/posts/49/responsive/0krwxhsw9rjxb-sm.png 480w ,https://phileasdg.github.io/media/posts/49/responsive/0krwxhsw9rjxb-md.png 768w"></figure><figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/49/Screenshot-2025-09-13-at-20.50.42.png" alt="Image description" width="1882" height="636"  sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/49/responsive/Screenshot-2025-09-13-at-20.50.42-xs.png 300w ,https://phileasdg.github.io/media/posts/49/responsive/Screenshot-2025-09-13-at-20.50.42-sm.png 480w ,https://phileasdg.github.io/media/posts/49/responsive/Screenshot-2025-09-13-at-20.50.42-md.png 768w"></figure><p>The dataset contains detailed information about 56 plant species in the Sunken Garden, including their Latin names, families, growing requirements, physical characteristics, and seasonal information.</p><p>The data reveal clear patterns in plant selection. Most species are adaptable to varying light conditions:</p><pre><code class="language-wl">In[]:= Dataset[ReverseSort@KeyMap[First, Normal[Counts[Values[Dataset[ConstructColumns[plantData, &quot;sun&quot;]]]]]]]
 </code></pre>
 <table>
@@ -225,7 +225,7 @@
             <category term="Environmental Science"/>
             <category term="Ecology"/>
 
-        <updated>2025-08-15T22:21:47-04:00</updated>
+        <updated>2025-08-16T04:21:47+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/47/Ecoregions_BannerImage-2.png" alt="" />
@@ -483,7 +483,7 @@ Wolfram Community, STAFF PICKS, April 17, 2025
             <category term="GIS"/>
             <category term="Economics"/>
 
-        <updated>2025-08-15T22:20:01-04:00</updated>
+        <updated>2025-08-16T04:20:01+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/46/world_trade_banner.png" alt="" />
@@ -640,7 +640,7 @@ Wolfram Community, STAFF PICKS, March 14, 2025
             <category term="Mathematica"/>
             <category term="AI"/>
 
-        <updated>2025-08-15T22:17:42-04:00</updated>
+        <updated>2025-08-16T04:17:42+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/45/Banner-image-Community-Post-LLM-Delphi-Method.png" alt="" />
@@ -955,7 +955,7 @@ Wolfram Community, STAFF PICKS, February 14, 2025
             <category term="Mathematica"/>
             <category term="Art"/>
 
-        <updated>2024-10-24T15:15:01-04:00</updated>
+        <updated>2024-10-24T21:15:01+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/41/Mathematical-Marbling-Banner.png" alt="" />
@@ -1248,7 +1248,7 @@ Wolfram Community, STAFF PICKS, February 14, 2025
             <category term="GIS"/>
             <category term="Environmental Science"/>
 
-        <updated>2024-07-28T03:17:34-04:00</updated>
+        <updated>2024-07-28T09:17:34+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/37/Hottest-day-on-earth-Social-Media-2.png" alt="" />
@@ -1389,7 +1389,7 @@ Wolfram Community, STAFF PICKS, February 14, 2025
             <category term="Ecology"/>
             <category term="Art"/>
 
-        <updated>2024-05-03T17:38:15-04:00</updated>
+        <updated>2024-05-03T23:38:15+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/36/Animation1.gif" alt="" />
@@ -1497,7 +1497,7 @@ Wolfram Community, STAFF PICKS, February 14, 2025
             <category term="Modelling"/>
             <category term="Mathematica"/>
 
-        <updated>2024-05-02T09:44:47-04:00</updated>
+        <updated>2024-05-02T15:44:47+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.14.00.png" alt="" />
@@ -1658,7 +1658,7 @@ Wolfram Community, STAFF PICKS, February 14, 2025
             <category term="Mathematica"/>
             <category term="Ecology"/>
 
-        <updated>2023-10-10T14:21:31-04:00</updated>
+        <updated>2023-10-10T20:21:31+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/32/Screenshot-2023-10-11-at-00.12.50.png" alt="" />
@@ -1907,7 +1907,7 @@ Wolfram Community, STAFF PICKS, February 14, 2025
             <category term="GIS"/>
             <category term="Environmental Science"/>
 
-        <updated>2023-07-11T23:58:37-04:00</updated>
+        <updated>2023-07-12T05:58:37+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/28/BlogHeader-2.png" alt="" />
