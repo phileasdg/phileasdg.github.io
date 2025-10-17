@@ -24,11 +24,12 @@
                    "Network Science",
                    "Modelling",
                    "Mathematica",
+                   "Geography &amp; GIS",
                    "Environmental Science",
                    "Ecology"
             ],
             "date_published": "2025-08-23T02:06:57+02:00",
-            "date_modified": "2025-10-10T17:45:15+02:00"
+            "date_modified": "2025-10-17T12:55:28+02:00"
         },
         {
             "id": "https://phileasdg.github.io/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/",
@@ -44,12 +45,13 @@
                    "Wolfram Language",
                    "Programming",
                    "Mathematica",
+                   "Geography &amp; GIS",
                    "GIS",
                    "Environmental Science",
                    "Ecology"
             ],
             "date_published": "2025-08-16T04:21:47+02:00",
-            "date_modified": "2025-08-16T17:58:57+02:00"
+            "date_modified": "2025-10-17T12:55:36+02:00"
         },
         {
             "id": "https://phileasdg.github.io/trading-places-a-network-analysis-of-global-commerce/",
@@ -68,11 +70,12 @@
                    "Network Science",
                    "Modelling",
                    "Mathematica",
+                   "Geography &amp; GIS",
                    "GIS",
                    "Economics"
             ],
             "date_published": "2025-08-16T04:20:01+02:00",
-            "date_modified": "2025-10-10T17:45:24+02:00"
+            "date_modified": "2025-10-17T12:55:44+02:00"
         },
         {
             "id": "https://phileasdg.github.io/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/",
@@ -129,11 +132,12 @@
                    "Work at Wolfram",
                    "Wolfram Language",
                    "Mathematica",
+                   "Geography &amp; GIS",
                    "GIS",
                    "Environmental Science"
             ],
             "date_published": "2024-07-28T09:17:34+02:00",
-            "date_modified": "2025-08-11T00:11:35+02:00"
+            "date_modified": "2025-10-17T12:55:54+02:00"
         },
         {
             "id": "https://phileasdg.github.io/a-forest-fire-model-in-1-2-and-3-dimensions/",
@@ -215,11 +219,12 @@
                    "Wolfram Language",
                    "Programming",
                    "Mathematica",
+                   "Geography &amp; GIS",
                    "GIS",
                    "Environmental Science"
             ],
             "date_published": "2023-07-12T05:58:37+02:00",
-            "date_modified": "2024-07-28T10:01:15+02:00"
+            "date_modified": "2025-10-17T12:56:07+02:00"
         }
     ]
 }
