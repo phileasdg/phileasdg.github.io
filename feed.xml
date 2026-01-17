@@ -3,23 +3,207 @@
     <title>Phileas Dazeley-Gaist</title>
     <link href="https://phileasdg.github.io/feed.xml" rel="self" />
     <link href="https://phileasdg.github.io" />
-    <updated>2026-01-10T12:55:29-05:00</updated>
+    <updated>2026-01-17T12:42:45-05:00</updated>
     <author>
         <name>Phileas Dazeley-Gaist</name>
     </author>
     <id>https://phileasdg.github.io</id>
 
     <entry>
+        <title>Patchwork with Coexisting Cellular Automata</title>
+        <author>
+            <name>Phileas Dazeley-Gaist</name>
+        </author>
+        <link href="https://phileasdg.github.io/patchwork-with-coexisting-cellular-automata/"/>
+        <id>https://phileasdg.github.io/patchwork-with-coexisting-cellular-automata/</id>
+        <media:content url="https://phileasdg.github.io/media/posts/53/banner-2.png" medium="image" />
+            <category term="Wolfram Language"/>
+            <category term="Programming"/>
+            <category term="Modelling"/>
+            <category term="Complex Systems"/>
+            <category term="Cellular Automata"/>
+            <category term="Art"/>
+
+        <updated>2026-01-17T10:53:32-05:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://phileasdg.github.io/media/posts/53/banner-2.png" alt="" />
+                    Note: This post was originally a short technical article I shared on&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://phileasdg.github.io/media/posts/53/banner-2.png" class="type:primaryImage" alt="" /></p>
+                <p class="msg msg--info"><strong>Note: </strong>This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live demonstrations or to download this text alongside the source code, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3608683?p_p_auth=C3EsWlzT">here</a>. </p>
+<h2>Introduction</h2>
+<p>At the 2025 Wolfram Summer School, while advising on a project about collaborative decision-making using cellular automata (CAs), I spent some time thinking up different possible setups to get CA rules to interact with each other and perform "negotiations". We considered several setups, including using CA state cells to represent a distribution of opinions in a society, and tried various schemes in an attempt to evolve rules that would reliably yield "consensus" states.</p>
+<p>One approach that I did not have time to dive into but that showed promise was to represent agents as rules confined to specific, strictly different regions in space, but able to interact with each other where their boundaries touch or are close to one another. Setups like this will be the subject of this short essay.</p>
+<p>Here's a teaser of what we're working toward: Programs that operate on a cellular automaton state arrays by applying a list of cellular automata rules to a list of non-overlapping regions of the state, such that each defined region is subject to its own dynamics, determined both by the region's assigned rule and the dynamics near the region boundary.</p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/cellsetup.gif" alt="" width="559" height="406"></figure>
+<h2>Cellular automata with custom boundary conditions</h2>
+<p>We'll work our way up to CAs operating in parallel on non-overlapping regions of space. But first, it'll be helpful to review some of the basics. </p>
+<h3>One-dimensional CAs</h3>
+<h4>Natively supported CA boundary conditions</h4>
+<p>In Wolfram Language, cellular automata default to having periodic boundary conditions.</p>
+<p><em>Elementary cellular automaton trajectory with periodic boundary conditions:<br></em></p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.31.52.png" alt="" width="225" height="226" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.31.52-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.31.52-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.31.52-md.png 768w"></figure>
+<p>Notice the ripple cascade that wraps around horizontal space as it leaves to the right and simultaneously enters to the left.</p>
+<p>The natively supported alternative to periodic boundary conditions in the CellularAutomaton function is to have CAs running on an infinite canvas.</p>
+<p><em>Elementary cellular automaton trajectory on an infinite canvas:</em></p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.33.15.png" alt="" width="225" height="226" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.33.15-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.33.15-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.33.15-md.png 768w"></figure>
+<p>Here, the width of the state array is not fixed. In this case, the ripple cascade simply propagates outwards forever, uninterrupted.</p>
+<p>The system we are envisioning requires that we implement custom boundary conditions, which there is no built in support for at the moment as far as I can tell. So how can we get there?</p>
+<h4>Confining CAs to regions in space</h4>
+<p>To confine a rule to a spatial region within a CA state, the simplest general approach I can think of is to apply the rule to the full state, but discard all changes to the state outside the rule's assigned region using a region mask. For example:</p>
+<p><em>Trajectory of a rule 30 CA confined to a small region of the simulation space:</em></p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.34.19.png" alt="" width="225" height="227" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.34.19-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.34.19-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.34.19-md.png 768w"></figure>
+<p>In the plot above, the green region represents the spatial domain of the automaton rule. Changes made to the state by the rule will only take effect inside the green region. </p>
+<p>Proceeding this way means that although the green automaton is unable to make changes to cells outside the green region, green region cells near the border still "sense", and are affected by the state of cells on the other side of the border. If a green-region cell's neighbourhood contains cells from different regions, those cell states are used to determine the new cell state just as they would usually be. What this achieves is making the automaton region boundaries porous by default. The dynamics in the green region are affected by the local dynamics outside of the green region.</p>
+<p>In the present example, the background is held constant and uniform. But there's not reason it has to be. If the background were heterogenous and dynamic, our setup would work just as well, though the dynamics in the green region would  be different as the state evolution would be subject to different kinds of interference from local background activity. We'll return to this point later.</p>
+<p>Another important clarification is that while in the simulations above, the chosen rule is confined to a region with a constant spatial boundary, the simulation itself is still operating in a periodic space. This distinction is essential because it means that cells on the periphery of the state array are still considered adjacent to cells on their opposite sides. In the example above, the left and right sides of the state array are still glued together. If a rule's assigned region were to span from one end of the state to the other, it would be possible for event cascades to wrap around.</p>
+<p><em>Trajectory of a rule 30 CA confined to a region that wraps around the periodic boundaries of the simulation space:</em></p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.35.45.png" alt="" width="225" height="227" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.35.45-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.35.45-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.35.45-md.png 768w"></figure>
+<h4>Removing spatial periodicity</h4>
+<p>To also get rid of the periodic boundary conditions of the space itself, my suggestion is a bit hacky but functional: Pad any starting CA state with enough zeros in all directions to prevent periodic interaction at the edges of the state array, compute the next step, and trim the resulting array so as to recover the original dimensions. Repeat as needed. Padding by the automaton neighbourhood  range is easy and guaranteed to be enough (the minimum required padding depends on the neighbourhood used by automata in the simulation, so I won't discuss it here). </p>
+<p><em>Cellular automaton trajectory with a rule 30 CA confined to a visually identical region as in the previous example, but that does not wrap around the periodic boundaries of the simulation space:</em></p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.36.30.png" alt="" width="225" height="226" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.36.30-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.36.30-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.36.30-md.png 768w"></figure>
+<p>Now, on the left and right sides of the state array, the background is effectively taken to be all zeros, so the rightmost cascade can never wrap around to the left, and the simulation space is fixed. In this specific case, the change also causes both green regions to start with the same initial conditions. As the neighbours to the left of the leftmost cell of each green region at t=0 are now considered to be zero, the initial conditions cause two cascades instead of one.</p>
+<p>We chose to have uniform and constant zero boundary conditions for the entire simulation space, but as before, we could have done otherwise. Here is an example in which these boundary conditions are made random and dynamic.</p>
+<p><em>Rule 30 CA trajectory confined to a region subject to random and dynamic boundary conditions:</em></p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.37.05.png" alt="" width="225" height="226" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.37.05-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.37.05-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.37.05-md.png 768w"></figure>
+<p>Here, the states of the cells that make up the boundary change at random, affecting the dynamics of the green automaton, although the boundary itself does not move around. The boundary is fixed in space, but not fixed in state.</p>
+<h3>Two-dimensional CAs</h3>
+<p>Now that we've established some techniques for confining 1D cellular automata to specific regions, the natural next step is to apply these ideas to 2D CAs. Good news! The techniques we just discussed for 1D CAs work just as well in 2D, and even in higher dimensions.</p>
+<p>Here's a setup in two dimensions that confines a totalistic 9-neighbour CA to a square region of the simulation space.</p>
+<p><em>Dynamics of a totalistic 9-neighbor CA confined to a square region of the simulation space:</em></p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/squaresetup.gif" alt="" width="300" height="300"></figure>
+<p>Just as before:</p>
+<ul>
+<li>The green region represents the spatial domain of the automaton rule. </li>
+<li>The boundary is porous, so nearby activity outside the green region can affect green region dynamics.</li>
+<li>The boundary conditions for the whole simulation space are still periodic by default, but can be fixed or controlled using the masking techniques I described for 1D CAs.</li>
+</ul>
+<p>Since the green region is determined by a binary mask array, we can easily try almost any setup you can think of painting out on a canvas. In the next few examples, I use a region with an inner isolated part with constant zero boundary conditions, and an outer part that connects every edge of the simulation window. The inner part will be undisturbed by any changes to the global, simulation space boundary conditions, so its dynamics can be thought of as a control in our experiments.</p>
+<p>Here's a setup where the green region allows the dynamics to wrap around along each axis.</p>
+<p><em>Totalistic 9-neighbor CA dynamics constrained to a region with an isolated central component subject to fixed zero boundary conditions, and a surrounding component subject to the periodic boundary conditions of the simulation space:</em></p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/crosssetupperiodic.gif" alt="" width="300" height="300"></figure>
+<p>You can think of the space as wrapping around a torus like this:</p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.45.55.png" alt="" width="225" height="205" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.45.55-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.45.55-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.45.55-md.png 768w"></figure>
+<p>Here's a setup with the same green region specification, but with constant zero boundary conditions applied to the simulation space.</p>
+<p><em>Totalistic 9-neighbor CA dynamics constrained to a region with an isolated central component subject to fixed zero boundary conditions, and a surrounding component also subject to fixed boundary conditions:</em></p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/crosssetupconstantzero-2.gif" alt="" width="300" height="300"></figure>
+<p>Setting constant zero boundary conditions turns the boundaries of the simulation window into smooth, solid, impenetrable walls, preventing the dynamics of the green CA from wrapping around.</p>
+<p>Finally, here's an example in which these boundary conditions are made random and dynamic.</p>
+<p><em>Totalistic 9-neighbor CA dynamics constrained to a region with an isolated central component subject to fixed zero boundary conditions, and a surrounding component subject to random dynamic boundary conditions:</em></p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/crosssetupdynamicrandom.gif" alt="" width="301" height="301"></figure>
+<p>In this last case, the dynamics in the outer part appear quite random.</p>
+<h3>Three dimensions and above</h3>
+<p>Just to show that it's possible, here's a complicated 3D example using a state generated by another 3D CA as the automaton region mask.</p>
+<p><em>Dynamics of a 3D CA confined to a complex 3D region:</em></p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/3Dsetup.gif" alt="" width="300" height="326"></figure>
+<p>And here's a simulation of the process in six dimensions, just for fun, although there's no longer a simple way to visualize its output, so all I'll show you is this preview of the final state array: </p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.52.45.png" alt="" width="1224" height="126" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.52.45-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.52.45-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.52.45-md.png 768w"></figure>
+<h3>Bonus: miscellaneous interesting examples</h3>
+<h4>Mazes</h4>
+<p><em>Generate a maze to use as a mask:</em></p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.53.16.png" alt="" width="225" height="229" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.53.16-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.53.16-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.53.16-md.png 768w"></figure>
+<p><em>Compute the trajectory of a 9-neighbour 2D totalistic CA confined by the mask:</em></p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/mazesetup.gif" alt="" width="300" height="300"></figure>
+<h4>Other complex shapes</h4>
+<p><em>Define an organic shape shape to use as a mask:</em></p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.55.53.png" alt="" width="225" height="234" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.55.53-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.55.53-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.55.53-md.png 768w"></figure>
+<p><em>Compute the trajectory of a 9-neighbour 2D totalistic CA confined by the mask:</em></p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/flowersetup.gif" alt="" width="300" height="308"></figure>
+<h3>Review</h3>
+<p>In this section, we explored techniques for confining cellular automata to specific spatial regions within a larger CA system. In summary:</p>
+<ul>
+<li>The CellularAutomaton function supports two default boundary conditions, periodic and infinite.</li>
+<li>To confine a CA rule to a specific spatial region, we can apply the rule to the full state, but discard all changes outside the rule's assigned region using a region mask. </li>
+<li>To remove the periodic boundary conditions of the space itself, we can pad the initial state with enough zeros in all directions to prevent periodic interaction at the edges, compute the next step, and trim the resulting array back to the original dimensions. This effectively simulates constant zero boundary conditions. </li>
+<li>By controlling the padding values we can set different kinds of global boundary conditions. Padding with ones will simulate uniform and constant one boundary conditions. Padding with zeros and ones in different places will result in non-uniform boundary conditions. In general, boundary conditions must be defined with valid cell states: zero or one for two-state CAs, and zero through <em>k-1</em> for <em>k</em> state CAs.</li>
+<li>We can also make the boundary conditions of the simulation space dynamic and heterogeneous, for example, by defining a global boundary mask that frames the simulation window, and setting cells within the boundary it defines to random states at every step of the simulation. Any CA whose spatial domain is close enough to the global boundary mask will see its dynamics affected by the random global boundary conditions.</li>
+<li>These techniques can be applied to 1D and 2D CAs, but also to CAs in higher dimensional spaces. </li>
+</ul>
+<h2>Coexisting Cellular Automata: <br>Running CAs in parallel in separate regions of space</h2>
+<h3>How does it work?</h3>
+<p>We can use the tools developed above to perform simulations in which several CA rules operate in parallel on non-overlapping regions of the simulation space. I'll refer to simulations like these as Coexisting CAs, and since I'm going to want to experiment with Coexisting CAs a lot, I'll define a <em>CoexistingCellularAutomata</em> function to automate the process of setting up and running these simulations. The full function definition can be found in the <em>Code Initialisation</em> section at the end of the <a href="https://community.wolfram.com/groups/-/m/t/3608683?p_p_auth=A7Xz7iqu">Wolfram Community version of this article</a>.</p>
+<p>The core steps of the process are: </p>
+<ol>
+<li>Define a list of CA rules and an initial state for the entire simulation space.</li>
+<li>Create an array that specifies the spatial domain for each CA rule, where each cell in the array corresponds to the index of the rule that should be applied in that region.</li>
+<li>Generate binary masks from the spatial domains array to isolate the regions where each rule should be applied.</li>
+<li>Define boundary conditions for the overall simulation space, which can be constant or dynamic.</li>
+<li>Apply the CA rules to their respective domains, clip the results to the domain masks, sum the resulting state arrays, and apply the global boundary conditions.</li>
+</ol>
+<h3>Computing a single step of a Coexisting CA simulation</h3>
+<p>This next code snippet demonstrates the process I settled on in my final implementation to compute a single Coexisting CA simulation step. I've included comments to describe the process alongside the code, and calls to Echo and EchoFunction to show key variables generated or used in the throughout its execution.</p>
+<figure class="post__image align-left"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.02.24.png" alt="" width="600" height="605" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.02.24-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.02.24-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.02.24-md.png 768w"></figure>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.03.30.png" alt="" width="600" height="496" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.03.30-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.03.30-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.03.30-md.png 768w"></figure>
+<h3>Performing a full Coexisting CA simulation</h3>
+<p>The CoexistingCellularAutomata function makes simulations of interacting CAs quite easy to set up and perform. Let me show you.</p>
+<p>I'll start by defining my simulation parameters. For this example, I'll pick 10 rules at random. Each rule domain will be assigned its own colour.</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.04.25.png" alt="" width="272" height="98" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.04.25-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.04.25-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.04.25-md.png 768w"></figure>
+<p><em>Pick some 2 colour range 9-neighbour totalistic CA rules at random:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.05.09.png" alt="" width="609" height="117" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.05.09-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.05.09-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.05.09-md.png 768w"></figure>
+<p>I'll set constant zero initial conditions across the initial state.</p>
+<p><em>Define an initial array representing the state at t=0:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.05.51.png" alt="" width="396" height="101" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.05.51-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.05.51-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.05.51-md.png 768w"></figure>
+<p>The spatial domains of each CA rule in the simulation must be specified using a single array of integer values corresponding to indices of the supplied rules in the rule list, or zero, meaning "no rules apply here". </p>
+<p>We can arbitrarily partition the simulation space and assign whichever parts we choose to whichever rules we like. Here, I've used a helper function called <em>generateVoronoiCASpatialDomains</em> (defined in the <em>Code Initialisation</em> section of the <a href="https://community.wolfram.com/groups/-/m/t/3608683?p_p_auth=A7Xz7iqu">Wolfram Community version of this essay</a>) to generate the rule domain definitions array.</p>
+<p><em>Define the spatial domains of each rule in the simulation space:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.07.05.png" alt="" width="529" height="52" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.07.05-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.07.05-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.07.05-md.png 768w"></figure>
+<p><em>Preview the domain masks:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.07.31.png" alt="" width="575" height="168" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.07.31-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.07.31-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.07.31-md.png 768w"></figure>
+<p>To perform a simulation, simply supply the list of rules, domain mask, initial state, and number of steps to the CoexistingCellularAutomata function.</p>
+<p><em>Perform a simulation using CoexistingCellularAutomata:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.08.45.png" alt="" width="405" height="205" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.08.45-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.08.45-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.08.45-md.png 768w"></figure>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.09.03.png" alt="" width="680" height="372" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.09.03-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.09.03-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.09.03-md.png 768w"></figure>
+<p>The result is a list of arrays representing the sequence of Coexisting CA states, each of which we can plot to make the frames of an animation of the full simulation trajectory.</p>
+<p><em>Animate the resulting simulation of interacting CAs, using the masks to colour the frames:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.09.50.png" alt="" width="586" height="172" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.09.50-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.09.50-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.09.50-md.png 768w"></figure>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/voronoisetup-2.gif" alt="" width="650" height="473"></figure>
+<h3>Using images as Coexisting CA domain Masks</h3>
+<p>The CoexistingCellularAutomata function works with arbitrary valid rule domain definitions. Any array of positive or zero integer values is a valid rule domain mask. This means we can use posterized images as rule domain specifications.</p>
+<p>For this next example, I posterized a webcam selfie so as to only have pixel values of 0,1, or 2 and used the resulting image as the domain mask specification in CoexistingCellularAutomata. In the simulation, these values respectively correspond to neutral territory, the domain of the first rule, and the domain of the second rule. I picked two totalistic 9-neighbour 2D CA rules to use at random:</p>
+<p><em>Define a mask to use in the simulation:</em></p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.15.08.png" alt="" width="651" height="180" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.15.08-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.15.08-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.15.08-md.png 768w"></figure>
+<figure class="post__image"><em><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.15.31.png" alt="" width="302" height="192" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.15.31-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.15.31-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.15.31-md.png 768w"></figure></em></p>
+<p><em>Set up and run a 20 step simulation with the chosen rules, rule domains defined by the image mask, and an initial condition array made of all zeros:</em></p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/picturesetup.gif" alt="" width="671" height="366"></figure>
+<h2>Global boundary conditions of Coexisting CA simulations</h2>
+<p>By default, CoexistingCellularAutomata assumes periodic boundary conditions on the simulation space, as in this trajectory of rule 10 and rule 90, where the leftmost cells of the array interact with the rightmost cells:</p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.29.51.png" alt="" width="251" height="212" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.29.51-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.29.51-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.29.51-md.png 768w"></figure>
+<p>As a convenience to the end user, CoexistingCellularAutomata also supports specifying global boundary conditions using the <em>"GlobalMaskFunction"</em> and <em>"GlobalMaskValueFunction"</em> options. As their names suggest, these options are designed to receive function arguments. These should be functions of the state array at any given time, though they can also be made to ignore the state array input. </p>
+<p>The <em>"GlobalMaskFunction"</em> option defines the boundary of the simulation by returning a binary mask where 1s represent cells that can be affected by the chosen CA rules, and 0s represent cells that cannot. The specified function may also return a 0, signalling that no special global boundary conditions should be added. The <em>"GlobalMaskValueFunction"</em> defines the values inside the boundary region, and can return a constant cell state value, or an array of valid cell states. When these functions return arrays, the arrays must have dimensions as the state array. </p>
+<p>To add constant zero boundary conditions on the left and right ends of the state arrays in the previous simulation, only minimal changes to the code are needed. By adding </p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.30.42.png" alt="" width="492" height="42" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.30.42-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.30.42-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.30.42-md.png 768w"></figure>
+<p>and </p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.31.08.png" alt="" width="283" height="31" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.31.08-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.31.08-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.31.08-md.png 768w"></figure>
+<p>to the CoexistingCellularAutomata function call, we restrict the rule domains to all cells other than those near the border, and set the excluded border cells to be equal to 0 throughout the simulation:</p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.31.40.png" alt="" width="250" height="214" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.31.40-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.31.40-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.31.40-md.png 768w"></figure>
+<p>Because <em>"GlobalMaskFunction"</em> and <em>"GlobalMaskValueFunction"</em> expect functions, and these functions are computed for every step of a Coexisting CA simulation, it's also quite easy to set dynamic boundary conditions. If instead, we had specified the options</p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.32.30.png" alt="" width="508" height="34" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.32.30-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.32.30-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.32.30-md.png 768w"></figure>
+<p>and </p>
+<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.32.50.png" alt="" width="446" height="33" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.32.50-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.32.50-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.32.50-md.png 768w"></figure>
+<p>we would get random dynamic boundary conditions on the boundaries of the simulation space:</p>
+<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.33.11.png" alt="" width="250" height="207" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.33.11-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.33.11-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.33.11-md.png 768w"></figure>
+<h2>Closing thoughts</h2>
+<p>There are many directions this work could go. It's easy to imagine how the setups we've explored here could become the basis form a kind of toy model of artificial life in which the organisms are wandering cellular automata whose spatial domain boundary conditions themselves are subject to environmental and competitive pressures. </p>
+<p>Another direction might be to modify the setups explored in this essay to allow multiple CAs to occupy the same spatial domains, and compete for dominance over these overlapping regions. This would require careful planning, as there are many possibilities for how such overlapping claims could be handled, and all will inevitably come with their own advantages and tradeoffs.</p>
+<p>What would you do next? If you find this work interesting, and you'd like to discuss it, please feel free to reach out. I'm excited to continue exploring this topic and to see what can come of it.</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
         <title>Mapping Global Land Cover with European Space Agency Data</title>
         <author>
             <name>Phileas Dazeley-Gaist</name>
         </author>
-        <link href="https://phileasdg.github.io/mapping-global-land-cover-with-european-space-agency-data-2/"/>
-        <id>https://phileasdg.github.io/mapping-global-land-cover-with-european-space-agency-data-2/</id>
+        <link href="https://phileasdg.github.io/mapping-global-land-cover-with-european-space-agency-data/"/>
+        <id>https://phileasdg.github.io/mapping-global-land-cover-with-european-space-agency-data/</id>
         <media:content url="https://phileasdg.github.io/media/posts/52/banner.png" medium="image" />
             <category term="Wolfram Language"/>
             <category term="Programming"/>
-            <category term="Mathematica"/>
             <category term="Geography &amp; GIS"/>
             <category term="Environmental Science"/>
             <category term="Ecology"/>
@@ -28,13 +212,14 @@
             <summary>
                 <![CDATA[
                         <img src="https://phileasdg.github.io/media/posts/52/banner.png" alt="" />
-                    Introduction: The ESA WorldCover dataset The European Space Agency's WorldCover is a&hellip;
+                    Note: This post was originally a short technical article I shared on&hellip;
                 ]]>
             </summary>
         <content type="html">
             <![CDATA[
                     <p><img src="https://phileasdg.github.io/media/posts/52/banner.png" class="type:primaryImage" alt="" /></p>
-                <h2>Introduction: The ESA WorldCover dataset</h2>
+                <p class="msg msg--info"><strong>Note: </strong>This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3582661">here</a>. </p>
+<h2>Introduction: The ESA WorldCover dataset</h2>
 <p>The <a href="https://esa-worldcover.org/en">European Space Agency's WorldCover</a> is a freely accessible dataset providing global land cover classification at 10-meter resolution derived from Sentinel-1 and Sentinel-2 satellite imagery. Released in 2020 and updated in 2021, the ESA reports that the updated dataset achieves an overall accuracy of 76.7% in identifying land cover types, including forests, grasslands, croplands, urban areas, and water bodies across the entire Earth's surface.</p>
 <p>The high-resolution imagery WorldCover offers is especially valuable for environmental monitoring, urban planning, and understanding how human activity impacts and encroaches upon wild landscapes. WorldCover's 10-meter resolution can capture fine-grained details such as the difference a small forest patch and an adjacent agricultural field, or between building clusters within a neighborhood. The ESA distributes WorldCover imagery through several access points, including through two WMTS services (one for the 2020 product, and another for the 2021 version). You can find a list of these access points at<a href="https://esa-worldcover.org/en/data-access"> this link</a>.</p>
 <p>ESA WorldCover classifies land cover using the following eleven land cover classes:</p>
@@ -201,10 +386,10 @@
             <category term="Wolfram Language"/>
             <category term="Network Science"/>
             <category term="Modelling"/>
-            <category term="Mathematica"/>
             <category term="Geography &amp; GIS"/>
             <category term="Environmental Science"/>
             <category term="Ecology"/>
+            <category term="Complex Systems"/>
 
         <updated>2025-08-22T20:06:57-04:00</updated>
             <summary>
@@ -216,7 +401,7 @@
         <content type="html">
             <![CDATA[
                     <p><img src="https://phileasdg.github.io/media/posts/49/banner.png" class="type:primaryImage" alt="" /></p>
-                <p><strong>Note:</strong> This post was originally a short technical article I shared on the Wolfram Community forums. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3535315">here</a>. </p><h2 id="introduction">Introduction</h2>
+                <p><strong>Note:</strong> This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3535315">here</a>. </p><h2 id="introduction">Introduction</h2>
 <p>About a year ago, a student at College of the Atlantic reached out to me for advice on a capstone project. She was interested in using Wolfram Language to make an interactive map of the college’s Sunken Garden, and exhibiting it as a kind of art installation. To help get her get started, I traced a <a href="https://www.coa.edu/live/files/841-appendix-1-sunken-garden-brochure-pdf">map of the garden</a> using the image Coordinates tool in a Wolfram Notebook and made two data representations of the garden: a point cloud of plant locations by species and a network of the garden’s paths.</p><p>Although her project ended up taking a different direction, the idea stuck with me. After stumbling upon the files recently I was inspired to see if I could build the representations I had made into a fully interactive map. Over the weekend, I dusted off this old notebook and got to work figuring out:</p><ol>
 <li><p>What interesting things can be said about the garden data?</p></li>
 <li><p>What kind of interactions and interfaces to the data would feel compelling to a general audience interested in the Sunken Garden.</p></li>
@@ -403,10 +588,10 @@
         <media:content url="https://phileasdg.github.io/media/posts/47/Ecoregions_BannerImage-2.png" medium="image" />
             <category term="Wolfram Language"/>
             <category term="Programming"/>
-            <category term="Mathematica"/>
             <category term="Geography &amp; GIS"/>
             <category term="Environmental Science"/>
             <category term="Ecology"/>
+            <category term="Complex Systems"/>
 
         <updated>2025-08-15T22:21:47-04:00</updated>
             <summary>
@@ -418,7 +603,7 @@
         <content type="html">
             <![CDATA[
                     <p><img src="https://phileasdg.github.io/media/posts/47/Ecoregions_BannerImage-2.png" class="type:primaryImage" alt="" /></p>
-                <p><strong>Note:</strong> This post was originally a short technical article I shared on the Wolfram Community forums. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3445374">here</a>. </p><h2 id="introduction">Introduction</h2>
+                <p><strong>Note:</strong> This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3445374">here</a>. </p><h2 id="introduction">Introduction</h2>
 <p>Ecoregions are distinct ecological zones with specific environmental conditions (climate, topography, soil composition…), habitats, and species. Each ecoregion contains characteristic species and ecological communities that are adapted to the region’s environment.</p><p>The Ecoregions2017©Resolve map is a revised version of the widely used 2001 map of terrestrial ecoregions of the world, originally developed by <a href="https://doi.org/10.1641/0006-3568(2001)051%5B0933:TEOTWA%5D2.0.CO;2">Olson et al</a>. The new map breaks up the Earth’s land into 846 distinct terrestrial ecoregions nested within 14 terrestrial <a href="https://en.wikipedia.org/wiki/Biome">biomes</a>. An interactive version of the map is available online <a href="https://ecoregions.appspot.com/">here</a>, and the work is discussed in the following article in BioScience: <a href="https://academic.oup.com/bioscience/article/67/6/534/3102935?login=false">An Ecoregion-Based Approach to Protecting Half the Terrestrial Realm</a> <a href="https://academic.oup.com/bioscience/article/67/6/534/3102935?login=false">(Dinerstein et al. 2017)</a>.</p><p>Terrestrial biomes of the world according to Dinerstein and Olson (also used in the <a href="https://www.worldwildlife.org/publications/global-200">WWF Global 200 classification</a>) already have computational representations in Wolfram Language. Here’s how one might represent them on a map:</p><p><em>Define a list of biomes:</em></p><figure class="post__image"><img src="https://phileasdg.github.io/media/posts/47/0svwohkmtobvo.png" alt="" width="2522" height="108" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/47/responsive/0svwohkmtobvo-xs.png 300w ,https://phileasdg.github.io/media/posts/47/responsive/0svwohkmtobvo-sm.png 480w ,https://phileasdg.github.io/media/posts/47/responsive/0svwohkmtobvo-md.png 768w"></figure><p><em>Produce a map of major world biomes:</em></p><figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/47/0ufjsmh9hw8yp.png" alt="" width="1262" height="168" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/47/responsive/0ufjsmh9hw8yp-xs.png 300w ,https://phileasdg.github.io/media/posts/47/responsive/0ufjsmh9hw8yp-sm.png 480w ,https://phileasdg.github.io/media/posts/47/responsive/0ufjsmh9hw8yp-md.png 768w"></figure><figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/47/13376kglpv3ht.png" alt="" width="1152" height="576" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/47/responsive/13376kglpv3ht-xs.png 300w ,https://phileasdg.github.io/media/posts/47/responsive/13376kglpv3ht-sm.png 480w ,https://phileasdg.github.io/media/posts/47/responsive/13376kglpv3ht-md.png 768w"></figure><p>The Ecoregions2017©Resolve data provide a more detailed ecological classification compared to the broader biome categories. While biomes represent large ecological zones based on similar climate conditions and dominant vegetation types, ecoregions offer finer granularity by incorporating specific environmental conditions, habitats, and species unique to each region.</p><p>Applications for the Ecoregions2017©Resolve include:</p><ul>
 <li>Depicting the global distributions of species and ecological communities</li>
 <li>Modeling ecological impacts of climate change</li>
@@ -663,9 +848,9 @@ Wolfram Community, STAFF PICKS, April 17, 2025
             <category term="Programming"/>
             <category term="Network Science"/>
             <category term="Modelling"/>
-            <category term="Mathematica"/>
             <category term="Geography &amp; GIS"/>
             <category term="Economics"/>
+            <category term="Complex Systems"/>
 
         <updated>2025-08-15T22:20:01-04:00</updated>
             <summary>
@@ -677,7 +862,7 @@ Wolfram Community, STAFF PICKS, April 17, 2025
         <content type="html">
             <![CDATA[
                     <p><img src="https://phileasdg.github.io/media/posts/46/world_trade_banner.png" class="type:primaryImage" alt="" /></p>
-                <p><strong>Note:</strong> This post was originally a short technical article I shared on the Wolfram Community forums. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3416904">here</a>. </p><h2 id="introduction">Introduction</h2>
+                <p><strong>Note:</strong> This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3416904">here</a>. </p><h2 id="introduction">Introduction</h2>
 <p>The global trade network is the backbone of international commerce, linking countries through a complex web of import and export relationships. Not only does it characterise the flow of goods and services, but it also shapes economic strategies and geopolitical landscapes. </p><p>While the true global trade network is incredibly complex, with millions of individual transactions occurring daily across countless products and services, we can still build meaningful representations that capture important aspects of global commerce ties. In this article, I’ll use Wolfram Knowledgebase country data from <a href="https://www.cia.gov/the-world-factbook/">The World Factbook</a> to define graphs of major import and export relationships on the global stage. </p><p>By constructing network representations of international trade, we can visualize and quantify the connections between nations, revealing patterns that might otherwise remain hidden in tables of statistics. Which countries serve as central hubs in global commerce? How do smaller economies interact with larger ones? Where do we see asymmetric dependencies? And how do natural trading communities form? In this short article, I’ll explore these questions through a series of visualizations and analyses.</p><h2 id="setup-building-a-dataset-of-international-commercial-relationships">Setup: Building a Dataset of International Commercial Relationships</h2>
 <p>The first thing we need to do is gather data on import and export relationships between countries. We can get this information from the Wolfram Knowledgebase.</p><p>Let’s start by creating a list of all countries: </p><p> <figure class="post__image"><img src="https://phileasdg.github.io/media/posts/46/0mhu7w08drqns.png" alt="countries" width="914" height="49" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/46/responsive/0mhu7w08drqns-xs.png 300w ,https://phileasdg.github.io/media/posts/46/responsive/0mhu7w08drqns-sm.png 480w ,https://phileasdg.github.io/media/posts/46/responsive/0mhu7w08drqns-md.png 768w"></figure></p><p>We’re going to extract values associated with country entities above. Manually, we might access one such value like this:</p><figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/46/1axwz1yc3p4za.png" alt="" width="424" height="47" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/46/responsive/1axwz1yc3p4za-xs.png 300w ,https://phileasdg.github.io/media/posts/46/responsive/1axwz1yc3p4za-sm.png 480w ,https://phileasdg.github.io/media/posts/46/responsive/1axwz1yc3p4za-md.png 768w"></figure><figure class="post__image"><img src="https://phileasdg.github.io/media/posts/46/0rhtbmil6fzi4.png" alt="" width="1084" height="48" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/46/responsive/0rhtbmil6fzi4-xs.png 300w ,https://phileasdg.github.io/media/posts/46/responsive/0rhtbmil6fzi4-sm.png 480w ,https://phileasdg.github.io/media/posts/46/responsive/0rhtbmil6fzi4-md.png 768w"></figure><p>We can also ask Wolfram Language to check the source of entity property data like so: </p><figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/46/096za5tfkwtq2.png" alt="" width="606" height="47" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/46/responsive/096za5tfkwtq2-xs.png 300w ,https://phileasdg.github.io/media/posts/46/responsive/096za5tfkwtq2-sm.png 480w ,https://phileasdg.github.io/media/posts/46/responsive/096za5tfkwtq2-md.png 768w"></figure><figure class="post__image"><img src="https://phileasdg.github.io/media/posts/46/1hbx1q5bewf0p-2.png" alt="" width="276" height="48" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/46/responsive/1hbx1q5bewf0p-2-xs.png 300w ,https://phileasdg.github.io/media/posts/46/responsive/1hbx1q5bewf0p-2-sm.png 480w ,https://phileasdg.github.io/media/posts/46/responsive/1hbx1q5bewf0p-2-md.png 768w"></figure><p>Now, let’s create a dataset of import and export information for these countries. We’ll extract key trade properties and remove entries with missing data.</p><figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/46/0ob3dcrtldzxu.png" alt="" width="2243" height="278" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/46/responsive/0ob3dcrtldzxu-xs.png 300w ,https://phileasdg.github.io/media/posts/46/responsive/0ob3dcrtldzxu-sm.png 480w ,https://phileasdg.github.io/media/posts/46/responsive/0ob3dcrtldzxu-md.png 768w"></figure><figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/46/0ovu7bhsqczea.png" alt="dataset preview" width="1452" height="546" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/46/responsive/0ovu7bhsqczea-xs.png 300w ,https://phileasdg.github.io/media/posts/46/responsive/0ovu7bhsqczea-sm.png 480w ,https://phileasdg.github.io/media/posts/46/responsive/0ovu7bhsqczea-md.png 768w"></figure><p>Since these are tabular data, we can represent them in a <a href="https://reference.wolfram.com/language/ref/Tabular">Tabular</a> object (introduced in Wolfram Language 14.2). The Tabular representation makes it possible to apply <a href="https://reference.wolfram.com/language/guide/TabularProcessing">standard data science pipeline </a>techniques including filtering, aggregation, transformation, and visualisation to our data easily.</p><p>The dataset we’ve built contains international trade information for countries around the world, with data sourced from <a href="https://www.cia.gov/the-world-factbook/">The World Factbook</a>. Each column represents a key aspect of a country’s trade profile: </p><ul>
 <li><em>ImportCommodities:</em> Major goods and product categories that each country primarily imports from international markets. These represent key dependencies on foreign products.</li>
@@ -821,7 +1006,7 @@ Wolfram Community, STAFF PICKS, March 14, 2025
             <category term="Work at Wolfram"/>
             <category term="Wolfram Language"/>
             <category term="Modelling"/>
-            <category term="Mathematica"/>
+            <category term="Complex Systems"/>
             <category term="AI"/>
 
         <updated>2025-08-15T22:17:42-04:00</updated>
@@ -834,7 +1019,7 @@ Wolfram Community, STAFF PICKS, March 14, 2025
         <content type="html">
             <![CDATA[
                     <p><img src="https://phileasdg.github.io/media/posts/45/Banner-image-Community-Post-LLM-Delphi-Method.png" class="type:primaryImage" alt="" /></p>
-                <p><strong>Note:</strong> This post was originally a short technical article I shared on the Wolfram Community forums. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3393596">here</a>. </p><h2 id="introduction">Introduction</h2>
+                <p><strong>Note:</strong> This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3393596">here</a>. </p><h2 id="introduction">Introduction</h2>
 <h3 id="an-overview-of-the-delphi-method">An Overview of the Delphi Method</h3>
 <p>The Delphi method is a structured communication technique originally designed as a forecasting technique, that relies on a panel of experts. It was developed by the RAND Corporation in the 1950s and 1960s. The method involves multiple rounds of questionnaires or writing prompts sent to a panel of experts. The anonymised responses are aggregated and shared with the group after each round. The experts are encouraged to revise their earlier answers in light of the replies of other members of the panel. With some luck, the answers will converge to consensus over the course of several rounds. The method is widely used for forecasting and decision-making in business and education. </p><p><em>Illustration of one round of the Delphi process:</em></p><pre><code class="language-wl">In[]:= Show[
    Graph[{0 -&gt; 1, 1 -&gt; 2, 1 -&gt; 3, 1 -&gt; 4, 2 -&gt; 5, 3 -&gt; 6, 4 -&gt; 7, 5 -&gt; 8, 6 -&gt; 8, 7 -&gt; 8, 8 -&gt; 9, 9 -&gt; 10}, 
@@ -1136,7 +1321,6 @@ Wolfram Community, STAFF PICKS, February 14, 2025
             <category term="Wolfram Language"/>
             <category term="Programming"/>
             <category term="Modelling"/>
-            <category term="Mathematica"/>
             <category term="Art"/>
 
         <updated>2024-10-24T15:15:01-04:00</updated>
@@ -1149,7 +1333,7 @@ Wolfram Community, STAFF PICKS, February 14, 2025
         <content type="html">
             <![CDATA[
                     <p><img src="https://phileasdg.github.io/media/posts/41/Mathematical-Marbling-Banner.png" class="type:primaryImage" alt="" /></p>
-                <p class="msg msg--info"><strong>Note: </strong>This post was originally a short technical article I shared on the Wolfram Community forums. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3258063">here</a>. </p>
+                <p class="msg msg--info"><strong>Note: </strong>This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3258063">here</a>. </p>
 <p class="msg--highlight msg ">See also: <a href="https://community.wolfram.com/groups/-/m/t/3271633">M<span class="cc6" data-native-text="true">athematical marbling animation</span></a>, for even more marbling magic.</p>
 <h2>Paper Marbling and Mathematical Marbling</h2>
 <h3>What is Paper Marbling?</h3>
@@ -1428,7 +1612,6 @@ Wolfram Community, STAFF PICKS, February 14, 2025
         <media:content url="https://phileasdg.github.io/media/posts/37/Hottest-day-on-earth-Social-Media-2.png" medium="image" />
             <category term="Work at Wolfram"/>
             <category term="Wolfram Language"/>
-            <category term="Mathematica"/>
             <category term="Geography &amp; GIS"/>
             <category term="Environmental Science"/>
 
@@ -1443,7 +1626,7 @@ Wolfram Community, STAFF PICKS, February 14, 2025
             <![CDATA[
                     <p><img src="https://phileasdg.github.io/media/posts/37/Hottest-day-on-earth-Social-Media-2.png" class="type:primaryImage" alt="" /></p>
                 <p>July 22, 2024 was the hottest day in recorded history, according to provisional data from the European climate service.</p>
-<p class="msg msg--info"><strong>Note: </strong>This post was originally a short technical article I shared on the Wolfram Community forums. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3234937">here</a>. </p>
+<p class="msg msg--info"><strong>Note: </strong>This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3234937">here</a>. </p>
 <h2>Introduction</h2>
 <p>On July 24 2024, <a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://apnews.com/article/hottest-day-ever-climate-change-weather-heat-extreme-global-warming-8e2b0b7fa0360ecb931ca333a832c694" target="_blank" data-testid="ButtonBoxView" rel="noopener" style="font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);"><span class="cc9" data-native-text="true">the Associated Press reported that July 22, 2024 broke the record for the hottest day ever recorded on earth</span></a><span class="cc7" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">, according to provisional data from the European climate service, Copernicus.</span></p>
 <div id="cell-1755bd5b-dc13-3440-bbb3-c2a8c2f106dd" class="cell">
@@ -1568,9 +1751,10 @@ Wolfram Community, STAFF PICKS, February 14, 2025
             <category term="Work at Wolfram"/>
             <category term="Programming"/>
             <category term="Modelling"/>
-            <category term="Mathematica"/>
             <category term="Environmental Science"/>
             <category term="Ecology"/>
+            <category term="Complex Systems"/>
+            <category term="Cellular Automata"/>
             <category term="Art"/>
 
         <updated>2024-05-03T17:38:15-04:00</updated>
@@ -1583,7 +1767,7 @@ Wolfram Community, STAFF PICKS, February 14, 2025
         <content type="html">
             <![CDATA[
                     <p><img src="https://phileasdg.github.io/media/posts/36/Animation1.gif" class="type:primaryImage" alt="" /></p>
-                <p class="msg msg--info"><strong>Note: </strong>This post was originally a short technical article I shared on the Wolfram Community forums. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3096615?p_p_auth=jA2YdLGR">here</a>. </p>
+                <p class="msg msg--info"><strong>Note: </strong>This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3096615?p_p_auth=jA2YdLGR">here</a>. </p>
 <h2>Introduction</h2>
 <p>The forest fire model is one of the simplest computational models to display self-organised criticality. The model is a probabilistic cellular automaton with the following rules. At each computation/time step:</p>
 <div id="cell-c6d531d9-bde4-e940-8566-2ff3288d6302" class="cell">
@@ -1680,7 +1864,7 @@ Wolfram Community, STAFF PICKS, February 14, 2025
             <category term="Programming"/>
             <category term="Network Science"/>
             <category term="Modelling"/>
-            <category term="Mathematica"/>
+            <category term="Complex Systems"/>
 
         <updated>2024-05-02T09:44:47-04:00</updated>
             <summary>
@@ -1692,7 +1876,7 @@ Wolfram Community, STAFF PICKS, February 14, 2025
         <content type="html">
             <![CDATA[
                     <p><img src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.14.00.png" class="type:primaryImage" alt="" /></p>
-                <p class="msg msg--info"><strong>Note: </strong>This post was originally a short technical article I shared on the Wolfram Community forums. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3055726">here</a>. </p>
+                <p class="msg msg--info"><strong>Note: </strong>This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3055726">here</a>. </p>
 <p class="msg msg--highlight "><span class="cc1" data-native-text="true"><strong>Source article:</strong> Zhaobin Xu, Jian Song, Hongmei Zhang, Zhenlin Wei, Dongqing Wei, Jacques Demongeot, A Mathematical Model Simulating the Adaptive Immune Response in Various Vaccines and Vaccination Strategies, medRxiv 2023.10.05.23296578. DOI: </span><a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://doi.org/10.1101/2023.10.05.23296578" target="_blank" data-testid="ButtonBoxView" rel="noopener"><span class="cc3" data-native-text="true">https://doi.org/10.1101/2023.10.05.23296578</span></a></p>
 <h2>Introduction:</h2>
 <p><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">The accomplishments of vaccination are numerous, leading to significant advances in human health. Yet new infectious diseases and evolving pathogens constantly challenge our understanding of vaccine efficacy and immunity. Mathematical modelling is a crucial lens through which we can reach a more comprehensive understanding of these complexities. By simulating the biological responses to vaccines, models can provide critical insights into disease progression, vaccine performance, and optimal strategies for developing vaccines.</span></p>
@@ -1819,256 +2003,6 @@ Wolfram Community, STAFF PICKS, February 14, 2025
 <div>
 <div class="native-layout native-layout-simple"><span class="cc8" data-native-text="true">If you are interested in this work, and would like to learn more, please make sure to give the </span><a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://www.medrxiv.org/content/10.1101/2023.10.05.23296578v1" target="_blank" data-testid="ButtonBoxView" rel="noopener"><span class="cc11" data-native-text="true">source paper </span></a><span class="cc8" data-native-text="true">a read! I primarily intend this post to demonstrate how one might conduct this form of modelling in the Wolfram Language. I also highly encourage you to try Bob Nachbar’s </span><a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://resources.wolframcloud.com/PacletRepository/resources/RobertNachbar/CompartmentalModeling/" target="_blank" data-testid="ButtonBoxView" rel="noopener"><span class="cc61" data-native-text="true">CompartmentalModelling</span></a><span class="cc8" data-native-text="true"> paclet. The </span><span class="cc42" data-native-text="true">CompartmentalModelling</span><span class="cc8" data-native-text="true"> paclet is not just for biologists, but could be a valuable tool for anyone dealing with interconnected systems that can be represented as compartments. </span></div>
 </div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-            ]]>
-        </content>
-    </entry>
-    <entry>
-        <title>Lotka-Volterra Models in the Wolfram Language</title>
-        <author>
-            <name>Phileas Dazeley-Gaist</name>
-        </author>
-        <link href="https://phileasdg.github.io/lotka-volterra-models-in-the-wolfram-language/"/>
-        <id>https://phileasdg.github.io/lotka-volterra-models-in-the-wolfram-language/</id>
-        <media:content url="https://phileasdg.github.io/media/posts/32/Screenshot-2023-10-11-at-00.12.50.png" medium="image" />
-            <category term="Work at Wolfram"/>
-            <category term="Wolfram Language"/>
-            <category term="Programming"/>
-            <category term="Network Science"/>
-            <category term="Modelling"/>
-            <category term="Mathematica"/>
-            <category term="Ecology"/>
-
-        <updated>2023-10-10T14:21:31-04:00</updated>
-            <summary>
-                <![CDATA[
-                        <img src="https://phileasdg.github.io/media/posts/32/Screenshot-2023-10-11-at-00.12.50.png" alt="" />
-                    Note: This post was originally a short technical article I shared on&hellip;
-                ]]>
-            </summary>
-        <content type="html">
-            <![CDATA[
-                    <p><img src="https://phileasdg.github.io/media/posts/32/Screenshot-2023-10-11-at-00.12.50.png" class="type:primaryImage" alt="" /></p>
-                <p class="msg msg--info"><strong>Note: </strong>This post was originally a short technical article I shared on the Wolfram Community forums. For an interactive experience with live demonstrations or to download this text and source source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3028599">here</a>. For brevity and readability, I've omitted several code implementation sections which were present in the original article. If you're looking to reproduce a function from this article and need the source code, please head to the original post.</p>
-<h2>Introduction: A review of the Lotka-Volterra Model</h2>
-<h3>Overview</h3>
-<div id="cell-c3a94280-e8a4-4954-ac9d-109d26687d61" class="cell">
-<div class="cell-wrapper">
-<div class="cell-content">
-<div>
-<div class="native-layout native-layout-simple"><span class="cc3" data-native-text="true">The Lotka-Volterra model, proposed in the early 20th century by mathematicians Alfred J. Lotka (1880-1949) and Vito Volterra (1860-1940), is an influential framework widely used to explore population dynamics of closed ecological systems.</span></div>
-</div>
-</div>
-</div>
-</div>
-<div id="cell-6a2d1478-3121-4d98-924f-9325cd35f2f4" class="cell">
-<div class="cell-wrapper">
-<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
-<div class="cell-content">
-<div class="native-layout native-layout-simple"><span class="cc3" data-native-text="true"><span class="cc3" data-native-text="true">In general, the Lotka-Volterra model refers to the classic two-species construction by Lotka and Volterra, in which the respective instantaneous rates of population change of a predator and prey species are tied to the other species’ population size. In the two </span></span><span class="cc3" data-native-text="true">species case, the Lotka-Volterra model usually results in periodic population “boom and bust” cycles in which the predator population closely follows but lags behind the prey’s (Bacaër 2011).</span></div>
-</div>
-</div>
-</div>
-<div id="cell-45ba991c-2672-48ea-bd83-7c376c0fba06" class="cell">
-<div class="cell-wrapper">
-<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
-<div class="cell-content">
-<div>
-<div class="native-layout native-layout-simple"><span class="cc3" data-native-text="true">Lotka proposed the classic formulation of the model in 1910 as a model of autocatalytic chemical reactions (Lotka 1910). In 1920, he applied the model to a two species food chain involving an idealised plant species and grazing predator (Lotka 1920). In 1925, Volterra independently began studying predator-prey interactions and published a short discussion of the subject in 1926 (Bacaër 2011). While Volterra’s work on the subject focused strictly on modelling predator-prey interactions in fisheries (Volterra 1927), Lotka took a broader interest in exploring competitive interactions and studying the “energetics of evolution” (Lotka 1922). He argued that natural selection could be understood as a physical principle as general as the laws of thermodynamics (Kingsland 2015).</span></div>
-</div>
-</div>
-</div>
-</div>
-<div id="cell-c2b48c5c-b6f1-4b04-be5c-3dedc320f043" class="cell">
-<div class="cell-wrapper">
-<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
-<div class="cell-content">
-<div>
-<div class="native-layout native-layout-simple"><span class="cc3" data-native-text="true">Lotka’s work is noteworthy beyond its contributions to the fields of theoretical population ecology, physical chemistry, and dynamical systems (non-exhaustive) for its interdisciplinarity. He envisioned and worked to create a new biological discipline, “physical biology”, which would apply physical principles and techniques to the study of biological systems composed of processes involving the exchange of matter or energy between system components (Kingsland, 2015). Lotka collected and published these ideas in </span><span class="cc14" data-native-text="true">Elements of Physical Biology </span><span class="cc3" data-native-text="true">(1925).</span></div>
-</div>
-</div>
-</div>
-</div>
-<div id="cell-64e966f6-bdd6-4625-88b1-c3c0e5efbd49" class="cell">
-<div class="cell-wrapper">
-<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
-<div class="cell-content">
-<div class="native-layout native-layout-simple"><span class="cc3" data-native-text="true">Lotka-Volterra models serve as critical conceptual tools for ecologists, lending remarkable insights into real-world ecological system dynamics. Its simplicity makes it an excellent choice to demonstrate key ideas about predator-prey interactions, including the influential concept of the prey-predator cycle, whereby prey abundance increases followed by a delayed increase in predators. Its principles have been refined and extended by many subsequent researchers and continue to hold relevance. The primary contribution of the Lotka-Volterra model to the field of ecology is the theoretical underpinning it provides for understanding interspecies interactions, (mainly predation and competition). This fundamental understanding has guided the development of more complex models for describing the dynamics of entire ecosystems.</span></div>
-<h3>How does it work?</h3>
-<div id="cell-f023857b-392c-44a9-ae6e-9bdbaf3b962e" class="cell">
-<div class="cell-wrapper">
-<div class="cell-content">
-<div>
-<div class="native-layout native-layout-simple"><span class="cc3" data-native-text="true">Consider two species, one which preys on the other (for example, the Canada lynx and snowshoe hare). Let </span><em><span class="cc14" data-native-text="true">x(t)</span></em><span class="cc3" data-native-text="true"> be the population density of the prey, and </span><em><span class="cc14" data-native-text="true">y(t)</span></em><span class="cc3" data-native-text="true"> be the population density of the predators at time </span><em><span class="cc14" data-native-text="true">t</span></em><span class="cc3" data-native-text="true">. To capture how the populations of each species will vary over time, we need two kinds of information:</span></div>
-</div>
-</div>
-</div>
-</div>
-<div id="cell-5239e989-3a09-491c-8b0c-4b1648af9769" class="cell">
-<div class="cell-wrapper">
-<ol>
-<li class="_3Dqn7hOe5vVS6Nh0S54gcV"><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">The growth rates of the species population in the absence of the other species.</span></li>
-<li class="_3Dqn7hOe5vVS6Nh0S54gcV">The effect of the presence of the other species on each species’ growth.</li>
-</ol>
-</div>
-</div>
-<div id="cell-bb246bdb-f5b8-461b-8235-c004afe4bf3f" class="cell">
-<div class="cell-wrapper">
-<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
-<div class="cell-content">
-<div class="native-layout native-layout-simple"><span class="cc3" data-native-text="true">In the classic formulation by Alfred J. Lotka, (1920), these parameters are </span><span class="cc14" data-native-text="true"><em>a</em>, <em>b</em>, <em>c</em>,</span><span class="cc3" data-native-text="true"> and </span><em><span class="cc14" data-native-text="true">d</span></em><span class="cc3" data-native-text="true">, where:</span></div>
-</div>
-</div>
-</div>
-<div id="cell-a3ba13e8-e138-432e-ac6f-e82c06d31edb" class="cell">
-<div class="cell-wrapper">
-<div class="HExNUSO6Shz5hgqMOEW9X">
-<div class="cell-dingbat">
-<ul>
-<li class="lines"><em><span class="cc14" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">a</span></em><span class="cc3" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true"> is the intrinsic growth rate of the prey species</span></li>
-<li class="lines"><em>b</em><span class="cc3" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true"> is the effect of the predators on the prey species growth rate; the rate at which predators kill prey</span></li>
-<li><em><span class="cc14" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">c</span></em><span class="cc3" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true"> is the death rate of the predator species when there are no prey</span></li>
-<li><em>d</em><span class="cc3" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true"> is the effect of the prey on the predator species growth rate; the rate at which the predator population grows from consuming prey</span></li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div id="cell-66e601fc-fea5-4394-9542-5575b3f4df4c" class="cell">
-<div class="cell-wrapper">
-<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
-<div class="cell-content">
-<div class="native-layout native-layout-simple"><span class="cc3" data-native-text="true">Using these parameters, we can write the coupled system of ordinary differential equations:</span></div>
-</div>
-</div>
-</div>
-<div id="cell-4a78be8d-14d9-414a-be6b-8d0cff42114c" class="cell">
-<div class="cell-wrapper">
-<div class="_3Dqn7hOe5vVS6Nh0S54gcV">
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-13.03.23.png" alt="" width="198" height="127" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.03.23-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.03.23-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.03.23-md.png 768w"></figure>
-</div>
-<div> </div>
-</div>
-</div>
-<div id="cell-e07d02be-46c2-4e1e-b152-dc7aa7f24459" class="cell">
-<div class="cell-wrapper">
-<div class="cell-content">
-<div class="native-layout native-layout-simple"><span class="cc3" data-native-text="true">We assume that each of these parameters is positive. The terms </span><em><span class="cc14" data-native-text="true">-b x y</span></em><span class="cc3" data-native-text="true"> and </span><em><span class="cc14" data-native-text="true">d x y</span></em><span class="cc3" data-native-text="true"> indicate that the larger prey and predator species are, the higher the mass/population/energy transfer from prey to predators will be.<br></span></div>
-<h3><em>Implementation: </em>In the Wolfram Language</h3>
-<p class="Text">Setting up a Lotka-Volterra model in the Wolfram Language is very straightforward using <code><span class="InputInline"><a href="http://reference.wolfram.com/mathematica/ref/NDSolve.html "><span class="LinkInline">NDSolve</span></a></span></code>, WL’s numerical differential equations solver.</p>
-<ul>
-<li class="ItemNumbered">Since we know the model takes two initial conditions (species population sizes) and four parameters (<em>a</em>, <em>b</em>, <em>c</em>, <em>d</em>), we can write a helper function that takes in this information and returns the appropriate coupled equations:</li>
-</ul>
-<p class="CodeText"><em>Set up the ODEs and initial conditions describing a two-species Lotka-Volterra model:</em></p>
-<figure class="post__image align-left"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-13.14.07.png" alt="" width="415" height="264" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.14.07-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.14.07-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.14.07-md.png 768w"></figure>
-<p><em>Example:</em></p>
-<figure class="post__image align-left"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-13.14.36.png" alt="" width="323" height="116" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.14.36-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.14.36-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.14.36-md.png 768w"></figure>
-<ul>
-<li class="ItemNumbered">Now, we can simply call our helper function inside <span class="InputInline"><span class="InputFormInline">NDSolve</span></span>, specifying our initial conditions and parameters. Additionally, we supply a list of variables to solve for, and another containing the name and range of the independent variable, <em>t</em>.</li>
-</ul>
-<figure class="post__image align-left"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2023-10-10-at-14.28.14.png" alt="" width="1388" height="198" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2023-10-10-at-14.28.14-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2023-10-10-at-14.28.14-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2023-10-10-at-14.28.14-md.png 768w"></figure>
-<ul>
-<li>Finally, we can plot these results in the time domain and state space:</li>
-</ul>
-<p class="align-left"><em>Time domain plot:</em></p>
-<figure class="post__image align-left"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-13.09.18.png" alt="" width="461" height="298" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.09.18-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.09.18-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.09.18-md.png 768w"></figure>
-<p><em>State space portrait: (I have iconised the options to make the code more readable, please visit the original community post to view the full code)</em></p>
-<figure class="post__image align-left"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-13.12.40.png" alt="" width="1452" height="1238" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.12.40-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.12.40-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.12.40-md.png 768w"></figure>
-<h2>Relationships and Food Webs</h2>
-<h3>Predation Relationships and Food Webs</h3>
-<p class="Text">Suppose we would like to extend our model to three or more species. For a given <em>n</em>-species system, will need too keep track of the <strong>relationships</strong> between species, and their <strong>effects</strong> on one another. We will discuss two ways of storing this information: one to facilitate our conceptual understanding of model configurations, and the other to facilitate the process of building the model system of ODEs. We will discuss the first of these ways here.</p>
-<p class="Text">Notice that as the number of species n in our model grows, so does the number of possible relationships between species (at a rate of 2^<em>n</em>, or 2^(<em>n</em>-1) if we assume the absence of cannibalism in the community). The number of possible combinations of relationships also grows without bounds (at a rate of 2^(<em>n</em>^2), or 2^((<em>n</em>-1)^2)without cannibalism). A set of predation relationships between species is known as a food web.</p>
-<p class="Text">In a food web, predation relationships are usually represented as arrows from prey to predator species, representing transfer of energy up the web’s component food chains.</p>
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-13.15.55.png" alt="" width="234" height="278" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.15.55-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.15.55-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.15.55-md.png 768w"></figure>
-<p><span class="cc3" data-native-text="true">Since food webs are graphs, we can express them directly in the Wolfram Language using </span><span class="cc44" data-native-text="true">Graph</span><span class="cc3" data-native-text="true"> objects (see documentation: </span><code><a href="https://reference.wolfram.com/language/ref/Graph.html"><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">Graph</span></a></code><span class="cc3" data-native-text="true">). Not all food web configurations will be ecologically meaningful, and some will be analogous to one-another, but expressing them like this helps to get a strong qualitative impression of the relationships they depict (Are we modelling a really simple web, or is it very complicated? How tangled is it? How loopy? How close together are the species? Do they form clusters? And so on). We can also answer questions about the food web parameter spaces. For instance: what structurally distinct categories of 3-species food web are there?</span></p>
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-13.17.56.png" alt="" width="481" height="577" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.17.56-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.17.56-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.17.56-md.png 768w"></figure>
-<h3>Aside: What species relationships are possible in an <em>n</em>-species system?</h3>
-<p>We can write a function to generate the possible predation configurations for a species in an n-species food web.</p>
-<p><em>Predation configurations for a species in an n-species food web:</em></p>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-13.18.42.png" alt="" width="1568" height="514" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.18.42-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.18.42-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.18.42-md.png 768w"></figure>
-<p>In a 3-species food web, the predation relationship configurations for a species N1 are:</p>
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-15.18.48.png" alt="" width="276" height="414" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-15.18.48-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-15.18.48-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-15.18.48-md.png 768w"></figure>
-<p>We can sample possible food web configurations randomly, but this will rarely yield realistic food webs for most contexts. Instead, we might restrict configurations to a subset of forms that fit our criteria, or we might simply look to real world systems for examples.</p>
-<p><em>Random valid 3-species food webs (with cannibalism):</em></p>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-13.19.19.png" alt="" width="1498" height="282" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.19.19-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.19.19-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.19.19-md.png 768w"></figure>
-<p><em>Random valid 3-species food webs (without cannibalism):</em></p>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-13.19.48.png" alt="" width="1526" height="298" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.19.48-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.19.48-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.19.48-md.png 768w"></figure>
-<h3>Species to Species Effects Representation: The Community Matrix</h3>
-<p>Whereas graphs are great at helping us intuit the nature of interactions in a community, we typically express interactions in n-species Lotka-Volterra models using a matrix of interaction coefficients called an <em>interaction matrix</em>. A perk of this strategy is that it allows us to write the generalised Lotka-Volterra model in a condensed form using linear algebra. We will discuss this condensed form shortly. When the matrix stores the effects of species on other species growth rates, we call this matrix a <em>community matrix</em>.</p>
-<p>Community matrices are a key concept in quantitative ecology and are used in many competition and predation models. A community matrix A is a square matrix where each element represents the interaction strength between pairs of species in an ecological community. Each cell <em>A[i,j]</em> represents the effect of the average species <em>j</em> individual on species <em>i</em>’s population growth rate (Novak et al. 2016). The principal diagonal of the matrix captures the species self-interactions, which we usually assume to be negative, to capture the effect of interspecific competition. This constrains species growth in the absence of prey, imposing implicit instantaneous carrying capacities of the system for different species.</p>
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-13.21.29.png" alt="" width="354" height="120" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.21.29-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.21.29-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.21.29-md.png 768w"></figure>
-<p class="Text">Note that values in an interaction matrix don’t necessarily correspond to predation relationships. If both <em>A[i,j]</em> and <em>A[j,i]</em> are negative, then the two species are considered to be in direct competition with one another as they negatively affect each other’s population. If <em>A[i,j]</em> is positive but <em>A[i,j]</em> is negative then species <em>i</em> is a predator or parasite of species <em>j</em>, since <em>i</em>’s population grows at <em>j</em>’s expense (Positive values for <em>A[i,j] </em>and <em>A[j,i] </em>would be considered mutualism, but we won’t go into that).</p>
-<p class="Text">To translate between community matrices and food webs, I have implemented some simple tools which you can find definitions for in the original version of this post.</p>
-<h2>Generalised Lotka-Volterra: How Does it Work?</h2>
-<p>We can model competition and predation systems with more than two species using the generalised form of the Lotka-Volterra model, which we write: </p>
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-13.24.26.png" alt="" width="181" height="94" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.24.26-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.24.26-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.24.26-md.png 768w"></figure>
-<p>where</p>
-<ul>
-<li><em>X</em> is a vector of population sizes or densities.</li>
-<li>The vector <em>f</em> is given by <em>f</em>=<em>r</em>+<em>A</em><em>X</em>, where <em>r</em> is a vector of intrinsic growth rates, and <em>A </em>is the community matrix or interaction matrix of the system.</li>
-</ul>
-</div>
-<div> </div>
-<div class="cell-content">We will define the intrinsic growth rates slightly differently from our approach for the two-species model, as we assume that each species has a positive intrinsic growth rate. We account for the negative effect of a species' intraspecific competition in the absence of food (on its intrinsic growth rates) in the diagonal of the community matrix.<br>
-<h2>Three Species Lotka-Volterra in the Wolfram Language</h2>
-<p>First, let's define a function to generate ODEs for an n-species Lotka-Volterra model:</p>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-13.23.34.png" alt="" width="2102" height="886" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.23.34-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.23.34-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-13.23.34-md.png 768w"></figure>
-<p class="Text">We can use <code><span class="InputInline"><span class="InputFormInline">GeneralizedLotkaVolterraODEs</span></span></code> to generate the system of ODEs for the given initial parameters:</p>
-<ul>
-<li class="Item"><em>vars</em> - a list of variable names (optional),</li>
-<li class="Item"><em>init</em> - a list of initial population sizes</li>
-<li class="Item"><em>r</em> - a list of species intrinsic growth rates</li>
-<li class="Item"><em>interactionMatrix</em> - a matrix describing community interactions (in our examples, a community matrix)</li>
-</ul>
-<p class="CodeText"><em>Generate a system of ODEs for a Generalised Lotka-Volterra model from provided parameters:</em></p>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-16.20.24.png" alt="" width="582" height="310" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.20.24-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.20.24-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.20.24-md.png 768w"></figure>
-<p>Using <code><span class="InputInline"><span class="InputFormInline">CommunityMatrixGraph</span></span></code> (see definition in original post), we can construct a weighted graph from the community matrix to get an idea of the relationships that define the system at a glance.</p>
-<p><em>Visualise the community interactions described by the community matrix:</em></p>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-16.22.53.png" alt="" width="1278" height="526" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.22.53-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.22.53-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.22.53-md.png 768w"></figure>
-<p>And <code><span class="InputInline"><span class="InputFormInline">NDSolve</span></span></code> to numerically approximate the population trajectories of the model.</p>
-<p><em>Numerical solutions to the model ODEs:</em></p>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-16.23.38.png" alt="" width="1774" height="390" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.23.38-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.23.38-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.23.38-md.png 768w"></figure>
-<p>We can then plot the solutions in the time domain and state space:</p>
-<p><em>Time domain plot:</em></p>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-16.24.12.png" alt="" width="1564" height="638" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.24.12-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.24.12-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.24.12-md.png 768w"></figure>
-<p><em>State space portrait (now in 3D!):</em></p>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-16.24.34.png" alt="" width="472" height="469" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.24.34-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.24.34-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.24.34-md.png 768w"></figure>
-<h2>Closing Notes: Four species and more</h2>
-<p class="Text">The generalised model we have discussed in this short text extends beyond three species systems. In fact, the tools we have developed will allow us to model any finite n-species closed-food web, that is, any system that we can express using a finite number of species initial population sizes, intrinsic growth rates, and interactions. It should be noted that just because we can specify a model does not always mean we can accurately solve for its behaviour: we are restricted by the limits of numerical approximation and our available computational power)</p>
-<p class="Text">Still, we can easily model four species webs. Let’s prepare two four species models. We’ll define some weighted webs describing the various interaction effects of our system:</p>
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-16.25.03.png" alt="" width="380" height="318" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.25.03-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.25.03-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.25.03-md.png 768w"></figure>
-<p>We can construct the community matrix describing either of these using the <code><span class="InputInline"><span class="InputFormInline">CommunityMatrix</span></span></code> function defined in the original version of this post. For example, take the first row of interaction webs from the above dataset:</p>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2023-10-10-at-15.20.16.png" alt="" width="403" height="136" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2023-10-10-at-15.20.16-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2023-10-10-at-15.20.16-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2023-10-10-at-15.20.16-md.png 768w"></figure>
-<p><em>Time domain plot:</em></p>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-16.25.51.png" alt="" width="1932" height="1216" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.25.51-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.25.51-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.25.51-md.png 768w"></figure>
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/32/Screenshot-2024-05-01-at-16.25.31.png" alt="" width="1892" height="938" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.25.31-xs.png 300w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.25.31-sm.png 480w ,https://phileasdg.github.io/media/posts/32/responsive/Screenshot-2024-05-01-at-16.25.31-md.png 768w"></figure>
-<p>To interact with this graphical user interface, head to the original version of this post.</p>
-<p class="Text"><strong>Note:</strong> What happened to the state-space plot? Well, we’ve run out of spatial dimensions to express the behaviour of the system, and in the interest of keeping this post short, we’ll leave things there for now.</p>
-<p class="Text">Consider what we have achieved in this short text. If you have read this far, I hope to have inspired you to think of how you might answer your own ecological questions in the Wolfram Language. If your questions expand on the subject of this post, I hope the tools I have developed within will help jumpstart your exploration! And please, don’t hesitate to reach out to me with any questions you may have about this work.</p>
-<h2 class="Section">Sources Cited</h2>
-<p class="Item">Allesina, Stefano. 2 Generalized Lotka-Volterra | A Tour of the Generalized Lotka-Volterra Model. Accessed 5 October 2023. <a href="https://stefanoallesina.github.io/Sao_Paulo_School/intro.html"><span class="HyperlinkInline">https://stefanoallesina.github.io/Sao_Paulo_School/intro.html</span></a>.</p>
-<p class="Item">———. 2 Generalized Lotka-Volterra | A Tour of the Generalized Lotka-Volterra Model. Accessed 5 October 2023. <a href="https://stefanoallesina.github.io/Sao_Paulo_School/intro.html"><span class="HyperlinkInline">https://stefanoallesina.github.io/Sao_Paulo_School/intro.html</span></a>.</p>
-<p class="Item">Bacaër, Nicolas. ‘Lotka, Volterra and the Predator–Prey System (1920–1926)’. In A Short History of Mathematical Population Dynamics, edited by Nicolas Bacaër, 71–76. London: Springer, 2011. <a href="https://doi.org/10.1007/978-0-85729-115-8_13"><span class="HyperlinkInline">https://doi.org/10.1007/978-0-85729-115-8_13</span></a>.</p>
-<p class="Item">Baigent, Steve. ‘Lotka-Volterra Dynamics - An Introduction.’, 2010.</p>
-<p class="Item">Hsu, Sze-Bi, Shigui Ruan, and Ting-Hui Yang. ‘Analysis of Three Species Lotka–Volterra Food Web Models with Omnivory’. Journal of Mathematical Analysis and Applications 426, no. 2 (15 June 2015): 659–87. <a href="https://doi.org/10.1016/j.jmaa.2015.01.035"><span class="HyperlinkInline">https://doi.org/10.1016/j.jmaa.2015.01.035</span></a>.</p>
-<p class="Item">Kingsland, Sharon. ‘Alfred J. Lotka and the Origins of Theoretical Population Ecology’. Proceedings of the National Academy of Sciences of the United States of America 112, no. 31 (4 August 2015): 9493–95. <a href="https://doi.org/10.1073/pnas.1512317112"><span class="HyperlinkInline">https://doi.org/10.1073/pnas.1512317112</span></a>.</p>
-<p class="Item">Lee, Benjamin. ‘Determination of the Parameters in Lotka-Volterra Equations from Population Measurements---Algorithms and Numerical Experiments’. SIAM Undergraduate Research Online 14 (1 January 2021). <a href="https://doi.org/10.1137/20S1383161"><span class="HyperlinkInline">https://doi.org/10.1137/20S1383161</span></a>.</p>
-<p class="Item">Lotka, Alfred J. ‘Analytical Note on Certain Rhythmic Relations in Organic Systems’. Proceedings of the National Academy of Sciences of the United States of America 6, no. 7 (July 1920): 410–15.</p>
-<p class="Item">———. ‘Contribution to the Theory of Periodic Reactions’. The Journal of Physical Chemistry 14, no. 3 (1 March 1910): 271–74. <a href="https://doi.org/10.1021/j150111a004"><span class="HyperlinkInline">https://doi.org/10.1021/j150111a004</span></a>.</p>
-<p class="Item">———. ‘Natural Selection as a Physical Principle*’. Proceedings of the National Academy of Sciences 8, no. 6 (June 1922): 151–54. <a href="https://doi.org/10.1073/pnas.8.6.151"><span class="HyperlinkInline">https://doi.org/10.1073/pnas.8.6.151</span></a>.</p>
-<p class="Item">Novak, Mark, Justin D. Yeakel, Andrew E. Noble, Daniel F. Doak, Mark Emmerson, James A. Estes, Ute Jacob, M. Timothy Tinker, and J. Timothy Wootton. ‘Characterizing Species Interactions to Understand Press Perturbations: What Is the Community Matrix?’ Annual Review of Ecology, Evolution, and Systematics 47, no. 1 (2016): 409–32. <a href="https://doi.org/10.1146/annurev-ecolsys-032416-010215"><span class="HyperlinkInline">https://doi.org/10.1146/annurev-ecolsys-032416-010215</span></a>.</p>
-<p class="Item">Volterra, Vito. Variazioni e fluttuazioni del numero d’individui in specie animali conviventi, &amp;c. Memoria / R. comitato talassografico italiano, 1927.</p>
-<h2 class="Section">Further Readings</h2>
-<p class="Item">‘Lotka-Volterra Equations -- from Wolfram MathWorld’. Accessed 5 October 2023. <a href="https://mathworld.wolfram.com/Lotka-VolterraEquations.html"><span class="HyperlinkInline">https://mathworld.wolfram.com/Lotka-VolterraEquations.html</span></a>.</p>
-<p class="Item">‘Lotka-Volterra Model - an Overview | ScienceDirect Topics’. Accessed 5 October 2023. <a href="https://www.sciencedirect.com/topics/earth-and-planetary-sciences/lotka-volterra-model"><span class="HyperlinkInline">https://www.sciencedirect.com/topics/earth-and-planetary-sciences/lotka-volterra-model</span></a>.</p>
-<p class="Item">A Short History of Mathematical Population Dynamics by Nicolas Bacaër, n.d.</p>
-<p class="Item">Essington, Timothy E. Introduction to Quantitative Ecology: Mathematical and Statistical Modelling for Beginners. Oxford, United Kingdom: Oxford University Press, 2021.</p>
-<p class="Item">Kot, Mark. Elements of Mathematical Ecology. 1st edition. Cambridge: Cambridge University Press, 2001.</p>
 </div>
 </div>
 </div>
