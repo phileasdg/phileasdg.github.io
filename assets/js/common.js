@@ -225,6 +225,21 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
   };
 
+  // Helper to handle lazy loading fade-in for dynamically added images
+  const handleLazyImages = (container) => {
+    const lazyImages = container.querySelectorAll('img[loading]');
+    lazyImages.forEach(img => {
+      if (img.classList.contains('is-loaded')) return;
+      if (img.complete) {
+        img.classList.add('is-loaded');
+      } else {
+        img.addEventListener('load', function () {
+          this.classList.add('is-loaded');
+        }, false);
+      }
+    });
+  };
+
   // Determine Page Type and Filter
   let pageType = 'home';
   let tagFilterName = '';
@@ -264,6 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
       tempDiv.innerHTML = initialChunk.map(p => renderCard(p, relPrefix)).join('');
       const initialItems = Array.from(tempDiv.children);
       initialItems.forEach(item => grid.appendChild(item));
+      handleLazyImages(grid);
 
       // Initialize Masonry
       if (typeof Masonry !== 'undefined') {
@@ -298,6 +314,7 @@ document.addEventListener("DOMContentLoaded", () => {
             chunkDiv.innerHTML = nextChunk.map(p => renderCard(p, relPrefix)).join('');
             const newItems = Array.from(chunkDiv.children);
             newItems.forEach(item => grid.appendChild(item));
+            handleLazyImages(grid);
 
             if (window.msnry) {
               window.msnry.appended(newItems);
