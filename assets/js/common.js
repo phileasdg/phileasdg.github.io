@@ -5,8 +5,13 @@ class SiteHeader extends HTMLElement {
     const isFileScheme = window.location.protocol === 'file:';
 
     const getRelativePrefix = () => {
-      // Strip base if it starts with /newsite
-      const normPath = pathname.startsWith('/newsite') ? pathname.substring(8) : pathname;
+      // Strip base if it starts with /newsite or /phileasdg.github.io
+      let normPath = pathname;
+      if (pathname.startsWith('/newsite')) {
+        normPath = pathname.substring(8);
+      } else if (pathname.startsWith('/phileasdg.github.io')) {
+        normPath = pathname.substring(20);
+      }
       const segments = normPath.split('/').filter(s => s.length > 0);
       
       if (segments.length > 0) {
@@ -28,8 +33,8 @@ class SiteHeader extends HTMLElement {
       }
 
       // Normalize paths for matching
-      const normPath = path.replace(/^\/newsite/, "").replace(/\/$/, "");
-      const normCurr = pathname.replace(/^\/newsite/, "").replace(/\/$/, "");
+      const normPath = path.replace(/^\/(newsite|phileasdg\.github\.io)/, "").replace(/\/$/, "");
+      const normCurr = pathname.replace(/^\/(newsite|phileasdg\.github\.io)/, "").replace(/\/$/, "");
       if (normPath === "" && normCurr === "") return true;
       if (normPath !== "" && normCurr.startsWith(normPath)) return true;
       return false;
@@ -75,7 +80,12 @@ class SiteFooter extends HTMLElement {
     const pathname = window.location.pathname;
     
     const getRelativePrefix = () => {
-      const normPath = pathname.startsWith('/newsite') ? pathname.substring(8) : pathname;
+      let normPath = pathname;
+      if (pathname.startsWith('/newsite')) {
+        normPath = pathname.substring(8);
+      } else if (pathname.startsWith('/phileasdg.github.io')) {
+        normPath = pathname.substring(20);
+      }
       const segments = normPath.split('/').filter(s => s.length > 0);
       if (segments.length > 0) {
         const last = segments[segments.length - 1];
@@ -123,6 +133,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const newsiteIndex = pathname.indexOf('/newsite/');
     if (newsiteIndex !== -1) {
       const subPath = pathname.substring(newsiteIndex + 9);
+      const segments = subPath.split('/').filter(s => s.length > 0 && !s.includes('.html'));
+      return '../'.repeat(segments.length);
+    }
+    const repoIndex = pathname.indexOf('/phileasdg.github.io/');
+    if (repoIndex !== -1) {
+      const subPath = pathname.substring(repoIndex + 21);
       const segments = subPath.split('/').filter(s => s.length > 0 && !s.includes('.html'));
       return '../'.repeat(segments.length);
     }
