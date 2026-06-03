@@ -3,8 +3,8 @@ import json
 import re
 from bs4 import BeautifulSoup
 
-workspace_dir = "/Users/phileasdazeleygaist/Desktop/My Websites/phileasdg.github.io/newsite"
-posts_json_path = os.path.join(workspace_dir, "data/posts.json")
+workspace_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+posts_json_path = os.path.join(workspace_dir, "data", "posts.json")
 
 def validate_posts_json():
     print("--- Validating posts.json ---")

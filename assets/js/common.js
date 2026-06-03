@@ -198,9 +198,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let imageHtml = '';
     if (post.thumbnail) {
       const srcsetHtml = getResponsiveSrcset(post.thumbnail, prefix);
+      const widthAttr = post.thumbWidth ? `width="${post.thumbWidth}"` : '';
+      const heightAttr = post.thumbHeight ? `height="${post.thumbHeight}"` : '';
       imageHtml = `
         <a href="${prefix}posts/${post.slug}/" class="c-card__image">
-          <img src="${prefix}${post.thumbnail}" ${srcsetHtml} sizes="(min-width: 56.25em) 100vw, (min-width: 37.5em) 50vw, 100vw" loading="lazy" alt="">
+          <img src="${prefix}${post.thumbnail}" ${srcsetHtml} ${widthAttr} ${heightAttr} sizes="(min-width: 56.25em) 100vw, (min-width: 37.5em) 50vw, 100vw" loading="lazy" alt="">
         </a>
       `;
     }
