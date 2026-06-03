@@ -1,0 +1,343 @@
+[
+  {
+    "id": "patchwork-with-coexisting-cellular-automata",
+    "name": "Patchwork with Coexisting Cellular Automata",
+    "slug": "patchwork-with-coexisting-cellular-automata",
+    "date": "2026-01-17T16:53",
+    "tags": [
+      "Art",
+      "Cellular Automata",
+      "Complex Systems",
+      "Modelling",
+      "Programming",
+      "Wolfram Language"
+    ],
+    "thumbnail": "media/posts/53/banner-2.png"
+  },
+  {
+    "id": "mapping-global-land-cover-with-european-space-agency-data",
+    "name": "Mapping Global Land Cover with European Space Agency Data",
+    "slug": "mapping-global-land-cover-with-european-space-agency-data",
+    "date": "2026-01-10T17:01",
+    "tags": [
+      "Ecology",
+      "Environmental Science",
+      "Geography & GIS",
+      "Programming",
+      "Wolfram Language"
+    ],
+    "thumbnail": "media/posts/52/banner.png"
+  },
+  {
+    "id": "computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden",
+    "name": "Computational Plant Ecology: Interactive Spatial Network Analysis of a College Garden",
+    "slug": "computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden",
+    "date": "2025-08-23T02:06",
+    "tags": [
+      "Complex Systems",
+      "Ecology",
+      "Environmental Science",
+      "Geography & GIS",
+      "Modelling",
+      "Network Science",
+      "Wolfram Language"
+    ],
+    "thumbnail": "media/posts/49/banner.png"
+  },
+  {
+    "id": "terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity",
+    "name": "Terrestrial Ecoregions of the World: Computational Insights Into Global Biodiversity",
+    "slug": "terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity",
+    "date": "2025-08-16T04:21",
+    "tags": [
+      "Complex Systems",
+      "Ecology",
+      "Environmental Science",
+      "Geography & GIS",
+      "Programming",
+      "Wolfram Language"
+    ],
+    "thumbnail": "media/posts/47/Ecoregions_BannerImage-2.png"
+  },
+  {
+    "id": "trading-places-a-network-analysis-of-global-commerce",
+    "name": "Trading Places: a Network Analysis of Global Commerce",
+    "slug": "trading-places-a-network-analysis-of-global-commerce",
+    "date": "2025-08-16T04:20",
+    "tags": [
+      "Complex Systems",
+      "Economics",
+      "Geography & GIS",
+      "Modelling",
+      "Network Science",
+      "Programming",
+      "Wolfram Language",
+      "Work at Wolfram"
+    ],
+    "thumbnail": "media/posts/46/world_trade_banner.png"
+  },
+  {
+    "id": "delphai-structured-communication-with-llms-in-a-simulated-delphi-process",
+    "name": "DelphAI: Structured Communication with LLMs in a Simulated Delphi Process",
+    "slug": "delphai-structured-communication-with-llms-in-a-simulated-delphi-process",
+    "date": "2025-08-16T04:17",
+    "tags": [
+      "AI",
+      "Complex Systems",
+      "Modelling",
+      "Wolfram Language",
+      "Work at Wolfram"
+    ],
+    "thumbnail": "media/posts/45/Banner-image-Community-Post-LLM-Delphi-Method.png"
+  },
+  {
+    "id": "creative-generative-design-with-mathematical-marbling",
+    "name": "Creative Generative Design with Mathematical Marbling",
+    "slug": "creative-generative-design-with-mathematical-marbling",
+    "date": "2024-10-24T21:15",
+    "tags": [
+      "Art",
+      "Modelling",
+      "Programming",
+      "Wolfram Language",
+      "Work at Wolfram"
+    ],
+    "thumbnail": "media/posts/41/Mathematical-Marbling-Banner.png"
+  },
+  {
+    "id": "earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data",
+    "name": "Earth's Hottest Day Ever Recorded - July 22, 2024 - Analysed and Visualised Through Climate Data",
+    "slug": "earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data",
+    "date": "2024-07-28T09:17",
+    "tags": [
+      "Environmental Science",
+      "Geography & GIS",
+      "Wolfram Language",
+      "Work at Wolfram"
+    ],
+    "thumbnail": "media/posts/37/Hottest-day-on-earth-Social-Media-2.png"
+  },
+  {
+    "id": "a-forest-fire-model-in-1-2-and-3-dimensions",
+    "name": "A Forest Fire Model in 1, 2, and 3 Dimensions",
+    "slug": "a-forest-fire-model-in-1-2-and-3-dimensions",
+    "date": "2024-05-03T23:38",
+    "tags": [
+      "Art",
+      "Cellular Automata",
+      "Complex Systems",
+      "Ecology",
+      "Environmental Science",
+      "Modelling",
+      "Programming",
+      "Work at Wolfram"
+    ],
+    "thumbnail": "media/posts/36/Animation1.gif"
+  },
+  {
+    "id": "a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2",
+    "name": "A Dynamical Model of Immune-System Response to mRNA, Live Virus, and Inactivated Vaccines",
+    "slug": "a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2",
+    "date": "2024-05-02T15:44",
+    "tags": [
+      "Complex Systems",
+      "Modelling",
+      "Network Science",
+      "Programming",
+      "Wolfram Language",
+      "Work at Wolfram"
+    ],
+    "thumbnail": "media/posts/35/Screenshot-2024-05-02-at-10.14.00.png"
+  },
+  {
+    "id": "wolfram-contributions-and-publications",
+    "name": "Wolfram Contributions and Publications",
+    "slug": "wolfram-contributions-and-publications",
+    "date": "2023-10-10T20:21",
+    "tags": [],
+    "thumbnail": ""
+  },
+  {
+    "id": "lotka-volterra-models-in-the-wolfram-language",
+    "name": "Lotka-Volterra Models in the Wolfram Language",
+    "slug": "lotka-volterra-models-in-the-wolfram-language",
+    "date": "2023-10-10T20:21",
+    "tags": [
+      "Complex Systems",
+      "Ecology",
+      "Modelling",
+      "Network Science",
+      "Programming",
+      "Wolfram Language",
+      "Work at Wolfram"
+    ],
+    "thumbnail": "media/posts/32/Screenshot-2023-10-11-at-00.12.50.png"
+  },
+  {
+    "id": "tracking-icebergs",
+    "name": "Tracking Icebergs: Exploring the Mathematics of Iceberg Drift and Decay Models",
+    "slug": "tracking-icebergs",
+    "date": "2023-10-10T20:21",
+    "tags": [
+      "Complex Systems",
+      "Environmental Science",
+      "Geography & GIS",
+      "Programming",
+      "Undergraduate work"
+    ],
+    "thumbnail": "media/posts/8/Iceberg_Ilulissat.jpg"
+  },
+  {
+    "id": "remote-sensing-for-the-wolfram-language",
+    "name": "Remote Sensing for the Wolfram Language",
+    "slug": "remote-sensing-for-the-wolfram-language",
+    "date": "2023-07-12T05:58",
+    "tags": [
+      "Environmental Science",
+      "Geography & GIS",
+      "Programming",
+      "Wolfram Language",
+      "Work at Wolfram"
+    ],
+    "thumbnail": "media/posts/28/BlogHeader-2.png"
+  },
+  {
+    "id": "economic-uses-of-selected-species-in-the-family-lamiaceae",
+    "name": "Economic Uses of Selected Species in the Family Lamiaceae",
+    "slug": "economic-uses-of-selected-species-in-the-family-lamiaceae",
+    "date": "2023-03-11T01:19",
+    "tags": [
+      "Ecology",
+      "Environmental Science",
+      "Geography & GIS",
+      "Undergraduate work"
+    ],
+    "thumbnail": "media/posts/27/De_Historia_stirpium_commentarii_insignes_...Fuchs_Leonhart_bpt6k1511104z_510.jpg"
+  },
+  {
+    "id": "mathematics-as-human-ecology",
+    "name": "HEE: Mathematics as Human Ecology",
+    "slug": "mathematics-as-human-ecology",
+    "date": "2023-02-23T19:46",
+    "tags": [
+      "Complex Systems",
+      "Ecology",
+      "Undergraduate work",
+      "Wolfram Language"
+    ],
+    "thumbnail": "media/posts/26/poster-2.png"
+  },
+  {
+    "id": "featured-in-the-wrack-line-noaa",
+    "name": "Featured in The Wrack Line (NOAA)",
+    "slug": "featured-in-the-wrack-line-noaa",
+    "date": "2022-12-18T16:55",
+    "tags": [
+      "Environmental Science",
+      "Geography & GIS",
+      "Undergraduate work"
+    ],
+    "thumbnail": "media/posts/24/unnamed-2.png"
+  },
+  {
+    "id": "digital-image-feedback-synthesis",
+    "name": "Digital Image Feedback Synthesis",
+    "slug": "digital-image-feedback-synthesis",
+    "date": "2022-12-09T03:57",
+    "tags": [
+      "Art",
+      "Complex Systems",
+      "Modelling",
+      "Programming",
+      "Undergraduate work",
+      "Wolfram Language"
+    ],
+    "thumbnail": "media/posts/23/Screenshot-2022-12-08-at-23.12.15.png"
+  },
+  {
+    "id": "recursive-poetry",
+    "name": "Video Feedback, Emergence, and Poetry",
+    "slug": "recursive-poetry",
+    "date": "2022-10-06T04:18",
+    "tags": [
+      "Art",
+      "Complex Systems",
+      "Programming",
+      "Undergraduate work"
+    ],
+    "thumbnail": "media/posts/20/Screenshot-2022-11-21-at-21.05.40.png"
+  },
+  {
+    "id": "standing-stones-and-megaliths-of-st-just",
+    "name": "Standing Stones and Megaliths of St Just - A GIS project",
+    "slug": "standing-stones-and-megaliths-of-st-just",
+    "date": "2022-08-12T14:17",
+    "tags": [
+      "Geography & GIS",
+      "Undergraduate work"
+    ],
+    "thumbnail": "media/posts/9/menhirs-2.JPG"
+  },
+  {
+    "id": "digital-double-reflections-on-digital-selfhood",
+    "name": "Digital Double, Reflections on Digital Selfhood.",
+    "slug": "digital-double-reflections-on-digital-selfhood",
+    "date": "2022-08-12T14:17",
+    "tags": [
+      "Art",
+      "Max msp jitter",
+      "Programming",
+      "Undergraduate work"
+    ],
+    "thumbnail": "media/posts/17/Screenshot-2022-08-12-at-01.07.35.png"
+  },
+  {
+    "id": "graphical-iteration-in-r",
+    "name": "Graphical iteration in R",
+    "slug": "graphical-iteration-in-r",
+    "date": "2022-08-12T14:15",
+    "tags": [
+      "Programming",
+      "R programming",
+      "Undergraduate work"
+    ],
+    "thumbnail": "media/posts/7/staircase-diagram.png"
+  },
+  {
+    "id": "logistic-model-bifurcation-regressions",
+    "name": "An Exploration of the Logistic Function using GAMs and Spline Regressions in R",
+    "slug": "logistic-model-bifurcation-regressions",
+    "date": "2022-08-12T14:15",
+    "tags": [
+      "Complex Systems",
+      "Modelling",
+      "Programming",
+      "R programming",
+      "Undergraduate work"
+    ],
+    "thumbnail": "media/posts/11/figure14-2.png"
+  },
+  {
+    "id": "mathematical-systems-thinking-for-human-ecology",
+    "name": "Mathematical Systems Thinking in Human Ecology",
+    "slug": "mathematical-systems-thinking-for-human-ecology",
+    "date": "2022-08-12T14:15",
+    "tags": [
+      "Complex Systems",
+      "Undergraduate work"
+    ],
+    "thumbnail": "media/posts/10/lsystem1.png"
+  },
+  {
+    "id": "ai-contemporary-uses-and-questions-for-audiovisual-entertainment",
+    "name": "AI: Contemporary uses and questions for Audiovisual Entertainment.",
+    "slug": "ai-contemporary-uses-and-questions-for-audiovisual-entertainment",
+    "date": "2022-08-12T14:14",
+    "tags": [
+      "AI",
+      "Programming",
+      "Undergraduate work"
+    ],
+    "thumbnail": "media/posts/12/GAN-video-2.png"
+  }
+]
