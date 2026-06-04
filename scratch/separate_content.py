@@ -3,9 +3,9 @@ import json
 import re
 
 ROOT_DIR = "/Users/phileasdazeleygaist/Desktop/My Websites/my blog/phileasdg.github.io"
-DATA_DIR = os.path.join(ROOT_DIR, "data")
-POSTS_CONTENT_DIR = os.path.join(DATA_DIR, "posts")
-PAGES_CONTENT_DIR = os.path.join(DATA_DIR, "pages")
+CONTENT_DIR = os.path.join(ROOT_DIR, "content")
+POSTS_CONTENT_DIR = os.path.join(CONTENT_DIR, "posts")
+PAGES_CONTENT_DIR = os.path.join(CONTENT_DIR, "pages")
 
 def extract_slug_from_url(url):
     # e.g., "https://phileasdg.github.io/patchwork-with-coexisting-cellular-automata/" -> "patchwork-with-coexisting-cellular-automata"

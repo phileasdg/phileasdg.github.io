@@ -92,7 +92,7 @@ def validate_html_files(posts_data, pages_data):
     # 1. Validate posts
     for post in posts_data:
         slug = post["slug"]
-        html_file = os.path.join(workspace_dir, "data", "posts", f"{slug}.html")
+        html_file = os.path.join(workspace_dir, "content", "posts", f"{slug}.html")
         fake_file_path = os.path.join(workspace_dir, "posts", slug, "index.html")
         
         if not os.path.exists(html_file):
@@ -133,7 +133,7 @@ def validate_html_files(posts_data, pages_data):
                 broken_links.append((name, attr, val))
                 
         if broken_links:
-            print(f"FAIL: data/posts/{slug}.html has broken links:")
+            print(f"FAIL: content/posts/{slug}.html has broken links:")
             for name, attr, val in broken_links:
                 print(f"  - <{name} {attr}=\"{val}\"> is broken!")
             all_ok = False
@@ -141,7 +141,7 @@ def validate_html_files(posts_data, pages_data):
     # 2. Validate pages
     for page in pages_data:
         slug = page["slug"]
-        html_file = os.path.join(workspace_dir, "data", "pages", f"{slug}.html")
+        html_file = os.path.join(workspace_dir, "content", "pages", f"{slug}.html")
         fake_file_path = os.path.join(workspace_dir, "pages", slug, "index.html")
         
         if not os.path.exists(html_file):
@@ -182,7 +182,7 @@ def validate_html_files(posts_data, pages_data):
                 broken_links.append((name, attr, val))
                 
         if broken_links:
-            print(f"FAIL: data/pages/{slug}.html has broken links:")
+            print(f"FAIL: content/pages/{slug}.html has broken links:")
             for name, attr, val in broken_links:
                 print(f"  - <{name} {attr}=\"{val}\"> is broken!")
             all_ok = False
@@ -202,7 +202,7 @@ def validate_main_pages(posts_data=None):
     # Add paginated pages and tag pages
     for root, dirs, files in os.walk(workspace_dir):
         # skip posts and some system/data directories
-        if any(p in root for p in ['/posts/', '/.git/', '/scratch/', 'data/posts', 'data/pages']):
+        if any(p in root for p in ['/posts/', '/.git/', '/scratch/', 'content/posts', 'content/pages']):
             continue
         for f in files:
             if f.endswith('.html'):

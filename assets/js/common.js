@@ -589,7 +589,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.className = 'post-template';
         mainEl.className = 'post';
         try {
-          const contentRes = await fetch(`data/posts/${slug}.html`);
+          const contentRes = await fetch(`content/posts/${slug}.html`);
           if (!contentRes.ok) throw new Error(`Failed to load content for post: ${slug}`);
           const contentHtml = await contentRes.text();
           mainEl.innerHTML = renderPost(postMeta, contentHtml);
@@ -614,7 +614,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.className = bodyClass;
         mainEl.className = page.main_class || '';
         try {
-          const contentRes = await fetch(`data/pages/${slug}.html`);
+          const contentRes = await fetch(`content/pages/${slug}.html`);
           if (!contentRes.ok) throw new Error(`Failed to load content for page: ${slug}`);
           const contentHtml = await contentRes.text();
           mainEl.innerHTML = normalizeContentHTML(contentHtml, `pages/${page.slug}/`);

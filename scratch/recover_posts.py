@@ -4,8 +4,8 @@ import subprocess
 from bs4 import BeautifulSoup
 
 ROOT_DIR = "/Users/phileasdazeleygaist/Desktop/My Websites/my blog/phileasdg.github.io"
-DATA_DIR = os.path.join(ROOT_DIR, "data")
-POSTS_CONTENT_DIR = os.path.join(DATA_DIR, "posts")
+CONTENT_DIR = os.path.join(ROOT_DIR, "content")
+POSTS_CONTENT_DIR = os.path.join(CONTENT_DIR, "posts")
 
 def recover_missing_posts():
     posts_json_path = os.path.join(DATA_DIR, "posts.json")
