@@ -5,6 +5,21 @@ from bs4 import BeautifulSoup
 
 workspace_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 posts_json_path = os.path.join(workspace_dir, "data", "posts.json")
+pages_json_path = os.path.join(workspace_dir, "data", "pages.json")
+
+def validate_pages_json():
+    print("--- Validating pages.json ---")
+    if not os.path.exists(pages_json_path):
+        print("FAIL: pages.json does not exist!")
+        return None
+    try:
+        with open(pages_json_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        print(f"SUCCESS: pages.json parsed correctly. Total pages: {len(data)}")
+        return data
+    except Exception as e:
+        print(f"FAIL: Error parsing pages.json: {e}")
+        return None
 
 def validate_posts_json():
     print("--- Validating posts.json ---")
@@ -20,7 +35,7 @@ def validate_posts_json():
         print(f"FAIL: Error parsing posts.json: {e}")
         return None
 
-def check_file_exists(base_dir, relative_path, current_file_path):
+def check_file_exists(base_dir, relative_path, current_file_path, posts_data=None):
     # Resolve the path relative to the directory containing current_file_path
     file_dir = os.path.dirname(current_file_path)
     # Handle absolute looking or site-root looking paths if any, but since they should be relative:
@@ -33,6 +48,29 @@ def check_file_exists(base_dir, relative_path, current_file_path):
     if clean_path.startswith(('http://', 'https://', 'mailto:', '//', 'tel:')):
         return True
         
+    # Check for SPA dynamic routes resolved relative to base_dir
+    resolved_full_path = os.path.normpath(os.path.join(file_dir, clean_path))
+    rel_from_root = os.path.relpath(resolved_full_path, base_dir).replace('\\', '/')
+
+    if rel_from_root.startswith('posts/'):
+        parts = rel_from_root.split('/')
+        if len(parts) >= 2:
+            slug = parts[1]
+            if posts_data and any(p.get("slug") == slug for p in posts_data):
+                return True
+    elif rel_from_root.startswith('pages/'):
+        parts = rel_from_root.split('/')
+        if len(parts) >= 2:
+            slug = parts[1]
+            pages_json = os.path.join(base_dir, "data", "pages.json")
+            if os.path.exists(pages_json):
+                with open(pages_json, 'r', encoding='utf-8') as f:
+                    pages_data = json.load(f)
+                    if any(p.get("slug") == slug for p in pages_data):
+                        return True
+    elif rel_from_root.startswith('tags/') or rel_from_root.startswith('authors/'):
+        return True
+
     resolved_path = os.path.normpath(os.path.join(file_dir, clean_path))
     
     # Check if file exists, or if it's a directory, check if index.html exists inside it
@@ -47,24 +85,24 @@ def check_file_exists(base_dir, relative_path, current_file_path):
             
     return False
 
-def validate_html_files(posts_data):
-    print("--- Validating Post HTML files ---")
+def validate_html_files(posts_data, pages_data):
+    print("--- Validating Post and Page HTML files ---")
     all_ok = True
     
+    # 1. Validate posts
     for post in posts_data:
         slug = post["slug"]
-        post_dir = os.path.join(workspace_dir, "posts", slug)
-        html_file = os.path.join(post_dir, "index.html")
+        html_file = os.path.join(workspace_dir, "data", "posts", f"{slug}.html")
+        fake_file_path = os.path.join(workspace_dir, "posts", slug, "index.html")
         
         if not os.path.exists(html_file):
-            print(f"FAIL: Post folder or index.html missing for slug: {slug} at {html_file}")
+            print(f"FAIL: Post HTML file missing for slug: {slug} at {html_file}")
             all_ok = False
             continue
             
         with open(html_file, 'r', encoding='utf-8') as f:
             soup = BeautifulSoup(f.read(), 'html.parser')
             
-        # Check all links (a, link) and media (img, script)
         elements_to_check = []
         for tag in soup.find_all(['a', 'link', 'img', 'script', 'source']):
             url = None
@@ -77,10 +115,8 @@ def validate_html_files(posts_data):
                 attr = 'src/srcset'
                 
             if url:
-                # Handle srcset which can contain multiple urls separated by commas
                 urls = []
                 if tag.name == 'source' or (tag.name == 'img' and tag.has_attr('srcset')):
-                    # basic parsing for srcset
                     for part in url.split(','):
                         part = part.strip()
                         if part:
@@ -93,22 +129,69 @@ def validate_html_files(posts_data):
                     
         broken_links = []
         for name, attr, val in elements_to_check:
-            if not check_file_exists(workspace_dir, val, html_file):
+            if not check_file_exists(workspace_dir, val, fake_file_path, posts_data):
                 broken_links.append((name, attr, val))
                 
         if broken_links:
-            print(f"FAIL: {slug}/index.html has broken links:")
+            print(f"FAIL: data/posts/{slug}.html has broken links:")
             for name, attr, val in broken_links:
                 print(f"  - <{name} {attr}=\"{val}\"> is broken!")
             all_ok = False
-        else:
-            pass # print(f"OK: {slug}/index.html")
+            
+    # 2. Validate pages
+    for page in pages_data:
+        slug = page["slug"]
+        html_file = os.path.join(workspace_dir, "data", "pages", f"{slug}.html")
+        fake_file_path = os.path.join(workspace_dir, "pages", slug, "index.html")
+        
+        if not os.path.exists(html_file):
+            print(f"FAIL: Page HTML file missing for slug: {slug} at {html_file}")
+            all_ok = False
+            continue
+            
+        with open(html_file, 'r', encoding='utf-8') as f:
+            soup = BeautifulSoup(f.read(), 'html.parser')
+            
+        elements_to_check = []
+        for tag in soup.find_all(['a', 'link', 'img', 'script', 'source']):
+            url = None
+            attr = None
+            if tag.name in ('a', 'link'):
+                url = tag.get('href')
+                attr = 'href'
+            elif tag.name in ('img', 'script', 'source'):
+                url = tag.get('src') or tag.get('srcset')
+                attr = 'src/srcset'
+                
+            if url:
+                urls = []
+                if tag.name == 'source' or (tag.name == 'img' and tag.has_attr('srcset')):
+                    for part in url.split(','):
+                        part = part.strip()
+                        if part:
+                            urls.append(part.split()[0])
+                else:
+                    urls = [url]
+                    
+                for u in urls:
+                    elements_to_check.append((tag.name, attr, u))
+                    
+        broken_links = []
+        for name, attr, val in elements_to_check:
+            if not check_file_exists(workspace_dir, val, fake_file_path, posts_data):
+                broken_links.append((name, attr, val))
+                
+        if broken_links:
+            print(f"FAIL: data/pages/{slug}.html has broken links:")
+            for name, attr, val in broken_links:
+                print(f"  - <{name} {attr}=\"{val}\"> is broken!")
+            all_ok = False
             
     if all_ok:
-        print("SUCCESS: All post HTML files have valid relative resource and link paths.")
+        print("SUCCESS: All post and page HTML files have valid relative resource and link paths.")
     return all_ok
 
-def validate_main_pages():
+def validate_main_pages(posts_data=None):
     print("--- Validating Main HTML Pages ---")
     all_ok = True
     main_files = [
@@ -118,8 +201,8 @@ def validate_main_pages():
     
     # Add paginated pages and tag pages
     for root, dirs, files in os.walk(workspace_dir):
-        # skip posts and some system directories
-        if any(p in root for p in ['/posts/', '/.git/', '/scratch/']):
+        # skip posts and some system/data directories
+        if any(p in root for p in ['/posts/', '/.git/', '/scratch/', 'data/posts', 'data/pages']):
             continue
         for f in files:
             if f.endswith('.html'):
@@ -143,7 +226,7 @@ def validate_main_pages():
                 
         broken_links = []
         for name, attr, val in elements_to_check:
-            if not check_file_exists(workspace_dir, val, html_file):
+            if not check_file_exists(workspace_dir, val, html_file, posts_data):
                 broken_links.append((name, attr, val))
                 
         # Report
@@ -160,12 +243,13 @@ def validate_main_pages():
 
 if __name__ == "__main__":
     posts = validate_posts_json()
-    if posts:
-        posts_ok = validate_html_files(posts)
-        main_ok = validate_main_pages()
-        if posts_ok and main_ok:
+    pages = validate_pages_json()
+    if posts and pages:
+        html_ok = validate_html_files(posts, pages)
+        main_ok = validate_main_pages(posts)
+        if html_ok and main_ok:
             print("\n*** ALL CHECKS PASSED SUCCESSFULLY! ***")
         else:
             print("\n*** SOME CHECKS FAILED! ***")
     else:
-        print("Validation stopped due to posts.json failure.")
+        print("Validation stopped due to metadata file loading failure.")
