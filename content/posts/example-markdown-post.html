@@ -1,0 +1,53 @@
+<p>Welcome to the new Markdown publishing workflow! This example post showcases all the content types and formatting options you might want to use when writing your articles.</p>
+<h2>1. Text Formatting & Hierarchy</h2>
+<p>You can write headings, sub-headings, and standard body text with simple styling:</p>
+<ul>
+<li><strong>Bold Text:</strong> Wrap text in double asterisks (<code>**bold**</code>).</li>
+</ul>
+<p><em> </em>Italic Text:* Wrap text in single asterisks (<code>*italic*</code>) or underscores (<code>_italic_</code>).</p>
+<ul>
+<li><code>Inline Code</code>: Wrap code or terms in backticks (`<code> </code>code<code> </code>`).</li>
+</ul>
+<h3>Subsection Checklist</h3>
+<p>1. Write the draft in Markdown.</p>
+<p>2. Add YAML frontmatter at the top.</p>
+<p>3. Commit and push!</p>
+<p>---</p>
+<h2>2. Lists and Lists Items</h2>
+<p>You can create ordered and unordered lists easily:</p>
+<ul>
+<li><strong>Unordered List Item 1</strong></li>
+<li><strong>Unordered List Item 2</strong></li>
+<li>Indented sub-items are also supported.</li>
+<li>Another sub-item.</li>
+</ul>
+<p>---</p>
+<h2>3. Code Blocks with Syntax Highlighting</h2>
+<p>Write multi-line code blocks with language-specific syntax highlighting (powered by Prism.js):</p>
+<pre><code class="language-javascript">
+// A simple JavaScript function to calculate the Fibonacci sequence
+function fibonacci(n) {
+  if (n &lt;= 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+console.log(fibonacci(10)); // Outputs: 55
+</code></pre>
+<pre><code class="language-python">
+# A simple Python class
+class Agent:
+    def __init__(self, name):
+        self.name = name
+        
+    def greet(self):
+        return f"Hello, I am {self.name}!"
+</code></pre>
+<p>---</p>
+<h2>4. Media & Embeds</h2>
+<p>You can embed images using Markdown syntax:</p>
+<img src="media/imgs/hypergraph-plotter.png" alt="Hypergraph Plotter Card Thumbnail" />
+<p>You can also drop raw HTML blocks like video <code><iframe></code> embeds directly into the page:</p>
+<figure class="post__video">
+<iframe width="560" height="314" src="https://www.youtube.com/embed/mBQfjY_g-pI" frameborder="0" allowfullscreen></iframe>
+</figure>
+<p>Enjoy writing!</p>

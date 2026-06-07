@@ -1,6 +1,20 @@
-<p><strong>Note: </strong>This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3096615?p<em>p</em>auth=jA2YdLGR">here</a>.</p>
-<h2>Introduction</h2>
-<p>The forest fire model is one of the simplest computational models to display self-organised criticality. The model is a probabilistic cellular automaton with the following rules. At each computation/time step:</p>
+---
+title: "A Forest Fire Model in 1, 2, and 3 Dimensions"
+date: "2024-05-03T23:38"
+tags: ["Art","Cellular Automata","Complex Systems","Ecology","Environmental Science","Modelling","Programming","Work at Wolfram"]
+thumbnail: "media/posts/36/Animation1.gif"
+thumbWidth: 1100
+thumbHeight: 834
+date_modified: "2026-01-17T17:24:01+01:00"
+date_published: "2024-05-03T23:38:15+02:00"
+---
+
+**Note: **This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post [here](https://community.wolfram.com/groups/-/m/t/3096615?p_p_auth=jA2YdLGR). 
+
+## Introduction
+
+The forest fire model is one of the simplest computational models to display self-organised criticality. The model is a probabilistic cellular automaton with the following rules. At each computation/time step:
+
 <div id="cell-c6d531d9-bde4-e940-8566-2ff3288d6302" class="cell">
 <div class="cell-wrapper">
 <div class="cell-content">
@@ -47,9 +61,11 @@
 <div id="cell-3e894a24-cbce-354d-8f40-865531a2b60e" class="cell">
 <div class="cell-wrapper">
 <div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
+
 <div class="cell-content">
 <div>
 <div class="native-layout native-layout-simple"><span class="cc3" data-native-text="true">Following the convention for 1-dimensional cellular automata, we stack the arrays for subsequent time steps vertically and in sequence. In the resulting graphic, space is represented horizontally and time flows vertically from top to bottom.</span></div>
+
 <div>
 <figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/36/Screenshot-2024-07-26-at-11.54.01.png" alt="" width="530" height="292" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-11.54.01-xs.png 300w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-11.54.01-sm.png 480w ,https://phileasdg.github.io/media/posts/36/responsive/Screenshot-2024-07-26-at-11.54.01-md.png 768w"></figure>
 <p>See some one dimensional trajectories in the animation below, or head to <a href="https://community.wolfram.com/groups/-/m/t/3096615">the original post </a>to see an interactive example:</p>
@@ -72,6 +88,7 @@
 <li><a href="https://www.sciencedirect.com/science/article/abs/pii/037596019090451S?via%3Dihub">Bak, Per, Kan Chen, and Chao Tang. 'A Forest-Fire Model and Some Thoughts on Turbulence'. Physics Letters A 147, no. 5 (16 July 1990): 297\[Dash]300.</a></li>
 </ul>
 </div>
+
 </div>
 </div>
 </div>

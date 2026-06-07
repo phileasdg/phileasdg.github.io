@@ -1,14 +1,36 @@
-<p><strong>Note: </strong>This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live code or to download this text alongside the source code, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3258063">here</a>.</p>
-<p>See also: <a href="https://community.wolfram.com/groups/-/m/t/3271633">M<span class="cc6" data-native-text="true">athematical marbling animation</span></a>, for even more marbling magic.</p>
-<h2>Paper Marbling and Mathematical Marbling</h2>
-<h3>What is Paper Marbling?</h3>
-<p>Ink marbling is the practice of dipping or dripping colorful inks or dyes onto a liquid surface, and swirling, displacing, cutting, dragging, and otherwise forming the ink into a design, often akin to patterns in marble. The earliest verified accounts of ink marbling date back to 12th century Japan, but the practice has a rich history throughout Asia, the Islamic World, and in Europe where it was extensively used to decorate book bindings. In Turkey, the practice is called “ebru” after the Persian word “ebrū”, which means “cloud-like”.</p>
+---
+title: "Creative Generative Design with Mathematical Marbling"
+date: "2024-10-24T21:15"
+tags: ["Art","Modelling","Programming","Wolfram Language","Work at Wolfram"]
+thumbnail: "media/posts/41/Mathematical-Marbling-Banner.png"
+thumbWidth: 4000
+thumbHeight: 2394
+date_modified: "2026-01-17T21:10:42+01:00"
+date_published: "2024-10-24T21:15:01+02:00"
+---
+
+**Note: **This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live code or to download this text alongside the source code, please visit the original post [here](https://community.wolfram.com/groups/-/m/t/3258063). 
+
+See also: [M<span class="cc6" data-native-text="true">athematical marbling animation</span>](https://community.wolfram.com/groups/-/m/t/3271633), for even more marbling magic.
+
+## Paper Marbling and Mathematical Marbling
+
+### What is Paper Marbling?
+
+Ink marbling is the practice of dipping or dripping colorful inks or dyes onto a liquid surface, and swirling, displacing, cutting, dragging, and otherwise forming the ink into a design, often akin to patterns in marble. The earliest verified accounts of ink marbling date back to 12th century Japan, but the practice has a rich history throughout Asia, the Islamic World, and in Europe where it was extensively used to decorate book bindings. In Turkey, the practice is called “ebru” after the Persian word “ebrū”, which means “cloud-like”.
+
 <figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/41/Screenshot-2024-12-16-at-20.48.07.png" alt="" width="538" height="345" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/41/responsive/Screenshot-2024-12-16-at-20.48.07-xs.png 300w ,https://phileasdg.github.io/media/posts/41/responsive/Screenshot-2024-12-16-at-20.48.07-sm.png 480w ,https://phileasdg.github.io/media/posts/41/responsive/Screenshot-2024-12-16-at-20.48.07-md.png 768w"></figure>
-<p>I find ink marbling deeply enchanting. The imprecision of the medium results in organic-seeming, flowing shapes - never perfectly regular or completely random. By combining techniques, artists can create a wide variety of motifs and designs, from waves and spirals to scallop shells, flowers, and trees.</p>
-<h3>Mathematical Marbling</h3>
-<p><span class="cc1" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">Mathematical marbling refers to the mathematical reproduction of the marbling process. Aubrey Jaffer has an excellent series of blog posts on the subject </span><a href="https://people.csail.mit.edu/jaffer/Marbling/"><span class="cc4" data-native-text="true">on his website</span></a><span class="cc1" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">. He has also co-authored </span><a href="https://ieeexplore.ieee.org/author/38513250100"><span class="cc4" data-native-text="true">several papers</span></a><span class="cc1" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true"> on mathematical and computational methods for marbling, </span><a href="https://ieeexplore.ieee.org/document/7478444"><span class="cc4" data-native-text="true">including on marbling in 3D</span></a><span class="cc1" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">. In this technical article, I will describe, reproduce, and demonstrate some mathematical marbling methods from his work.</span></p>
-<p><span class="cc1" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">In his blog post </span><a href="https://people.csail.mit.edu/jaffer/Marbling/Mathematics"><span class="cc4" data-native-text="true">The mathematics of marbling</span></a><span class="cc1" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">, Jaffer outlines several marbling methods that don’t require fluid mechanics theory to perform. This article will explore vector graphics implementations of three of these methods in Wolfram Language, respectively, for dripping ink drops on a marbling canvas such that new drops displace and distort previous ones, for tracing lines through the ink using a pointed object (or tine), and for tracing circles through the ink using a pointed object. The lines and curves produced by displacing ink using a sharp tool like a toothpick are known as tine lines.</span></p>
-<p><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">For each of these methods, I’ll split my exploration into a short description of the process, an implementation section containing my code, and an exploratory examples section demonstrating how you can use and combine these techniques to produce computational marbling art.</span></p>
+
+I find ink marbling deeply enchanting. The imprecision of the medium results in organic-seeming, flowing shapes - never perfectly regular or completely random. By combining techniques, artists can create a wide variety of motifs and designs, from waves and spirals to scallop shells, flowers, and trees.
+
+### Mathematical Marbling
+
+<span class="cc1" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">Mathematical marbling refers to the mathematical reproduction of the marbling process. Aubrey Jaffer has an excellent series of blog posts on the subject </span>[<span class="cc4" data-native-text="true">on his website</span>](https://people.csail.mit.edu/jaffer/Marbling/)<span class="cc1" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">. He has also co-authored </span>[<span class="cc4" data-native-text="true">several papers</span>](https://ieeexplore.ieee.org/author/38513250100)<span class="cc1" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true"> on mathematical and computational methods for marbling, </span>[<span class="cc4" data-native-text="true">including on marbling in 3D</span>](https://ieeexplore.ieee.org/document/7478444)<span class="cc1" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">. In this technical article, I will describe, reproduce, and demonstrate some mathematical marbling methods from his work.</span>
+
+<span class="cc1" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">In his blog post </span>[<span class="cc4" data-native-text="true">The mathematics of marbling</span>](https://people.csail.mit.edu/jaffer/Marbling/Mathematics)<span class="cc1" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">, Jaffer outlines several marbling methods that don’t require fluid mechanics theory to perform. This article will explore vector graphics implementations of three of these methods in Wolfram Language, respectively, for dripping ink drops on a marbling canvas such that new drops displace and distort previous ones, for tracing lines through the ink using a pointed object (or tine), and for tracing circles through the ink using a pointed object. The lines and curves produced by displacing ink using a sharp tool like a toothpick are known as tine lines.</span>
+
+<span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">For each of these methods, I’ll split my exploration into a short description of the process, an implementation section containing my code, and an exploratory examples section demonstrating how you can use and combine these techniques to produce computational marbling art.</span>
+
 <div id="cell-2060b4c3-02e0-c040-9f43-92dbf2116dcf" class="cell">
 <div class="cell-wrapper">
 <div class="cell-content">
@@ -23,7 +45,7 @@
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/41/Screenshot-2024-12-16-at-20.54.54.png" alt="" width="1780" height="1586" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/41/responsive/Screenshot-2024-12-16-at-20.54.54-xs.png 300w ,https://phileasdg.github.io/media/posts/41/responsive/Screenshot-2024-12-16-at-20.54.54-sm.png 480w ,https://phileasdg.github.io/media/posts/41/responsive/Screenshot-2024-12-16-at-20.54.54-md.png 768w"></figure>
 <h3>Examples</h3>
 <p>The <em>dripDrops</em> function takes as its arguments: </p>
-<p><ol></p>
+<ol>
 <li>A list of polygons, or an empty list defining the existing geometry on the canvas.</li>
 <li>A list defining the sequence of new drop positions.</li>
 <li>A list of drop sizes. </li>
@@ -80,7 +102,7 @@
 <h3>Examples: tineLine and combLine</h3>
 <h4>Distort polygons with a single tine line using tineLine</h4>
 <p>The <em>tineLine</em> function distorts a polygon along an infinite tine line defined by a point <em>b</em> and unit vector <em>m</em>, alongside the tine parameters <em>z</em> and <em>c</em>. The function takes the following arguments:</p>
-<p><ol></p>
+<ol>
 <li>A polygon to distort.</li>
 <li>An arbitrary point on the desired tine line.</li>
 <li>A unit vector in the direction of the tine line.</li>
@@ -93,7 +115,7 @@
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/41/Screenshot-2024-12-16-at-21.27.21.png" alt="" width="538" height="158" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/41/responsive/Screenshot-2024-12-16-at-21.27.21-xs.png 300w ,https://phileasdg.github.io/media/posts/41/responsive/Screenshot-2024-12-16-at-21.27.21-sm.png 480w ,https://phileasdg.github.io/media/posts/41/responsive/Screenshot-2024-12-16-at-21.27.21-md.png 768w"></figure>
 <h4>Distort polygons with an arbitrary number of tine lines using combLine</h4>
 <p>The <em>combLine</em> function extends <em>tineLine</em>'s functionality to allow dragging multiple tines across polygons with a single function call. It takes the following arguments: </p>
-<p><ol></p>
+<ol>
 <li>A list of polygons, or empty list representing the canvas, or marbling tank. </li>
 <li>A list of arbitrary points on the desired tine lines.</li>
 <li>A list of unit vectors defining the line directions, or a single unit vector.</li>
@@ -131,7 +153,7 @@
 <h3>Examples</h3>
 <h4>Distort polygons with a single tine line using tineCircle</h4>
 <p>The <em>tineCircle</em> function distorts a polygon along a tine circle defined by the central point <em>b</em> and radius <em>r</em>, alongside the tine parameters <em>z</em> and <em>c</em>. The function takes the following arguments:</p>
-<p><ol></p>
+<ol>
 <li>A polygon to distort.</li>
 <li>The centre of the desired tine circle.</li>
 <li>The radius of the desired tine circle.</li>
@@ -144,7 +166,7 @@
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/41/Screenshot-2024-12-16-at-21.39.01.png" alt="" width="594" height="175" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/41/responsive/Screenshot-2024-12-16-at-21.39.01-xs.png 300w ,https://phileasdg.github.io/media/posts/41/responsive/Screenshot-2024-12-16-at-21.39.01-sm.png 480w ,https://phileasdg.github.io/media/posts/41/responsive/Screenshot-2024-12-16-at-21.39.01-md.png 768w"></figure>
 <h4>Distort polygons with an arbitrary number of tine circles using combCircle</h4>
 <p>The <em>combCircle</em> function extends <em>tineCircle</em>'s functionality to allow dragging multiple tines in circles through polygons with a single function call. It takes the following arguments: </p>
-<p><ol></p>
+<ol>
 <li>A list of polygons, or empty list representing the canvas, or marbling tank. </li>
 <li>A list of centre points of the desired tine circles.</li>
 <li>A list of radii of the desired tine circles, or a single radius value for all specified tine circles.</li>
@@ -204,6 +226,7 @@
 <p><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">Screen capture of the interactive marbling canvas interface:</span></p>
 <figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/41/Screenshot-2024-12-16-at-21.24.33.png" alt="" width="485" height="658" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/41/responsive/Screenshot-2024-12-16-at-21.24.33-xs.png 300w ,https://phileasdg.github.io/media/posts/41/responsive/Screenshot-2024-12-16-at-21.24.33-sm.png 480w ,https://phileasdg.github.io/media/posts/41/responsive/Screenshot-2024-12-16-at-21.24.33-md.png 768w"></figure>
 </div>
+
 <div class="cell-content">
 <h2>Conclusion</h2>
 <p>This exploration into mathematical marbling showcases the power and flexibility of Wolfram Language for generative art exploration, process design, and process implementation. By combining mathematical transformations, we can simulate traditional marbling techniques digitally, opening up endless possibilities for experimentation and creativity.</p>
@@ -216,47 +239,61 @@
 <div id="cell-9bddc041-7da9-af48-a5be-2e27d70ab293" class="cell">
 <div class="cell-wrapper">
 <div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
+
 <div class="cell-content">
 <div class="native-layout native-layout-simple"><a href="https://commons.wikimedia.org/wiki/File:Battal_Ebru.jpg"><span class="cc1" data-native-text="true">Akcire.14. (2020). Battal Ebru.</span></a></div>
+
 </div>
 </div>
 </div>
+
 <div id="cell-3b10e018-ef9a-2041-8cd4-5d10d278c7d3" class="cell">
 <div class="cell-wrapper">
 <div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
+
 <div class="cell-content">
 <div>
 <div class="native-layout native-layout-simple"><a href="https://commons.wikimedia.org/wiki/File:Marbled_endpaper_from_Die_Nachfolge_Christi_ed._Ludwig_Donin_(Vienna_ca._1875)_1000ppi_(cropped).png"><span class="cc1" data-native-text="true">Aristeas, C. (1875). English: Marbled endpaper from a copy of Die Nachfolge Christi in vier Büchern von Thomas von Kempis.</span></a></div>
+
 </div>
 </div>
 </div>
 </div>
+
 <div id="cell-b5342346-ec7c-cf43-a463-21b2248273ce" class="cell">
 <div class="cell-wrapper">
 <div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
+
 <div class="cell-content">
 <div>
 <div class="native-layout native-layout-simple"><a href="https://people.csail.mit.edu/jaffer/Marbling/Mathematics"><span class="cc1" data-native-text="true">Jaffer, A. (n.d.). The Mathematics of Marbling. Retrieved 26 August 2024</span></a></div>
+
 </div>
 </div>
 </div>
 </div>
+
 <div id="cell-080ad89a-93f5-f04d-ac94-d936423e66e2" class="cell">
 <div class="cell-wrapper">
 <div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
+
 <div class="cell-content">
 <div>
 <div class="native-layout native-layout-simple"><a href="https://doi.org/10.1109/MCG.2011.51"><span class="cc1" data-native-text="true">Shufang Lu, Jaffer, A., Xiaogang Jin, Hanli Zhao, &amp; Xiaoyang Mao. (2012). Mathematical Marbling. IEEE Computer Graphics and Applications, 32(6), 26–35.</span></a></div>
+
 </div>
 </div>
 </div>
 </div>
+
 <div id="cell-f91b2dd1-29c9-ac49-b8c9-92f290dfeb43" class="cell">
 <div class="cell-wrapper">
 <div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
+
 <div class="cell-content">
 <div>
 <div class="native-layout native-layout-simple"><a href="https://www.skillshare.com/es/blog/suminagashi-aprende-el-arte-del-marmoleado-de-papel-japones/"><span class="cc1" data-native-text="true">Turner, E. (2022, April 13). Suminagashi: Aprende el arte del marmoleado de papel japonés. Skillshare Blog.</span></a></div>
+
 </div>
 </div>
 </div>

@@ -1,49 +1,106 @@
-<p><strong>Note: </strong>This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live code or to download this text alongside the source code, please visit the original post <a href="https://community.wolfram.com/groups/-/m/t/3582661">here</a>.</p>
-<h2>Introduction: The ESA WorldCover dataset</h2>
-<p>The <a href="https://esa-worldcover.org/en">European Space Agency's WorldCover</a> is a freely accessible dataset providing global land cover classification at 10-meter resolution derived from Sentinel-1 and Sentinel-2 satellite imagery. Released in 2020 and updated in 2021, the ESA reports that the updated dataset achieves an overall accuracy of 76.7% in identifying land cover types, including forests, grasslands, croplands, urban areas, and water bodies across the entire Earth's surface.</p>
-<p>The high-resolution imagery WorldCover offers is especially valuable for environmental monitoring, urban planning, and understanding how human activity impacts and encroaches upon wild landscapes. WorldCover's 10-meter resolution can capture fine-grained details such as the difference a small forest patch and an adjacent agricultural field, or between building clusters within a neighborhood. The ESA distributes WorldCover imagery through several access points, including through two WMTS services (one for the 2020 product, and another for the 2021 version). You can find a list of these access points at<a href="https://esa-worldcover.org/en/data-access"> this link</a>.</p>
-<p>ESA WorldCover classifies land cover using the following eleven land cover classes:</p>
+---
+title: "Mapping Global Land Cover with European Space Agency Data"
+date: "2026-01-10T17:01"
+tags: ["Ecology","Environmental Science","Geography & GIS","Programming","Wolfram Language"]
+thumbnail: "media/posts/52/banner.png"
+thumbWidth: 1959
+thumbHeight: 1228
+date_modified: "2026-01-17T21:08:42+01:00"
+date_published: "2026-01-10T17:01:14+01:00"
+---
+
+**Note: **This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live code or to download this text alongside the source code, please visit the original post [here](https://community.wolfram.com/groups/-/m/t/3582661). 
+
+## Introduction: The ESA WorldCover dataset
+
+The [European Space Agency's WorldCover](https://esa-worldcover.org/en) is a freely accessible dataset providing global land cover classification at 10-meter resolution derived from Sentinel-1 and Sentinel-2 satellite imagery. Released in 2020 and updated in 2021, the ESA reports that the updated dataset achieves an overall accuracy of 76.7% in identifying land cover types, including forests, grasslands, croplands, urban areas, and water bodies across the entire Earth's surface.
+
+The high-resolution imagery WorldCover offers is especially valuable for environmental monitoring, urban planning, and understanding how human activity impacts and encroaches upon wild landscapes. WorldCover's 10-meter resolution can capture fine-grained details such as the difference a small forest patch and an adjacent agricultural field, or between building clusters within a neighborhood. The ESA distributes WorldCover imagery through several access points, including through two WMTS services (one for the 2020 product, and another for the 2021 version). You can find a list of these access points at[ this link](https://esa-worldcover.org/en/data-access).
+
+ESA WorldCover classifies land cover using the following eleven land cover classes:
+
 <figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/52/Screenshot-2026-01-10-at-11.02.55.png" alt="" width="546" height="70" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.02.55-xs.png 300w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.02.55-sm.png 480w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.02.55-md.png 768w"></figure>
-<p>In Wolfram Language (WL), it's fairly straightforward to access ESA WorldCover data through <a href="https://reference.wolfram.com/language/ref/GeoGraphics.html">GeoGraphics</a> using the <a href="https://reference.wolfram.com/language/ref/GeoServer.html">GeoServer</a> option. This way, we can visualize land cover for any region on Earth, from small scale features like countryside human settlements to entire continents, and compare it to other geographic data to uncover patterns in land use and other anthropogenic environmental impacts.</p>
-<p>This short piece will demonstrate how to connect to ESA WorldCover to make custom geographic visualisations in WL, and illustrate the flexibility of the Wolfram environment for this kind of data exploration by visualizing the land cover around the twenty largest US cities by population size, and around the 63 US national parks. The code to generate the former set of maps will be about five lines long, and about twenty lines long for the latter.</p>
-<h2>Connecting to ESA WorldCover with GeoGraphics</h2>
-<p>First, let's define the GeoServer options to access the WorldCover datasets.</p>
-<p><em>GeoServer specification for ESA WorldCover 2020:</em></p>
+
+In Wolfram Language (WL), it's fairly straightforward to access ESA WorldCover data through [GeoGraphics](https://reference.wolfram.com/language/ref/GeoGraphics.html) using the [GeoServer](https://reference.wolfram.com/language/ref/GeoServer.html) option. This way, we can visualize land cover for any region on Earth, from small scale features like countryside human settlements to entire continents, and compare it to other geographic data to uncover patterns in land use and other anthropogenic environmental impacts.
+
+This short piece will demonstrate how to connect to ESA WorldCover to make custom geographic visualisations in WL, and illustrate the flexibility of the Wolfram environment for this kind of data exploration by visualizing the land cover around the twenty largest US cities by population size, and around the 63 US national parks. The code to generate the former set of maps will be about five lines long, and about twenty lines long for the latter.
+
+## Connecting to ESA WorldCover with GeoGraphics
+
+First, let's define the GeoServer options to access the WorldCover datasets.
+
+*GeoServer specification for ESA WorldCover 2020:*
+
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/52/Screenshot-2026-01-10-at-11.05.11.png" alt="" width="1330" height="224" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.05.11-xs.png 300w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.05.11-sm.png 480w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.05.11-md.png 768w"></figure>
-<p><em>GeoServer specification for ESA WorldCover 2021:</em></p>
+
+*GeoServer specification for ESA WorldCover 2021:*
+
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/52/Screenshot-2026-01-10-at-11.05.31.png" alt="" width="1314" height="220" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.05.31-xs.png 300w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.05.31-sm.png 480w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.05.31-md.png 768w"></figure>
-<p>While we're at it, let's define a legend with which to label our maps.</p>
-<p><em>Define a WorldCover legend: </em></p>
+
+While we're at it, let's define a legend with which to label our maps.
+
+*Define a WorldCover legend: *
+
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/52/Screenshot-2026-01-10-at-11.06.01.png" alt="" width="1278" height="678" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.06.01-xs.png 300w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.06.01-sm.png 480w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.06.01-md.png 768w"></figure>
-<p>We now have all the pieces needed to make WorldCover visualizations. To make a land cover map, simply call specify the region you'd like to plot and the GeoServer specification to use inside GeoGraphics.</p>
-<p><em>Map global land cover:</em></p>
+
+We now have all the pieces needed to make WorldCover visualizations. To make a land cover map, simply call specify the region you'd like to plot and the GeoServer specification to use inside GeoGraphics. 
+
+*Map global land cover:*
+
 <figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/52/Screenshot-2026-01-10-at-11.06.44.png" alt="" width="553" height="242" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.06.44-xs.png 300w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.06.44-sm.png 480w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.06.44-md.png 768w"></figure>
-<p>I've specified the <a href="https://reference.wolfram.com/language/ref/GeoZoomLevel.html">GeoZoomLevel</a> option manually in this example because the default setting results in imagery just below the resolution I want. This is a side-effect of the way the ESA WorldCover data services are set up. Let's come back to that later. For now, we'll keep specifying the zoom level manually.</p>
-<p>To add the legend we defined above to the plot, you can use <a href="https://reference.wolfram.com/language/ref/Labeled.html">Labeled</a>. The main advantage of using Labeled over <a href="https://reference.wolfram.com/language/ref/Legended.html">Legended</a> is that you can control where the legend goes with the third argument. If the example below had resulted in a wide map, for instance, we might have instead chosen to add the legend below the map using <a href="https://reference.wolfram.com/language/ref/Below.html">Below</a> as the third argument to <a href="https://reference.wolfram.com/language/ref/Labeled.html">Labeled</a> instead of <a href="https://reference.wolfram.com/language/ref/Right.html">Right</a>.</p>
-<p><em>Map the land cover in Illinois:</em></p>
+
+I've specified the [GeoZoomLevel](https://reference.wolfram.com/language/ref/GeoZoomLevel.html) option manually in this example because the default setting results in imagery just below the resolution I want. This is a side-effect of the way the ESA WorldCover data services are set up. Let's come back to that later. For now, we'll keep specifying the zoom level manually.
+
+To add the legend we defined above to the plot, you can use [Labeled](https://reference.wolfram.com/language/ref/Labeled.html). The main advantage of using Labeled over [Legended](https://reference.wolfram.com/language/ref/Legended.html) is that you can control where the legend goes with the third argument. If the example below had resulted in a wide map, for instance, we might have instead chosen to add the legend below the map using [Below](https://reference.wolfram.com/language/ref/Below.html) as the third argument to [Labeled](https://reference.wolfram.com/language/ref/Labeled.html) instead of [Right](https://reference.wolfram.com/language/ref/Right.html).
+
+*Map the land cover in Illinois:*
+
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/52/Screenshot-2026-01-10-at-11.09.06.png" alt="" width="586" height="569" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.09.06-xs.png 300w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.09.06-sm.png 480w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.09.06-md.png 768w"></figure>
-<p>We can easily compare both dataset versions by plotting the same map twice, once with each GeoServer specification.</p>
-<p><em>Compare imagery from WorldCover 2020 and WorldCover 2021 over the same region:</em></p>
+
+We can easily compare both dataset versions by plotting the same map twice, once with each GeoServer specification.
+
+*Compare imagery from WorldCover 2020 and WorldCover 2021 over the same region:*
+
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/52/Screenshot-2026-01-10-at-11.09.48.png" alt="" width="1448" height="774" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.09.48-xs.png 300w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.09.48-sm.png 480w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.09.48-md.png 768w"></figure>
-<p>By lightly modifying the previous example, we can make a side-by-side comparison of ESA WorldCover land cover classification with another map of the same region:</p>
-<p><em>Map the land cover around London: </em></p>
+
+By lightly modifying the previous example, we can make a side-by-side comparison of ESA WorldCover land cover classification with another map of the same region: 
+
+*Map the land cover around London: *
+
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/52/Screenshot-2026-01-10-at-11.11.04.png" alt="" width="1818" height="1140" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.11.04-xs.png 300w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.11.04-sm.png 480w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.11.04-md.png 768w"></figure>
-<p>Since the WorldCover dataset has global coverage, it can be used to visualise land cover for remote areas.</p>
-<p><em>Map the land cover on Kerguelen:</em></p>
+
+Since the WorldCover dataset has global coverage, it can be used to visualise land cover for remote areas.
+
+*Map the land cover on Kerguelen:*
+
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/52/Screenshot-2026-01-10-at-11.11.45.png" alt="" width="617" height="498" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.11.45-xs.png 300w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.11.45-sm.png 480w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.11.45-md.png 768w"></figure>
-<p>To adjust the automatic GeoZoomLevel setting I've opted to generate the map once with automatic settings, retrieving the chosen GeoZoomLevel from the result and adding a constant (I chose 2) to the result to get the adjusted setting to use in the final map. Then I recompute the final map with the adjusted GeoZoomLevel.</p>
-<p><em>Automatically set the zoom level to be a little higher than by default:</em></p>
+
+To adjust the automatic GeoZoomLevel setting I've opted to generate the map once with automatic settings, retrieving the chosen GeoZoomLevel from the result and adding a constant (I chose 2) to the result to get the adjusted setting to use in the final map. Then I recompute the final map with the adjusted GeoZoomLevel.
+
+*Automatically set the zoom level to be a little higher than by default:*
+
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/52/Screenshot-2026-01-10-at-11.12.29.png" alt="" width="692" height="498" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.12.29-xs.png 300w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.12.29-sm.png 480w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.12.29-md.png 768w"></figure>
-<p>In the following sections, I'll apply the connection to this dataset to automatically survey the land cover around the largest US cities by population, and all 63 US national parks.</p>
-<h2>Land cover around major US cities</h2>
-<p>We can apply this workflow to quickly visualize any set of locations. Let's start with the largest cities in the US.</p>
-<p><em>List the largest US cities by population:</em></p>
+
+In the following sections, I'll apply the connection to this dataset to automatically survey the land cover around the largest US cities by population, and all 63 US national parks.
+
+## Land cover around major US cities
+
+We can apply this workflow to quickly visualize any set of locations. Let's start with the largest cities in the US. 
+
+*List the largest US cities by population:*
+
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/52/Screenshot-2026-01-10-at-11.13.09.png" alt="" width="698" height="172" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.13.09-xs.png 300w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.13.09-sm.png 480w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.13.09-md.png 768w"></figure>
-<p>Plotting the ESA land cover for these cities yields important morphological visual contrasts. For example, Phoenix and Denver exemplify contiguous expansion into open terrain and are surrounded by arid shrubland and high plains grassland, respectively. In contrast, New York, San Jose and Seattle have sharp boundaries where development is strictly confined by valley topography or water bodies, and in Charlotte the built environment is heavily interspersed with dense tree canopy.</p>
+
+Plotting the ESA land cover for these cities yields important morphological visual contrasts. For example, Phoenix and Denver exemplify contiguous expansion into open terrain and are surrounded by arid shrubland and high plains grassland, respectively. In contrast, New York, San Jose and Seattle have sharp boundaries where development is strictly confined by valley topography or water bodies, and in Charlotte the built environment is heavily interspersed with dense tree canopy.
+
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/52/Screenshot-2026-01-10-at-11.13.36.png" alt="" width="1350" height="434" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.13.36-xs.png 300w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.13.36-sm.png 480w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.13.36-md.png 768w"></figure>
+
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/52/Screenshot-2026-01-10-at-11.23.04.png" alt="" width="1740" height="1384" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.23.04-xs.png 300w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.23.04-sm.png 480w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.23.04-md.png 768w"></figure>
-<p><em>Map the land cover around any of the twenty largest US cities by population:</em></p>
+
+*Map the land cover around any of the twenty largest US cities by population:*
+
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/52/Screenshot-2026-01-10-at-11.34.00.png" alt="" width="555" height="132" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.34.00-xs.png 300w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.34.00-sm.png 480w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.34.00-md.png 768w"></figure>
+
 <div class="gallery-wrapper"><div class="gallery"  data-is-empty="false" data-translation="Add images" data-columns="3">
 <figure class="gallery__item"><a href="https://phileasdg.github.io/media/posts/52/gallery/Austin.png" data-size="668x864"><img loading="lazy" src="https://phileasdg.github.io/media/posts/52/gallery/Austin-thumbnail.png" alt="" width="668" height="864"></a></figure>
 <figure class="gallery__item"><a href="https://phileasdg.github.io/media/posts/52/gallery/Charlotte.png" data-size="652x864"><img loading="lazy" src="https://phileasdg.github.io/media/posts/52/gallery/Charlotte-thumbnail.png" alt="" width="652" height="864"></a></figure>
@@ -66,16 +123,27 @@
 <figure class="gallery__item"><a href="https://phileasdg.github.io/media/posts/52/gallery/Seattle.png" data-size="531x864"><img loading="lazy" src="https://phileasdg.github.io/media/posts/52/gallery/Seattle-thumbnail.png" alt="" width="531" height="864"></a></figure>
 <figure class="gallery__item"><a href="https://phileasdg.github.io/media/posts/52/gallery/Washington.png" data-size="666x864"><img loading="lazy" src="https://phileasdg.github.io/media/posts/52/gallery/Washington-thumbnail.png" alt="" width="666" height="864"></a></figure>
 </div>
+
 </div>
-<h2>Land cover around US National Parks</h2>
-<p>Let's also try this for US national parks. In the last example, we used entities from the Wolfram Knowledgebase to define the geographic footprints of US cities to be plotted. We'll need to to something similar for national but since the knowledgebase does not have built-in entities for every park yet, we'll have to supplement the list with some custom-defined regions as well.</p>
-<p><em>Define an Association representing US national parks:</em></p>
+
+## Land cover around US National Parks
+
+Let's also try this for US national parks. In the last example, we used entities from the Wolfram Knowledgebase to define the geographic footprints of US cities to be plotted. We'll need to to something similar for national but since the knowledgebase does not have built-in entities for every park yet, we'll have to supplement the list with some custom-defined regions as well.
+
+*Define an Association representing US national parks:*
+
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/52/Screenshot-2026-01-10-at-11.30.39.png" alt="" width="1564" height="1320" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.30.39-xs.png 300w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.30.39-sm.png 480w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.30.39-md.png 768w"></figure>
-<p>Applying this workflow again to US National Parks, there are important contrasts in the landscape compositions. For instance, Denali and the Everglades have unique dominant cover types: permanent snow and grassland, and herbaceous wetland and mangroves, respectively, that stand apart from the arid shrubland and bare rock of Arches. Other contrasts are defined by topography and hydrography, such as the fragmented coastal forests of Acadia or the steep gradients of the Black Canyon. An outlier, Indiana Dunes is sharply bounded by adjacent urban and agricultural land.</p>
+
+Applying this workflow again to US National Parks, there are important contrasts in the landscape compositions. For instance, Denali and the Everglades have unique dominant cover types: permanent snow and grassland, and herbaceous wetland and mangroves, respectively, that stand apart from the arid shrubland and bare rock of Arches. Other contrasts are defined by topography and hydrography, such as the fragmented coastal forests of Acadia or the steep gradients of the Black Canyon. An outlier, Indiana Dunes is sharply bounded by adjacent urban and agricultural land.
+
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/52/Screenshot-2026-01-10-at-11.30.58.png" alt="" width="1550" height="414" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.30.58-xs.png 300w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.30.58-sm.png 480w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.30.58-md.png 768w"></figure>
+
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/52/Screenshot-2026-01-10-at-11.31.19.png" alt="" width="1810" height="1334" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.31.19-xs.png 300w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.31.19-sm.png 480w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.31.19-md.png 768w"></figure>
-<p><em>Map the land cover of any US national park:</em></p>
+
+*Map the land cover of any US national park:*
+
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/52/Screenshot-2026-01-10-at-11.39.04.png" alt="" width="618" height="168" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.39.04-xs.png 300w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.39.04-sm.png 480w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.39.04-md.png 768w"></figure>
+
 <div class="gallery-wrapper"><div class="gallery"  data-is-empty="false" data-translation="Add images" data-columns="3">
 <figure class="gallery__item"><a href="https://phileasdg.github.io/media/posts/52/gallery/Acadia-National-Park.png" data-size="720x715"><img loading="lazy" src="https://phileasdg.github.io/media/posts/52/gallery/Acadia-National-Park-thumbnail.png" alt="" width="720" height="715"></a></figure>
 <figure class="gallery__item"><a href="https://phileasdg.github.io/media/posts/52/gallery/American-Samoa.png" data-size="720x385"><img loading="lazy" src="https://phileasdg.github.io/media/posts/52/gallery/American-Samoa-thumbnail.png" alt="" width="720" height="385"></a></figure>
@@ -141,16 +209,29 @@
 <figure class="gallery__item"><a href="https://phileasdg.github.io/media/posts/52/gallery/Yosemite-National-Park.png" data-size="720x752"><img loading="lazy" src="https://phileasdg.github.io/media/posts/52/gallery/Yosemite-National-Park-thumbnail.png" alt="" width="720" height="752"></a></figure>
 <figure class="gallery__item"><a href="https://phileasdg.github.io/media/posts/52/gallery/Zion-National-Park.png" data-size="671x864"><img loading="lazy" src="https://phileasdg.github.io/media/posts/52/gallery/Zion-National-Park-thumbnail.png" alt="" width="671" height="864"></a></figure>
 </div>
+
 </div>
-<h2>Connecting to NASA remote sensing services</h2>
-<p>The ESA WorldCover dataset is a great resource for understanding land cover patterns, and luckily for us, we live in a world in which there are many more. Many remote sensing services are available as map tile servers (WMTS), and two of my favourite providers of high quality free remote sensing imagery datasets of this kind, often with global and sometimes even near real time coverage, are Copernicus Marine and NASA GIBS (Global Imagery Browse Services). You can access NASA GIBS remote sensing imagery using the RemoteSensing paclet, which I've previously written about <a href="https://community.wolfram.com/groups/-/m/t/2959942">here</a>.</p>
-<p>Suppose our reason for consulting ESA LandCover is that we'd like to better understand human environmental impacts globally. In that case, another dataset I'd recommend consulting is the Anthropogenic Biomes (or "Anthromes") map by Ellis &amp; Ramankutty (2008), which classifies Earth's terrestrial surface by the degree and type of human settlements.</p>
-<p>The anthropogenic biomes dataset puts human activity at the center of ecological classification, and that makes it an especially compelling tool to study the Anthropocene. It's also conveniently available through NASA GIBS via the RemoteSensing paclet, among over a thousand other remote sensing datasets. Here's how you can install and use this tool yourself:</p>
-<p><em>Run this code to install the paclet:</em></p>
-<p><code>PacletInstall["PhileasDazeleyGaist</code>RemoteSensing<code>"]</code></p>
-<p><em>Once the paclet is installed, it can be loaded like this:</em></p>
-<p><code>Needs["PhileasDazeleyGaist</code>RemoteSensing<code>"]</code></p>
-<p><em>Use the RemoteSensing paclet to fetch a map of anthropogenic biomes of the world (Ellis &amp; Ramankutty, 2008):</em></p>
+
+## Connecting to NASA remote sensing services
+
+The ESA WorldCover dataset is a great resource for understanding land cover patterns, and luckily for us, we live in a world in which there are many more. Many remote sensing services are available as map tile servers (WMTS), and two of my favourite providers of high quality free remote sensing imagery datasets of this kind, often with global and sometimes even near real time coverage, are Copernicus Marine and NASA GIBS (Global Imagery Browse Services). You can access NASA GIBS remote sensing imagery using the RemoteSensing paclet, which I've previously written about [here](https://community.wolfram.com/groups/-/m/t/2959942). 
+
+Suppose our reason for consulting ESA LandCover is that we'd like to better understand human environmental impacts globally. In that case, another dataset I'd recommend consulting is the Anthropogenic Biomes (or "Anthromes") map by Ellis &amp; Ramankutty (2008), which classifies Earth's terrestrial surface by the degree and type of human settlements.
+
+The anthropogenic biomes dataset puts human activity at the center of ecological classification, and that makes it an especially compelling tool to study the Anthropocene. It's also conveniently available through NASA GIBS via the RemoteSensing paclet, among over a thousand other remote sensing datasets. Here's how you can install and use this tool yourself:
+
+*Run this code to install the paclet:*
+
+`PacletInstall["PhileasDazeleyGaist`RemoteSensing`"]`
+
+*Once the paclet is installed, it can be loaded like this:*
+
+`Needs["PhileasDazeleyGaist`RemoteSensing`"]`
+
+*Use the RemoteSensing paclet to fetch a map of anthropogenic biomes of the world (Ellis &amp; Ramankutty, 2008):*
+
 <figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/52/Screenshot-2026-01-10-at-11.46.15.png" alt="" width="1252" height="1000" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.46.15-xs.png 300w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.46.15-sm.png 480w ,https://phileasdg.github.io/media/posts/52/responsive/Screenshot-2026-01-10-at-11.46.15-md.png 768w"></figure>
-<h2>Sources Cited</h2>
-<p>WorldCover 2020 v100: Zanaga, D., Van De Kerchove, R., De Keersmaecker, W., Souverijns, N., Brockmann, C., Quast, R., Wevers, J., Grosu, A., Paccini, A., Vergnaud, S., Cartus, O., Santoro, M., Fritz, S., Georgieva, I., Lesiv, M., Carter, S., Herold, M., Li, Linlin, Tsendbazar, N.E., Ramoino, F., Arino, O., 2021. ESA WorldCover 10 m 2020 v100. <a href="https://doi.org/10.5281/zenodo.5571936">https://doi.org/10.5281/zenodo.5571936 </a><br>Ellis, Erle C., and Navin Ramankutty. 2008. Putting People in the Map: Anthropogenic Biomes of the World. https://doi.org/10.1890/070062.</p>
+
+## Sources Cited
+
+WorldCover 2020 v100: Zanaga, D., Van De Kerchove, R., De Keersmaecker, W., Souverijns, N., Brockmann, C., Quast, R., Wevers, J., Grosu, A., Paccini, A., Vergnaud, S., Cartus, O., Santoro, M., Fritz, S., Georgieva, I., Lesiv, M., Carter, S., Herold, M., Li, Linlin, Tsendbazar, N.E., Ramoino, F., Arino, O., 2021. ESA WorldCover 10 m 2020 v100. [https://doi.org/10.5281/zenodo.5571936 ](https://doi.org/10.5281/zenodo.5571936)<br>Ellis, Erle C., and Navin Ramankutty. 2008. Putting People in the Map: Anthropogenic Biomes of the World. https://doi.org/10.1890/070062.

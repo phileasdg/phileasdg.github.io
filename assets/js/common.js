@@ -569,7 +569,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const paginationContainer = mainEl.querySelector('#pagination-container');
 
       if (grid) {
-        const initialChunk = posts.slice(0, 12);
+        const visiblePosts = posts.filter(p => p.hideFromHome !== true);
+        const initialChunk = visiblePosts.slice(0, 12);
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = initialChunk.map(p => renderCard(p, '')).join('');
         Array.from(tempDiv.children).forEach(item => grid.appendChild(item));
@@ -577,7 +578,7 @@ document.addEventListener("DOMContentLoaded", () => {
         initGridMasonry(grid);
 
         if (paginationContainer) {
-          setupPagination(posts, paginationContainer, grid, '');
+          setupPagination(visiblePosts, paginationContainer, grid, '');
         }
       }
     } else if (cleanHash.startsWith('posts/')) {
@@ -710,7 +711,8 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
 
       const grid = mainEl.querySelector('.l-masonry');
-      const initialChunk = posts.slice(0, 12);
+      const visiblePosts = posts.filter(p => p.hideFromHome !== true);
+      const initialChunk = visiblePosts.slice(0, 12);
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = initialChunk.map(p => renderCard(p, '')).join('');
       Array.from(tempDiv.children).forEach(item => grid.appendChild(item));
@@ -718,7 +720,7 @@ document.addEventListener("DOMContentLoaded", () => {
       initGridMasonry(grid);
 
       const paginationContainer = mainEl.querySelector('#pagination-container');
-      setupPagination(posts, paginationContainer, grid, '');
+      setupPagination(visiblePosts, paginationContainer, grid, '');
     } else {
       window.location.hash = '#/';
     }

@@ -1,0 +1,42 @@
+name: Compile Markdown Posts
+
+on:
+  push:
+    branches:
+      - development
+    paths:
+      - 'content/posts/markdown/**'
+      - 'scratch/build-posts.js'
+      - 'package.json'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Build posts
+        run: npm run build
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add content/posts/*.html data/posts.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Auto-compile Markdown posts [skip ci]"
+            git push
+          fi
