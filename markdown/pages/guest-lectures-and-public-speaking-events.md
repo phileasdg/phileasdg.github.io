@@ -1,9 +1,3 @@
----
-title: "Guest Lectures and Public Speaking Events"
-body_class: "post-template"
-main_class: "post"
----
-
 ### Upcoming Events
 
 - Conference Poster: Growing a Sympoietic Art Organism: An Experimental Framework for Tracking the Micro-Dynamics of Cultural Evolution - *NetSci 2026 *- June 2026
@@ -28,7 +22,7 @@ Past events are listed in reverse-chronological order. This is an incomplete lis
 
 - Networked Creativity: Citation Network Analysis of a Small Artist Community - *Wolfram Technology Conference* - November 5, 2025 [[slides (pdf)](https://drive.google.com/file/d/11zREhD44UuKQKP89s87fIfF44yYXn88W/view?usp=sharing)]
 - Growing a Sympoietic Art Organism: Structured co-creativity in a small artist community - *Santa Fe Institute Complexity Coffee: Nascent Research Ideas - *October 15, 2025 [[slides (nb)](https://www.wolframcloud.com/obj/1ed9c8dd-ef84-4df9-9407-399f7451a22d)]
-- <span class="_ccc9">Computational Modeling </span><span class="_ccc9">for Complex Systems </span>- *Indiana University* - October 22, 2025 [[slides (nb)](https://www.wolframcloud.com/obj/9b45e0b1-5766-41ac-aebf-9a3587260393)]
+- Computational Modeling for Complex Systems - *Indiana University* - October 22, 2025 [[slides (nb)](https://www.wolframcloud.com/obj/9b45e0b1-5766-41ac-aebf-9a3587260393)]
 - A Crash Course in Data Visualization with Wolfram Language - *Cornell College of Human Ecology* - October 6, 2025 [[slides (nb)](https://www.wolframcloud.com/obj/88a127ac-8f30-46e3-93e5-da26b01aba0a)]
 - Creative Generative Design with Mathematical Marbling - *Augmentation Lab Human Augmentation Summit @ MIT Media Lab* - August 23, 2025
 - A Framework for Dialogical AI - *Complexity Global School - Universidad de los Andes TREES &amp; Santa Fe Institute *- August 5, 2025 [[slides (pdf)](https://drive.google.com/file/d/19USUn25uNdDALVC7JvnBA5lPpEsEGShZ/view?usp=sharing)]

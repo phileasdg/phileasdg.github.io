@@ -1,9 +1,3 @@
----
-title: "Phileas Dazeley-Gaist"
-body_class: "post-template"
-main_class: "post"
----
-
 Email: phileasdg[at]gmail.com<br/>LinkedIn: [https://www.linkedin.com/in/phileas/](https://www.linkedin.com/in/phileas/)<br/>GitHub: [https://github.com/phileasdg](https://github.com/phileasdg)
 ## Work Experience:
 

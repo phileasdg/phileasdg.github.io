@@ -1,9 +1,3 @@
----
-title: "Publications & Academic Writing"
-body_class: "post-template"
-main_class: "post"
----
-
 My ORCID page: [https://orcid.org/0009-0002-1768-6574](https://orcid.org/0009-0002-1768-6574)
 
 Publications listed in reverse chronological order.

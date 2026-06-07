@@ -1,27 +1,18 @@
----
-title: "Graphical iteration in R"
-date: "2022-08-12T14:15"
-tags: ["Programming","R programming","Undergraduate work"]
-thumbnail: "media/posts/7/staircase-diagram.png"
-thumbWidth: 1016
-thumbHeight: 729
----
+## What is graphical iteration?
 
-## <span data-offset-key="3bl4a-0-0">What</span><span data-offset-key="3bl4a-1-0"> is</span><span data-offset-key="3bl4a-2-0"> graphical</span><span data-offset-key="3bl4a-3-0"> iteration</span><span data-offset-key="3bl4a-4-0">?</span>
+Graphical iteration is one graphical way to visualise the orbits of a function for different initial conditions. The main advantages of graphical iteration over other ways to visualise function orbits are that graphical iteration provides a visualisation of the orbits as a trajectory on the plot of the function being iterated. This can give insights into the behaviour of the orbits that might not be apparent from other ways of visualising the orbits. It is another way to conceptualise the behaviour of orbits.
 
-<span data-offset-key="3bl4a-23-0">Graph</span><span data-offset-key="3bl4a-24-0">ical</span><span data-offset-key="3bl4a-25-0"> iteration</span><span data-offset-key="3bl4a-26-0"> is</span><span data-offset-key="3bl4a-27-0"> one</span><span data-offset-key="3bl4a-28-0"> graphical</span><span data-offset-key="3bl4a-29-0"> way</span><span data-offset-key="3bl4a-30-0"> to</span><span data-offset-key="3bl4a-31-0"> visual</span><span data-offset-key="3bl4a-32-0">ise</span><span data-offset-key="3bl4a-33-0"> the</span><span data-offset-key="3bl4a-34-0"> orbits</span><span data-offset-key="3bl4a-35-0"> of</span><span data-offset-key="3bl4a-36-0"> a</span><span data-offset-key="3bl4a-37-0"> function</span><span data-offset-key="3bl4a-38-0"> for</span><span data-offset-key="3bl4a-39-0"> different</span><span data-offset-key="3bl4a-40-0"> initial</span><span data-offset-key="3bl4a-41-0"> conditions</span><span data-offset-key="3bl4a-42-0">.</span><span data-offset-key="3bl4a-43-0"> The</span><span data-offset-key="3bl4a-44-0"> main</span><span data-offset-key="3bl4a-45-0"> advantages</span><span data-offset-key="3bl4a-46-0"> of</span><span data-offset-key="3bl4a-47-0"> graphical</span><span data-offset-key="3bl4a-48-0"> iteration</span><span data-offset-key="3bl4a-49-0"> over</span><span data-offset-key="3bl4a-50-0"> other</span><span data-offset-key="3bl4a-51-0"> ways</span><span data-offset-key="3bl4a-52-0"> to</span><span data-offset-key="3bl4a-53-0"> visual</span><span data-offset-key="3bl4a-54-0">ise</span><span data-offset-key="3bl4a-55-0"> function</span><span data-offset-key="3bl4a-56-0"> orbits</span><span data-offset-key="3bl4a-57-0"> are</span><span data-offset-key="3bl4a-58-0"> that</span><span data-offset-key="3bl4a-59-0"> graphical</span><span data-offset-key="3bl4a-60-0"> iteration</span><span data-offset-key="3bl4a-61-0"> provides</span><span data-offset-key="3bl4a-62-0"> a</span><span data-offset-key="3bl4a-63-0"> visual</span><span data-offset-key="3bl4a-64-0">isation</span><span data-offset-key="3bl4a-65-0"> of</span><span data-offset-key="3bl4a-66-0"> the</span><span data-offset-key="3bl4a-67-0"> orbits</span><span data-offset-key="3bl4a-68-0"> as</span><span data-offset-key="3bl4a-69-0"> a</span><span data-offset-key="3bl4a-70-0"> trajectory</span><span data-offset-key="3bl4a-71-0"> on</span><span data-offset-key="3bl4a-72-0"> the</span><span data-offset-key="3bl4a-73-0"> plot</span><span data-offset-key="3bl4a-74-0"> of</span><span data-offset-key="3bl4a-75-0"> the</span><span data-offset-key="3bl4a-76-0"> function</span><span data-offset-key="3bl4a-77-0"> being</span><span data-offset-key="3bl4a-78-0"> iter</span><span data-offset-key="3bl4a-79-0">ated</span><span data-offset-key="3bl4a-80-0">.</span><span data-offset-key="3bl4a-81-0"> This</span><span data-offset-key="3bl4a-82-0"> can</span><span data-offset-key="3bl4a-83-0"> give</span><span data-offset-key="3bl4a-84-0"> insights</span><span data-offset-key="3bl4a-85-0"> into</span><span data-offset-key="3bl4a-86-0"> the</span><span data-offset-key="3bl4a-87-0"> behaviour</span><span data-offset-key="3bl4a-88-0"> of</span><span data-offset-key="3bl4a-89-0"> the</span><span data-offset-key="3bl4a-90-0"> orbits</span><span data-offset-key="3bl4a-91-0"> that</span><span data-offset-key="3bl4a-92-0"> might</span><span data-offset-key="3bl4a-93-0"> not</span><span data-offset-key="3bl4a-94-0"> be</span><span data-offset-key="3bl4a-95-0"> apparent</span><span data-offset-key="3bl4a-96-0"> from</span><span data-offset-key="3bl4a-97-0"> other</span><span data-offset-key="3bl4a-98-0"> ways</span><span data-offset-key="3bl4a-99-0"> of</span><span data-offset-key="3bl4a-100-0"> visual</span><span data-offset-key="3bl4a-101-0">ising</span><span data-offset-key="3bl4a-102-0"> the</span><span data-offset-key="3bl4a-103-0"> orbits</span><span data-offset-key="3bl4a-104-0">.</span><span data-offset-key="3bl4a-105-0"> It</span><span data-offset-key="3bl4a-106-0"> is</span><span data-offset-key="3bl4a-107-0"> another</span><span data-offset-key="3bl4a-108-0"> way</span><span data-offset-key="3bl4a-109-0"> to</span><span data-offset-key="3bl4a-110-0"> conceptual</span><span data-offset-key="3bl4a-111-0">ise</span><span data-offset-key="3bl4a-112-0"> the</span> <span data-offset-key="3bl4a-114-0">behaviour</span><span data-offset-key="3bl4a-115-0"> of</span><span data-offset-key="3bl4a-116-0"> orbits</span><span data-offset-key="3bl4a-117-0">.</span>
+<figure class="post__image">![graphical iteration illustration ](../../media/posts/7/graphical_iteration.png =720x536)<figcaption>Graphical iteration illustration from https://www.mathscard.co.uk/online/numerical-methods/</figcaption></figure>
 
-<figure class="post__image"><img alt="graphical iteration illustration " height="536" loading="lazy" sizes="(max-width: 48em) 100vw, 100vw" src="../../media/posts/7/graphical_iteration.png" srcset="../../../media/posts/7/responsive/graphical_iteration-xs.png 300w, ../../media/posts/7/responsive/graphical_iteration-sm.png 480w, ../../media/posts/7/responsive/graphical_iteration-md.png 768w" width="720"/><figcaption>Graphical iteration illustration from https://www.mathscard.co.uk/online/numerical-methods/</figcaption></figure>
-
-## <span data-offset-key="3bl4a-120-0">How</span><span data-offset-key="3bl4a-121-0"> does</span><span data-offset-key="3bl4a-122-0"> graphical</span><span data-offset-key="3bl4a-123-0"> iteration</span><span data-offset-key="3bl4a-124-0"> work</span><span data-offset-key="3bl4a-125-0">?</span>
+## How does graphical iteration work?
 
 **A step by step guide:**
 
-1. <span data-offset-key="3bl4a-136-0">Choose</span><span data-offset-key="3bl4a-137-0"> a</span><span data-offset-key="3bl4a-138-0"> function</span><span data-offset-key="3bl4a-139-0"> to</span><span data-offset-key="3bl4a-140-0"> iter</span><span data-offset-key="3bl4a-141-0">ate</span><span data-offset-key="3bl4a-142-0">,</span><span data-offset-key="3bl4a-143-0"> for</span><span data-offset-key="3bl4a-144-0"> example</span><span data-offset-key="3bl4a-145-0">,</span><span data-offset-key="3bl4a-146-0"> the</span><span data-offset-key="3bl4a-147-0"> function</span><span data-offset-key="3bl4a-148-0"> f</span><span data-offset-key="3bl4a-149-0">(</span><span data-offset-key="3bl4a-150-0">x</span><span data-offset-key="3bl4a-151-0">)</span><span data-offset-key="3bl4a-152-0"> =</span><span data-offset-key="3bl4a-153-0"> x</span><span data-offset-key="3bl4a-154-0">^</span><span data-offset-key="3bl4a-155-0">2</span><span data-offset-key="3bl4a-156-0">.</span>
-2. <span data-offset-key="3bl4a-160-0">Choose</span><span data-offset-key="3bl4a-161-0"> an</span><span data-offset-key="3bl4a-162-0"> initial</span><span data-offset-key="3bl4a-163-0"> x</span><span data-offset-key="3bl4a-164-0">-</span><span data-offset-key="3bl4a-165-0">value</span><span data-offset-key="3bl4a-166-0">,</span><span data-offset-key="3bl4a-167-0"> for</span><span data-offset-key="3bl4a-168-0"> example</span><span data-offset-key="3bl4a-169-0">,</span><span data-offset-key="3bl4a-170-0"> x</span><span data-offset-key="3bl4a-171-0">_</span><span data-offset-key="3bl4a-172-0">0</span><span data-offset-key="3bl4a-173-0"> =</span><span data-offset-key="3bl4a-174-0"> 0</span><span data-offset-key="3bl4a-175-0">.</span><span data-offset-key="3bl4a-176-0">3</span><span data-offset-key="3bl4a-177-0">.</span>
-3. <span data-offset-key="3bl4a-181-0">Trace</span><span data-offset-key="3bl4a-182-0"> a</span><span data-offset-key="3bl4a-183-0"> line</span><span data-offset-key="3bl4a-184-0"> perpendicular</span><span data-offset-key="3bl4a-185-0"> to</span><span data-offset-key="3bl4a-186-0"> the</span><span data-offset-key="3bl4a-187-0"> x</span><span data-offset-key="3bl4a-188-0">_</span><span data-offset-key="3bl4a-189-0">axis</span><span data-offset-key="3bl4a-190-0"> from</span><span data-offset-key="3bl4a-191-0"> x</span><span data-offset-key="3bl4a-192-0">_</span><span data-offset-key="3bl4a-193-0">n</span><span data-offset-key="3bl4a-194-0"> =</span><span data-offset-key="3bl4a-195-0"> x</span><span data-offset-key="3bl4a-196-0">_</span><span data-offset-key="3bl4a-197-0">0</span><span data-offset-key="3bl4a-198-0"> =</span><span data-offset-key="3bl4a-199-0"> 0</span><span data-offset-key="3bl4a-200-0">.</span><span data-offset-key="3bl4a-201-0">3</span><span data-offset-key="3bl4a-202-0"> in</span><span data-offset-key="3bl4a-203-0"> x</span><span data-offset-key="3bl4a-204-0"> and</span><span data-offset-key="3bl4a-205-0"> 0</span><span data-offset-key="3bl4a-206-0"> in</span><span data-offset-key="3bl4a-207-0"> y</span><span data-offset-key="3bl4a-208-0"> to</span><span data-offset-key="3bl4a-209-0"> y</span><span data-offset-key="3bl4a-210-0"> =</span><span data-offset-key="3bl4a-211-0"> f</span><span data-offset-key="3bl4a-212-0">(</span><span data-offset-key="3bl4a-213-0">x</span><span data-offset-key="3bl4a-214-0">_</span><span data-offset-key="3bl4a-215-0">n</span><span data-offset-key="3bl4a-216-0">)</span><span data-offset-key="3bl4a-217-0"> =</span><span data-offset-key="3bl4a-218-0"> x</span><span data-offset-key="3bl4a-219-0">_</span><span data-offset-key="3bl4a-220-0">n</span><span data-offset-key="3bl4a-221-0">^</span><span data-offset-key="3bl4a-222-0">2</span>
-4. <span data-offset-key="3bl4a-226-0">Trace</span><span data-offset-key="3bl4a-227-0"> a</span><span data-offset-key="3bl4a-228-0"> line</span><span data-offset-key="3bl4a-229-0"> parallel</span><span data-offset-key="3bl4a-230-0"> to</span><span data-offset-key="3bl4a-231-0"> the</span><span data-offset-key="3bl4a-232-0"> x</span><span data-offset-key="3bl4a-233-0">_</span><span data-offset-key="3bl4a-234-0">axis</span><span data-offset-key="3bl4a-235-0"> from</span><span data-offset-key="3bl4a-236-0"> 0</span><span data-offset-key="3bl4a-237-0">.</span><span data-offset-key="3bl4a-238-0">3</span><span data-offset-key="3bl4a-239-0"> in</span><span data-offset-key="3bl4a-240-0"> x</span><span data-offset-key="3bl4a-241-0"> and</span><span data-offset-key="3bl4a-242-0"> y</span><span data-offset-key="3bl4a-243-0"> =</span><span data-offset-key="3bl4a-244-0"> f</span><span data-offset-key="3bl4a-245-0">(</span><span data-offset-key="3bl4a-246-0">x</span><span data-offset-key="3bl4a-247-0">_</span><span data-offset-key="3bl4a-248-0">n</span><span data-offset-key="3bl4a-249-0">)</span><span data-offset-key="3bl4a-250-0"> =</span><span data-offset-key="3bl4a-251-0"> x</span><span data-offset-key="3bl4a-252-0">^</span><span data-offset-key="3bl4a-253-0">2</span><span data-offset-key="3bl4a-254-0"> to</span><span data-offset-key="3bl4a-255-0"> x</span><span data-offset-key="3bl4a-256-0"> =</span><span data-offset-key="3bl4a-257-0"> f</span><span data-offset-key="3bl4a-258-0">(</span><span data-offset-key="3bl4a-259-0">x</span><span data-offset-key="3bl4a-260-0">_(</span><span data-offset-key="3bl4a-261-0">n</span><span data-offset-key="3bl4a-262-0">+</span><span data-offset-key="3bl4a-263-0">1</span><span data-offset-key="3bl4a-264-0">))</span><span data-offset-key="3bl4a-265-0"> =</span><span data-offset-key="3bl4a-266-0"> x</span><span data-offset-key="3bl4a-267-0">_(</span><span data-offset-key="3bl4a-268-0">n</span><span data-offset-key="3bl4a-269-0">+</span><span data-offset-key="3bl4a-270-0">1</span><span data-offset-key="3bl4a-271-0">)</span>
-5. <span data-offset-key="3bl4a-275-0">Repeat</span><span data-offset-key="3bl4a-276-0"> steps</span><span data-offset-key="3bl4a-277-0"> 3</span><span data-offset-key="3bl4a-278-0"> and</span><span data-offset-key="3bl4a-279-0"> 4</span><span data-offset-key="3bl4a-280-0"> for</span><span data-offset-key="3bl4a-281-0"> following</span><span data-offset-key="3bl4a-282-0"> iter</span><span data-offset-key="3bl4a-283-0">ate</span><span data-offset-key="3bl4a-284-0"> values</span><span data-offset-key="3bl4a-285-0"> up</span><span data-offset-key="3bl4a-286-0"> to</span><span data-offset-key="3bl4a-287-0"> the</span><span data-offset-key="3bl4a-288-0"> desired</span><span data-offset-key="3bl4a-289-0"> x</span><span data-offset-key="3bl4a-290-0">_</span><span data-offset-key="3bl4a-291-0">n</span><span data-offset-key="3bl4a-292-0">.</span>
+1. Choose a function to iterate, for example, the function f(x) = x^2.
+2. Choose an initial x-value, for example, x_0 = 0.3.
+3. Trace a line perpendicular to the x_axis from x_n = x_0 = 0.3 in x and 0 in y to y = f(x_n) = x_n^2
+4. Trace a line parallel to the x_axis from 0.3 in x and y = f(x_n) = x^2 to x = f(x_(n+1)) = x_(n+1)
+5. Repeat steps 3 and 4 for following iterate values up to the desired x_n.
 
 ## Graphical iteration in R with tidyverse
 
@@ -29,146 +20,149 @@ This past winter, I wrote a short program in R to produce graphical iteration pl
 
 Although I think of myself usually more as a python programmer, I find R has some great advantages when it comes to plotting thanks to the tidyverse library collection, which includes the excellent ggplot.
 
-<figure class="post__image"><img alt="Graphical Iteration plot for the orbits of the function f(x) = -2 * sin(x) + x, given initial conditions 3.6, 4.43, and 7" height="865" loading="lazy" sizes="(max-width: 48em) 100vw, 100vw" src="../../media/posts/7/graphical-iteration.png" srcset="../../../media/posts/7/responsive/graphical-iteration-xs.png 300w, ../../media/posts/7/responsive/graphical-iteration-sm.png 480w, ../../media/posts/7/responsive/graphical-iteration-md.png 768w" width="1400"/><figcaption>Graphical iteration plot of the orbits of the function f(x) = <span class="pl-k">-</span><span class="pl-c1">2</span> <span class="pl-k">*</span> sin(<span class="pl-smi">x</span>) <span class="pl-k">+</span> <span class="pl-smi">x, for the initial conditions 3.6, 4.43, and 7. Made using ggplot.</span></figcaption></figure>
+<figure class="post__image">![Graphical Iteration plot for the orbits of the function f(x) = -2 * sin(x) + x, given initial conditions 3.6, 4.43, and 7](../../media/posts/7/graphical-iteration.png =1400x865)<figcaption>Graphical iteration plot of the orbits of the function f(x) = -2 * sin(x) + x, for the initial conditions 3.6, 4.43, and 7. Made using ggplot.</figcaption></figure>
 
 ## The program
 
 The program is fairly simple. It is composed of several blocks. First, a setup block, in which the user specifies the program settings such as the function to iterate, initial conditions, number of iterations, and the plot window. Then, the block where most of the code lifes, the main body of the program, which is composed of a function to collect plotting data for the user-specified function, a function to collect and return graphical iteration plotting data, and a last function to collect and return time series plotting data according to the program settings. In the final block of this program, we run the functions from the last block with the user-specified setup settings, and plot the graphical iteration and time series orbit plots using the tibbles the functions return.
 
-<h3 dir="auto">Setup</h3>
+### Setup
 
-<div class="highlight highlight-source-r position-relative overflow-auto"><pre><span class="pl-c"># set your initial condition and desired number of iterations:</span>
-<span class="pl-smi">x_0s</span> <span class="pl-k">&lt;-</span> c(<span class="pl-c1">3.43</span>, <span class="pl-c1">4.43</span>, <span class="pl-c1">7</span>)
-<span class="pl-smi">N</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">100</span>
+<div class="highlight highlight-source-r position-relative overflow-auto">
+# set your initial condition and desired number of iterations:
+x_0s &lt;- c(3.43, 4.43, 7)
+N &lt;- 100
 
-<span class="pl-c"># set the iteration plot x axis range (lower and upper bounds):</span>
-<span class="pl-smi">x_min</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">0</span>; <span class="pl-smi">x_max</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">8</span>
-<span class="pl-smi">y_min</span> <span class="pl-k">&lt;-</span> <span class="pl-k">-</span><span class="pl-c1">2</span>; <span class="pl-smi">y_max</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">8</span>
+# set the iteration plot x axis range (lower and upper bounds):
+x_min &lt;- 0; x_max &lt;- 8
+y_min &lt;- -2; y_max &lt;- 8
 
-<span class="pl-smi">use_custom_range_x</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">FALSE</span>
-<span class="pl-smi">use_custom_range_y</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">FALSE</span>
+use_custom_range_x &lt;- FALSE
+use_custom_range_y &lt;- FALSE
 
-<span class="pl-c"># declare your function here:</span>
-<span class="pl-en">func</span> <span class="pl-k">&lt;-</span> <span class="pl-k">function</span>(<span class="pl-smi">x</span>){
-  <span class="pl-k">return</span>(<span class="pl-k">-</span><span class="pl-c1">2</span> <span class="pl-k">*</span> sin(<span class="pl-smi">x</span>) <span class="pl-k">+</span> <span class="pl-smi">x</span>) <span class="pl-c"># function goes here</span>
-}</pre></div>
+# declare your function here:
+func &lt;- function(x){
+  return(-2 * sin(x) + x) # function goes here
+}</pre>
 
-<h3 dir="auto">The nitty-gritty</h3>
+### The nitty-gritty
 
-<div class="highlight highlight-source-r position-relative overflow-auto"><pre><span class="pl-en">get_function_data</span> <span class="pl-k">&lt;-</span> <span class="pl-k">function</span>(<span class="pl-v">range</span> <span class="pl-k">=</span> c(<span class="pl-k">-</span><span class="pl-c1">1</span>, <span class="pl-c1">1</span>), <span class="pl-v">steps</span> <span class="pl-k">=</span> <span class="pl-c1">100</span>){
+<div class="highlight highlight-source-r position-relative overflow-auto">
+get_function_data &lt;- function(range = c(-1, 1), steps = 100){
   
-  <span class="pl-smi">steps_multiplier</span> <span class="pl-k">&lt;-</span> (<span class="pl-smi">range</span>[<span class="pl-c1">2</span>]<span class="pl-k">-</span><span class="pl-smi">range</span>[<span class="pl-c1">1</span>])<span class="pl-k">/</span><span class="pl-c1">10</span> 
-  <span class="pl-k">if</span>(<span class="pl-smi">steps_multiplier</span> <span class="pl-k">&lt;</span> <span class="pl-c1">1</span>){<span class="pl-smi">steps_multiplier</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">1</span>}
-  <span class="pl-c"># adds steps to get data for depending on the number of 10s </span>
-  <span class="pl-c"># in the specified plot x range</span>
+  steps_multiplier &lt;- (range[2]-range[1])/10 
+  if(steps_multiplier &lt; 1){steps_multiplier &lt;- 1}
+  # adds steps to get data for depending on the number of 10s 
+  # in the specified plot x range
   
-  <span class="pl-smi">x</span> <span class="pl-k">&lt;-</span> seq(<span class="pl-v">from</span> <span class="pl-k">=</span> <span class="pl-smi">range</span>[<span class="pl-c1">1</span>], <span class="pl-v">to</span> <span class="pl-k">=</span> <span class="pl-smi">range</span>[<span class="pl-c1">2</span>], <span class="pl-v">length.out</span> <span class="pl-k">=</span> <span class="pl-smi">steps</span> <span class="pl-k">*</span> <span class="pl-smi">steps_multiplier</span>)
+  x &lt;- seq(from = range[1], to = range[2], length.out = steps * steps_multiplier)
   
-  <span class="pl-smi">y</span> <span class="pl-k">&lt;-</span> <span class="pl-k">array</span>(<span class="pl-v">dim</span> <span class="pl-k">=</span> <span class="pl-smi">steps</span> <span class="pl-k">*</span> <span class="pl-smi">steps_multiplier</span>) 
-  <span class="pl-k">for</span>(<span class="pl-smi">i</span> <span class="pl-k">in</span> <span class="pl-c1">1</span><span class="pl-k">:</span>length(<span class="pl-smi">x</span>)){
-    <span class="pl-smi">y</span>[<span class="pl-smi">i</span>] <span class="pl-k">&lt;-</span> func(<span class="pl-smi">x</span>[<span class="pl-smi">i</span>])
+  y &lt;- array(dim = steps * steps_multiplier) 
+  for(i in 1:length(x)){
+    y[i] &lt;- func(x[i])
     } 
   
-  <span class="pl-k">return</span>(<span class="pl-k">data.frame</span>(<span class="pl-v">x</span> <span class="pl-k">=</span> <span class="pl-smi">x</span>, <span class="pl-v">y</span> <span class="pl-k">=</span> <span class="pl-smi">y</span>))
+  return(data.frame(x = x, y = y))
 }
 
-<span class="pl-en">graphical_iterator</span> <span class="pl-k">&lt;-</span> <span class="pl-k">function</span>(<span class="pl-smi">x_0s</span>, <span class="pl-v">N</span> <span class="pl-k">=</span> <span class="pl-c1">100</span>){ 
+graphical_iterator &lt;- function(x_0s, N = 100){ 
   
-  <span class="pl-smi">segments</span> <span class="pl-k">&lt;-</span> <span class="pl-k">data.frame</span>()
-  <span class="pl-k">for</span>(<span class="pl-smi">i</span> <span class="pl-k">in</span> <span class="pl-smi">x_0s</span>){
+  segments &lt;- data.frame()
+  for(i in x_0s){
     
-    <span class="pl-smi">start</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">i</span> 
-    <span class="pl-smi">vert</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">FALSE</span> 
+    start &lt;- i 
+    vert &lt;- FALSE 
     
-    <span class="pl-smi">x_0</span> <span class="pl-k">&lt;-</span> rep(<span class="pl-smi">i</span>,<span class="pl-v">times</span><span class="pl-k">=</span><span class="pl-c1">1</span><span class="pl-k">+</span>(<span class="pl-smi">N</span><span class="pl-k">*</span><span class="pl-c1">2</span>))
-    <span class="pl-smi">xstarts</span> <span class="pl-k">&lt;-</span> c(<span class="pl-smi">start</span>)
-    <span class="pl-smi">ystarts</span> <span class="pl-k">&lt;-</span> c(<span class="pl-smi">y_min</span>)
-    <span class="pl-smi">xends</span> <span class="pl-k">&lt;-</span> c(<span class="pl-smi">start</span>)
-    <span class="pl-smi">yends</span> <span class="pl-k">&lt;-</span> c(func(<span class="pl-smi">start</span>))
+    x_0 &lt;- rep(i,times=1+(N*2))
+    xstarts &lt;- c(start)
+    ystarts &lt;- c(y_min)
+    xends &lt;- c(start)
+    yends &lt;- c(func(start))
     
-    <span class="pl-c"># iteratively get the coordinates of the next segment points</span>
-    <span class="pl-k">for</span>(<span class="pl-smi">i</span> <span class="pl-k">in</span> <span class="pl-c1">1</span><span class="pl-k">:</span>(<span class="pl-c1">2</span> <span class="pl-k">*</span> <span class="pl-smi">N</span>)) 
-      <span class="pl-c"># range = 2 * N because every step will be described by two segments</span>
+    # iteratively get the coordinates of the next segment points
+    for(i in 1:(2 * N)) 
+      # range = 2 * N because every step will be described by two segments
     {
-      <span class="pl-c"># if the last segment was vertical, the next must be horizontal</span>
-      <span class="pl-k">if</span>(<span class="pl-smi">vert</span>){
-        <span class="pl-smi">xstarts</span> <span class="pl-k">&lt;-</span> c(<span class="pl-smi">xstarts</span>, <span class="pl-smi">start</span>)
-        <span class="pl-smi">ystarts</span> <span class="pl-k">&lt;-</span> c(<span class="pl-smi">ystarts</span>, <span class="pl-smi">start</span>)
-        <span class="pl-smi">xends</span> <span class="pl-k">&lt;-</span> c(<span class="pl-smi">xends</span>, <span class="pl-smi">start</span>)
-        <span class="pl-smi">yends</span> <span class="pl-k">&lt;-</span> c(<span class="pl-smi">yends</span>, func(<span class="pl-smi">start</span>)) 
-        <span class="pl-smi">vert</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">FALSE</span>
+      # if the last segment was vertical, the next must be horizontal
+      if(vert){
+        xstarts &lt;- c(xstarts, start)
+        ystarts &lt;- c(ystarts, start)
+        xends &lt;- c(xends, start)
+        yends &lt;- c(yends, func(start)) 
+        vert &lt;- FALSE
       }
-      <span class="pl-k">else</span>{
-        <span class="pl-smi">xstarts</span> <span class="pl-k">&lt;-</span> c(<span class="pl-smi">xstarts</span>, <span class="pl-smi">start</span>)
-        <span class="pl-smi">ystarts</span> <span class="pl-k">&lt;-</span> c(<span class="pl-smi">ystarts</span>, func(<span class="pl-smi">start</span>)) 
-        <span class="pl-smi">xends</span> <span class="pl-k">&lt;-</span> c(<span class="pl-smi">xends</span>, func(<span class="pl-smi">start</span>)) 
-        <span class="pl-smi">yends</span> <span class="pl-k">&lt;-</span> c(<span class="pl-smi">yends</span>, func(<span class="pl-smi">start</span>)) 
-        <span class="pl-smi">vert</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">TRUE</span>
-        <span class="pl-smi">start</span> <span class="pl-k">&lt;-</span> func(<span class="pl-smi">start</span>) <span class="pl-c"># update start value</span>
+      else{
+        xstarts &lt;- c(xstarts, start)
+        ystarts &lt;- c(ystarts, func(start)) 
+        xends &lt;- c(xends, func(start)) 
+        yends &lt;- c(yends, func(start)) 
+        vert &lt;- TRUE
+        start &lt;- func(start) # update start value
       }
     }
-    <span class="pl-smi">segments</span> <span class="pl-k">&lt;-</span> rbind(<span class="pl-smi">segments</span>, <span class="pl-k">data.frame</span>(<span class="pl-v">x_0s</span> <span class="pl-k">=</span> <span class="pl-smi">x_0</span>, <span class="pl-smi">xstarts</span>, <span class="pl-smi">ystarts</span>, <span class="pl-smi">xends</span>, <span class="pl-smi">yends</span>))
+    segments &lt;- rbind(segments, data.frame(x_0s = x_0, xstarts, ystarts, xends, yends))
   }
-  <span class="pl-k">return</span>(<span class="pl-smi">segments</span>)
+  return(segments)
 }
 
-<span class="pl-smi">cobweb_trajects</span> <span class="pl-k">&lt;-</span> graphical_iterator(<span class="pl-v">x_0s</span> <span class="pl-k">=</span> <span class="pl-smi">x_0s</span>, <span class="pl-v">N</span> <span class="pl-k">=</span> <span class="pl-smi">N</span>)
+cobweb_trajects &lt;- graphical_iterator(x_0s = x_0s, N = N)
 
-<span class="pl-k">if</span>(<span class="pl-smi">use_custom_range_x</span> <span class="pl-k">==</span> <span class="pl-c1">FALSE</span>){
-  <span class="pl-smi">x_min</span> <span class="pl-k">&lt;-</span> min(<span class="pl-smi">cobweb_trajects</span><span class="pl-k">$</span><span class="pl-smi">xstarts</span>); <span class="pl-smi">x_max</span> <span class="pl-k">&lt;-</span> max(<span class="pl-smi">cobweb_trajects</span><span class="pl-k">$</span><span class="pl-smi">xends</span>)
+if(use_custom_range_x == FALSE){
+  x_min &lt;- min(cobweb_trajects$xstarts); x_max &lt;- max(cobweb_trajects$xends)
 }
-<span class="pl-k">if</span>(<span class="pl-smi">use_custom_range_y</span> <span class="pl-k">==</span> <span class="pl-c1">FALSE</span>){
-  <span class="pl-smi">y_min</span> <span class="pl-k">&lt;-</span> min(<span class="pl-smi">cobweb_trajects</span><span class="pl-k">$</span><span class="pl-smi">xstarts</span>); <span class="pl-smi">y_max</span> <span class="pl-k">&lt;-</span> max(<span class="pl-smi">cobweb_trajects</span><span class="pl-k">$</span><span class="pl-smi">xends</span>)
+if(use_custom_range_y == FALSE){
+  y_min &lt;- min(cobweb_trajects$xstarts); y_max &lt;- max(cobweb_trajects$xends)
 }
 
-<span class="pl-smi">plot_data</span> <span class="pl-k">&lt;-</span> get_function_data(<span class="pl-v">range</span> <span class="pl-k">=</span> c(<span class="pl-smi">x_min</span>,<span class="pl-smi">x_max</span>)) <span class="pl-c"># gets the plotting data</span>
+plot_data &lt;- get_function_data(range = c(x_min,x_max)) # gets the plotting data
 
-<span class="pl-en">get_function_iteration_trajectories</span> <span class="pl-k">&lt;-</span> <span class="pl-k">function</span>(<span class="pl-smi">x_0s</span>, <span class="pl-v">N</span> <span class="pl-k">=</span> <span class="pl-c1">100</span>){
+get_function_iteration_trajectories &lt;- function(x_0s, N = 100){
   
-  <span class="pl-smi">trajectories</span> <span class="pl-k">&lt;-</span> <span class="pl-k">data.frame</span>()
+  trajectories &lt;- data.frame()
   
-  <span class="pl-k">for</span>(<span class="pl-smi">i</span> <span class="pl-k">in</span> <span class="pl-smi">x_0s</span>){
-    <span class="pl-smi">x_t</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">i</span>
+  for(i in x_0s){
+    x_t &lt;- i
     
-    <span class="pl-smi">x_0</span> <span class="pl-k">&lt;-</span> rep(<span class="pl-smi">i</span>,<span class="pl-v">times</span><span class="pl-k">=</span><span class="pl-smi">N</span><span class="pl-k">+</span><span class="pl-c1">1</span>)
-    <span class="pl-smi">n</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">0</span><span class="pl-k">:</span><span class="pl-smi">N</span>
+    x_0 &lt;- rep(i,times=N+1)
+    n &lt;- 0:N
     
-    <span class="pl-smi">trajectory</span> <span class="pl-k">&lt;-</span> c(<span class="pl-smi">x_t</span>)
+    trajectory &lt;- c(x_t)
     
-    <span class="pl-k">for</span>(<span class="pl-smi">t</span> <span class="pl-k">in</span> <span class="pl-c1">0</span><span class="pl-k">:</span>(<span class="pl-smi">N</span><span class="pl-k">-</span><span class="pl-c1">1</span>)){
-      <span class="pl-smi">x_t</span> <span class="pl-k">&lt;-</span> func(<span class="pl-smi">x_t</span>)
-      <span class="pl-smi">trajectory</span> <span class="pl-k">&lt;-</span> c(<span class="pl-smi">trajectory</span>, <span class="pl-smi">x_t</span>) <span class="pl-c"># add x_t_1's value to the trajectory vector</span>
+    for(t in 0:(N-1)){
+      x_t &lt;- func(x_t)
+      trajectory &lt;- c(trajectory, x_t) # add x_t_1's value to the trajectory vector
     }
-    <span class="pl-smi">trajectories</span> <span class="pl-k">&lt;-</span> rbind(<span class="pl-smi">trajectories</span>, <span class="pl-k">data.frame</span>(<span class="pl-v">x_0s</span> <span class="pl-k">=</span> <span class="pl-smi">x_0</span>, <span class="pl-v">ns</span> <span class="pl-k">=</span> <span class="pl-smi">n</span>, <span class="pl-v">trajectories</span> <span class="pl-k">=</span> <span class="pl-smi">trajectory</span>))
+    trajectories &lt;- rbind(trajectories, data.frame(x_0s = x_0, ns = n, trajectories = trajectory))
   }
-  <span class="pl-k">return</span>(<span class="pl-smi">trajectories</span>)
+  return(trajectories)
 }
 
-<span class="pl-smi">trajectories</span> <span class="pl-k">&lt;-</span> get_function_iteration_trajectories(<span class="pl-v">x_0s</span> <span class="pl-k">=</span> <span class="pl-smi">x_0s</span>, <span class="pl-v">N</span> <span class="pl-k">=</span> <span class="pl-smi">N</span>)</pre><h3 class="zeroclipboard-container position-absolute right-0 top-0"><span style="color: var(--headings-color); font-family: var(--font-base); font-size: 1.60181em; font-weight: var(--font-weight-bold); letter-spacing: var(--letter-spacing);">Plots</span></h3></div>
+trajectories &lt;- get_function_iteration_trajectories(x_0s = x_0s, N = N)</pre>### Plots
 
 **Graphical iteration plot:**
 
-<div class="highlight highlight-source-r position-relative overflow-auto"><pre><span class="pl-smi">plot_data</span> %<span class="pl-k">&gt;</span>% 
-  ggplot(aes(<span class="pl-smi">x</span>, <span class="pl-smi">y</span>)) <span class="pl-k">+</span>
-  geom_line(<span class="pl-v">colour</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>black<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-  geom_abline(<span class="pl-v">linetype</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>dashed<span class="pl-pds">"</span></span>) <span class="pl-k">+</span> 
-  geom_segment(<span class="pl-v">data</span> <span class="pl-k">=</span> <span class="pl-smi">cobweb_trajects</span>, aes(<span class="pl-v">x</span> <span class="pl-k">=</span> <span class="pl-smi">xstarts</span>, <span class="pl-v">y</span> <span class="pl-k">=</span> <span class="pl-smi">ystarts</span>, <span class="pl-v">xend</span> <span class="pl-k">=</span> <span class="pl-smi">xends</span>, 
-                                          <span class="pl-v">yend</span> <span class="pl-k">=</span> <span class="pl-smi">yends</span>, <span class="pl-v">colour</span><span class="pl-k">=</span>as.factor(<span class="pl-smi">x_0s</span>))) <span class="pl-k">+</span>
-  coord_cartesian(<span class="pl-v">xlim</span> <span class="pl-k">=</span> c(<span class="pl-smi">x_min</span>, <span class="pl-smi">x_max</span>), <span class="pl-v">ylim</span> <span class="pl-k">=</span> c(<span class="pl-smi">y_min</span>, <span class="pl-smi">y_max</span>)) </pre></div>
+<div class="highlight highlight-source-r position-relative overflow-auto">
+plot_data %&gt;% 
+  ggplot(aes(x, y)) +
+  geom_line(colour = "black") +
+  geom_abline(linetype = "dashed") + 
+  geom_segment(data = cobweb_trajects, aes(x = xstarts, y = ystarts, xend = xends, 
+                                          yend = yends, colour=as.factor(x_0s))) +
+  coord_cartesian(xlim = c(x_min, x_max), ylim = c(y_min, y_max)) </pre>
 
-<figure class="post__image"><img alt="" height="480" loading="lazy" sizes="(max-width: 48em) 100vw, 100vw" src="../../media/posts/7/figure1.png" srcset="../../../media/posts/7/responsive/figure1-xs.png 300w, ../../media/posts/7/responsive/figure1-sm.png 480w, ../../media/posts/7/responsive/figure1-md.png 768w" width="672"/></figure>
+![](../../media/posts/7/figure1.png =672x480)
 
-**Time-series plot: **
+**Time-series plot: **
 
-<span class="pl-c"># trajectory plot</span>
-<span class="pl-smi">trajectories</span> %<span class="pl-k">&gt;</span>% 
-  ggplot(aes(<span class="pl-smi">ns</span>, <span class="pl-smi">trajectories</span>, <span class="pl-v">colour</span> <span class="pl-k">=</span> as.factor(<span class="pl-smi">x_0s</span>))) <span class="pl-k">+</span>
-  geom_line() <span class="pl-k">+</span> labs(<span class="pl-v">x</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>n<span class="pl-pds">"</span></span>)</pre>
+# trajectory plot
+trajectories %&gt;% 
+  ggplot(aes(ns, trajectories, colour = as.factor(x_0s))) +
+  geom_line() + labs(x="n")</pre>
 
-<figure class="post__image"><img alt="" height="480" loading="lazy" sizes="(max-width: 48em) 100vw, 100vw" src="../../media/posts/7/figure2.png" srcset="../../../media/posts/7/responsive/figure2-xs.png 300w, ../../media/posts/7/responsive/figure2-sm.png 480w, ../../media/posts/7/responsive/figure2-md.png 768w" width="672"/></figure>
+![](../../media/posts/7/figure2.png =672x480)
 
-## Closing remarks 
+## Closing remarks 
 
-<p>I hope that this tool might be useful in education settings for demonstration purposes, or for analysis, as the program also produces data frames of the plotting data which contain all the orbit information. I am hopeful that this tool might be useful to undergraduate students. I have seen graphical iteration used in economics courses at the university level, so perhaps this tool could help economists in training, for instance, to model poverty traps.  
+I hope that this tool might be useful in education settings for demonstration purposes, or for analysis, as the program also produces data frames of the plotting data which contain all the orbit information. I am hopeful that this tool might be useful to undergraduate students. I have seen graphical iteration used in economics courses at the university level, so perhaps this tool could help economists in training, for instance, to model poverty traps.  
 
 If you are interested in trying this code out for yourself, by far the easiest way is probably to download the original .rmd file from my GitHub, at this link: [Graphical iteration in R on GitHub](https://github.com/phileasdg/Graphical-Iteration-in-R) Please feel free to modify it and use it in your projects. The program is licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/).[](https://github.com/phileasdg/Graphical-Iteration-in-R)

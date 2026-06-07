@@ -1,18 +1,8 @@
----
-title: "DelphAI: Structured Communication with LLMs in a Simulated Delphi Process"
-date: "2025-08-16T04:17"
-tags: ["AI","Complex Systems","Modelling","Wolfram Language","Work at Wolfram"]
-thumbnail: "media/posts/45/Banner-image-Community-Post-LLM-Delphi-Method.png"
-thumbWidth: 1598
-thumbHeight: 747
-date_modified: "2026-01-17T21:09:57+01:00"
-date_published: "2025-08-16T04:17:42+02:00"
----
-
 **Note:** This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live code or to download this text alongside the source code, please visit the original post [here](https://community.wolfram.com/groups/-/m/t/3393596). 
 
-<h2 id="introduction">Introduction</h2>
-<h3 id="an-overview-of-the-delphi-method">An Overview of the Delphi Method</h3>
+## Introduction
+
+### An Overview of the Delphi Method
 
 The Delphi method is a structured communication technique originally designed as a forecasting technique, that relies on a panel of experts. It was developed by the RAND Corporation in the 1950s and 1960s. The method involves multiple rounds of questionnaires or writing prompts sent to a panel of experts. The anonymised responses are aggregated and shared with the group after each round. The experts are encouraged to revise their earlier answers in light of the replies of other members of the panel. With some luck, the answers will converge to consensus over the course of several rounds. The method is widely used for forecasting and decision-making in business and education. 
 
@@ -28,9 +18,9 @@ In[]:= Show[
   ]
 ```
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/18afa53ilb1yy-2.png" alt="Illustration of one round of the Delphi process:" width="1328" height="642" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/18afa53ilb1yy-2-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/18afa53ilb1yy-2-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/18afa53ilb1yy-2-md.png 768w"></figure>
+![Illustration of one round of the Delphi process:](https://phileasdg.github.io/media/posts/45/18afa53ilb1yy-2.png =1328x642)
 
-<h3 id="what-does-it-look-like-in-practice">What does it look like in practice?</h3>
+### What does it look like in practice?
 
 Here’s a step-by-step breakdown of the Delphi method. 
 
@@ -55,9 +45,10 @@ In[]:= ListAnimate[Join[Join @@ Table[Join[
     Table[delphiMethodPlot[0, True, False, &quot;End: The facilitator produces a final report.&quot;], 60]], AnimationRate -> 30]
 ```
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/0k6j4neosl4i7.png" alt="Snapshot from an animation representing the Delphi process" width="820" height="907" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/0k6j4neosl4i7-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/0k6j4neosl4i7-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/0k6j4neosl4i7-md.png 768w"></figure>
+![Snapshot from an animation representing the Delphi process](https://phileasdg.github.io/media/posts/45/0k6j4neosl4i7.png =820x907)
 
-<h3 id="why-simulate-a-delphi-process-with-llms">Why simulate a Delphi process with LLMS?</h3>
+### Why simulate a Delphi process with LLMS?
+
 <h4 id="studying-llm-capabilities">Studying LLM Capabilities</h4>
 
 LLMs provide a unique laboratory for studying artificial intelligence capabilities in structured dialogue. We can systematically evaluate how well these models maintain consistent expertise and viewpoints across multiple rounds of interaction - a key test of their ability to maintain coherent personas. The controlled environment allows us to study how AI systems incorporate new information while maintaining logical reasoning threads, and observe how they handle disagreements and work toward consensus. Perhaps most importantly, what would take weeks or months with human experts can be simulated in minutes, enabling rapid experimentation with different approaches and parameters. 
@@ -70,7 +61,7 @@ The digital nature and speed of LLM interactions offers unprecedented opportunit
 
 While promising, this approach comes with important limitations that must be considered. LLMs lack the deep, embodied experience of human experts - their expertise is ultimately derived from training data rather than years of lived experience. Since all participants in a simulation draw from the same underlying model, there’s a risk of artificial consensus that doesn’t reflect the true diversity of expert opinions. Additionally, LLMs don’t have professional reputations or real-world consequences to consider when making judgments, potentially limiting the relevance of their decisions. Findings should be interpreted with appropriate awareness of these constraints.
 
-<h3 id="motivation-for-using-wolfram-language">Motivation for using Wolfram Language</h3>
+### Motivation for using Wolfram Language
 
 A few advantages of using Wolfram Language to implement an LLM Delphi process simulation are:
 
@@ -86,29 +77,31 @@ There are many great LLM-related functions like [ChatObject](https://reference.w
 
 Being able to connect LLMs to the full Wolfram Language standard library of functions and symbols, the wolfram resource system, and wolfram knowledgebase.
 
-<h2 id="llm-delphi-process-implementation">*LLM Delphi Process Implementation*</h2>
-<h3 id="defining-a-project-prompt-bank">Defining a project prompt bank</h3>
+## *LLM Delphi Process Implementation*
+
+### Defining a project prompt bank
 
 Define a dataset of project prompts:
 
-<figure class="post__image"><img src="https://phileasdg.github.io/media/posts/45/19u9mclxjw50y.png" alt="Definition of a dataset of project prompts" width="1195" height="719" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/19u9mclxjw50y-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/19u9mclxjw50y-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/19u9mclxjw50y-md.png 768w"></figure>
+![Definition of a dataset of project prompts](https://phileasdg.github.io/media/posts/45/19u9mclxjw50y.png =1195x719)
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/Screenshot-2025-08-15-at-22.39.36.png" alt="Prompt bank dataset preview (cut off)" width="1398" height="1058" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/Screenshot-2025-08-15-at-22.39.36-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/Screenshot-2025-08-15-at-22.39.36-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/Screenshot-2025-08-15-at-22.39.36-md.png 768w"></figure>
+![Prompt bank dataset preview (cut off)](https://phileasdg.github.io/media/posts/45/Screenshot-2025-08-15-at-22.39.36.png =1398x1058)
 
-<h3 id="participants-setup">Participants setup</h3>
+### Participants setup
+
 <h4 id="defining-a-dataset-of-persona-details">Defining a dataset of persona details</h4>
 
 *Generate 24 conflicting opinions:*
 
-<figure class="post__image"><img src="https://phileasdg.github.io/media/posts/45/0um5kz93vlo6r.png" alt="Generate 24 conflicting opinions" width="796" height="85" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/0um5kz93vlo6r-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/0um5kz93vlo6r-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/0um5kz93vlo6r-md.png 768w"></figure>
+![Generate 24 conflicting opinions](https://phileasdg.github.io/media/posts/45/0um5kz93vlo6r.png =796x85)
 
 *Generate a dataset of participant details (name, persona prompt, a sample of preexisting perspectives):*
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/0ang0i5eq7168.png" alt="Generate a dataset of participant details" width="2530" height="323" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/0ang0i5eq7168-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/0ang0i5eq7168-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/0ang0i5eq7168-md.png 768w"></figure>
+![Generate a dataset of participant details](https://phileasdg.github.io/media/posts/45/0ang0i5eq7168.png =2530x323)
 
 *Let’s load a pre-generated dataset of participant parameters:*
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/05a87xett01ev.png" alt="Load a pre-generated dataset of participant parameters" width="567" height="78" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/05a87xett01ev-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/05a87xett01ev-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/05a87xett01ev-md.png 768w"></figure>
+![Load a pre-generated dataset of participant parameters](https://phileasdg.github.io/media/posts/45/05a87xett01ev.png =567x78)
 
 <table>
 <thead>
@@ -168,7 +161,7 @@ In[]:= initialiseParticipantChat[participantParameterDataset[[1]]]
 Out[]= &quot;The garden should feature a diverse range of exotic plants to make it visually appealing and unique.--------------It should be on the outskirts of town, where it&#39;s quieter and more peaceful for gardening without disturbances.--------------The primary purpose of the garden is to grow food for the community, and any surplus should be donated to local food banks.&quot;
 ```
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/1ny77ybl4x6ee-2.png" alt="" width="237" height="86" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/1ny77ybl4x6ee-2-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/1ny77ybl4x6ee-2-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/1ny77ybl4x6ee-2-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/1ny77ybl4x6ee-2.png =237x86)
 
 *Initializing all participant chat objects at once:*
 
@@ -193,12 +186,13 @@ In[]:= ClearAll[participantChats]
 <td>-ChatObject-</td>
 </tr>
 </tbody></table>
-<h3 id="facilitator-setup">Facilitator setup</h3>
+### Facilitator setup
+
 <h4 id="providing-instructions-from-the-facilitator-to-the-participants-and-getting-participant-contributions">Providing instructions from the facilitator to the participants, and getting participant contributions</h4>
 
 *Construct facilitator instructions to participants:*
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/0aykn2josyvjv.png" alt="" width="1739" height="119" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/0aykn2josyvjv-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/0aykn2josyvjv-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/0aykn2josyvjv-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/0aykn2josyvjv.png =1739x119)
 
 *Construct the initial instructions to participants from the facilitator:*
 
@@ -237,7 +231,7 @@ In[]:= ClearAll[facilitatorChat]
  facilitatorChat = ChatObject[promptBank[&quot;Initial instructions to facilitator&quot;]]
 ```
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/15vejcwe3gdmg.png" alt="Chat object" width="237" height="86" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/15vejcwe3gdmg-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/15vejcwe3gdmg-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/15vejcwe3gdmg-md.png 768w"></figure>
+![Chat object](https://phileasdg.github.io/media/posts/45/15vejcwe3gdmg.png =237x86)
 
 *Extract the latest participant responses:*
 
@@ -248,7 +242,7 @@ In[]:= ClearAll[latestParticipantResponses]
 
 *Example:*
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/0y00znl27qdxv-2.png" alt="" width="545" height="41" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/0y00znl27qdxv-2-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/0y00znl27qdxv-2-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/0y00znl27qdxv-2-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/0y00znl27qdxv-2.png =545x41)
 
 *Construct an instructions prompt for the facilitator to produce a report based on the latest round of participant contributions:*
 
@@ -264,7 +258,7 @@ In[]:= ClearAll[constructInstructionsToFacilitator]
 
 *Submit people’s latest round of contributions to the facilitator and ask the facilitator to produce a report:*
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/1a62mzg18g6x8.png" alt="" width="1378" height="41" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/1a62mzg18g6x8-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/1a62mzg18g6x8-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/1a62mzg18g6x8-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/1a62mzg18g6x8.png =1378x41)
 
 <h4 id="sending-facilitator-reports-to-participants">Sending facilitator reports to participants</h4>
 
@@ -295,7 +289,7 @@ In[]:= (*Map[ChatEvaluate[#,constructInstructionsFromFacilitator[
 In[]:= (*latestParticipantResponses[%]*)
 ```
 
-<h3 id="tying-it-all-together-simulating-the-delphi-process">Tying it all together: simulating the Delphi process</h3>
+### Tying it all together: simulating the Delphi process
 
 A Delphi process round is made from the contributions of participants + the report produced by the facilitator.
 
@@ -347,13 +341,14 @@ In[]:= threeRoundDelphiProcessData = MapAt[delphiProcessFinalReport, Nest[delphi
 In[]:= Iconize[threeRoundDelphiProcessData]
 ```
 
-<figure class="post__image"><img src="https://phileasdg.github.io/media/posts/45/04f11y5b1vhzy.png" alt="Iconized data" width="88" height="41" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/04f11y5b1vhzy-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/04f11y5b1vhzy-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/04f11y5b1vhzy-md.png 768w"></figure>
+![Iconized data](https://phileasdg.github.io/media/posts/45/04f11y5b1vhzy.png =88x41)
 
 Let’s load a precomputed simulation result:
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/17ugn9x2lpitf.png" alt="Image description" width="1089" height="38" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/17ugn9x2lpitf-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/17ugn9x2lpitf-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/17ugn9x2lpitf-md.png 768w"></figure>
+![Image description](https://phileasdg.github.io/media/posts/45/17ugn9x2lpitf.png =1089x38)
 
-<h3 id="fetching-participant-contributionsfacilitator-reports-from-completed-simulations">Fetching participant contributions/facilitator reports from completed simulations</h3>
+### Fetching participant contributions/facilitator reports from completed simulations
+
 <h4 id="implementation-nthroundcontributions-nthroundcontributionspeechbubbles-nthroundreport-nthroundreportspeechbubble">*Implementation:* (nthRoundContributions, nthRoundContributionSpeechBubbles, nthRoundReport, nthRoundReportSpeechBubble)</h4>
 
 *Define a function to retrieve the contributions of the participants at the nth Delphi process round:*
@@ -365,7 +360,7 @@ In[]:= ClearAll[nthRoundContributions]
 
 *Retrieve the nth round participant contributions:*
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/Screenshot-2025-08-15-at-22.55.37.png" alt="" width="1706" height="572" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/Screenshot-2025-08-15-at-22.55.37-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/Screenshot-2025-08-15-at-22.55.37-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/Screenshot-2025-08-15-at-22.55.37-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/Screenshot-2025-08-15-at-22.55.37.png =1706x572)
 
 1. **Understanding Soil Composition and Local Climate**: The notion that any plant can thrive with enough watering and fertilization overlooks the critical role of soil health and structure. Different plants have varying requirements for soil pH, drainage, and nutrient availability. For example, root vegetables like carrots and beets prefer sandy loam for proper growth, while leafy greens may do better in richer, loamy soils. It is essential to assess soil composition and amend it appropriately before deciding on plant varieties.
 
@@ -417,50 +412,51 @@ In conclusion, I believe that through a combination of native planting, organic 
 
 Define a function to construct speech bubbles for the nth round contribution of a participant specification *participants* (which could be All, a single participant name, or a list of participant names):
 
-<figure class="post__image"><img src="https://phileasdg.github.io/media/posts/45/090s6if3in8jv.png" alt="" width="1106" height="233" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/090s6if3in8jv-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/090s6if3in8jv-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/090s6if3in8jv-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/090s6if3in8jv.png =1106x233)
 
 *Example: *
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/1gaifup1y9wd1.png" alt="" width="1520" height="41" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/1gaifup1y9wd1-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/1gaifup1y9wd1-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/1gaifup1y9wd1-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/1gaifup1y9wd1.png =1520x41)
 
-<figure class="post__image"><img src="https://phileasdg.github.io/media/posts/45/1h5ybo970k9qi.png" alt="" width="1226" height="855" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/1h5ybo970k9qi-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/1h5ybo970k9qi-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/1h5ybo970k9qi-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/1h5ybo970k9qi.png =1226x855)
 
 *Define a function to retrieve the facilitator reports at the nth Delphi process round:*
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/0ljlk3quiqz29.png" alt="" width="2262" height="68" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/0ljlk3quiqz29-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/0ljlk3quiqz29-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/0ljlk3quiqz29-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/0ljlk3quiqz29.png =2262x68)
 
 *Retrieve the nth round facilitator report:*
 
-<figure class="post__image"><img src="https://phileasdg.github.io/media/posts/45/1l0peedx4yo34.png" alt="" width="478" height="41" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/1l0peedx4yo34-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/1l0peedx4yo34-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/1l0peedx4yo34-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/1l0peedx4yo34.png =478x41)
 
 *Define a function to construct nth round facilitator report speech bubbles:*
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/0lv37w7ofd568.png" alt="" width="1577" height="236" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/0lv37w7ofd568-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/0lv37w7ofd568-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/0lv37w7ofd568-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/0lv37w7ofd568.png =1577x236)
 
 *Example: *
 
-<figure class="post__image"><img src="https://phileasdg.github.io/media/posts/45/1cm44wjglqejj.png" alt="" width="1194" height="41" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/1cm44wjglqejj-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/1cm44wjglqejj-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/1cm44wjglqejj-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/1cm44wjglqejj.png =1194x41)
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/0m65zjrnlrk4h.png" alt="" width="1181" height="774" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/0m65zjrnlrk4h-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/0m65zjrnlrk4h-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/0m65zjrnlrk4h-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/0m65zjrnlrk4h.png =1181x774)
 
 <h4 id="visualising-the-full-dialogue-from-a-simulated-delphi-process">Visualising the full dialogue from a simulated Delphi process:</h4>
 
 *Visualise the sequence of communications between agents in the Delphi process:*
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/1v8y6wfhn3sfw.png" alt="" width="1801" height="349" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/1v8y6wfhn3sfw-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/1v8y6wfhn3sfw-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/1v8y6wfhn3sfw-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/1v8y6wfhn3sfw.png =1801x349)
 
 (see the included visualisation at the end of this text)
 
-<h3 id="other-miscellaneous-visualisation-tools">Other miscellaneous visualisation tools</h3>
+### Other miscellaneous visualisation tools
+
 <h4 id="implementation-diskframe-delphimethodplot">*Implementation:* (diskFrame, delphiMethodPlot)</h4>
 
 *Create disk frame around an expression:*
 
-<figure class="post__image"><img src="https://phileasdg.github.io/media/posts/45/090s6if3in8jv-2.png" alt="" width="1106" height="233" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/090s6if3in8jv-2-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/090s6if3in8jv-2-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/090s6if3in8jv-2-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/090s6if3in8jv-2.png =1106x233)
 
 *Create a Delphi process illustration:*
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/1vzaoomjz8zr0.png" alt="" width="2536" height="403" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/1vzaoomjz8zr0-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/1vzaoomjz8zr0-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/1vzaoomjz8zr0-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/1vzaoomjz8zr0.png =2536x403)
 
 *Make an animation illustrating the process:*
 
@@ -473,10 +469,11 @@ In[]:= ListAnimate[Join[Join @@ Table[Join[
     Table[delphiMethodPlot[0, True, False, &quot;End: The facilitator produces a final report.&quot;], 30]], AnimationRate -> 30]
 ```
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/1jrowcy9twoa8.png" alt="" width="820" height="907" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/1jrowcy9twoa8-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/1jrowcy9twoa8-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/1jrowcy9twoa8-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/1jrowcy9twoa8.png =820x907)
 
-<h2 id="case-study-establishing-and-maintaining-a-community-garden">Case Study: Establishing and Maintaining a Community Garden</h2>
-<h3 id="the-case-study-setting">The case study setting</h3>
+## Case Study: Establishing and Maintaining a Community Garden
+
+### The case study setting
 
 This case study simulates a Delphi process focused on developing a comprehensive plan for establishing and maintaining a community garden. 
 
@@ -492,7 +489,7 @@ The simulation employs 4 LLM “expert” participants, each represented by thei
 
 Plus a Facilitator (🕵️) who guides the process, summarizes findings, and produces reports. 
 
-<h3 id="participant-system-prompts">Participant system prompts</h3>
+### Participant system prompts
 
 The LLM expert participants are given the following shared instructions: 
 
@@ -502,27 +499,27 @@ Shared participant system prompt:
 In[]:= Framed[Text[Style[promptBank[&quot;Shared participant prompt&quot;], Italic]], RoundingRadius -> 5]
 ```
 
-<figure class="post__image"><img src="https://phileasdg.github.io/media/posts/45/1hq1mwjuuylfb.png" alt="" width="2786" height="289" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/1hq1mwjuuylfb-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/1hq1mwjuuylfb-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/1hq1mwjuuylfb-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/1hq1mwjuuylfb.png =2786x289)
 
 In addition to these shared instructions, each participant gets their own persona prompt which describes the general , and some of the beliefs they should defend. For example:
 
 Participant persona prompt example: The Horticulturist
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/0l7d8px336ljg.png" alt="" width="1880" height="137" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/0l7d8px336ljg-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/0l7d8px336ljg-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/0l7d8px336ljg-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/0l7d8px336ljg.png =1880x137)
 
-<figure class="post__image"><img src="https://phileasdg.github.io/media/posts/45/1cozki4smkasv.png" alt="" width="2182" height="680" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/1cozki4smkasv-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/1cozki4smkasv-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/1cozki4smkasv-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/1cozki4smkasv.png =2182x680)
 
 Participant beliefs are generated automatically using an LLM using the prompt:
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/1m8rvekmhvg8o.png" alt="" width="685" height="41" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/1m8rvekmhvg8o-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/1m8rvekmhvg8o-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/1m8rvekmhvg8o-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/1m8rvekmhvg8o.png =685x41)
 
-<figure class="post__image"><img src="https://phileasdg.github.io/media/posts/45/0bgll1krzz5nh.png" alt="" width="1721" height="56" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/0bgll1krzz5nh-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/0bgll1krzz5nh-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/0bgll1krzz5nh-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/0bgll1krzz5nh.png =1721x56)
 
 The resulting text is then converted into a list of first person statements using the prompt:
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/1adufvrvtmh3b.png" alt="" width="685" height="41" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/1adufvrvtmh3b-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/1adufvrvtmh3b-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/1adufvrvtmh3b-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/1adufvrvtmh3b.png =685x41)
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/0gwv7g2o5hcwh.png" alt="" width="1864" height="250" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/0gwv7g2o5hcwh-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/0gwv7g2o5hcwh-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/0gwv7g2o5hcwh-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/0gwv7g2o5hcwh.png =1864x250)
 
 where $\text{$\grave{ }$1$\grave{ }$}$ stands for the conflicting opinions list generated at the last step. 
 
@@ -588,11 +585,11 @@ At the start of each round, the participants are sent instructions from the faci
 In[]:= Framed[Text[Style[promptBank[&quot;Instructions from facilitator template&quot;], Italic]],RoundingRadius -> 5]
 ```
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/0mls12ptpekcj.png" alt="" width="2478" height="563" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/0mls12ptpekcj-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/0mls12ptpekcj-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/0mls12ptpekcj-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/0mls12ptpekcj.png =2478x563)
 
 Each participant then responds to this prompt.
 
-<h3 id="the-facilitator-system-prompt">The facilitator system prompt</h3>
+### The facilitator system prompt
 
 The facilitator has the task of coordinating and directing the Delphi process. Unlike the expert participants who are given specific personas and perspectives, the facilitator is instructed to remain neutral and focus on process management. The facilitator is instructed using the following system prompt:
 
@@ -600,7 +597,7 @@ The facilitator has the task of coordinating and directing the Delphi process. U
 In[]:= Framed[Text[Style[promptBank[&quot;Initial instructions to facilitator&quot;], Italic]], RoundingRadius -> 5]
 ```
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/035sfh91ajxpx.png" alt="" width="2452" height="250" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/035sfh91ajxpx-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/035sfh91ajxpx-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/035sfh91ajxpx-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/035sfh91ajxpx.png =2452x250)
 
 At each round, when the participants have completed their contributions, the facilitator is sent the latest list of contributions in the following template:
 
@@ -608,11 +605,11 @@ At each round, when the participants have completed their contributions, the fac
 In[]:= Framed[Text[Style[promptBank[&quot;Facilitator materials template&quot;], Italic]], RoundingRadius -> 5]
 ```
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/06nt3vbqzfi37.png" alt="" width="2741" height="563" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/06nt3vbqzfi37-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/06nt3vbqzfi37-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/06nt3vbqzfi37-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/06nt3vbqzfi37.png =2741x563)
 
 The report the facilitator produces in response is sent out to the participants at the start of the next round. For the final round, the facilitator uses its latest report to produce a final report concluding the Delphi process.
 
-<h3 id="the-delphi-process">The Delphi process</h3>
+### The Delphi process
 
 The simulated Delphi process of this case study consists of three rounds of structured communication between expert participants and a facilitator, culminating in a final report. A key feature of the implementation is the use of chat objects to provide each agent its own chat history and context throughout the process. 
 
@@ -639,7 +636,7 @@ The result looks like this:
 In[]:= Dataset[AssociationThread[{&quot;Round Count&quot;, &quot;Participant Chats&quot;, &quot;Facilitator Chat&quot;}, threeRoundDelphiProcessData]]
 ```
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/11da8zqwcppmx.png" alt="" width="1359" height="1023" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/11da8zqwcppmx-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/11da8zqwcppmx-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/11da8zqwcppmx-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/11da8zqwcppmx.png =1359x1023)
 
 The simulation results can be retrieved as plain text or speech bubbles. For more detail on this functionality, see the *Fetching participant contributions/facilitator reports from completed simulations* subsection of the *LLM Delphi Process Implementation* section of this article. 
 
@@ -651,7 +648,7 @@ In[]:= First[nthRoundContributionSpeechBubbles[threeRoundDelphiProcessData[[2]],
     &quot;SnippetForm&quot; -> True, &quot;SnippetLength&quot; -> 10]]
 ```
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/13qyjo9rab6t5.png" alt="" width="1244" height="632" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/13qyjo9rab6t5-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/13qyjo9rab6t5-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/13qyjo9rab6t5-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/13qyjo9rab6t5.png =1244x632)
 
 Likewise, to make a speech bubble for the nth round report, we might say:
 
@@ -660,17 +657,17 @@ In[]:= nthRoundReportSpeechBubble[Last[threeRoundDelphiProcessData], 1,
    &quot;SnippetForm&quot; -> True, &quot;SnippetLength&quot; -> 10]
 ```
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/0g9j5mu9p8p5g.png" alt="" width="1178" height="620" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/0g9j5mu9p8p5g-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/0g9j5mu9p8p5g-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/0g9j5mu9p8p5g-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/0g9j5mu9p8p5g.png =1178x620)
 
-<h3 id="case-study-full-exchange-transcript">*Case-study full exchange transcript*</h3>
+### *Case-study full exchange transcript*
 
 Visualise the full sequence of exchanges between agents in the case-study Delphi process simulation:
 
-<figure class="post__image"><img src="https://phileasdg.github.io/media/posts/45/010t8jgipvpxf.png" alt="" width="1801" height="349" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/010t8jgipvpxf-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/010t8jgipvpxf-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/010t8jgipvpxf-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/45/010t8jgipvpxf.png =1801x349)
 
-<figure class="post__image"><img loading="lazy" src="https://phileasdg.github.io/media/posts/45/fulltranscript.png" alt="Full transcript" width="902" height="13790" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/45/responsive/fulltranscript-xs.png 300w ,https://phileasdg.github.io/media/posts/45/responsive/fulltranscript-sm.png 480w ,https://phileasdg.github.io/media/posts/45/responsive/fulltranscript-md.png 768w"></figure>
+![Full transcript](https://phileasdg.github.io/media/posts/45/fulltranscript.png =902x13790)
 
-<h3 id="qualitatively-speaking-how-did-the-llm-participants-and-facilitator-do">Qualitatively speaking, how did the LLM participants and facilitator do?</h3>
+### Qualitatively speaking, how did the LLM participants and facilitator do?
 
 I’m personally quite pleased with the results here. Using Anthropic’s Claude 3.5 Sonnet, the results feel remarkably natural and productive. Several aspects stand out:
 
@@ -680,7 +677,7 @@ I’m personally quite pleased with the results here. Using Anthropic’s Claude
 
 The simulation demonstrated that LLMs can effectively maintain consistent personas while engaging in meaningful negotiation and consensus-building. The quality of discourse suggests that this approach could be valuable for studying group decision-making processes and testing different facilitation strategies.
 
-<h2 id="what-next">What Next?</h2>
+## What Next?
 
 This case study suggests the potential of using LLMs to study structured communication protocols. Wolfram proved to be an ideal environment for this work thanks to its powerful LLM functions, flexible syntax, and rich visualization capabilities.
 
@@ -696,7 +693,7 @@ Future work could explore several promising directions:
 
 The code and methodology presented here provide a foundation for researchers interested in using LLMs to study group decision-making and consensus-building processes.
 
-<h2 id="cite-this-work">Cite this work</h2>
+## Cite this work
 
 [DelphAI: Structured communication with LLMs in a simulated Delphi process](https://community.wolfram.com/groups/-/m/t/3393596)
 by [Phileas Dazeley-Gaist](https://community.wolfram.com/web/phileasdg)

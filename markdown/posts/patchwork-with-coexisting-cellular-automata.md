@@ -1,15 +1,4 @@
----
-title: "Patchwork with Coexisting Cellular Automata"
-date: "2026-01-17T16:53"
-tags: ["Art","Cellular Automata","Complex Systems","Modelling","Programming","Wolfram Language"]
-thumbnail: "media/posts/53/banner-2.png"
-thumbWidth: 3083
-thumbHeight: 1539
-date_modified: "2026-01-17T21:12:55+01:00"
-date_published: "2026-01-17T16:53:32+01:00"
----
-
-**Note: **This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live code or to download this text alongside the source code, please visit the original post [here](https://community.wolfram.com/groups/-/m/t/3608683?p_p_auth=C3EsWlzT). 
+**Note: **This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live code or to download this text alongside the source code, please visit the original post [here](https://community.wolfram.com/groups/-/m/t/3608683?p_p_auth=C3EsWlzT). 
 
 ## Introduction
 
@@ -19,11 +8,11 @@ One approach that I did not have time to dive into but that showed promise was t
 
 Here's a teaser of what we're working toward: Programs that operate on a cellular automaton state arrays by applying a list of cellular automata rules to a list of non-overlapping regions of the state, such that each defined region is subject to its own dynamics, determined both by the region's assigned rule and the dynamics near the region boundary.
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/cellsetup.gif" alt="" width="559" height="406"></figure>
+![](https://phileasdg.github.io/media/posts/53/cellsetup.gif =559x406)
 
 ## Cellular automata with custom boundary conditions
 
-We'll work our way up to CAs operating in parallel on non-overlapping regions of space. But first, it'll be helpful to review some of the basics. 
+We'll work our way up to CAs operating in parallel on non-overlapping regions of space. But first, it'll be helpful to review some of the basics. 
 
 ### One-dimensional CAs
 
@@ -33,7 +22,7 @@ In Wolfram Language, cellular automata default to having periodic boundary condi
 
 *Elementary cellular automaton trajectory with periodic boundary conditions:<br>*
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.31.52.png" alt="" width="225" height="226" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.31.52-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.31.52-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.31.52-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.31.52.png =225x226)
 
 Notice the ripple cascade that wraps around horizontal space as it leaves to the right and simultaneously enters to the left.
 
@@ -41,7 +30,7 @@ The natively supported alternative to periodic boundary conditions in the Cellul
 
 *Elementary cellular automaton trajectory on an infinite canvas:*
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.33.15.png" alt="" width="225" height="226" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.33.15-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.33.15-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.33.15-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.33.15.png =225x226)
 
 Here, the width of the state array is not fixed. In this case, the ripple cascade simply propagates outwards forever, uninterrupted.
 
@@ -53,27 +42,27 @@ To confine a rule to a spatial region within a CA state, the simplest general ap
 
 *Trajectory of a rule 30 CA confined to a small region of the simulation space:*
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.34.19.png" alt="" width="225" height="227" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.34.19-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.34.19-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.34.19-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.34.19.png =225x227)
 
-In the plot above, the green region represents the spatial domain of the automaton rule. Changes made to the state by the rule will only take effect inside the green region. 
+In the plot above, the green region represents the spatial domain of the automaton rule. Changes made to the state by the rule will only take effect inside the green region. 
 
 Proceeding this way means that although the green automaton is unable to make changes to cells outside the green region, green region cells near the border still "sense", and are affected by the state of cells on the other side of the border. If a green-region cell's neighbourhood contains cells from different regions, those cell states are used to determine the new cell state just as they would usually be. What this achieves is making the automaton region boundaries porous by default. The dynamics in the green region are affected by the local dynamics outside of the green region.
 
-In the present example, the background is held constant and uniform. But there's not reason it has to be. If the background were heterogenous and dynamic, our setup would work just as well, though the dynamics in the green region would  be different as the state evolution would be subject to different kinds of interference from local background activity. We'll return to this point later.
+In the present example, the background is held constant and uniform. But there's not reason it has to be. If the background were heterogenous and dynamic, our setup would work just as well, though the dynamics in the green region would  be different as the state evolution would be subject to different kinds of interference from local background activity. We'll return to this point later.
 
 Another important clarification is that while in the simulations above, the chosen rule is confined to a region with a constant spatial boundary, the simulation itself is still operating in a periodic space. This distinction is essential because it means that cells on the periphery of the state array are still considered adjacent to cells on their opposite sides. In the example above, the left and right sides of the state array are still glued together. If a rule's assigned region were to span from one end of the state to the other, it would be possible for event cascades to wrap around.
 
 *Trajectory of a rule 30 CA confined to a region that wraps around the periodic boundaries of the simulation space:*
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.35.45.png" alt="" width="225" height="227" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.35.45-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.35.45-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.35.45-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.35.45.png =225x227)
 
 <h4>Removing spatial periodicity</h4>
 
-To also get rid of the periodic boundary conditions of the space itself, my suggestion is a bit hacky but functional: Pad any starting CA state with enough zeros in all directions to prevent periodic interaction at the edges of the state array, compute the next step, and trim the resulting array so as to recover the original dimensions. Repeat as needed. Padding by the automaton neighbourhood  range is easy and guaranteed to be enough (the minimum required padding depends on the neighbourhood used by automata in the simulation, so I won't discuss it here). 
+To also get rid of the periodic boundary conditions of the space itself, my suggestion is a bit hacky but functional: Pad any starting CA state with enough zeros in all directions to prevent periodic interaction at the edges of the state array, compute the next step, and trim the resulting array so as to recover the original dimensions. Repeat as needed. Padding by the automaton neighbourhood  range is easy and guaranteed to be enough (the minimum required padding depends on the neighbourhood used by automata in the simulation, so I won't discuss it here). 
 
 *Cellular automaton trajectory with a rule 30 CA confined to a visually identical region as in the previous example, but that does not wrap around the periodic boundaries of the simulation space:*
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.36.30.png" alt="" width="225" height="226" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.36.30-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.36.30-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.36.30-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.36.30.png =225x226)
 
 Now, on the left and right sides of the state array, the background is effectively taken to be all zeros, so the rightmost cascade can never wrap around to the left, and the simulation space is fixed. In this specific case, the change also causes both green regions to start with the same initial conditions. As the neighbours to the left of the leftmost cell of each green region at t=0 are now considered to be zero, the initial conditions cause two cascades instead of one.
 
@@ -81,7 +70,7 @@ We chose to have uniform and constant zero boundary conditions for the entire si
 
 *Rule 30 CA trajectory confined to a region subject to random and dynamic boundary conditions:*
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.37.05.png" alt="" width="225" height="226" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.37.05-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.37.05-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.37.05-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.37.05.png =225x226)
 
 Here, the states of the cells that make up the boundary change at random, affecting the dynamics of the green automaton, although the boundary itself does not move around. The boundary is fixed in space, but not fixed in state.
 
@@ -93,11 +82,11 @@ Here's a setup in two dimensions that confines a totalistic 9-neighbour CA to a 
 
 *Dynamics of a totalistic 9-neighbor CA confined to a square region of the simulation space:*
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/squaresetup.gif" alt="" width="300" height="300"></figure>
+![](https://phileasdg.github.io/media/posts/53/squaresetup.gif =300x300)
 
 Just as before:
 
-- The green region represents the spatial domain of the automaton rule. 
+- The green region represents the spatial domain of the automaton rule. 
 
 - The boundary is porous, so nearby activity outside the green region can affect green region dynamics.
 
@@ -109,17 +98,17 @@ Here's a setup where the green region allows the dynamics to wrap around along e
 
 *Totalistic 9-neighbor CA dynamics constrained to a region with an isolated central component subject to fixed zero boundary conditions, and a surrounding component subject to the periodic boundary conditions of the simulation space:*
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/crosssetupperiodic.gif" alt="" width="300" height="300"></figure>
+![](https://phileasdg.github.io/media/posts/53/crosssetupperiodic.gif =300x300)
 
 You can think of the space as wrapping around a torus like this:
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.45.55.png" alt="" width="225" height="205" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.45.55-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.45.55-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.45.55-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.45.55.png =225x205)
 
 Here's a setup with the same green region specification, but with constant zero boundary conditions applied to the simulation space.
 
 *Totalistic 9-neighbor CA dynamics constrained to a region with an isolated central component subject to fixed zero boundary conditions, and a surrounding component also subject to fixed boundary conditions:*
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/crosssetupconstantzero-2.gif" alt="" width="300" height="300"></figure>
+![](https://phileasdg.github.io/media/posts/53/crosssetupconstantzero-2.gif =300x300)
 
 Setting constant zero boundary conditions turns the boundaries of the simulation window into smooth, solid, impenetrable walls, preventing the dynamics of the green CA from wrapping around.
 
@@ -127,7 +116,7 @@ Finally, here's an example in which these boundary conditions are made random an
 
 *Totalistic 9-neighbor CA dynamics constrained to a region with an isolated central component subject to fixed zero boundary conditions, and a surrounding component subject to random dynamic boundary conditions:*
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/crosssetupdynamicrandom.gif" alt="" width="301" height="301"></figure>
+![](https://phileasdg.github.io/media/posts/53/crosssetupdynamicrandom.gif =301x301)
 
 In this last case, the dynamics in the outer part appear quite random.
 
@@ -137,11 +126,11 @@ Just to show that it's possible, here's a complicated 3D example using a state g
 
 *Dynamics of a 3D CA confined to a complex 3D region:*
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/3Dsetup.gif" alt="" width="300" height="326"></figure>
+![](https://phileasdg.github.io/media/posts/53/3Dsetup.gif =300x326)
 
-And here's a simulation of the process in six dimensions, just for fun, although there's no longer a simple way to visualize its output, so all I'll show you is this preview of the final state array: 
+And here's a simulation of the process in six dimensions, just for fun, although there's no longer a simple way to visualize its output, so all I'll show you is this preview of the final state array: 
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.52.45.png" alt="" width="1224" height="126" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.52.45-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.52.45-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.52.45-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.52.45.png =1224x126)
 
 ### Bonus: miscellaneous interesting examples
 
@@ -149,21 +138,21 @@ And here's a simulation of the process in six dimensions, just for fun, although
 
 *First, generate a maze to use as a mask:*
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.53.16.png" alt="" width="225" height="229" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.53.16-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.53.16-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.53.16-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.53.16.png =225x229)
 
 *Compute the trajectory of a 9-neighbour 2D totalistic CA confined by the mask:*
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/mazesetup.gif" alt="" width="300" height="300"></figure>
+![](https://phileasdg.github.io/media/posts/53/mazesetup.gif =300x300)
 
 <h4>Other complex shapes</h4>
 
 *Define an organic shape shape to use as a mask:*
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.55.53.png" alt="" width="225" height="234" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.55.53-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.55.53-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-11.55.53-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.55.53.png =225x234)
 
 *Compute the trajectory of a 9-neighbour 2D totalistic CA confined by the mask:*
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/flowersetup.gif" alt="" width="300" height="308"></figure>
+![](https://phileasdg.github.io/media/posts/53/flowersetup.gif =300x308)
 
 ### Review
 
@@ -171,9 +160,9 @@ In this section, we explored techniques for confining cellular automata to speci
 
 - The CellularAutomaton function supports two default boundary conditions, periodic and infinite.
 
-- To confine a CA rule to a specific spatial region, we can apply the rule to the full state, but discard all changes outside the rule's assigned region using a region mask. 
+- To confine a CA rule to a specific spatial region, we can apply the rule to the full state, but discard all changes outside the rule's assigned region using a region mask. 
 
-- To remove the periodic boundary conditions of the space itself, we can pad the initial state with enough zeros in all directions to prevent periodic interaction at the edges, compute the next step, and trim the resulting array back to the original dimensions. This effectively simulates constant zero boundary conditions. 
+- To remove the periodic boundary conditions of the space itself, we can pad the initial state with enough zeros in all directions to prevent periodic interaction at the edges, compute the next step, and trim the resulting array back to the original dimensions. This effectively simulates constant zero boundary conditions. 
 
 - By controlling the padding values we can set different kinds of global boundary conditions. Padding with ones will simulate uniform and constant one boundary conditions. Padding with zeros and ones in different places will result in non-uniform boundary conditions. In general, boundary conditions must be defined with valid cell states: zero or one for two-state CAs, and zero through *k-1* for *k* state CAs.
 
@@ -181,13 +170,13 @@ In this section, we explored techniques for confining cellular automata to speci
 
 - These techniques can be applied to 1D and 2D CAs, but also to CAs in higher dimensional spaces.
 
-## Coexisting Cellular Automata: <br>Running CAs in parallel in separate regions of space
+## Coexisting Cellular Automata: <br>Running CAs in parallel in separate regions of space
 
 ### How does it work?
 
 We can use the tools developed above to perform simulations in which several CA rules operate in parallel on non-overlapping regions of the simulation space. I'll refer to simulations like these as Coexisting CAs, and since I'm going to want to experiment with Coexisting CAs a lot, I'll define a *CoexistingCellularAutomata* function to automate the process of setting up and running these simulations. The full function definition can be found in the *Code Initialisation* section at the end of the [Wolfram Community version of this article](https://community.wolfram.com/groups/-/m/t/3608683?p_p_auth=A7Xz7iqu).
 
-The core steps of the process are: 
+The core steps of the process are: 
 
 1. Define a list of CA rules and an initial state for the entire simulation space.
 
@@ -203,9 +192,9 @@ The core steps of the process are: 
 
 This next code snippet demonstrates the process I settled on in my final implementation to compute a single Coexisting CA simulation step. I've included comments to describe the process alongside the code, and calls to Echo and EchoFunction to show key variables generated or used in the throughout its execution.
 
-<figure class="post__image align-left"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.02.24.png" alt="" width="600" height="605" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.02.24-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.02.24-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.02.24-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.02.24.png =600x605)
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.03.30.png" alt="" width="600" height="496" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.03.30-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.03.30-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.03.30-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.03.30.png =600x496)
 
 ### Performing a full Coexisting CA simulation
 
@@ -213,45 +202,45 @@ The CoexistingCellularAutomata function makes simulations of interacting CAs qui
 
 I'll start by defining my simulation parameters. For this example, I'll pick 10 rules at random. Each rule domain will be assigned its own colour.
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.04.25.png" alt="" width="272" height="98" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.04.25-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.04.25-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.04.25-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.04.25.png =272x98)
 
 *Pick some 2 colour range 9-neighbour totalistic CA rules at random:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.05.09.png" alt="" width="609" height="117" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.05.09-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.05.09-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.05.09-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.05.09.png =609x117)
 
 I'll set constant zero initial conditions across the initial state.
 
 *Define an initial array representing the state at t=0:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.05.51.png" alt="" width="396" height="101" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.05.51-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.05.51-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.05.51-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.05.51.png =396x101)
 
-The spatial domains of each CA rule in the simulation must be specified using a single array of integer values corresponding to indices of the supplied rules in the rule list, or zero, meaning "no rules apply here". 
+The spatial domains of each CA rule in the simulation must be specified using a single array of integer values corresponding to indices of the supplied rules in the rule list, or zero, meaning "no rules apply here". 
 
 We can arbitrarily partition the simulation space and assign whichever parts we choose to whichever rules we like. Here, I've used a helper function called *generateVoronoiCASpatialDomains* (defined in the *Code Initialisation* section of the [Wolfram Community version of this essay](https://community.wolfram.com/groups/-/m/t/3608683?p_p_auth=A7Xz7iqu)) to generate the rule domain definitions array.
 
 *Define the spatial domains of each rule in the simulation space:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.07.05.png" alt="" width="529" height="52" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.07.05-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.07.05-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.07.05-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.07.05.png =529x52)
 
 *Preview the domain masks:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.07.31.png" alt="" width="575" height="168" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.07.31-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.07.31-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.07.31-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.07.31.png =575x168)
 
 To perform a simulation, simply supply the list of rules, domain mask, initial state, and number of steps to the CoexistingCellularAutomata function.
 
 *Perform a simulation using CoexistingCellularAutomata:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.08.45.png" alt="" width="405" height="205" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.08.45-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.08.45-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.08.45-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.08.45.png =405x205)
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.09.03.png" alt="" width="680" height="372" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.09.03-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.09.03-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.09.03-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.09.03.png =680x372)
 
 The result is a list of arrays representing the sequence of Coexisting CA states, each of which we can plot to make the frames of an animation of the full simulation trajectory.
 
 *Animate the resulting simulation of interacting CAs, using the masks to colour the frames:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.09.50.png" alt="" width="586" height="172" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.09.50-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.09.50-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.09.50-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.09.50.png =586x172)
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/voronoisetup-2.gif" alt="" width="650" height="473"></figure>
+![](https://phileasdg.github.io/media/posts/53/voronoisetup-2.gif =650x473)
 
 ### Using images as Coexisting CA domain Masks
 
@@ -261,53 +250,53 @@ For this next example, I posterized a webcam selfie so as to only have pixel val
 
 *Define a mask to use in the simulation:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.15.08.png" alt="" width="651" height="180" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.15.08-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.15.08-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.15.08-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.15.08.png =651x180)
 
-<figure class="post__image"><em><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.15.31.png" alt="" width="302" height="192" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.15.31-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.15.31-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.15.31-md.png 768w"></figure>
+<figure class="post__image"><em>![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.15.31.png =302x192)</figure>
 
-</em></p>
+</em>
 
 *Set up and run a 20 step simulation with the chosen rules, rule domains defined by the image mask, and an initial condition array made of all zeros:*
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/picturesetup.gif" alt="" width="671" height="366"></figure>
+![](https://phileasdg.github.io/media/posts/53/picturesetup.gif =671x366)
 
 ## Global boundary conditions of Coexisting CA simulations
 
 By default, CoexistingCellularAutomata assumes periodic boundary conditions on the simulation space, as in this trajectory of rule 10 and rule 90, where the leftmost cells of the array interact with the rightmost cells:
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.29.51.png" alt="" width="251" height="212" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.29.51-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.29.51-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.29.51-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.29.51.png =251x212)
 
-As a convenience to the end user, CoexistingCellularAutomata also supports specifying global boundary conditions using the *"GlobalMaskFunction"* and *"GlobalMaskValueFunction"* options. As their names suggest, these options are designed to receive function arguments. These should be functions of the state array at any given time, though they can also be made to ignore the state array input. 
+As a convenience to the end user, CoexistingCellularAutomata also supports specifying global boundary conditions using the *"GlobalMaskFunction"* and *"GlobalMaskValueFunction"* options. As their names suggest, these options are designed to receive function arguments. These should be functions of the state array at any given time, though they can also be made to ignore the state array input. 
 
-The *"GlobalMaskFunction"* option defines the boundary of the simulation by returning a binary mask where 1s represent cells that can be affected by the chosen CA rules, and 0s represent cells that cannot. The specified function may also return a 0, signalling that no special global boundary conditions should be added. The *"GlobalMaskValueFunction"* defines the values inside the boundary region, and can return a constant cell state value, or an array of valid cell states. When these functions return arrays, the arrays must have dimensions as the state array. 
+The *"GlobalMaskFunction"* option defines the boundary of the simulation by returning a binary mask where 1s represent cells that can be affected by the chosen CA rules, and 0s represent cells that cannot. The specified function may also return a 0, signalling that no special global boundary conditions should be added. The *"GlobalMaskValueFunction"* defines the values inside the boundary region, and can return a constant cell state value, or an array of valid cell states. When these functions return arrays, the arrays must have dimensions as the state array. 
 
-To add constant zero boundary conditions on the left and right ends of the state arrays in the previous simulation, only minimal changes to the code are needed. By adding 
+To add constant zero boundary conditions on the left and right ends of the state arrays in the previous simulation, only minimal changes to the code are needed. By adding 
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.30.42.png" alt="" width="492" height="42" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.30.42-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.30.42-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.30.42-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.30.42.png =492x42)
 
-and 
+and 
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.31.08.png" alt="" width="283" height="31" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.31.08-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.31.08-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.31.08-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.31.08.png =283x31)
 
 to the CoexistingCellularAutomata function call, we restrict the rule domains to all cells other than those near the border, and set the excluded border cells to be equal to 0 throughout the simulation:
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.31.40.png" alt="" width="250" height="214" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.31.40-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.31.40-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.31.40-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.31.40.png =250x214)
 
 Because *"GlobalMaskFunction"* and *"GlobalMaskValueFunction"* expect functions, and these functions are computed for every step of a Coexisting CA simulation, it's also quite easy to set dynamic boundary conditions. If instead, we had specified the options
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.32.30.png" alt="" width="508" height="34" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.32.30-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.32.30-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.32.30-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.32.30.png =508x34)
 
-and 
+and 
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.32.50.png" alt="" width="446" height="33" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.32.50-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.32.50-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.32.50-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.32.50.png =446x33)
 
 we would get random dynamic boundary conditions on the boundaries of the simulation space:
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.33.11.png" alt="" width="250" height="207" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.33.11-xs.png 300w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.33.11-sm.png 480w ,https://phileasdg.github.io/media/posts/53/responsive/Screenshot-2026-01-17-at-12.33.11-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.33.11.png =250x207)
 
 ## Closing thoughts
 
-There are many directions this work could go. It's easy to imagine how the setups we've explored here could become the basis form a kind of toy model of artificial life in which the organisms are wandering cellular automata whose spatial domain boundary conditions themselves are subject to environmental and competitive pressures. 
+There are many directions this work could go. It's easy to imagine how the setups we've explored here could become the basis form a kind of toy model of artificial life in which the organisms are wandering cellular automata whose spatial domain boundary conditions themselves are subject to environmental and competitive pressures. 
 
 Another direction might be to modify the setups explored in this essay to allow multiple CAs to occupy the same spatial domains, and compete for dominance over these overlapping regions. This would require careful planning, as there are many possibilities for how such overlapping claims could be handled, and all will inevitably come with their own advantages and tradeoffs.
 

@@ -1,9 +1,3 @@
----
-title: "Inquiries"
-body_class: "post-template"
-main_class: "post"
----
-
 ## Business inquiries:
 
 For consulting or other business related inquiries, please reach out through my email address, or through my LinkedIn account through the link at the bottom of this page. 

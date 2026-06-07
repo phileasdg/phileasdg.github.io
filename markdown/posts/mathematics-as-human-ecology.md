@@ -1,12 +1,3 @@
----
-title: "HEE: Mathematics as Human Ecology"
-date: "2023-02-23T19:46"
-tags: ["Complex Systems","Ecology","Undergraduate work","Wolfram Language"]
-thumbnail: "media/posts/26/poster-2.png"
-thumbWidth: 6258
-thumbHeight: 2714
----
-
 ## Foreword
 
 The Human Ecology Essay (HEE) is a senior year graduation requirement at College of the Atlantic. It is an opportunity to reflect on one's learning journey at the college and to share one's unique perspectives on human ecological investigations and practices. Each year, College of the Atlantic publishes a selection of these short essays. This is mine.
@@ -47,11 +38,11 @@ In 1968, Aristid Lindenmayer proposed a method to model the branching patterns p
 
 Imagine a string of characters or a single character such as “B”. Suppose we want to transform this object according to the following rule:
 
-<figure class="post__image align-center"><img alt="" height="30" loading="lazy" sizes="(max-width: 48em) 100vw, 100vw" src="../../media/posts/26//rule.png" srcset="../../../media/posts/26//responsive/rule-xs.png 300w, ../../media/posts/26//responsive/rule-sm.png 480w, ../../media/posts/26//responsive/rule-md.png 768w" width="225"/></figure>
+![](../../media/posts/26//rule.png =225x30)
 
 We can apply this rule to “B” by replacing every A with AA and every B with A[+B]-B. Starting with “B”, what happens when we apply the substitution rule three times? As we go, we get:
 
-<figure class="post__image align-center"><img alt="" height="117" loading="lazy" sizes="(max-width: 48em) 100vw, 100vw" src="../../media/posts/26/rules.png" srcset="../../../media/posts/26/responsive/rules-xs.png 300w, ../../media/posts/26/responsive/rules-sm.png 480w, ../../media/posts/26/responsive/rules-md.png 768w" width="587"/></figure>
+![](../../media/posts/26/rules.png =587x117)
 
 Let’s interpret the final transformed string as instructions to draw a tree: Start at any point on the page. This is the base of your tree. As you read through the string, refer to the following table for specific instructions.
 
@@ -91,7 +82,7 @@ Start a new branch leaning to the left from branching point one level back from 
 
 By the end, you should have one of these (try it and find out which one 😁):
 
-<figure class="post__image align-center"><img alt="" height="95" loading="lazy" sizes="(max-width: 48em) 100vw, 100vw" src="../../media/posts/26/Screenshot-2023-02-23-at-13.49.09.png" srcset="../../../media/posts/26/responsive/Screenshot-2023-02-23-at-13.49.09-xs.png 300w, ../../media/posts/26/responsive/Screenshot-2023-02-23-at-13.49.09-sm.png 480w, ../../media/posts/26/responsive/Screenshot-2023-02-23-at-13.49.09-md.png 768w" width="396"/></figure>
+![](../../media/posts/26/Screenshot-2023-02-23-at-13.49.09.png =396x95)
 
 Isn’t it fascinating and exciting to see that such a simple process can capture the branching patterns in the growth of plants? Doesn’t it animate you with wonder and curiosity?
 
@@ -101,11 +92,11 @@ In 1636, Leonard Euler published *Solutio problematis ad geometriam situs pertin
 
 At its core, a graph is a bunch of points (called vertices) that are connected by lines (called edges) to each other in an arbitrary way. For example: Some of my friends know each other, and all my friends have other friends that I have never met. Suppose I was to make a graph where all of us were points connected by lines to our respective friends, it might look something like this:
 
-<figure class="post__image align-center"><img alt="" height="230" loading="lazy" sizes="(max-width: 48em) 100vw, 100vw" src="../../media/posts/26/g1.png" srcset="../../../media/posts/26/responsive/g1-xs.png 300w, ../../media/posts/26/responsive/g1-sm.png 480w, ../../media/posts/26/responsive/g1-md.png 768w" width="337"/></figure>
+![](../../media/posts/26/g1.png =337x230)
 
 There are many directions one might go from here. Maybe we want to know the fastest ways for gossip to spread throughout the network; to do this, we would compute the “betweenness centrality” of the graph, a measure of how often a node is on the shortest path between two other nodes. The nodes with highest betweenness centrality are the ones which have the most influence on the flow of information through the network (*Betweenness Centrality - Neo4j Graph Data Science*, n.d.).
 
-<figure class="post__image align-center"><img alt="" height="384" loading="lazy" sizes="(max-width: 48em) 100vw, 100vw" src="../../media/posts/26/Screenshot-2023-02-23-at-13.51.13.png" srcset="../../../media/posts/26/responsive/Screenshot-2023-02-23-at-13.51.13-xs.png 300w, ../../media/posts/26/responsive/Screenshot-2023-02-23-at-13.51.13-sm.png 480w, ../../media/posts/26/responsive/Screenshot-2023-02-23-at-13.51.13-md.png 768w" width="1004"/></figure>
+![](../../media/posts/26/Screenshot-2023-02-23-at-13.51.13.png =1004x384)
 
 Another thing we might do is look for communities in the network. Communities are “subset[s] of nodes within the graph such that connections between the nodes are denser than connections with the rest of the network” (Radicchi et al., 2004). These communities are easier to analyse qualitatively. For instance, one might contain my friends from college, another might be family friends, or maybe friends from high school.
 

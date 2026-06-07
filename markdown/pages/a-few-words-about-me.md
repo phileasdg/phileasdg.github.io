@@ -1,9 +1,3 @@
----
-title: "About me"
-body_class: "post-template"
-main_class: "post"
----
-
 I'm a French-British human ecologist, data scientist, and scientific programmer specialized in complex systems and geospatial data.
  
 ![About me portrait](../../media/posts/6/portrait-new.png =2696x1797)

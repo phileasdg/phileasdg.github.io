@@ -28,7 +28,7 @@ jobs:
           cache: 'npm'
 
       - name: Build posts and pages
-        run: npm run build
+        run: NODE_ENV=production npm run build
 
       - name: Commit and push changes
         run: |

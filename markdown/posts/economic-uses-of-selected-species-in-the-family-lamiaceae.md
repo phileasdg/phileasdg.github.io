@@ -1,17 +1,8 @@
----
-title: "Economic Uses of Selected Species in the Family Lamiaceae"
-date: "2023-03-11T01:19"
-tags: ["Ecology","Environmental Science","Geography & GIS","Undergraduate work"]
-thumbnail: "media/posts/27/De_Historia_stirpium_commentarii_insignes_...Fuchs_Leonhart_bpt6k1511104z_510.jpg"
-thumbWidth: 2558
-thumbHeight: 1114
----
-
 ## Introduction to the Lamiaceae Family
 
 Lamiaceae (also Labiatae in older literature, or colloquially the mint family) is an expansive family of flowering plants made up of 250 genera and over 7000 species (Stankovic, 2020).
 
-<figure class="post__image align-center"><figure class="post__image"><img alt="Figure 1: Worldwide Lamiaceae distribution (GBIF Backbone Taxonomy, n.d.)" height="454" loading="lazy" sizes="(max-width: 48em) 100vw, 100vw" src="../../media/posts/27//map1.png" srcset="../../../media/posts/27//responsive/map1-xs.png 300w, ../../media/posts/27//responsive/map1-sm.png 480w, ../../media/posts/27//responsive/map1-md.png 768w" width="908"/></figure>
+<figure class="post__image align-center">![Figure 1: Worldwide Lamiaceae distribution (GBIF Backbone Taxonomy, n.d.)](../../media/posts/27//map1.png =908x454)
 
 <figcaption>Figure 1: Worldwide Lamiaceae distribution (GBIF Backbone Taxonomy, n.d.)</figcaption></figure>
 
@@ -25,7 +16,7 @@ This paper will survey three different kinds of economic uses for three differen
 
 Teak (*Tectona grandis*) is a large deciduous tree native to the tropical regions of South and Southeast Asia (Moya et al., 2014). It grows naturally in India, Laos, Myanmar, and Thailand and is cultivated in tropical climates worldwide primarily for high-end timber (Ibid.).
 
-<figure class="post__image align-center"><figure class="post__image"><img alt="Figure 2: Worldwide distribution of teak (GBIF Backbone Taxonomy, n.d.)" height="462" loading="lazy" sizes="(max-width: 48em) 100vw, 100vw" src="../../media/posts/27//map2.png" srcset="../../../media/posts/27//responsive/map2-xs.png 300w, ../../media/posts/27//responsive/map2-sm.png 480w, ../../media/posts/27//responsive/map2-md.png 768w" width="928"/></figure>
+<figure class="post__image align-center">![Figure 2: Worldwide distribution of teak (GBIF Backbone Taxonomy, n.d.)](../../media/posts/27//map2.png =928x462)
 
 <figcaption>Figure 2: Worldwide distribution of teak (GBIF Backbone Taxonomy, n.d.)</figcaption></figure>
 
@@ -35,9 +26,9 @@ Teak wood is famously used in boatbuilding for its combination of strength, flex
 
 The history of teak exploitation is deeply entwined with the history of European colonialism. Over the course of several centuries, European chartered companies such as the British Borneo company exploited teak in Southeast Asia, often at great cost to the indigenous populations and governments (Saha, 2016). In colonial Burma, the teak trade saw startling mortality rates from anthrax outbreaks, and widespread opium addiction in elephants and their riders (Ibid.). The extensive British exploitation of Indian teak from 1793 to 1815 gave the British navy a military advantage over its neighbours (Sérougne, 2020) which the British empire pressed against France during the seven Anglo-French wars of this period (Ibid.).
 
-<figure class="post__image align-center"><figure class="post__image"><img alt="Figure 3: Workers in colonial Burma felling a teak tree (Saha, 2016) " height="564" loading="lazy" sizes="(max-width: 48em) 100vw, 100vw" src="../../media/posts/27//teak-felling.jpg" srcset="../../../media/posts/27//responsive/teak-felling-xs.jpg 300w, ../../media/posts/27//responsive/teak-felling-sm.jpg 480w, ../../media/posts/27//responsive/teak-felling-md.jpg 768w" width="441"/></figure>
+<figure class="post__image align-center">![Figure 3: Workers in colonial Burma felling a teak tree (Saha, 2016) ](../../media/posts/27//teak-felling.jpg =441x564)
 
-<figcaption>Figure 3: Workers in colonial Burma felling a teak tree (Saha, 2016) </figcaption></figure>
+<figcaption>Figure 3: Workers in colonial Burma felling a teak tree (Saha, 2016) </figcaption></figure>
 
 Due to the wood’s high price, its primary use until the mid-20th century remained in large shipbuilding projects (Aubaile-Sallenave, 2021), and to this day, it is considered a luxurious wood. Although its contemporary uses in boat building are greatly diminished (Ibid), it is now broadly used to manufacture consumer goods and infrastructure. For example, to make high-end furniture, or, in India and Bangladesh to build bridges, telephone poles, and railway sleeper wagons (Rahman, 2003).
 
@@ -47,13 +38,15 @@ Modern commercialised teak is primarily sourced from plantations which are grown
 
 Chia (*Salvia hispanica*) is an annual herbaceous plant indigenous to southern Mexico and Guatemala (Motyka et al., 2022). It grows in tropical and subtropical climates, especially in mountainous areas with acidic loam soils and good drainage (Ibid.). Chia is cultivated industrially in Central and North, South America, Europe, and Australia (Ibid), primarily for the culinary uses of its seeds (Knez Hrnčič et al., 2019). Several cultivars of Chia exist (Atamian, n.d.), although documentation regarding them is rather scarce. Yue et al., 2022 refers to six of them, and the University of Kentucky’s Centre for Crop Diversification has patented “long day length flowering lines of chia capable of producing seed in the Commonwealth and the Midwest (University of Kentucky, n.d.)”.
 
-<figure class="post__image"><img alt="Figure 4: Worldwide distribution of chia (GBIF Backbone Taxonomy, n.d.)" height="540" loading="lazy" sizes="(max-width: 48em) 100vw, 100vw" src="../../media/posts/27/map3.png" srcset="../../../media/posts/27/responsive/map3-xs.png 300w, ../../media/posts/27/responsive/map3-sm.png 480w, ../../media/posts/27/responsive/map3-md.png 768w" width="1092"/><figcaption><p>Figure 4: Worldwide distribution of chia (GBIF Backbone Taxonomy, n.d.)</p></figcaption></figure>
+<figure class="post__image">![Figure 4: Worldwide distribution of chia (GBIF Backbone Taxonomy, n.d.)](../../media/posts/27/map3.png =1092x540)<figcaption>
+Figure 4: Worldwide distribution of chia (GBIF Backbone Taxonomy, n.d.)
+</figcaption></figure>
 
 Chia plants grow to a height of up of 60 cm in optimal conditions (Agri Farming, 2018), with opposite decussate[[1]](#_ftn1) elongated and serrated lime-green leaves, each 3 cm to 5 cm wide by 4 cm to 8 cm long (Motyka et al., 2022). They flower approximately four months after germination, usually in the late spring or summer (Agri Farming, 2018) in whorls of small purple or white flowers (Motyka et al., 2022). Chia seeds are 1 mm to 2 mm long, oval, and vary in shade from white to black (Ibid.). They can be uniform or speckled (Ibid.). They are notoriously hydrophilic, able to absorb water up to 12 times their own mass, which encases them in a gelatinous substance called mucilage (Ibid.).
 
 Chia was an important crop in pre-Columbian Mesoamerican societies, with many culinary, religious, medicinal, and artistic uses (Knez Hrnčič et al., 2019). These uses were almost completely lost during colonial rule (Anacleto et al., 2018). This survey will focus on the food uses of the chia plant, which we can break up into the following categories: whole seeds, seed flour, seed mucilage, and seed oil, the first three of which at least were known by pre-Colombian Mesoamerican peoples (Ibid.). Among other culinary practices, the Aztecs frequently roasted and ground the seeds into a flour called Chianpinolli which could be incorporated into tortillas, tamales, and beverages called Chianatoles (Ibid.).
 
-<figure class="post__image align-center"><figure class="post__image"><img alt="Figure 5: Illustration from the Florentine Codex (c. 1575–1577 or 1578–1580) depicting women grinding seeds of chia to make chiapinolli. Reproduced from Knez Hrnčič et al., 2019." height="316" loading="lazy" sizes="(max-width: 48em) 100vw, 100vw" src="../../media/posts/27/chia-2.png" srcset="../../../media/posts/27/responsive/chia-2-xs.png 300w, ../../media/posts/27/responsive/chia-2-sm.png 480w, ../../media/posts/27/responsive/chia-2-md.png 768w" width="493"/></figure>
+<figure class="post__image align-center">![Figure 5: Illustration from the Florentine Codex (c. 1575–1577 or 1578–1580) depicting women grinding seeds of chia to make chiapinolli. Reproduced from Knez Hrnčič et al., 2019.](../../media/posts/27/chia-2.png =493x316)
 
 <figcaption>
 
@@ -69,7 +62,9 @@ Thanks to the work a small number of farmers in the Mexican States of Jalisco, G
 
 Rosemary (*Salvia rosmarinus*, or *Rosmarinus officinalis* in older literature) is a fragrant and flavourful winter-hardy evergreen shrub (Leplat, 2017). It grows natively in southern Europe and the Mediterranean region (Kew, n.d.) and is cultivated worldwide in Mediterranean and temperate climates as a herb used in flavouring, perfumery, and medicine (Leplat, 2017). In its southern European native range, rosemary is easily wild crafted[[2]](#_ftn1) and is a prevalent garden herb (Ibid.). There are at least 20 cultivars of the plant, characterised by different taste profiles and yields of medicinal components (Ibid.). Most commercialised rosemary is now cultivated (Ibid.).
 
-<figure class="post__image"><img alt="Figure 6: Worldwide distribution of rosemary (GBIF Backbone Taxonomy, n.d.)" height="468" loading="lazy" sizes="(max-width: 48em) 100vw, 100vw" src="../../media/posts/27/map4.png" srcset="../../../media/posts/27/responsive/map4-xs.png 300w, ../../media/posts/27/responsive/map4-sm.png 480w, ../../media/posts/27/responsive/map4-md.png 768w" width="942"/><figcaption><p>Figure 6: Worldwide distribution of rosemary (GBIF Backbone Taxonomy, n.d.)</p></figcaption></figure>
+<figure class="post__image">![Figure 6: Worldwide distribution of rosemary (GBIF Backbone Taxonomy, n.d.)](../../media/posts/27/map4.png =942x468)<figcaption>
+Figure 6: Worldwide distribution of rosemary (GBIF Backbone Taxonomy, n.d.)
+</figcaption></figure>
 
 Rosemary typically grows to between 50 cm and 2 m tall, and spreads 1 m to 2 m horizontally (Ibid.). Its leaves are dark green, needle-like, sessile[[3]](#_ftn1), and opposite decussate (Ibid.). Its leaves and stems are covered with a relatively thick and mostly gas- and water-impermeable cuticle, which helps the plant conserve moisture (Ibid.). Rosemary flowers in spring and early summer[[4]](#_ftn2) (Kew, n.d.) in small groupings of three to four blue and white flowers near the top of the bush’s branches, at the base of some of the top leaves (Leplat, 2017).
 

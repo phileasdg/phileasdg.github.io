@@ -1,9 +1,3 @@
----
-title: "Resume / Curriculum Vitae"
-body_class: "post-template"
-main_class: "post"
----
-
 ## English
 
 Thank you for your interest in my work. To view my resume in English, please follow this link: [English language resume](../resume-english/)

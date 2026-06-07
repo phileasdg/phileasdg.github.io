@@ -1,11 +1,3 @@
----
-title: "Wolfram Contributions and Publications"
-date: "2023-10-10T20:21"
-tags: []
-thumbnail: ""
-hideFromHome: true
----
-
 ## Writing:
 
 - [Technical Articles on Wolfram Community](https://community.wolfram.com/web/phileasdg)
@@ -27,10 +19,10 @@ Other Miscellaneous Functions:
 - [Talk - Networked Creativity: Citation Network Analysis of a Small Artist Community - *2025 Wolfram Technology Conference* - November 2025](https://drive.google.com/file/d/11zREhD44UuKQKP89s87fIfF44yYXn88W/view?usp=sharing)
 - Mentor - *Wolfram Summer School* - June &amp; July 2025
 - [Talk - Wolfram Language for GIS Coursework - *2024 Wolfram Technology Conference *- October 2024](https://www.youtube.com/watch?v=cf-GTAOoiNg)
-- [Talk - Ecological Research with Wolfram Language -* **Wolfram Colloquium Series* - August 2024](https://www.bigmarker.com/wolfram-u/eco-research-aug-2024?utm_bmcr_source=community)
+- [Talk - Ecological Research with Wolfram Language -* **Wolfram Colloquium Series* - August 2024](https://www.bigmarker.com/wolfram-u/eco-research-aug-2024?utm_bmcr_source=community)
 - Mentor - Wolfram Summer School - June &amp; July 2024
-- [Talk - Ecological Research with Wolfram Language - *Wolfram Colloquium Series* - April 2024](https://www.youtube.com/watch?v=WgyqZlZI0BE)
-- [Talk - Ecology and Environmental Science Modelling in Wolfram Language - *Wolfram U*](https://www.wolfram.com/wolfram-u/courses/mathematics/ecology-and-environmental-science-modeling-in-wolfram-language/)[](https://www.wolfram.com/wolfram-u/courses/mathematics/ecology-and-environmental-science-modeling-in-wolfram-language/)
+- [Talk - Ecological Research with Wolfram Language - *Wolfram Colloquium Series* - April 2024](https://www.youtube.com/watch?v=WgyqZlZI0BE)
+- [Talk - Ecology and Environmental Science Modelling in Wolfram Language - *Wolfram U*](https://www.wolfram.com/wolfram-u/courses/mathematics/ecology-and-environmental-science-modeling-in-wolfram-language/)[](https://www.wolfram.com/wolfram-u/courses/mathematics/ecology-and-environmental-science-modeling-in-wolfram-language/)
 
 ## Wolfram Summer School Mentee Projects:
 

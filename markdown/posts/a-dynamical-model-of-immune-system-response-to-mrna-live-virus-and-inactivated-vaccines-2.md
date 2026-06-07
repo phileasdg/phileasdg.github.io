@@ -1,51 +1,28 @@
----
-title: "A Dynamical Model of Immune-System Response to mRNA, Live Virus, and Inactivated Vaccines"
-date: "2024-05-02T15:44"
-tags: ["Complex Systems","Modelling","Network Science","Programming","Wolfram Language","Work at Wolfram"]
-thumbnail: "media/posts/35/Screenshot-2024-05-02-at-10.14.00.png"
-thumbWidth: 1578
-thumbHeight: 752
-date_modified: "2026-01-17T17:24:16+01:00"
-date_published: "2024-05-02T15:44:47+02:00"
----
+**Note: **This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post [here](https://community.wolfram.com/groups/-/m/t/3055726). 
 
-**Note: **This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post [here](https://community.wolfram.com/groups/-/m/t/3055726). 
-
-<span class="cc1" data-native-text="true">**Source article:** Zhaobin Xu, Jian Song, Hongmei Zhang, Zhenlin Wei, Dongqing Wei, Jacques Demongeot, A Mathematical Model Simulating the Adaptive Immune Response in Various Vaccines and Vaccination Strategies, medRxiv 2023.10.05.23296578. DOI: </span>[<span class="cc3" data-native-text="true">https://doi.org/10.1101/2023.10.05.23296578</span>](https://doi.org/10.1101/2023.10.05.23296578)
+**Source article:** Zhaobin Xu, Jian Song, Hongmei Zhang, Zhenlin Wei, Dongqing Wei, Jacques Demongeot, A Mathematical Model Simulating the Adaptive Immune Response in Various Vaccines and Vaccination Strategies, medRxiv 2023.10.05.23296578. DOI: [https://doi.org/10.1101/2023.10.05.23296578](https://doi.org/10.1101/2023.10.05.23296578)
 
 ## Introduction:
 
-<span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">The accomplishments of vaccination are numerous, leading to significant advances in human health. Yet new infectious diseases and evolving pathogens constantly challenge our understanding of vaccine efficacy and immunity. Mathematical modelling is a crucial lens through which we can reach a more comprehensive understanding of these complexities. By simulating the biological responses to vaccines, models can provide critical insights into disease progression, vaccine performance, and optimal strategies for developing vaccines.</span>
+The accomplishments of vaccination are numerous, leading to significant advances in human health. Yet new infectious diseases and evolving pathogens constantly challenge our understanding of vaccine efficacy and immunity. Mathematical modelling is a crucial lens through which we can reach a more comprehensive understanding of these complexities. By simulating the biological responses to vaccines, models can provide critical insights into disease progression, vaccine performance, and optimal strategies for developing vaccines.
 
-<div id="cell-fe47751b-0fbc-4ad3-bab0-ee4f1dd22fb8" class="cell">
-<div class="cell-wrapper">
-<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
+<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> 
 
-<div class="cell-content">
-<div>
-<div class="native-layout native-layout-simple"><span class="cc6" data-native-text="true">In this short text, we’ll explore an approach to constructing one such model in the Wolfram Language. We will reproduce a compartmental dynamical model of adaptive immune responses to vaccine treatments described in a recent preprint from medRxiv.org: </span><span class="cc14" data-native-text="true">A Mathematical Model Simulating the Adaptive Immune Response in Various Vaccines and Vaccination Strategies</span> <a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://www.medrxiv.org/content/10.1101/2023.10.05.23296578v1" target="_blank" data-testid="ButtonBoxView" rel="noopener"><span class="cc9" data-native-text="true">(Xu et al. 2023)</span></a><span class="cc6" data-native-text="true">. Compartmental models are a class of mathematical models which divide variables of interest into sections or “compartments”. Each compartment represents a specific state within the system being studied. The models track how entities, like cells or molecules, interact within and between these compartments over time.</span></div>
+<div class="native-layout native-layout-simple">In this short text, we’ll explore an approach to constructing one such model in the Wolfram Language. We will reproduce a compartmental dynamical model of adaptive immune responses to vaccine treatments described in a recent preprint from medRxiv.org: A Mathematical Model Simulating the Adaptive Immune Response in Various Vaccines and Vaccination Strategies <a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://www.medrxiv.org/content/10.1101/2023.10.05.23296578v1" target="_blank" data-testid="ButtonBoxView" rel="noopener">(Xu et al. 2023)</a>. Compartmental models are a class of mathematical models which divide variables of interest into sections or “compartments”. Each compartment represents a specific state within the system being studied. The models track how entities, like cells or molecules, interact within and between these compartments over time.
 
-</div>
-</div>
-</div>
-</div>
+<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> 
 
-<div id="cell-95dd72c5-3543-4f12-a9d7-8486a64fa8f9" class="cell">
-<div class="cell-wrapper">
-<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
-
-<div class="cell-content">
-<div class="native-layout native-layout-simple"><span class="cc6" data-native-text="true">The stated goal of the paper is to construct a novel mathematical model to quantitatively research the activation of adaptive immune responses by vaccines. This model is used to simulate and compare the dynamics of antibody levels after administering different types of vaccines (inactivated, attenuated live virus, mRNA), thereby contributing to a better understanding of the mechanisms of various vaccines and vaccination strategies. Through the model, the authors aim to suggest strategies for vaccine design, while providing a comprehensive portrait of the inducible interactions between antibodies and antigens in the immune process.</span></div>
+<div class="native-layout native-layout-simple">The stated goal of the paper is to construct a novel mathematical model to quantitatively research the activation of adaptive immune responses by vaccines. This model is used to simulate and compare the dynamics of antibody levels after administering different types of vaccines (inactivated, attenuated live virus, mRNA), thereby contributing to a better understanding of the mechanisms of various vaccines and vaccination strategies. Through the model, the authors aim to suggest strategies for vaccine design, while providing a comprehensive portrait of the inducible interactions between antibodies and antigens in the immune process.
 
 ## Setup
 
 ### Dependencies
 
-<span class="cc6" data-native-text="true">We will make use of the </span>[<span class="cc9" data-native-text="true">CompartmentalModelling</span>](https://resources.wolframcloud.com/PacletRepository/resources/RobertNachbar/CompartmentalModeling/)<span class="cc6" data-native-text="true"> paclet. You can install and load the paclet like so:</span>
+We will make use of the [CompartmentalModelling](https://resources.wolframcloud.com/PacletRepository/resources/RobertNachbar/CompartmentalModeling/) paclet. You can install and load the paclet like so:
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-09.49.26.png" alt="" width="560" height="178" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-09.49.26-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-09.49.26-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-09.49.26-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-09.49.26.png =560x178)
 
-<span class="cc6" data-native-text="true">You can find documentation for this paclet by following </span>[<span class="cc9" data-native-text="true">this link</span>](https://resources.wolframcloud.com/PacletRepository/resources/RobertNachbar/CompartmentalModeling/)<span class="cc6" data-native-text="true">.</span>
+You can find documentation for this paclet by following [this link](https://resources.wolframcloud.com/PacletRepository/resources/RobertNachbar/CompartmentalModeling/).
 
 ### Paper Tables
 
@@ -55,33 +32,31 @@ You can find the definitions for the tables of reactions, reaction variables, an
 
 The authors of the paper helpfully provide three tables fully specifying the interactions between state variables (components) of the system, as well as model parameters and initial conditions. I have reproduced these tables below. Note that some parameter values and initial conditions depend on the selected vaccine treatment type. More precisely:
 
-</div>
-
 - The replication rate of viral antigens, described by parameter k_14 should be set to .3 in the case of a simulation of an attenuated live virus vaccine, and 0 otherwise.
 
 - The initial condition of the state variable x_2 (Antigen) should be set to 10^6 for simulation with an inactivated vaccine, 0 with an mRNA vaccine, and 1 for an attenuated live virus vaccine.
 
-- The initial condition of the state variable x_9 <span class="cc6" data-native-text="true"> (mRNA) should be set to 0 for simulation with an inactivated or attenuated live virus vaccine, and 10^6</span><span class="cc6" data-native-text="true"> for and mRNA vaccine.</span>
+- The initial condition of the state variable x_9  (mRNA) should be set to 0 for simulation with an inactivated or attenuated live virus vaccine, and 10^6 for and mRNA vaccine.
 
-<span class="cc6" data-native-text="true">For a more in depth explanation of these parameters and initial conditions, please refer to </span>[<span class="cc9" data-native-text="true">the paper</span>](https://www.medrxiv.org/content/10.1101/2023.10.05.23296578v1)<span class="cc6" data-native-text="true">.</span>
+For a more in depth explanation of these parameters and initial conditions, please refer to [the paper](https://www.medrxiv.org/content/10.1101/2023.10.05.23296578v1).
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.05.51.png" alt="" width="1266" height="1226" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.05.51-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.05.51-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.05.51-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.05.51.png =1266x1226)
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.06.39.png" alt="" width="1330" height="1144" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.06.39-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.06.39-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.06.39-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.06.39.png =1330x1144)
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.06.54.png" alt="" width="1330" height="578" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.06.54-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.06.54-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.06.54-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.06.54.png =1330x578)
 
 ## Extracting Model Information
 
-<span class="cc6" data-native-text="true">We can use tools from the </span>**<span class="cc39" data-native-text="true">CompartmentalModelling</span>**<span class="cc6" data-native-text="true"> paclet to extract useful information about the model. For instance, we can use </span>**<span class="cc39" data-native-text="true">CompartmentalModelGraph</span>**<span class="cc6" data-native-text="true"> from the CompartmentalModelling paclet to visualise the model’s structure:</span>
+We can use tools from the **CompartmentalModelling** paclet to extract useful information about the model. For instance, we can use **CompartmentalModelGraph** from the CompartmentalModelling paclet to visualise the model’s structure:
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.10.06.png" alt="" width="1682" height="840" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.10.06-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.10.06-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.10.06-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.10.06.png =1682x840)
 
-<span class="cc6" data-native-text="true">The </span><span class="cc39" data-native-text="true">CompartmentalModelling</span><span class="cc6" data-native-text="true"> paclet contains convenient functions to streamline the process of building models. For instance, we can use </span>**<span class="cc39" data-native-text="true">KineticCompartmentalModel</span>**<span class="cc6" data-native-text="true"> to generate differential equations for from a list of component transitions (the reactions).</span>
+The CompartmentalModelling paclet contains convenient functions to streamline the process of building models. For instance, we can use **KineticCompartmentalModel** to generate differential equations for from a list of component transitions (the reactions).
 
 *Fetch the model data:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.16.18.png" alt="" width="476" height="929" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.16.18-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.16.18-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.16.18-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.16.18.png =476x929)
 
 These data are very useful for quickly building and simulating compartmental models.
 
@@ -89,17 +64,17 @@ These data are very useful for quickly building and simulating compartmental mod
 
 ### Preparing Model ODEs
 
-<span class="cc8" data-native-text="true">Owing to details related to the original code implementation of the model, the authors provide a slightly modified system of ODEs describing the model. This system is reproduced below and numerically approximated using </span><span class="cc42" data-native-text="true">NDSolve</span><span class="cc8" data-native-text="true"> for different vaccine treatments:</span>
+Owing to details related to the original code implementation of the model, the authors provide a slightly modified system of ODEs describing the model. This system is reproduced below and numerically approximated using NDSolve for different vaccine treatments:
 
 *Reproduce the ODEs from the paper:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.17.43.png" alt="" width="1308" height="484" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.17.43-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.17.43-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.17.43-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.17.43.png =1308x484)
 
 Let’s also get some replacement rules to easily convert between the variable names in plain English, and the symbols used in the paper for the model’s system of ODEs.
 
 *Plain English variables &lt;--&gt; ODE variables:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.18.28.png" alt="" width="588" height="57" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.18.28-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.18.28-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.18.28-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.18.28.png =588x57)
 
 ### Vaccine Treatment Simulations
 
@@ -111,70 +86,69 @@ In the paper, the authors model three cases:
 
 3. mRNA Vaccine
 
-<span class="cc8" data-native-text="true">These cases are solved numerically in the three following sections. The inactivated vaccine and mRNA vaccines each take two injections, one at one at </span>
+These cases are solved numerically in the three following sections. The inactivated vaccine and mRNA vaccines each take two injections, one at one at 
 
-<div>
-<div class="lines"><span class="pa ch cc17" data-token-box-id="c2832" data-token-text="t">t</span><span class="pa char cc10" data-token-box-id="c2833" data-token-text="=">=</span><span class="pa ch cc8" data-token-box-id="c2834" data-token-text="0">0</span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">, the other at </span><span class="pa ch cc17" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2841" data-token-text="t">t</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2842" data-token-text="=">=</span><span class="pa ch cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2843" data-token-text="50">50</span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">. The attenuated live-virus vaccine takes a single dose at </span><span class="pa ch cc17" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2850" data-token-text="t">t</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2851" data-token-text="=">=</span><span class="pa ch cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2852" data-token-text="0">0</span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">. The injection dosage is of </span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">6^</span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">10</span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);"> for all simulations.</span></div>
+<div class="lines">t=0, the other at t=50. The attenuated live-virus vaccine takes a single dose at t=0. The injection dosage is of 6^10 for all simulations.
 
 ### 1. Inactivated Vaccine Simulation
 
 Model-specific parameters and initial conditions:
 
-- <span class="cc8" data-native-text="true">Replication rate of viral antigens: </span>k_<span class="pa char cc19" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2605" data-token-text="14">14</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2607" data-token-text="=">=</span><span class="pa ch cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2608" data-token-text="0">0</span>
+- Replication rate of viral antigens: k_14=0
 
-- <span class="cc8" data-native-text="true">Antigen = </span>x_<span class="pa char cc19" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2627" data-token-text="2">2</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2629" data-token-text="[">[</span><span class="pa ch cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2630" data-token-text="0">0</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2631" data-token-text="]">]</span><span class="cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true"> = </span><span style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">10^6</span>
+- Antigen = x_2[0] = 10^6
 
-- <span class="cc8" data-native-text="true">mRNA = </span>x_9[<span class="pa ch cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2664" data-token-text="0">0</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2665" data-token-text="]">]</span><span class="cc8" data-native-text="true"> = 0</span>
+- mRNA = x_9[0] = 0
 
 *Define model parameters corresponding to the inactivated vaccine setup:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.21.55.png" alt="" width="1484" height="186" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.21.55-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.21.55-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.21.55-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.21.55.png =1484x186)
 
 *Define initial conditions of the system corresponding to the inactivated vaccine setup:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.22.21.png" alt="" width="1414" height="632" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.22.21-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.22.21-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.22.21-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.22.21.png =1414x632)
 
 *Construct the system of equations for NDSolve, with parameter values and initial conditions:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.22.40.png" alt="" width="599" height="29" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.22.40-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.22.40-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.22.40-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.22.40.png =599x29)
 
-*<span class="cc25" data-native-text="true">Solve numerically with NDSolve, from </span>*<span class="pa ch cc47" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2737" data-token-text="t">t</span><span class="pa char cc27" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2738" data-token-text="=">=</span><span class="pa ch cc25" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2739" data-token-text="0">0</span>*<span class="cc25" data-native-text="true"> to </span>*<span class="pa ch cc47" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2746" data-token-text="t">t</span><span class="pa char cc27" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2747" data-token-text="=">=</span><span class="pa ch cc25" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2748" data-token-text="100">100</span>*<span class="cc25" data-native-text="true">:</span>*
+*Solve numerically with NDSolve, from *t=0* to *t=100*:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.23.23.png" alt="" width="485" height="29" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.23.23-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.23.23-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.23.23-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.23.23.png =485x29)
 
 *Plot the solution:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.23.50.png" alt="" width="1448" height="642" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.23.50-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.23.50-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.23.50-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.23.50.png =1448x642)
 
 ### 2. Attenuated Live Virus Vaccine
 
 Model-specific parameters and initial conditions:
 
-- <span class="cc8" data-native-text="true">Replication rate of viral antigens: </span>k_<span class="pa char cc19" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2605" data-token-text="14">14</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2607" data-token-text="=">=</span><span class="pa ch cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2608" data-token-text="0">0.3</span>
+- Replication rate of viral antigens: k_14=0.3
 
-- <span class="cc8" data-native-text="true">Antigen = </span>x_<span class="pa char cc19" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2627" data-token-text="2">2</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2629" data-token-text="[">[</span><span class="pa ch cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2630" data-token-text="0">0</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2631" data-token-text="]">]</span><span class="cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true"> = 1</span>
+- Antigen = x_2[0] = 1
 
-- <span class="cc8" data-native-text="true">mRNA = </span>x_9[<span class="pa ch cc8" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2664" data-token-text="0">0</span><span class="pa char cc10" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2665" data-token-text="]">]</span><span class="cc8" data-native-text="true"> = 0</span>
+- mRNA = x_9[0] = 0
 
 *Define model parameters corresponding to the inactivated vaccine setup:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.25.32.png" alt="" width="1484" height="194" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.25.32-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.25.32-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.25.32-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.25.32.png =1484x194)
 
 *Define initial conditions of the system corresponding to the inactivated vaccine setup:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.25.49.png" alt="" width="1402" height="638" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.25.49-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.25.49-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.25.49-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.25.49.png =1402x638)
 
 *Construct the system of equations for NDSolve, with parameter values and initial conditions:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.26.00.png" alt="" width="378" height="35" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.26.00-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.26.00-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.26.00-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.26.00.png =378x35)
 
-*<span class="cc25" data-native-text="true">Solve numerically with NDSolve, from </span>*<span class="pa ch cc47" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2737" data-token-text="t">t</span><span class="pa char cc27" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2738" data-token-text="=">=</span><span class="pa ch cc25" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2739" data-token-text="0">0</span>*<span class="cc25" data-native-text="true"> to </span>*<span class="pa ch cc47" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2746" data-token-text="t">t</span><span class="pa char cc27" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2747" data-token-text="=">=</span><span class="pa ch cc25" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-token-box-id="c2748" data-token-text="100">100</span>*<span class="cc25" data-native-text="true">:</span>*
+*Solve numerically with NDSolve, from *t=0* to *t=100*:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.26.19.png" alt="" width="494" height="38" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.26.19-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.26.19-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.26.19-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.26.19.png =494x38)
 
 *Plot the solution:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.26.44.png" alt="" width="1478" height="646" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.26.44-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.26.44-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.26.44-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.26.44.png =1478x646)
 
 ### 3. mRNA Vaccine
 
@@ -182,51 +156,28 @@ Model-specific parameters and initial conditions:<br><br>Replication rate of vir
 
 *Define model parameters corresponding to the inactivated vaccine setup:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.30.46.png" alt="" width="1492" height="206" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.30.46-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.30.46-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.30.46-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.30.46.png =1492x206)
 
 *Define initial conditions of the system corresponding to the inactivated vaccine setup:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.31.19.png" alt="" width="1398" height="646" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.31.19-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.31.19-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.31.19-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.31.19.png =1398x646)
 
 *Construct the system of equations for NDSolve, with parameter values and initial conditions:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.31.32.png" alt="" width="649" height="37" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.31.32-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.31.32-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.31.32-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.31.32.png =649x37)
 
 *Solve numerically with NDSolve, from t=0 to t=100:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.31.48.png" alt="" width="519" height="37" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.31.48-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.31.48-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.31.48-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.31.48.png =519x37)
 
 *Plot the solution:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.32.06.png" alt="" width="1460" height="646" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.32.06-xs.png 300w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.32.06-sm.png 480w ,https://phileasdg.github.io/media/posts/35/responsive/Screenshot-2024-05-02-at-10.32.06-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.32.06.png =1460x646)
 
 ## Closing Notes
 
-<div id="cell-54b896b0-0f0b-4cac-9367-cb44dc59b1b4" class="cell">
-<div class="cell-wrapper">
-<div class="cell-content">
-<div>
-<div> </div>
+<div class="native-layout native-layout-simple">Through the exploration of this dynamical immune response model, we have seen how mathematical modelling in the Wolfram Language, can be used to derive insights into complex biological systems.
 
-<div class="native-layout native-layout-simple"><span class="cc8" data-native-text="true">Through the exploration of this dynamical immune response model, we have seen how mathematical modelling in the Wolfram Language, can be used to derive insights into complex biological systems.</span></div>
+<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> 
 
-</div>
-</div>
-</div>
-</div>
-
-<div id="cell-952802b4-cfde-45ea-bf61-c9cfcec97f25" class="cell">
-<div class="cell-wrapper">
-<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
-
-<div class="cell-content">
-<div>
-<div class="native-layout native-layout-simple"><span class="cc8" data-native-text="true">If you are interested in this work, and would like to learn more, please make sure to give the </span><a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://www.medrxiv.org/content/10.1101/2023.10.05.23296578v1" target="_blank" data-testid="ButtonBoxView" rel="noopener"><span class="cc11" data-native-text="true">source paper </span></a><span class="cc8" data-native-text="true">a read! I primarily intend this post to demonstrate how one might conduct this form of modelling in the Wolfram Language. I also highly encourage you to try Bob Nachbar’s </span><a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://resources.wolframcloud.com/PacletRepository/resources/RobertNachbar/CompartmentalModeling/" target="_blank" data-testid="ButtonBoxView" rel="noopener"><span class="cc61" data-native-text="true">CompartmentalModelling</span></a><span class="cc8" data-native-text="true"> paclet. The </span><span class="cc42" data-native-text="true">CompartmentalModelling</span><span class="cc8" data-native-text="true"> paclet is not just for biologists, but could be a valuable tool for anyone dealing with interconnected systems that can be represented as compartments. </span></div>
-
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+<div class="native-layout native-layout-simple">If you are interested in this work, and would like to learn more, please make sure to give the <a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://www.medrxiv.org/content/10.1101/2023.10.05.23296578v1" target="_blank" data-testid="ButtonBoxView" rel="noopener">source paper </a>a read! I primarily intend this post to demonstrate how one might conduct this form of modelling in the Wolfram Language. I also highly encourage you to try Bob Nachbar’s <a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://resources.wolframcloud.com/PacletRepository/resources/RobertNachbar/CompartmentalModeling/" target="_blank" data-testid="ButtonBoxView" rel="noopener">CompartmentalModelling</a> paclet. The CompartmentalModelling paclet is not just for biologists, but could be a valuable tool for anyone dealing with interconnected systems that can be represented as compartments.

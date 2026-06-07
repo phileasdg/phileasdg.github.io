@@ -11,6 +11,8 @@ const PAGES_OUTPUT_HTML_DIR = './content/pages';
 const PAGES_JSON_PATH = './data/pages.json';
 const CUSTOM_PAGES_DIR = './content/custom-pages';
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 // Ensure directories exist
 if (!fs.existsSync(POSTS_MARKDOWN_DIR)) {
   fs.mkdirSync(POSTS_MARKDOWN_DIR, { recursive: true });
@@ -261,7 +263,12 @@ function parseFrontMatter(fileContent) {
 // --- COMPILE POSTS ---
 function compilePosts() {
   console.log('Compiling posts...');
-  const mdFiles = fs.readdirSync(POSTS_MARKDOWN_DIR).filter(file => file.endsWith('.md'));
+  const mdFiles = fs.readdirSync(POSTS_MARKDOWN_DIR).filter(file => {
+    if (isProduction && file === 'example-markdown-post.md') {
+      return false;
+    }
+    return file.endsWith('.md');
+  });
 
   let posts = [];
   if (fs.existsSync(POSTS_JSON_PATH)) {
@@ -276,25 +283,32 @@ function compilePosts() {
     const filePath = path.join(POSTS_MARKDOWN_DIR, file);
     const fileContent = fs.readFileSync(filePath, 'utf8');
     const { data, content } = parseFrontMatter(fileContent);
-    const slug = data.slug || path.basename(file, '.md');
-    const htmlContent = parseMarkdown(content);
+    const slug = path.basename(file, '.md');
     
+    // Look up existing metadata in posts.json
+    const existingIndex = posts.findIndex(p => p.slug === slug);
+    const existingMeta = existingIndex > -1 ? posts[existingIndex] : {};
+    
+    // Merge: frontmatter overrides existing, which overrides defaults
+    const mergedData = { ...existingMeta, ...data };
+
+    const htmlContent = parseMarkdown(content);
     fs.writeFileSync(path.join(POSTS_OUTPUT_HTML_DIR, `${slug}.html`), htmlContent, 'utf8');
     
     const metadata = {
-      id: data.id || slug,
-      name: data.title || data.name || slug,
+      id: mergedData.id || slug,
+      name: mergedData.title || mergedData.name || slug,
       slug: slug,
-      date: data.date || new Date().toISOString().substring(0, 16),
-      tags: data.tags || [],
-      thumbnail: data.thumbnail || "",
-      ...(data.thumbWidth !== undefined && { thumbWidth: Number(data.thumbWidth) }),
-      ...(data.thumbHeight !== undefined && { thumbHeight: Number(data.thumbHeight) }),
-      ...(data.date_modified !== undefined && { date_modified: data.date_modified }),
-      ...(data.date_published !== undefined && { date_published: data.date_published })
+      date: mergedData.date || new Date().toISOString().substring(0, 16),
+      tags: mergedData.tags || [],
+      thumbnail: mergedData.thumbnail || "",
+      ...(mergedData.thumbWidth !== undefined && { thumbWidth: Number(mergedData.thumbWidth) }),
+      ...(mergedData.thumbHeight !== undefined && { thumbHeight: Number(mergedData.thumbHeight) }),
+      ...(mergedData.date_modified !== undefined && { date_modified: mergedData.date_modified }),
+      ...(mergedData.date_published !== undefined && { date_published: mergedData.date_published }),
+      ...(mergedData.hideFromHome !== undefined && { hideFromHome: mergedData.hideFromHome })
     };
 
-    const existingIndex = posts.findIndex(p => p.slug === slug);
     if (existingIndex > -1) {
       posts[existingIndex] = { ...posts[existingIndex], ...metadata };
     } else {
@@ -302,6 +316,15 @@ function compilePosts() {
     }
     console.log(`  Compiled post: ${file} -> ${slug}.html`);
   });
+
+  if (isProduction) {
+    posts = posts.filter(p => p.slug !== 'example-markdown-post');
+    const exampleHtmlPath = path.join(POSTS_OUTPUT_HTML_DIR, 'example-markdown-post.html');
+    if (fs.existsSync(exampleHtmlPath)) {
+      fs.unlinkSync(exampleHtmlPath);
+      console.log('  Removed example-markdown-post.html from production build.');
+    }
+  }
 
   posts.sort((a, b) => new Date(b.date) - new Date(a.date));
   fs.writeFileSync(POSTS_JSON_PATH, JSON.stringify(posts, null, 2), 'utf8');
@@ -332,21 +355,25 @@ function compilePages() {
     const filePath = path.join(PAGES_MARKDOWN_DIR, file);
     const fileContent = fs.readFileSync(filePath, 'utf8');
     const { data, content } = parseFrontMatter(fileContent);
-    const slug = data.slug || path.basename(file, '.md');
+    const slug = path.basename(file, '.md');
+
+    // Look up existing page metadata
+    const existingMeta = existingPages.find(p => p.slug === slug) || {};
+    const mergedData = { ...existingMeta, ...data };
     
     // Compile markdown body
     const bodyHtml = parseMarkdown(content);
 
     // Wrap in standard page layout
-    const finalHtml = `<div class="wrapper"><article class="content"><header class="content__header"><h1 class="content__title">${data.title || slug}</h1></header><div class="content__inner"><div class="content__entry">${bodyHtml}</div><footer><div class="content__tags-share"><aside class="content__share"></aside></div></footer></div></article></div>`;
+    const finalHtml = `<div class="wrapper"><article class="content"><header class="content__header"><h1 class="content__title">${mergedData.title || slug}</h1></header><div class="content__inner"><div class="content__entry">${bodyHtml}</div><footer><div class="content__tags-share"><aside class="content__share"></aside></div></footer></div></article></div>`;
     
     fs.writeFileSync(path.join(PAGES_OUTPUT_HTML_DIR, `${slug}.html`), finalHtml, 'utf8');
     
     const metadata = {
       slug: slug,
-      title: data.title || slug,
-      body_class: data.body_class || 'post-template',
-      main_class: data.main_class || 'post'
+      title: mergedData.title || slug,
+      body_class: mergedData.body_class || 'post-template',
+      main_class: mergedData.main_class || 'post'
     };
 
     updatedPages.push(metadata);

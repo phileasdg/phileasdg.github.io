@@ -1,116 +1,78 @@
----
-title: "Earth's Hottest Day Ever Recorded - July 22, 2024 - Analysed and Visualised Through Climate Data"
-date: "2024-07-28T09:17"
-tags: ["Environmental Science","Geography & GIS","Wolfram Language","Work at Wolfram"]
-thumbnail: "media/posts/37/Hottest-day-on-earth-Social-Media-2.png"
-thumbWidth: 1202
-thumbHeight: 866
-date_modified: "2026-01-17T17:23:35+01:00"
-date_published: "2024-07-28T09:17:34+02:00"
----
-
 July 22, 2024 was the hottest day in recorded history, according to provisional data from the European climate service.
 
-**Note: **This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post [here](https://community.wolfram.com/groups/-/m/t/3234937). 
+**Note: **This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post [here](https://community.wolfram.com/groups/-/m/t/3234937). 
 
 ## Introduction
 
-On July 24 2024, [<span class="cc9" data-native-text="true">the Associated Press reported that July 22, 2024 broke the record for the hottest day ever recorded on earth</span>](https://apnews.com/article/hottest-day-ever-climate-change-weather-heat-extreme-global-warming-8e2b0b7fa0360ecb931ca333a832c694)<span class="cc7" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">, according to provisional data from the European climate service, Copernicus.</span>
+On July 24 2024, [the Associated Press reported that July 22, 2024 broke the record for the hottest day ever recorded on earth](https://apnews.com/article/hottest-day-ever-climate-change-weather-heat-extreme-global-warming-8e2b0b7fa0360ecb931ca333a832c694), according to provisional data from the European climate service, Copernicus.
 
-<div id="cell-1755bd5b-dc13-3440-bbb3-c2a8c2f106dd" class="cell">
-<div class="cell-wrapper">
-<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
+<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> 
 
-<div class="cell-content">
-<div>
-<div class="native-layout native-layout-simple"><span class="cc7" data-native-text="true">In the article, Sibi Arasu and Seth Borenstein report that “Monday was 0.06 degrees Celsius (0.1 degree Fahrenheit) hotter than Sunday, which was .01 degrees Celsius hotter (0.2 degrees Fahrenheit) than the previous hottest day on record, July 6, 2023.”</span></div>
+<div class="native-layout native-layout-simple">In the article, Sibi Arasu and Seth Borenstein report that “Monday was 0.06 degrees Celsius (0.1 degree Fahrenheit) hotter than Sunday, which was .01 degrees Celsius hotter (0.2 degrees Fahrenheit) than the previous hottest day on record, July 6, 2023.”
 
-</div>
-</div>
-</div>
-</div>
+<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> 
 
-<div id="cell-48e7de22-8d3e-244e-a6a3-142436e30a7d" class="cell">
-<div class="cell-wrapper">
-<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
+<div class="native-layout native-layout-simple">The data they cite are from the <a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels?tab=overview" target="_blank" data-testid="ButtonBoxView" rel="noopener">ECMWF Reanalysis v5 (ERA5) dataset</a>, which provides hourly spatial estimates of many of atmospheric, land and oceanic climate variables, including surface air temperature and sea surface temperature, daily, from 1940 to the present day.
 
-<div class="cell-content">
-<div>
-<div class="native-layout native-layout-simple"><span class="cc7" data-native-text="true">The data they cite are from the </span><a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels?tab=overview" target="_blank" data-testid="ButtonBoxView" rel="noopener"><span class="cc9" data-native-text="true">ECMWF Reanalysis v5 (ERA5) dataset</span></a><span class="cc7" data-native-text="true">, which provides hourly spatial estimates of many of atmospheric, land and oceanic climate variables, including surface air temperature and sea surface temperature, daily, from 1940 to the present day.</span></div>
+<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> 
 
-</div>
-</div>
-</div>
-</div>
+<div class="native-layout native-layout-simple">While Copernicus provides free access to these data, the size of raw dataset files (which are large gridded data layer stacks stored in NetCDF format) makes many ad hoc analyses prohibitively expensive. However, and fortunately, Copernicus and the University of Maine’s Climate Change Institute both provide trackers for the average global temperature based on ERA5 data. These are:
 
-<div id="cell-8862fa9c-62ac-2b4b-b299-cb9d9452881e" class="cell">
-<div class="cell-wrapper">
-<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
+- Copernicus’ Climate Pulse: <a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://pulse.climate.copernicus.eu/" target="_blank" data-testid="ButtonBoxView" rel="noopener">https://pulse.climate.copernicus.eu/</a> (near real time, typically 2 days behind)
 
-<div class="cell-content">
-<div class="native-layout native-layout-simple"><span class="cc7" data-native-text="true">While Copernicus provides free access to these data, the size of raw dataset files (which are large gridded data layer stacks stored in NetCDF format) makes many ad hoc analyses prohibitively expensive. However, and fortunately, Copernicus and the University of Maine’s Climate Change Institute both provide trackers for the average global temperature based on ERA5 data. These are:</span></div>
+- The University of Maine’s Climate Reanalyzer: <a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://climatereanalyzer.org/clim/t2_daily/?dm_id=world" target="_blank" data-testid="ButtonBoxView" rel="noopener" style="font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);">https://climatereanalyzer.org/clim/t2_daily/?dm_id=world</a> (a few more days delay)
 
-<div id="cell-c05329c8-883f-a443-8d6b-fc38e8ce5332" class="cell">
-<ul>
-<li class="cell-wrapper"><span class="cc7" data-native-text="true">Copernicus’ Climate Pulse: </span><a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://pulse.climate.copernicus.eu/" target="_blank" data-testid="ButtonBoxView" rel="noopener"><span class="cc9" data-native-text="true">https://pulse.climate.copernicus.eu/</span></a><span class="cc7" data-native-text="true"> (near real time, typically 2 days behind)</span></li>
-<li class="native-layout native-layout-simple"><span class="cc7" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true">The University of Maine’s Climate Reanalyzer: </span><a class="GsEf0r4HiEK6fH_vutb_b EEKKPz0N2Ww3GdmB51Zgq" href="https://climatereanalyzer.org/clim/t2_daily/?dm_id=world" target="_blank" data-testid="ButtonBoxView" rel="noopener" style="font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);"><span class="cc9" data-native-text="true">https://climatereanalyzer.org/clim/t2_daily/?dm_id=world</span></a><span class="cc7" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal);" data-native-text="true"> (a few more days delay)</span></li>
-</ul>
-</div>
+<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> 
 
-<div id="cell-6a3b29c0-a328-8948-934c-6fce8fd3047b" class="cell">
-<div class="cell-wrapper">
-<div class="_3Dqn7hOe5vVS6Nh0S54gcV"> </div>
-
-<div class="cell-content">
-<div class="native-layout native-layout-simple"><span class="cc7" data-native-text="true">How easy would it be to import and study these data in the Wolfram Language? Let’s find out.</span></div>
+<div class="native-layout native-layout-simple">How easy would it be to import and study these data in the Wolfram Language? Let’s find out.
 
 ## Getting Global Mean Surface Temperature Data
 
 ### Importing and Preprocessing Data from Climate Pulse:
 
-<span class="cc7" data-native-text="true">Climate Pulse conveniently provides a </span>[<span class="cc9" data-native-text="true">link</span>](https://sites.ecmwf.int/data/climatepulse/data/series/era5_daily_series_2t_global.csv)<span class="cc7" data-native-text="true"> to download a table of global surface air temperature data from 1940 to the latest data available. Let’s import these data:</span>
+Climate Pulse conveniently provides a [link](https://sites.ecmwf.int/data/climatepulse/data/series/era5_daily_series_2t_global.csv) to download a table of global surface air temperature data from 1940 to the latest data available. Let’s import these data:
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.20.10.png" alt="" width="2014" height="180" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.20.10-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.20.10-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.20.10-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.20.10.png =2014x180)
 
-<figure class="post__image align-center"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.20.43.png" alt="" width="371" height="190" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.20.43-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.20.43-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.20.43-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.20.43.png =371x190)
 
-Neat! The columns key (dropped from the .csv table during the import) defines the columns as: 
+Neat! The columns key (dropped from the .csv table during the import) defines the columns as: 
 
-`# Columns:`<br><br>`#  2t: Daily mean absolute temperature based on hourly values from 00 to 23 UTC`<br>`#  clim_91-20: Daily climatology for 1991-2020`<br>`#  ano_91-20: Daily anomaly relative to the 1991-2020 daily climatology`<br>`#  status: Preliminary or final`<br><br>`# Units: deg. C`<br>`# Last updated: 25 Jul 2024`
+`# Columns:`<br><br>`#  2t: Daily mean absolute temperature based on hourly values from 00 to 23 UTC`<br>`#  clim_91-20: Daily climatology for 1991-2020`<br>`#  ano_91-20: Daily anomaly relative to the 1991-2020 daily climatology`<br>`#  status: Preliminary or final`<br><br>`# Units: deg. C`<br>`# Last updated: 25 Jul 2024`
 
 To construct time series from these data, it'll help to convert the values from the date column into Wolfram Language date objects:
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.21.51.png" alt="" width="2204" height="76" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.21.51-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.21.51-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.21.51-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.21.51.png =2204x76)
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.22.06.png" alt="" width="371" height="186" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.22.06-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.22.06-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.22.06-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.22.06.png =371x186)
 
 ### Constructing and Plotting Time Series from the Data:
 
 Now that we have the data, we can get a time series of daily mean absolute temperatures like so:
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.22.57.png" alt="" width="1490" height="62" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.22.57-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.22.57-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.22.57-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.22.57.png =1490x62)
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.23.35.png" alt="" width="352" height="66" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.23.35-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.23.35-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.23.35-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.23.35.png =352x66)
 
-Plotting it is as easy as: 
+Plotting it is as easy as: 
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.24.05.png" alt="" width="548" height="96" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.24.05-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.24.05-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.24.05-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.24.05.png =548x96)
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.24.32.png" alt="" width="1458" height="982" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.24.32-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.24.32-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.24.32-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.24.32.png =1458x982)
 
 ### Verifying the Claims Made by the AP &amp; Others:
 
 Based on these data, was the hottest day on record really last Monday? Let's confirm:
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.25.02.png" alt="" width="270" height="29" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.25.02-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.25.02-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.25.02-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.25.02.png =270x29)
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.25.15.png" alt="" width="371" height="67" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.25.15-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.25.15-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.25.15-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.25.15.png =371x67)
 
 What were the top 5 hottest recorded days since 1940?
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.25.45.png" alt="" width="276" height="26" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.25.45-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.25.45-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.25.45-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.25.45.png =276x26)
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.26.05.png" alt="" width="373" height="155" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.26.05-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.26.05-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.26.05-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.26.05.png =373x155)
 
 Note that the top four hottest days on record were this month.
 
@@ -118,19 +80,19 @@ Note that the top four hottest days on record were this month.
 
 With the data we have collected, we can now reproduce the now famous year over year plot of global mean surface temperatures from Climate Pulse.
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.26.54.png" alt="" width="2610" height="1398" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.26.54-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.26.54-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.26.54-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.26.54.png =2610x1398)
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.27.20.png" alt="" width="1266" height="1586" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.27.20-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.27.20-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.27.20-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.27.20.png =1266x1586)
 
 ## Getting These Data for Specific Time Ranges and Regions from Climate Reanalyzer
 
-It would be helpful to have a function that automates the process of importing these data for different available regions and time ranges. <br>This task is quite straightforward using data from Climate Reanalyzer.
+It would be helpful to have a function that automates the process of importing these data for different available regions and time ranges. <br>This task is quite straightforward using data from Climate Reanalyzer.
 
 *Define a function to import time series from Climate Reanalyzer:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.28.05.png" alt="" width="1978" height="424" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.28.05-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.28.05-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.28.05-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.28.05.png =1978x424)
 
-The function supports importing data from six regions, specified with the area parameter: 
+The function supports importing data from six regions, specified with the area parameter: 
 
 - "World" ---&gt; The whole world, 90°S-90°N, 0-360°E
 
@@ -150,15 +112,15 @@ Consider the following examples:
 
 *Request and plot the time series of daily surface temperatures in the Arctic from 1990 to 2000:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.29.31.png" alt="" width="530" height="126" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.29.31-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.29.31-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.29.31-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.29.31.png =530x126)
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.31.09.png" alt="" width="1180" height="786" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.31.09-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.31.09-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.31.09-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.31.09.png =1180x786)
 
 ## Map Animations:
 
 Climate Pulse hosts recent raster maps of global surface temperatures. Here is the one corresponding to last Monday:
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.31.40.png" alt="" width="1348" height="784" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.31.40-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.31.40-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.31.40-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.31.40.png =1348x784)
 
 I'd like to take a moment to highlight my RemoteSensing paclet, which presently provides a WL interface to NASA's GIBS and AppEEARS APIs for remote sensing data retrieval. While my paclet does not yet support access to Copernicus ERA5 data (look out for future releases), GIBS and AppEEARS both provide access to similar data products, which we can import and work with directly in the Wolfram Language.
 
@@ -168,33 +130,24 @@ Please feel free to consult the paclet documentation here: [https://resources.wo
 
 *`PacletInstall["PhileasDazeleyGaist/RemoteSensing"]`*
 
-*Load the paclet: *
+*Load the paclet: *
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.32.55.png" alt="" width="347" height="29" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.32.55-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.32.55-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.32.55-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.32.55.png =347x29)
 
 *Using GIBSData, list global surface air temperature products:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.33.17.png" alt="" width="1520" height="44" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.33.17-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.33.17-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.33.17-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.33.17.png =1520x44)
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.33.30.png" alt="" width="2434" height="96" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.33.30-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.33.30-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.33.30-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.33.30.png =2434x96)
 
 *Animate a map using one of these products:*
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.37.14.png" alt="" width="1732" height="212" sizes="(max-width: 48em) 100vw, 100vw" srcset="https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.37.14-xs.png 300w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.37.14-sm.png 480w ,https://phileasdg.github.io/media/posts/37/responsive/Screenshot-2024-07-28-at-03.37.14-md.png 768w"></figure>
+![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.37.14.png =1732x212)
 
-<figure class="post__image"><img loading="lazy"  src="https://phileasdg.github.io/media/posts/37/Animation2.gif" alt="" width="1114" height="484"></figure>
+![](https://phileasdg.github.io/media/posts/37/Animation2.gif =1114x484)
 
 ## Conclusion
 
-In this article, we've explored how one can readily access and analyse global climate data using the Wolfram Language. We've shown how one can pull daily global mean surface air temperature data from specific geographical ranges and plot the data over time, as well as how to import recent raster maps of global surface temperatures from Copernicus' Climate Pulse. We've also highlighted the RemoteSensing paclet, a powerful tool that can interface with NASA's GIBS and AppEEARS APIs for convenient remote sensing data retrieval. 
+In this article, we've explored how one can readily access and analyse global climate data using the Wolfram Language. We've shown how one can pull daily global mean surface air temperature data from specific geographical ranges and plot the data over time, as well as how to import recent raster maps of global surface temperatures from Copernicus' Climate Pulse. We've also highlighted the RemoteSensing paclet, a powerful tool that can interface with NASA's GIBS and AppEEARS APIs for convenient remote sensing data retrieval. 
 
 With these functionalities, researchers in climate science and related fields are better equipped to analyse and interpret vast amounts of climate data right from within the Wolfram Language.
-
- 
-
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
