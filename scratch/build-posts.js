@@ -2,13 +2,14 @@ import fs from 'fs';
 import path from 'path';
 
 // --- CONFIGURATION ---
-const POSTS_MARKDOWN_DIR = './content/posts/markdown';
+const POSTS_MARKDOWN_DIR = './markdown/posts';
 const POSTS_OUTPUT_HTML_DIR = './content/posts';
 const POSTS_JSON_PATH = './data/posts.json';
 
-const PAGES_MARKDOWN_DIR = './content/pages/markdown';
+const PAGES_MARKDOWN_DIR = './markdown/pages';
 const PAGES_OUTPUT_HTML_DIR = './content/pages';
 const PAGES_JSON_PATH = './data/pages.json';
+const CUSTOM_PAGES_DIR = './content/custom-pages';
 
 // Ensure directories exist
 if (!fs.existsSync(POSTS_MARKDOWN_DIR)) {
@@ -233,26 +234,22 @@ function compilePosts() {
 function compilePages() {
   console.log('Compiling pages...');
   const mdFiles = fs.readdirSync(PAGES_MARKDOWN_DIR).filter(file => file.endsWith('.md'));
+  const customFiles = fs.existsSync(CUSTOM_PAGES_DIR)
+    ? fs.readdirSync(CUSTOM_PAGES_DIR).filter(file => file.endsWith('.html'))
+    : [];
 
-  let pages = [];
+  let existingPages = [];
   if (fs.existsSync(PAGES_JSON_PATH)) {
     try {
-      pages = JSON.parse(fs.readFileSync(PAGES_JSON_PATH, 'utf8'));
+      existingPages = JSON.parse(fs.readFileSync(PAGES_JSON_PATH, 'utf8'));
     } catch (err) {
       console.error('Error reading pages.json:', err);
     }
   }
 
-  // Preserve playgrounds metadata
-  const playgroundsMeta = pages.find(p => p.slug === 'playgrounds') || {
-    slug: 'playgrounds',
-    title: 'Digital Playgrounds',
-    body_class: 'playgrounds-body',
-    main_class: ''
-  };
-
   const updatedPages = [];
 
+  // 1. Process Markdown pages
   mdFiles.forEach(file => {
     const filePath = path.join(PAGES_MARKDOWN_DIR, file);
     const fileContent = fs.readFileSync(filePath, 'utf8');
@@ -278,15 +275,29 @@ function compilePages() {
     console.log(`  Compiled page: ${file} -> ${slug}.html`);
   });
 
-  // Re-add playgrounds in its position or append it
-  const hasPlaygrounds = updatedPages.some(p => p.slug === 'playgrounds');
-  if (!hasPlaygrounds) {
-    // Try to insert in original menu position or just push
-    updatedPages.push(playgroundsMeta);
-  }
+  // 2. Process Custom HTML pages
+  customFiles.forEach(file => {
+    const slug = path.basename(file, '.html');
+    const srcPath = path.join(CUSTOM_PAGES_DIR, file);
+    const destPath = path.join(PAGES_OUTPUT_HTML_DIR, file);
+    
+    // Copy the custom HTML file
+    fs.copyFileSync(srcPath, destPath);
+    console.log(`  Copied custom page: ${file} -> ${destPath}`);
+
+    // Lookup metadata in existingPages
+    const existingMeta = existingPages.find(p => p.slug === slug);
+    const metadata = {
+      slug: slug,
+      title: existingMeta ? existingMeta.title : (slug.charAt(0).toUpperCase() + slug.slice(1)),
+      body_class: existingMeta ? existingMeta.body_class : 'post-template',
+      main_class: existingMeta ? existingMeta.main_class : 'post'
+    };
+
+    updatedPages.push(metadata);
+  });
 
   // Sort pages slightly or keep order matching original menu order for nicer list
-  // Let's match navigation ordering if possible, or just keep original order
   const orderMap = {
     'guest-lectures-and-public-speaking-events': 1,
     'playgrounds': 2,

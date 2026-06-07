@@ -5,8 +5,8 @@ on:
     branches:
       - development
     paths:
-      - 'content/posts/markdown/**'
-      - 'content/pages/markdown/**'
+      - 'markdown/posts/**'
+      - 'markdown/pages/**'
       - 'scratch/build-posts.js'
       - 'package.json'
 

@@ -615,11 +615,18 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.className = bodyClass;
         mainEl.className = page.main_class || '';
         try {
-          let contentHtml;
+          const contentRes = await fetch(`content/pages/${slug}.html`);
+          if (!contentRes.ok) throw new Error(`Failed to load content for page: ${slug}`);
+          let contentHtml = await contentRes.text();
+          mainEl.innerHTML = normalizeContentHTML(contentHtml, `pages/${page.slug}/`);
+
           if (slug === 'playgrounds') {
-            const playgroundsRes = await fetch('data/playgrounds.json');
-            const playgrounds = await playgroundsRes.json();
-            const cardsHtml = playgrounds.map(item => `
+            try {
+              const playgroundsRes = await fetch('data/playgrounds.json');
+              const playgrounds = await playgroundsRes.json();
+              const container = mainEl.querySelector('#playgrounds-container');
+              if (container) {
+                container.innerHTML = playgrounds.map(item => `
         <article class="c-card">
             <a class="c-card__image" href="${item.url}" rel="noopener noreferrer" target="_blank">
                 <img alt="${item.title} Project Thumbnail"
@@ -633,27 +640,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 <p class="c-card__description">${item.description}</p>
             </div>
         </article>
-            `).join('');
-
-            contentHtml = `
-<div class="wrapper">
-    <header class="post__header">
-        <h1 class="post__title">Playgrounds</h1>
-        <p style="text-align: center; color: var(--gray-2); max-width: 60ch; margin: 1.5rem auto 0; font-family: 'Inter', sans-serif; line-height: 1.6;">
-            A selection of web experiments, research projects, and other curiosities exploring connections
-            between complexity, art, and computation.</p>
-    </header>
-    <div class="playgrounds-grid">
-        ${cardsHtml}
-    </div>
-</div>
-            `;
-          } else {
-            const contentRes = await fetch(`content/pages/${slug}.html`);
-            if (!contentRes.ok) throw new Error(`Failed to load content for page: ${slug}`);
-            contentHtml = await contentRes.text();
+                `).join('');
+              }
+            } catch (err) {
+              console.error("Failed to load playgrounds data:", err);
+            }
           }
-          mainEl.innerHTML = normalizeContentHTML(contentHtml, `pages/${page.slug}/`);
           if (window.Prism) {
             Prism.highlightAllUnder(mainEl);
           }
