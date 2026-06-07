@@ -1,0 +1,13 @@
+---
+title: "Resume / Curriculum Vitae"
+body_class: "post-template"
+main_class: "post"
+---
+
+## English
+
+Thank you for your interest in my work. To view my resume in English, please follow this link: [English language resume](../resume-english/)
+## Français
+
+Merci de l'intérêt que vous portez pour mon travail. Pour consulter mon CV en Français, je vous invite à suivre le lien suivant : [CV en Francais](../cv-francais/)
+# ![](../../media/posts/5/profile-banner-calm.png)

@@ -1,16 +1,24 @@
 import fs from 'fs';
 import path from 'path';
 
-const MARKDOWN_DIR = './content/posts/markdown';
-const OUTPUT_HTML_DIR = './content/posts';
+// --- CONFIGURATION ---
+const POSTS_MARKDOWN_DIR = './content/posts/markdown';
+const POSTS_OUTPUT_HTML_DIR = './content/posts';
 const POSTS_JSON_PATH = './data/posts.json';
 
+const PAGES_MARKDOWN_DIR = './content/pages/markdown';
+const PAGES_OUTPUT_HTML_DIR = './content/pages';
+const PAGES_JSON_PATH = './data/pages.json';
+
 // Ensure directories exist
-if (!fs.existsSync(MARKDOWN_DIR)) {
-  fs.mkdirSync(MARKDOWN_DIR, { recursive: true });
+if (!fs.existsSync(POSTS_MARKDOWN_DIR)) {
+  fs.mkdirSync(POSTS_MARKDOWN_DIR, { recursive: true });
+}
+if (!fs.existsSync(PAGES_MARKDOWN_DIR)) {
+  fs.mkdirSync(PAGES_MARKDOWN_DIR, { recursive: true });
 }
 
-// Simple Markdown parser
+// --- MARKDOWN PARSER ---
 function parseMarkdown(md) {
   let html = md.replace(/\r\n/g, '\n');
 
@@ -131,7 +139,7 @@ function parseMarkdown(md) {
   return result.join('\n');
 }
 
-// Simple Frontmatter parser
+// --- FRONTMATTER PARSER ---
 function parseFrontMatter(fileContent) {
   const parts = fileContent.split('---');
   if (parts.length < 3) {
@@ -171,60 +179,135 @@ function parseFrontMatter(fileContent) {
   return { data, content };
 }
 
-// Read all markdown files
-const mdFiles = fs.readdirSync(MARKDOWN_DIR).filter(file => file.endsWith('.md'));
+// --- COMPILE POSTS ---
+function compilePosts() {
+  console.log('Compiling posts...');
+  const mdFiles = fs.readdirSync(POSTS_MARKDOWN_DIR).filter(file => file.endsWith('.md'));
 
-// Read existing posts.json
-let posts = [];
-if (fs.existsSync(POSTS_JSON_PATH)) {
-  try {
-    posts = JSON.parse(fs.readFileSync(POSTS_JSON_PATH, 'utf8'));
-  } catch (err) {
-    console.error('Error reading posts.json:', err);
+  let posts = [];
+  if (fs.existsSync(POSTS_JSON_PATH)) {
+    try {
+      posts = JSON.parse(fs.readFileSync(POSTS_JSON_PATH, 'utf8'));
+    } catch (err) {
+      console.error('Error reading posts.json:', err);
+    }
   }
+
+  mdFiles.forEach(file => {
+    const filePath = path.join(POSTS_MARKDOWN_DIR, file);
+    const fileContent = fs.readFileSync(filePath, 'utf8');
+    const { data, content } = parseFrontMatter(fileContent);
+    const slug = data.slug || path.basename(file, '.md');
+    const htmlContent = parseMarkdown(content);
+    
+    fs.writeFileSync(path.join(POSTS_OUTPUT_HTML_DIR, `${slug}.html`), htmlContent, 'utf8');
+    
+    const metadata = {
+      id: data.id || slug,
+      name: data.title || data.name || slug,
+      slug: slug,
+      date: data.date || new Date().toISOString().substring(0, 16),
+      tags: data.tags || [],
+      thumbnail: data.thumbnail || "",
+      ...(data.thumbWidth !== undefined && { thumbWidth: Number(data.thumbWidth) }),
+      ...(data.thumbHeight !== undefined && { thumbHeight: Number(data.thumbHeight) }),
+      ...(data.date_modified !== undefined && { date_modified: data.date_modified }),
+      ...(data.date_published !== undefined && { date_published: data.date_published })
+    };
+
+    const existingIndex = posts.findIndex(p => p.slug === slug);
+    if (existingIndex > -1) {
+      posts[existingIndex] = { ...posts[existingIndex], ...metadata };
+    } else {
+      posts.push(metadata);
+    }
+    console.log(`  Compiled post: ${file} -> ${slug}.html`);
+  });
+
+  posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+  fs.writeFileSync(POSTS_JSON_PATH, JSON.stringify(posts, null, 2), 'utf8');
+  console.log(`Successfully compiled posts and updated: ${POSTS_JSON_PATH}`);
 }
 
-// Process each markdown file
-mdFiles.forEach(file => {
-  const filePath = path.join(MARKDOWN_DIR, file);
-  const fileContent = fs.readFileSync(filePath, 'utf8');
-  
-  // Parse frontmatter and content
-  const { data, content } = parseFrontMatter(fileContent);
-  const slug = data.slug || path.basename(file, '.md');
-  const htmlContent = parseMarkdown(content);
-  
-  // Write compiled HTML
-  fs.writeFileSync(path.join(OUTPUT_HTML_DIR, `${slug}.html`), htmlContent, 'utf8');
-  
-  // Prepare metadata entry
-  const metadata = {
-    id: data.id || slug,
-    name: data.title || data.name || slug,
-    slug: slug,
-    date: data.date || new Date().toISOString().substring(0, 16),
-    tags: data.tags || [],
-    thumbnail: data.thumbnail || "",
-    ...(data.thumbWidth !== undefined && { thumbWidth: Number(data.thumbWidth) }),
-    ...(data.thumbHeight !== undefined && { thumbHeight: Number(data.thumbHeight) }),
-    ...(data.date_modified !== undefined && { date_modified: data.date_modified }),
-    ...(data.date_published !== undefined && { date_published: data.date_published })
+// --- COMPILE PAGES ---
+function compilePages() {
+  console.log('Compiling pages...');
+  const mdFiles = fs.readdirSync(PAGES_MARKDOWN_DIR).filter(file => file.endsWith('.md'));
+
+  let pages = [];
+  if (fs.existsSync(PAGES_JSON_PATH)) {
+    try {
+      pages = JSON.parse(fs.readFileSync(PAGES_JSON_PATH, 'utf8'));
+    } catch (err) {
+      console.error('Error reading pages.json:', err);
+    }
+  }
+
+  // Preserve playgrounds metadata
+  const playgroundsMeta = pages.find(p => p.slug === 'playgrounds') || {
+    slug: 'playgrounds',
+    title: 'Digital Playgrounds',
+    body_class: 'playgrounds-body',
+    main_class: ''
   };
 
-  // Merge/Upsert into posts array
-  const existingIndex = posts.findIndex(p => p.slug === slug);
-  if (existingIndex > -1) {
-    posts[existingIndex] = { ...posts[existingIndex], ...metadata };
-  } else {
-    posts.push(metadata);
+  const updatedPages = [];
+
+  mdFiles.forEach(file => {
+    const filePath = path.join(PAGES_MARKDOWN_DIR, file);
+    const fileContent = fs.readFileSync(filePath, 'utf8');
+    const { data, content } = parseFrontMatter(fileContent);
+    const slug = data.slug || path.basename(file, '.md');
+    
+    // Compile markdown body
+    const bodyHtml = parseMarkdown(content);
+
+    // Wrap in standard page layout
+    const finalHtml = `<div class="wrapper"><article class="content"><header class="content__header"><h1 class="content__title">${data.title || slug}</h1></header><div class="content__inner"><div class="content__entry">${bodyHtml}</div><footer><div class="content__tags-share"><aside class="content__share"></aside></div></footer></div></article></div>`;
+    
+    fs.writeFileSync(path.join(PAGES_OUTPUT_HTML_DIR, `${slug}.html`), finalHtml, 'utf8');
+    
+    const metadata = {
+      slug: slug,
+      title: data.title || slug,
+      body_class: data.body_class || 'post-template',
+      main_class: data.main_class || 'post'
+    };
+
+    updatedPages.push(metadata);
+    console.log(`  Compiled page: ${file} -> ${slug}.html`);
+  });
+
+  // Re-add playgrounds in its position or append it
+  const hasPlaygrounds = updatedPages.some(p => p.slug === 'playgrounds');
+  if (!hasPlaygrounds) {
+    // Try to insert in original menu position or just push
+    updatedPages.push(playgroundsMeta);
   }
+
+  // Sort pages slightly or keep order matching original menu order for nicer list
+  // Let's match navigation ordering if possible, or just keep original order
+  const orderMap = {
+    'guest-lectures-and-public-speaking-events': 1,
+    'playgrounds': 2,
+    'publications': 3,
+    'a-few-words-about-me': 4,
+    'resume-cv': 5,
+    'resume-english': 6,
+    'cv-francais': 7,
+    'inquiries': 8
+  };
   
-  console.log(`Compiled: ${file} -> ${slug}.html`);
-});
+  updatedPages.sort((a, b) => {
+    const orderA = orderMap[a.slug] || 99;
+    const orderB = orderMap[b.slug] || 99;
+    return orderA - orderB;
+  });
 
-// Sort posts by date descending
-posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+  fs.writeFileSync(PAGES_JSON_PATH, JSON.stringify(updatedPages, null, 2), 'utf8');
+  console.log(`Successfully compiled pages and updated: ${PAGES_JSON_PATH}`);
+}
 
-// Save posts.json with pretty print
-fs.writeFileSync(POSTS_JSON_PATH, JSON.stringify(posts, null, 2), 'utf8');
-console.log(`Successfully compiled posts and updated: ${POSTS_JSON_PATH}`);
+// Run compilation
+compilePosts();
+compilePages();

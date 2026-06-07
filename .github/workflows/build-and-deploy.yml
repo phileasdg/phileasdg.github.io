@@ -6,6 +6,7 @@ on:
       - development
     paths:
       - 'content/posts/markdown/**'
+      - 'content/pages/markdown/**'
       - 'scratch/build-posts.js'
       - 'package.json'
 
@@ -26,17 +27,17 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - name: Build posts
+      - name: Build posts and pages
         run: npm run build
 
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add content/posts/*.html data/posts.json
+          git add content/posts/*.html content/pages/*.html data/posts.json data/pages.json
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Auto-compile Markdown posts [skip ci]"
+            git commit -m "Auto-compile Markdown posts and pages [skip ci]"
             git push
           fi

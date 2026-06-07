@@ -615,9 +615,44 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.className = bodyClass;
         mainEl.className = page.main_class || '';
         try {
-          const contentRes = await fetch(`content/pages/${slug}.html`);
-          if (!contentRes.ok) throw new Error(`Failed to load content for page: ${slug}`);
-          const contentHtml = await contentRes.text();
+          let contentHtml;
+          if (slug === 'playgrounds') {
+            const playgroundsRes = await fetch('data/playgrounds.json');
+            const playgrounds = await playgroundsRes.json();
+            const cardsHtml = playgrounds.map(item => `
+        <article class="c-card">
+            <a class="c-card__image" href="${item.url}" rel="noopener noreferrer" target="_blank">
+                <img alt="${item.title} Project Thumbnail"
+                    onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
+                    src="${item.thumbnail}" />
+            </a>
+            <div class="c-card__wrapper">
+                <header class="c-card__header">
+                    <h2 class="c-card__title"><a class="invert" href="${item.url}" rel="noopener noreferrer" target="_blank">${item.title}</a></h2>
+                </header>
+                <p class="c-card__description">${item.description}</p>
+            </div>
+        </article>
+            `).join('');
+
+            contentHtml = `
+<div class="wrapper">
+    <header class="post__header">
+        <h1 class="post__title">Playgrounds</h1>
+        <p style="text-align: center; color: var(--gray-2); max-width: 60ch; margin: 1.5rem auto 0; font-family: 'Inter', sans-serif; line-height: 1.6;">
+            A selection of web experiments, research projects, and other curiosities exploring connections
+            between complexity, art, and computation.</p>
+    </header>
+    <div class="playgrounds-grid">
+        ${cardsHtml}
+    </div>
+</div>
+            `;
+          } else {
+            const contentRes = await fetch(`content/pages/${slug}.html`);
+            if (!contentRes.ok) throw new Error(`Failed to load content for page: ${slug}`);
+            contentHtml = await contentRes.text();
+          }
           mainEl.innerHTML = normalizeContentHTML(contentHtml, `pages/${page.slug}/`);
           if (window.Prism) {
             Prism.highlightAllUnder(mainEl);

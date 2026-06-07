@@ -1,25 +1,7 @@
 [
   {
-    "slug": "inquiries",
-    "title": "Inquiries",
-    "body_class": "post-template",
-    "main_class": "post"
-  },
-  {
-    "slug": "publications",
-    "title": "Publications & Academic Writing",
-    "body_class": "post-template",
-    "main_class": "post"
-  },
-  {
     "slug": "guest-lectures-and-public-speaking-events",
     "title": "Guest Lectures and Public Speaking Events",
-    "body_class": "post-template",
-    "main_class": "post"
-  },
-  {
-    "slug": "a-few-words-about-me",
-    "title": "About me",
     "body_class": "post-template",
     "main_class": "post"
   },
@@ -28,6 +10,18 @@
     "title": "Digital Playgrounds",
     "body_class": "playgrounds-body",
     "main_class": ""
+  },
+  {
+    "slug": "publications",
+    "title": "Publications & Academic Writing",
+    "body_class": "post-template",
+    "main_class": "post"
+  },
+  {
+    "slug": "a-few-words-about-me",
+    "title": "About me",
+    "body_class": "post-template",
+    "main_class": "post"
   },
   {
     "slug": "resume-cv",
@@ -44,6 +38,12 @@
   {
     "slug": "cv-francais",
     "title": "Phileas Dazeley-Gaist",
+    "body_class": "post-template",
+    "main_class": "post"
+  },
+  {
+    "slug": "inquiries",
+    "title": "Inquiries",
     "body_class": "post-template",
     "main_class": "post"
   }
