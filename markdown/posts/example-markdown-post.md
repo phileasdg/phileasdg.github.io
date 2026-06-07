@@ -57,11 +57,19 @@ class Agent:
 ---
 
 ## 4. Media & Embeds
-You can embed images using Markdown syntax:
+You can embed images using simple Markdown syntax. By default, the build system automatically wraps them in a `<figure class="post__image">` container and generates responsive `srcset` and `sizes` attributes if matching sizes are found on disk under the image's `responsive/` directory.
 
+### Standard Image:
 ![Hypergraph Plotter Card Thumbnail](media/imgs/hypergraph-plotter.png)
 
-You can also drop raw HTML blocks like video `<iframe>` embeds directly into the page:
+### Image with Custom Dimensions:
+You can specify the image width and height using the `=widthxheight` syntax (e.g. `=600x380` or `=600x` to specify width only) in the image target brackets:
+![Hypergraph Plotter Card Thumbnail](media/imgs/hypergraph-plotter.png =600x380)
+
+---
+
+## 5. Raw HTML Support
+You can drop raw HTML blocks directly into the page (e.g. for embeds, customized styling, or video players). The Markdown compiler protects these tags and keeps them as-is:
 
 <figure class="post__video">
   <iframe width="560" height="314" src="https://www.youtube.com/embed/mBQfjY_g-pI" frameborder="0" allowfullscreen></iframe>

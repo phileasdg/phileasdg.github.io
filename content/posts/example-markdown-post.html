@@ -44,9 +44,15 @@ class Agent:
 </code></pre>
 <p>---</p>
 <h2>4. Media & Embeds</h2>
-<p>You can embed images using Markdown syntax:</p>
-<img src="media/imgs/hypergraph-plotter.png" alt="Hypergraph Plotter Card Thumbnail" />
-<p>You can also drop raw HTML blocks like video <code><iframe></code> embeds directly into the page:</p>
+<p>You can embed images using simple Markdown syntax. By default, the build system automatically wraps them in a <code><figure class="post__image"></code> container and generates responsive <code>srcset</code> and <code>sizes</code> attributes if matching sizes are found on disk under the image's <code>responsive/</code> directory.</p>
+<h3>Standard Image:</h3>
+<figure class="post__image"><img src="media/imgs/hypergraph-plotter.png" alt="Hypergraph Plotter Card Thumbnail" loading="lazy" /></figure>
+<h3>Image with Custom Dimensions:</h3>
+<p>You can specify the image width and height using the <code>=widthxheight</code> syntax (e.g. <code>=600x380</code> or <code>=600x</code> to specify width only) in the image target brackets:</p>
+<figure class="post__image"><img src="media/imgs/hypergraph-plotter.png" alt="Hypergraph Plotter Card Thumbnail" width="600" height="380" loading="lazy" /></figure>
+<p>---</p>
+<h2>5. Raw HTML Support</h2>
+<p>You can drop raw HTML blocks directly into the page (e.g. for embeds, customized styling, or video players). The Markdown compiler protects these tags and keeps them as-is:</p>
 <figure class="post__video">
 <iframe width="560" height="314" src="https://www.youtube.com/embed/mBQfjY_g-pI" frameborder="0" allowfullscreen></iframe>
 </figure>

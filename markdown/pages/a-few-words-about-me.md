@@ -6,7 +6,7 @@ main_class: "post"
 
 I'm a French-British human ecologist, data scientist, and scientific programmer specialized in complex systems and geospatial data.
  
-![](../../media/posts/6/portrait-new.png)
+![About me portrait](../../media/posts/6/portrait-new.png =2696x1797)
  
 I currently work at Wolfram Research as an Applications Developer, where my responsibilities include:
 

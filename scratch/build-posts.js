@@ -19,6 +19,66 @@ if (!fs.existsSync(PAGES_MARKDOWN_DIR)) {
   fs.mkdirSync(PAGES_MARKDOWN_DIR, { recursive: true });
 }
 
+// Helper to find responsive variants of an image on disk and build srcset/sizes attributes
+function getResponsiveSrcsetAndSizes(imgPath) {
+  // Strip origin if present
+  let cleanPath = imgPath.replace(/^https?:\/\/phileasdg\.github\.io\//, '/');
+  
+  // Normalize relative parts
+  cleanPath = cleanPath.replace(/^(\.\.\/)+/, '');
+  if (cleanPath.startsWith('/')) {
+    cleanPath = cleanPath.substring(1);
+  }
+
+  // Now cleanPath is like "media/posts/49/image.png"
+  const fullLocalPath = path.resolve(cleanPath);
+  if (!fs.existsSync(fullLocalPath)) {
+    return { srcset: '', sizes: '' };
+  }
+
+  const dir = path.dirname(cleanPath);
+  const ext = path.extname(cleanPath);
+  const base = path.basename(cleanPath, ext);
+
+  // Check on disk for responsive sizes
+  const responsiveDir = path.join(dir, 'responsive');
+  const sizesList = [
+    { suffix: '-xs', width: '300w' },
+    { suffix: '-sm', width: '480w' },
+    { suffix: '-md', width: '768w' },
+    { suffix: '-lg', width: '1200w' }
+  ];
+
+  const foundSrcset = [];
+  sizesList.forEach(item => {
+    const responsiveFileLocal = path.resolve(responsiveDir, `${base}${item.suffix}${ext}`);
+    if (fs.existsSync(responsiveFileLocal)) {
+      let prefix = '';
+      if (imgPath.startsWith('https://phileasdg.github.io/')) {
+        prefix = 'https://phileasdg.github.io/';
+      } else if (imgPath.startsWith('../../')) {
+        prefix = '../../';
+      } else if (imgPath.startsWith('../')) {
+        prefix = '../';
+      } else if (imgPath.startsWith('/')) {
+        prefix = '/';
+      }
+      
+      const relativeHtmlPath = `${prefix}${dir}/responsive/${base}${item.suffix}${ext}`;
+      foundSrcset.push(`${relativeHtmlPath} ${item.width}`);
+    }
+  });
+
+  if (foundSrcset.length > 0) {
+    return {
+      srcset: `srcset="${foundSrcset.join(', ')}"`,
+      sizes: `sizes="(max-width: 48em) 100vw, 100vw"`
+    };
+  }
+
+  return { srcset: '', sizes: '' };
+}
+
 // --- MARKDOWN PARSER ---
 function parseMarkdown(md) {
   let html = md.replace(/\r\n/g, '\n');
@@ -57,30 +117,48 @@ function parseMarkdown(md) {
     // Process inline markdown for non-code block lines
     let processedLine = line.trim();
 
-    // 1. Temporarily extract HTML tags to prevent modifying them
+    // 1. Images (must be BEFORE links and BEFORE extracting HTML tags)
+    processedLine = processedLine.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, imgTarget) => {
+      const parts = imgTarget.trim().split(/\s+/);
+      const imgPath = parts[0];
+      let widthAttr = '';
+      let heightAttr = '';
+      
+      for (let i = 1; i < parts.length; i++) {
+        const sizeMatch = parts[i].match(/^=(\d*)x(\d*)$/);
+        if (sizeMatch) {
+          if (sizeMatch[1]) widthAttr = ` width="${sizeMatch[1]}"`;
+          if (sizeMatch[2]) heightAttr = ` height="${sizeMatch[2]}"`;
+        }
+      }
+
+      const { srcset, sizes } = getResponsiveSrcsetAndSizes(imgPath);
+      const srcsetAttr = srcset ? ' ' + srcset : '';
+      const sizesAttr = sizes ? ' ' + sizes : '';
+      return `<figure class="post__image"><img src="${imgPath}" alt="${alt}"${widthAttr}${heightAttr}${srcsetAttr}${sizesAttr} loading="lazy" /></figure>`;
+    });
+
+    // 2. Links (must be BEFORE extracting HTML tags)
+    processedLine = processedLine.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+
+    // 3. Headers (must match start of line, must be BEFORE extracting HTML tags)
+    processedLine = processedLine.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+    processedLine = processedLine.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+    processedLine = processedLine.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+
+    // 4. Temporarily extract HTML tags (original + newly generated) to prevent modifying them
     const htmlTags = [];
     processedLine = processedLine.replace(/<[^>]+>/g, (match) => {
       htmlTags.push(match);
       return `%%HTMLTAGPLACEHOLDER${htmlTags.length - 1}%%`;
     });
 
-    // 2. Temporarily extract inline code to prevent formatting inside backticks
+    // 5. Temporarily extract inline code to prevent formatting inside backticks
     const codeBlocks = [];
     processedLine = processedLine.replace(/`([^`]+)`/g, (match, code) => {
       codeBlocks.push(code);
       return `%%CODEPLACEHOLDER${codeBlocks.length - 1}%%`;
     });
-
-    // 3. Images (must be BEFORE links)
-    processedLine = processedLine.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" />');
-
-    // 4. Links
-    processedLine = processedLine.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
-
-    // 5. Headers (must match start of line, but we trimmed leading spaces)
-    processedLine = processedLine.replace(/^### (.*$)/gim, '<h3>$1</h3>');
-    processedLine = processedLine.replace(/^## (.*$)/gim, '<h2>$1</h2>');
-    processedLine = processedLine.replace(/^# (.*$)/gim, '<h1>$1</h1>');
 
     // 6. Bold
     processedLine = processedLine.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
