@@ -241,7 +241,7 @@ code {
   background-color: rgba(var(--color-rgb), 0.1);
   border-radius: 2px;
   color: var(--color);
-  font-size: 1rem;
+  font-size: 0.85em;
   font-family: var(--monospace);
   padding: 0.25rem 0.5rem;
 }
@@ -249,7 +249,7 @@ code {
 pre {
   background-color: var(--lighter);
   border-radius: 3px;
-  font-size: 1rem;
+  font-size: 0.85rem;
   padding: 1.5rem;
   white-space: pre-wrap !important;
   word-wrap: break-word;
@@ -1806,7 +1806,7 @@ textarea {
 .post__video::before, .post__iframe::before {
   display: block;
   content: "";
-  padding-top: var(--embed-aspect-ratio);
+  padding-top: var(--embed-aspect-ratio, 56.25%);
 }
 .post__video iframe, .post__video video, .post__iframe iframe, .post__iframe video {
   border: none;

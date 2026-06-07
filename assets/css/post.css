@@ -233,7 +233,7 @@
 .post__iframe::before, .post__video::before {
   display:block;
   content:"";
-  padding-top:var(--embed-aspect-ratio)
+  padding-top:var(--embed-aspect-ratio, 56.25%)
 }
 .post__iframe iframe, .post__iframe video, .post__video iframe, .post__video video {
   border:none;
