@@ -1,4 +1,24 @@
-import { Vec } from './geom.js?v=1.0.57';
+import { Vec } from './geom.js?v=1.0.70';
+
+/**
+ * Helper to find the closest point on segment [a, b] to point p.
+ * Returns the closest point coordinates and projection factor t in [0, 1].
+ */
+function getClosestPointOnSegment(p, a, b) {
+  const abX = b.x - a.x;
+  const abY = b.y - a.y;
+  const l2 = abX * abX + abY * abY;
+  if (l2 < 0.1) return { x: a.x, y: a.y, t: 0 };
+  
+  let t = ((p.x - a.x) * abX + (p.y - a.y) * abY) / l2;
+  t = Math.max(0, Math.min(1, t));
+  
+  return {
+    x: a.x + t * abX,
+    y: a.y + t * abY,
+    t: t
+  };
+}
 
 /**
  * Manages the force-directed simulation for a bipartite representation of the hypergraph.
@@ -11,7 +31,7 @@ export class BipartiteForceLayout {
     this.height = options.height || 600;
     
     // Hypergraph physics coefficients
-    this.kAttract = options.kAttract !== undefined ? options.kAttract : 0.18;
+    this.kAttract = options.kAttract !== undefined ? options.kAttract : 0.35;
     this.kRepel = options.kRepel !== undefined ? options.kRepel : 7000;
     this.kHyperedgeRepel = options.kHyperedgeRepel !== undefined ? options.kHyperedgeRepel : 20000;
     this.kCenter = options.kCenter !== undefined ? options.kCenter : 0.008;
@@ -23,11 +43,11 @@ export class BipartiteForceLayout {
     this.sameCompRepelCap = options.sameCompRepelCap !== undefined ? options.sameCompRepelCap : 10.0;
     this.kSharedAttract = options.kSharedAttract !== undefined ? options.kSharedAttract : 0.08;
     // Force pushing non-member vertices out of foreign blob regions
-    this.kNonMemberRepel = options.kNonMemberRepel !== undefined ? options.kNonMemberRepel : 1.8;
+    this.kNonMemberRepel = options.kNonMemberRepel !== undefined ? options.kNonMemberRepel : 2.2;
     this.coolingRate = options.coolingRate !== undefined ? options.coolingRate : 0.985;
     this.temperatureThreshold = options.temperatureThreshold !== undefined ? options.temperatureThreshold : 0.005;
-    this.maxBlobReach = options.maxBlobReach !== undefined ? options.maxBlobReach : 140;
-    this.nonMemberGap = options.nonMemberGap !== undefined ? options.nonMemberGap : 40;
+    this.maxBlobReach = options.maxBlobReach !== undefined ? options.maxBlobReach : 400;
+    this.nonMemberGap = options.nonMemberGap !== undefined ? options.nonMemberGap : 12;
 
     this.nodes = []; // All nodes (vertices + hubs)
     this.nodeMap = new Map(); // id -> node reference
@@ -264,10 +284,13 @@ export class BipartiteForceLayout {
         }
 
         if (sharedCount > 0) {
+          const unionSize = set1.size + set2.size - sharedCount;
+          const similarity = unionSize > 0 ? sharedCount / unionSize : 0;
           this.sharedVertexPairs.push({
             v1Id,
             v2Id,
-            count: sharedCount
+            count: sharedCount,
+            similarity: similarity
           });
         }
       }
@@ -296,7 +319,7 @@ export class BipartiteForceLayout {
       return node.radius || 4;
     }
     if (node.shape === 'rect') {
-      return Math.sqrt(node.halfWidth * node.halfWidth + node.halfHeight * node.halfHeight);
+      return node.halfWidth || 70;
     }
     if (node.shape === 'capsule') {
       return Math.min(
@@ -342,7 +365,8 @@ export class BipartiteForceLayout {
     const fx = new Array(n).fill(0);
     const fy = new Array(n).fill(0);
 
-    const centerX = this.width / 2;
+    const isDesktop = this.width > 768;
+    const centerX = isDesktop ? (this.width / 2 + 90) : (this.width / 2);
     const centerY = this.height / 2;
 
     // Build a set of linked vertex-hub pairs to skip self-repulsion in the layout physics
@@ -370,13 +394,16 @@ export class BipartiteForceLayout {
         const dy = v.y - node.y;
         const d = Math.sqrt(dx * dx + dy * dy);
         // Account for the vertex node's own half-extent in the blob direction
-        const vReach = d + (v.radius || v.halfWidth || vertexRadius);
+        const ux = d > 0.001 ? dx / d : 1;
+        const uy = d > 0.001 ? dy / d : 0;
+        const r_v = this.getNodeRadius(v, ux, uy);
+        const vReach = d + r_v;
         if (vReach > maxDist) maxDist = vReach;
       });
       const rawReach = Math.min(maxDist + blobMargin, this.maxBlobReach);
-      // EMA: 95% previous value + 5% new measurement — smooths out frame-to-frame jitter
+      // EMA: 85% previous value + 15% new measurement — reacts faster to drags
       node.blobReach = node.blobReach != null
-        ? 0.95 * node.blobReach + 0.05 * rawReach
+        ? 0.85 * node.blobReach + 0.15 * rawReach
         : rawReach;
     });
 
@@ -542,93 +569,155 @@ export class BipartiteForceLayout {
 
       const dx = v2Node.x - v1Node.x;
       const dy = v2Node.y - v1Node.y;
+      const d = Math.sqrt(dx * dx + dy * dy);
+      if (d < 0.1) return;
 
-      // Hookean spring force (rest length = 0) proportional to shared edges count
-      const forceX = dx * this.kSharedAttract * pair.count;
-      const forceY = dy * this.kSharedAttract * pair.count;
+      const ux = dx / d;
+      const uy = dy / d;
 
-      fx[idx1] += forceX;
-      fy[idx1] += forceY;
-      fx[idx2] -= forceX;
-      fy[idx2] -= forceY;
+      // Rest length: pull them together until their cards touch with a safe gap (20px clearance)
+      const r1 = this.getNodeRadius(v1Node, ux, uy);
+      const r2 = this.getNodeRadius(v2Node, ux, uy);
+      const safeDist = r1 + r2 + 20;
+
+      if (d > safeDist) {
+        // Hookean spring force scaled by non-linear Jaccard similarity weighting.
+        // Highly similar / identical membership nodes are pulled together extremely strongly.
+        const similarityWeight = pair.similarity === 1.0 
+          ? 15.0 
+          : Math.pow(pair.similarity, 2.0) * 8.0;
+
+        const forceFactor = this.kSharedAttract * similarityWeight * (d - safeDist);
+        const forceX = ux * forceFactor;
+        const forceY = uy * forceFactor;
+
+        fx[idx1] += forceX;
+        fy[idx1] += forceY;
+        fx[idx2] -= forceX;
+        fy[idx2] -= forceY;
+      }
     });
 
     // 2c. Non-member blob avoidance:
     //   For each vertex V that does NOT belong to edge E, if V falls inside E's blob
-    //   boundary (centroid of E's members + blob reach), push V radially outward.
-    //   Direction: V - centroid(E members), which points toward the nearest exit.
+    //   boundary (skeleton of E + local reach + blobMargin), push V perpendicularly outward.
+    //   Direction: V - closestPointOnSkeleton, which points toward the nearest boundary exit.
     if (this.hyperedges && this.vertexEdgeSet) {
       this.hyperedges.forEach(edge => {
         if (edge.vertices.length < 2) return;
-
-        // Compute centroid of this edge's member vertices
-        let cx = 0, cy = 0, cnt = 0;
-        edge.vertices.forEach(vId => {
-          const vn = this.nodeMap.get(vId);
-          if (vn) { cx += vn.x; cy += vn.y; cnt++; }
-        });
-        if (cnt === 0) return;
-        cx /= cnt; cy /= cnt;
-
-        // Blob reach for this edge: use hub's blobReach if available, else estimate
+ 
         const hubNode = this.nodeMap.get(`_hub_${edge.id}`);
-        const reach = (hubNode && hubNode.blobReach != null)
-          ? hubNode.blobReach
-          : blobMargin;
-
-        // For every non-member vertex, repel it from inside the blob
+        if (!hubNode) return;
+ 
+        const idxHub = this.nodes.indexOf(hubNode);
         const nonMemberRepelStrength = this.kNonMemberRepel;
+ 
         for (let i = 0; i < n; i++) {
           const node = this.nodes[i];
           if (node.isHub) continue;
+ 
           // Skip member vertices
           const memberSet = this.vertexEdgeSet.get(node.id);
           if (memberSet && memberSet.has(edge.id)) continue;
-          // Also skip nodes with NO edge memberships — they have no home blob,
-          // and being repelled from every blob just sends them flying to infinity.
-          if (!memberSet || memberSet.size === 0) continue;
+ 
 
-          // Vector from centroid to this node
-          let dx = node.x - cx;
-          let dy = node.y - cy;
-          let d = Math.sqrt(dx * dx + dy * dy);
-
+ 
+          // Find the closest point on the hyperedge's star skeleton (segments connecting members to hub)
+          let minD = Infinity;
+          let closestPt = null;
+          let closestMemberNode = null;
+ 
+          for (const vId of edge.vertices) {
+            const vNode = this.nodeMap.get(vId);
+            if (!vNode) continue;
+ 
+            const res = getClosestPointOnSegment(node, vNode, hubNode);
+            const dx = node.x - res.x;
+            const dy = node.y - res.y;
+            const d = Math.sqrt(dx * dx + dy * dy);
+ 
+            if (d < minD) {
+              minD = d;
+              closestPt = res;
+              closestMemberNode = vNode;
+            }
+          }
+ 
+          if (!closestPt) continue;
+ 
+          let dx = node.x - closestPt.x;
+          let dy = node.y - closestPt.y;
+          let d = minD;
+ 
           if (d < 0.1) {
-            // Exactly at centroid — nudge randomly
-            dx = (Math.random() - 0.5);
-            dy = (Math.random() - 0.5);
+            // Nudge randomly
+            dx = (Math.random() - 0.5) * 2;
+            dy = (Math.random() - 0.5) * 2;
             d = Math.sqrt(dx * dx + dy * dy);
           }
-
-          // Node half-extent in the direction toward centroid
+ 
           const ux = dx / d;
           const uy = dy / d;
+ 
+          // Interpolated local reach of the visual blob at this point on the skeleton
           const nodeReach = this.getNodeRadius(node, ux, uy);
-          // The "inside threshold": node surface is inside the blob + gap if d - nodeReach < reach + nonMemberGap
-          const penetration = (reach + this.nonMemberGap) - (d - nodeReach);
-          if (penetration <= 0) continue; // already outside the buffer zone
+          const memberReach = this.getNodeRadius(closestMemberNode, ux, uy);
+          const hubReach = hubNode.radius || 4;
+          const localReach = (1 - closestPt.t) * memberReach + closestPt.t * hubReach;
+ 
+          // Inside threshold: visual blob boundary is at localReach + blobMargin + nonMemberGap
+          const penetration = (localReach + blobMargin + this.nonMemberGap) - (d - nodeReach);
+          
+          if (penetration > 0) {
+            // Smooth linear spring force to prevent wiggling/jitter
+            const force = nonMemberRepelStrength * penetration * 0.22;
+            const pushX = ux * force;
+            const pushY = uy * force;
 
-          // Force proportional to penetration depth, directed away from centroid
-          const force = nonMemberRepelStrength * penetration;
-          const pushX = (dx / d) * force;
-          const pushY = (dy / d) * force;
+            fx[i] += pushX;
+            fy[i] += pushY;
 
-          fx[i] += pushX;
-          fy[i] += pushY;
+            // Distribute equal and opposite reaction force to endpoints using linear interpolation
+            const weightM = 1 - closestPt.t;
+            const weightH = closestPt.t;
+            const idxM = this.nodes.indexOf(closestMemberNode);
+            if (idxM !== -1) {
+              fx[idxM] -= pushX * weightM;
+              fy[idxM] -= pushY * weightM;
+            }
+            if (idxHub !== -1) {
+              fx[idxHub] -= pushX * weightH;
+              fy[idxHub] -= pushY * weightH;
+            }
+          }
 
-          // Distribute equal and opposite reaction force to member nodes of the edge to conserve momentum
-          const reactX = pushX / cnt;
-          const reactY = pushY / cnt;
-          edge.vertices.forEach(vId => {
-            const memberNode = this.nodeMap.get(vId);
-            if (memberNode) {
-              const idxM = this.nodes.indexOf(memberNode);
-              if (idxM !== -1) {
-                fx[idxM] -= reactX;
-                fy[idxM] -= reactY;
+          // Gentle hub repulsion to clear the interior dead zones of large multi-node edges
+          // Run this independently of segment penetration to clear interior zones
+          if (hubNode && hubNode.blobReach) {
+            const dxH = node.x - hubNode.x;
+            const dyH = node.y - hubNode.y;
+            const dH = Math.sqrt(dxH * dxH + dyH * dyH);
+            if (dH > 0.1) {
+              const uxH = dxH / dH;
+              const uyH = dyH / dH;
+              const nodeReachH = this.getNodeRadius(node, uxH, uyH);
+              const hubThreshold = hubNode.blobReach + nodeReachH + this.nonMemberGap;
+              const hubPenetration = hubThreshold - dH;
+              if (hubPenetration > 0) {
+                const hubForce = nonMemberRepelStrength * hubPenetration * 0.15;
+                const pushXH = uxH * hubForce;
+                const pushYH = uyH * hubForce;
+
+                fx[i] += pushXH;
+                fy[i] += pushYH;
+
+                if (idxHub !== -1) {
+                  fx[idxHub] -= pushXH;
+                  fy[idxHub] -= pushYH;
+                }
               }
             }
-          });
+          }
         }
       });
     }
@@ -641,6 +730,7 @@ export class BipartiteForceLayout {
 
     for (let i = 0; i < n; i++) {
       const node = this.nodes[i];
+
       const targetX = node.targetX !== undefined ? node.targetX : centerX;
       const targetY = node.targetY !== undefined ? node.targetY : centerY;
       const dx = targetX - node.x;
@@ -730,16 +820,50 @@ export class BipartiteForceLayout {
             if (isFixed1) {
               n2.x += pushX;
               n2.y += pushY;
+              // Damp velocity of the colliding node to absorb kinetic energy
+              n2.vx *= 0.5;
+              n2.vy *= 0.5;
             } else if (isFixed2) {
               n1.x -= pushX;
               n1.y -= pushY;
+              n1.vx *= 0.5;
+              n1.vy *= 0.5;
             } else {
               n1.x -= pushX * 0.5;
               n1.y -= pushY * 0.5;
               n2.x += pushX * 0.5;
               n2.y += pushY * 0.5;
+              n1.vx *= 0.5;
+              n1.vy *= 0.5;
+              n2.vx *= 0.5;
+              n2.vy *= 0.5;
             }
           }
+        }
+      }
+    }
+
+    // 6. Recenter all nodes to prevent global drift
+    // Skip recentering while dragging or if any nodes are pinned to prevent fighting inputs and causing drift
+    if (this.draggedNodeId === null && (!this.fixedNodeIds || this.fixedNodeIds.size === 0)) {
+      let sumX = 0, sumY = 0, massCount = 0;
+      for (let i = 0; i < n; i++) {
+        const node = this.nodes[i];
+        if (!node.isHub) {
+          sumX += node.x;
+          sumY += node.y;
+          massCount++;
+        }
+      }
+      if (massCount > 0) {
+        const comX = sumX / massCount;
+        const comY = sumY / massCount;
+        const dx = centerX - comX;
+        const dy = centerY - comY;
+        for (let i = 0; i < n; i++) {
+          const node = this.nodes[i];
+          node.x += dx;
+          node.y += dy;
         }
       }
     }
@@ -803,14 +927,14 @@ export class BipartiteForceLayout {
         node.halfHeight = r;
       } else {
         // name-labeled: Event card layout
-        const w = 140;
-        const h = 100;
+        const w = 120;
+        const h = 120;
         node.shape = 'rect';
         node.width = w;
         node.height = h;
         node.halfWidth = w / 2;
         node.halfHeight = h / 2;
-        node.radius = 80;
+        node.radius = 60;
       }
     });
   }

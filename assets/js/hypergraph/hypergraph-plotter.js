@@ -1,5 +1,5 @@
-import { Vec, getBlobPath } from './geom.js?v=1.0.57';
-import { BipartiteForceLayout, circularLayout, gridLayout } from './layout.js?v=1.0.57';
+import { Vec, getBlobPath } from './geom.js?v=1.0.70';
+import { BipartiteForceLayout, circularLayout, gridLayout } from './layout.js?v=1.0.70';
 
 function getNodeHullPoints(node) {
   if (node.isHub) {
@@ -85,7 +85,7 @@ export class HypergraphPlotter {
       initialZoom: null,
 
       // Force-directed layout physics parameters
-      kAttract: 0.18,
+      kAttract: 0.35,
       kRepel: 7000,
       kHyperedgeRepel: 20000,
       kCenter: 0.008,
@@ -96,10 +96,11 @@ export class HypergraphPlotter {
       sameCompRepelScale: 0.3,
       sameCompRepelCap: 10.0,
       kSharedAttract: 0.08,
+      kNonMemberRepel: 2.2,
       coolingRate: 0.985,
       temperatureThreshold: 0.005,
-      maxBlobReach: 140,
-      nonMemberGap: 40,
+      maxBlobReach: 400,
+      nonMemberGap: 12,
       ...options
     };
 
@@ -246,6 +247,7 @@ export class HypergraphPlotter {
       sameCompRepelScale: this.options.sameCompRepelScale,
       sameCompRepelCap: this.options.sameCompRepelCap,
       kSharedAttract: this.options.kSharedAttract,
+      kNonMemberRepel: this.options.kNonMemberRepel,
       coolingRate: this.options.coolingRate,
       temperatureThreshold: this.options.temperatureThreshold,
       maxBlobReach: this.options.maxBlobReach,
@@ -596,6 +598,8 @@ export class HypergraphPlotter {
           fo.setAttribute('y', String(simNode.y - h / 2));
           fo.setAttribute('width', String(w));
           fo.setAttribute('height', String(h));
+          fo.style.width = `${w}px`;
+          fo.style.height = `${h}px`;
           
           const tagColor = v.tagColor || ((v.edgeIdx !== undefined && v.edgeIdx !== -1)
             ? this.getPaletteColor(v.edgeIdx, this.hyperedges.length, palette)
@@ -604,10 +608,11 @@ export class HypergraphPlotter {
           const cardContainer = document.createElement('div');
           cardContainer.className = `c-card c-graph-card default ${isSelected ? 'is-selected' : ''}`;
           cardContainer.style.cssText = `
-            width: 100%;
-            height: 100%;
+            width: ${w}px !important;
+            height: ${h}px !important;
             border: ${isSelected ? '2px solid var(--primary, #3b82f6)' : '1px solid #e2e8f0'};
-            box-sizing: border-box;
+            box-sizing: border-box !important;
+            border-radius: 50% !important;
             display: block;
             position: relative;
           `;
@@ -691,9 +696,13 @@ export class HypergraphPlotter {
             fo.setAttribute('y', String(simNode.y - h / 2));
             fo.setAttribute('width', String(w));
             fo.setAttribute('height', String(h));
+            fo.style.width = `${w}px`;
+            fo.style.height = `${h}px`;
             
             const cardContainer = fo.querySelector('.c-graph-card');
             if (cardContainer) {
+              cardContainer.style.width = `${w}px`;
+              cardContainer.style.height = `${h}px`;
               cardContainer.style.border = isSelected ? '2px solid var(--primary, #3b82f6)' : '1px solid #e2e8f0';
               if (isSelected) {
                 cardContainer.classList.add('is-selected');
@@ -791,19 +800,152 @@ export class HypergraphPlotter {
       this.physicsLayout.updateCenter(actualWidth, actualHeight);
     }
 
-    this.physicsLayout.setGraph(this.vertices, this.hyperedges, this.options);
+    if (isFirstLoad && this.options.layoutType === 'spring-embedding') {
+      // Warm up / initialize the complete graph first to establish stable target centers
+      // and initial spawn positions based on the final components.
+      this.physicsLayout.setGraph(this.vertices, this.hyperedges, this.options);
+      
+      const savedNodes = new Map();
+      this.physicsLayout.nodes.forEach(node => {
+        savedNodes.set(node.id, {
+          x: node.x,
+          y: node.y,
+          targetX: node.targetX,
+          targetY: node.targetY,
+          targetOffsetX: node.targetOffsetX,
+          targetOffsetY: node.targetOffsetY,
+          componentId: node.componentId,
+          componentSize: node.componentSize
+        });
+      });
 
-    if (this.options.layoutType === 'spring-embedding') {
-      // Warm up the simulation so it is mostly settled before framing/rendering
-      const ticks = isFirstLoad ? 250 : 0;
-      for (let i = 0; i < ticks; i++) {
+      // Clear the physics nodes to start clean for progressive loading
+      this.physicsLayout.nodes = [];
+      this.physicsLayout.nodeMap.clear();
+      this.physicsLayout.links = [];
+
+      // Progressive edge loading layout strategy:
+      // 1. Calculate vertex degrees
+      const vertexDegrees = {};
+      this.vertices.forEach(v => {
+        vertexDegrees[v.id] = 0;
+      });
+      this.hyperedges.forEach(e => {
+        e.vertices.forEach(vId => {
+          if (vertexDegrees[vId] !== undefined) {
+            vertexDegrees[vId]++;
+          }
+        });
+      });
+
+      // 2. Overlap score for a hyperedge is the sum of (degree - 1) for its vertices
+      const getEdgeOverlapScore = (e) => {
+        let score = 0;
+        e.vertices.forEach(vId => {
+          if (vertexDegrees[vId] !== undefined) {
+            score += (vertexDegrees[vId] - 1);
+          }
+        });
+        return score;
+      };
+
+      // 3. Sort hyperedges: least overlapping first, then smallest first
+      const sortedEdges = [...this.hyperedges].sort((a, b) => {
+        const scoreA = getEdgeOverlapScore(a);
+        const scoreB = getEdgeOverlapScore(b);
+        if (scoreA !== scoreB) {
+          return scoreA - scoreB;
+        }
+        return a.vertices.length - b.vertices.length;
+      });
+
+      // 4. Stagger hyperedges one by one with intermediate physics ticks
+      const incrementalEdges = [];
+      const addedVertexIds = new Set();
+      const ticksPerEdge = Math.max(20, Math.min(50, Math.floor(400 / Math.max(1, sortedEdges.length))));
+
+      sortedEdges.forEach(edge => {
+        incrementalEdges.push(edge);
+        edge.vertices.forEach(vId => addedVertexIds.add(vId));
+
+        // Filter vertices to only include those that are members of currently active edges
+        const currentVertices = this.vertices.filter(v => addedVertexIds.has(v.id));
+
+        const previousActiveIds = new Set(this.physicsLayout.nodes.map(n => n.id));
+
+        this.physicsLayout.setGraph(currentVertices, incrementalEdges, this.options);
+
+        // Override target centers and newly spawned positions to stay stable
+        this.physicsLayout.nodes.forEach(node => {
+          const saved = savedNodes.get(node.id);
+          if (saved) {
+            node.targetX = saved.targetX;
+            node.targetY = saved.targetY;
+            node.targetOffsetX = saved.targetOffsetX;
+            node.targetOffsetY = saved.targetOffsetY;
+            node.componentId = saved.componentId;
+            node.componentSize = saved.componentSize;
+
+            if (!previousActiveIds.has(node.id)) {
+              node.x = saved.x;
+              node.y = saved.y;
+              node.vx = 0;
+              node.vy = 0;
+            }
+          }
+        });
+
+        for (let i = 0; i < ticksPerEdge; i++) {
+          this.physicsLayout.temperature = 1.0; // Keep warm during progressive steps to separate edges
+          this.physicsLayout.tick();
+        }
+      });
+
+      // 5. Final settlement with all vertices and edges (including untagged nodes)
+      const previousActiveIds = new Set(this.physicsLayout.nodes.map(n => n.id));
+      this.physicsLayout.setGraph(this.vertices, this.hyperedges, this.options);
+
+      // Force stable targets and restore correct initial position for newly added untagged nodes
+      this.physicsLayout.nodes.forEach(node => {
+        const saved = savedNodes.get(node.id);
+        if (saved) {
+          node.targetX = saved.targetX;
+          node.targetY = saved.targetY;
+          node.targetOffsetX = saved.targetOffsetX;
+          node.targetOffsetY = saved.targetOffsetY;
+          node.componentId = saved.componentId;
+          node.componentSize = saved.componentSize;
+
+          if (!previousActiveIds.has(node.id)) {
+            node.x = saved.x;
+            node.y = saved.y;
+            node.vx = 0;
+            node.vy = 0;
+          }
+        }
+      });
+
+      for (let i = 0; i < 650; i++) {
+        if (i < 400) {
+          this.physicsLayout.temperature = 1.0; // Keep warm to allow full expansion of all components
+        }
         this.physicsLayout.tick();
       }
-      if (isFirstLoad) {
-        this.physicsLayout.temperature = 1.0; // Reset temperature to 1.0 after static warmup
-      }
+      this.physicsLayout.temperature = 1.0; // ensure interactive layout is warm
     } else {
-      this._applyStaticLayout();
+      this.physicsLayout.setGraph(this.vertices, this.hyperedges, this.options);
+
+      if (this.options.layoutType === 'spring-embedding') {
+        const ticks = isFirstLoad ? 250 : 0;
+        for (let i = 0; i < ticks; i++) {
+          this.physicsLayout.tick();
+        }
+        if (isFirstLoad) {
+          this.physicsLayout.temperature = 1.0;
+        }
+      } else {
+        this._applyStaticLayout();
+      }
     }
 
     if (isFirstLoad) {
@@ -813,7 +955,6 @@ export class HypergraphPlotter {
         this.pan.y = actualHeight / 2 - (this.physicsLayout.height / 2) * this.zoom;
         this.applyTransform();
       } else {
-        // Fit to viewport. On first load, we apply a 1.0x zoom to fit all nodes cleanly.
         this.zoomToFit(null, 1.0);
       }
     }

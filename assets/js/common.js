@@ -774,7 +774,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 try {
-                  const plotterUrl = new URL('./assets/js/hypergraph/hypergraph-plotter.js?v=1.0.57', window.location.href).href;
+                  const plotterUrl = new URL('./assets/js/hypergraph/hypergraph-plotter.js?v=1.0.70', window.location.href).href;
                   const { HypergraphPlotter } = await import(plotterUrl);
                   plotterInstance = new HypergraphPlotter(container, {
                     width: container.clientWidth || 800,
@@ -788,7 +788,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     physicsPlaying: true,
                     allowZoom: true,
                     allowPan: true,
-                    kAttract: 0.18,
+                    kAttract: 0.35,
                     kRepel: 7000,
                     kHyperedgeRepel: 20000,
                     kCenter: 0.008,
@@ -797,13 +797,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     restLength: 0,
                     componentSpacing: 120,
                     kSharedAttract: 0.08,
-                    kNonMemberRepel: 1.2,
-                    coolingRate: 0.998,
-                    temperatureThreshold: 0.001,
-                    maxBlobReach: 140,
+                    kNonMemberRepel: 2.2,
+                    coolingRate: 0.985,
+                    temperatureThreshold: 0.005,
+                    maxBlobReach: 400,
                     sameCompRepelScale: 0.4,
                     sameCompRepelCap: 40.0,
-                    nonMemberGap: 40
+                    nonMemberGap: 12
                   });
 
                   // Pre-calculate stable colors for all hyperedges based on full list
