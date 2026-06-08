@@ -488,8 +488,10 @@ function compilePosts() {
     console.log(`  Compiled post: ${file} -> ${slug}.html`);
   });
 
+  const processedSlugs = new Set(mdFiles.map(file => path.basename(file, '.md')));
+  posts = posts.filter(p => processedSlugs.has(p.slug));
+
   if (isProduction) {
-    posts = posts.filter(p => p.slug !== 'example-markdown-post');
     const exampleHtmlPath = path.join(POSTS_OUTPUT_HTML_DIR, 'example-markdown-post.html');
     if (fs.existsSync(exampleHtmlPath)) {
       fs.unlinkSync(exampleHtmlPath);

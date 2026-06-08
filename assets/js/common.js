@@ -169,9 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
     'art',
     'complex-systems',
     'environmental-science',
-    'network-science',
-    'economics',
-    'ai'
+    'network-science'
   ]);
   let isDefaultTagsInitialized = false;
 
@@ -774,7 +772,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 try {
-                  const plotterUrl = new URL('./assets/js/hypergraph/hypergraph-plotter.js?v=1.0.70', window.location.href).href;
+                  const plotterUrl = new URL('./assets/js/hypergraph/hypergraph-plotter.js?v=1.0.76', window.location.href).href;
                   const { HypergraphPlotter } = await import(plotterUrl);
                   plotterInstance = new HypergraphPlotter(container, {
                     width: container.clientWidth || 800,
