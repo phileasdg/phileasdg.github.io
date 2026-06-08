@@ -5,14 +5,14 @@ As a Managing Marine Debris Data for Community Use NOAA data science intern, I w
 
 Anyway... I've embedded the newsletter here in case you'd like to read it, I hope you enjoy!
 ## The Wrack Line: Fall 2022
-![](../../media/posts/24/unnamed.png =600x300)
+![](../../media/posts/featured-in-the-wrack-line-noaa/unnamed.png =600x300)
 <em style="color: #3a3a3a; font-family: 'Helvetica Neue', Helvetica, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: var(--font-weight-normal);">The Wrack Line is a newsletter for partners, participants, and data users of NOAA's Marine Debris Monitoring and Assessment Project (MDMAP).Thank you for reading! </em>
 
 <div style="margin: 0; padding: 0; width: 100%!important;"><div class="m_-2332561867194686856govd_hr" style="padding: 0px;"> 
 
 <div class="m_-2332561867194686856govd_hr_inner">Mobile Data Entry with Internet Access
 
-<table border="1" style="border-collapse: collapse; width: 100%;"><tbody><tr><td style="width: 49.9288%;">![](../../media/posts/24//unnamed.jpg =297x223)</td><td style="width: 49.9288%;">
+<table border="1" style="border-collapse: collapse; width: 100%;"><tbody><tr><td style="width: 49.9288%;">![](../../media/posts/featured-in-the-wrack-line-noaa//unnamed.jpg =297x223)</td><td style="width: 49.9288%;">
 For those who would prefer entering data on the beach rather than using datasheets, the <a data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://lnks.gd/l/eyJhbGciOiJIUzI1NiJ9.eyJidWxsZXRpbl9saW5rX2lkIjoxMDAsInVyaSI6ImJwMjpjbGljayIsImJ1bGxldGluX2lkIjoiMjAyMjEyMTMuNjgxMjA1NTEiLCJ1cmwiOiJodHRwczovL21kbWFwLm9yci5ub2FhLmdvdi8_dXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPUdvdkRlbGl2ZXJ5In0.g-M57zxaQL3etCEqHgYRwtexk3W25i6g9LpGhF8HXyk/s/2580731833/br/150277375178-l&amp;source=gmail&amp;ust=1671464435964000&amp;usg=AOvVaw2Xtk77Wmav-XFYuMAU8cps" href="https://lnks.gd/l/eyJhbGciOiJIUzI1NiJ9.eyJidWxsZXRpbl9saW5rX2lkIjoxMDAsInVyaSI6ImJwMjpjbGljayIsImJ1bGxldGluX2lkIjoiMjAyMjEyMTMuNjgxMjA1NTEiLCJ1cmwiOiJodHRwczovL21kbWFwLm9yci5ub2FhLmdvdi8_dXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPUdvdkRlbGl2ZXJ5In0.g-M57zxaQL3etCEqHgYRwtexk3W25i6g9LpGhF8HXyk/s/2580731833/br/150277375178-l" rel="noopener" style="color: #ec3f13; text-decoration: underline;" target="_blank" title="data entry">data entry website</a> works on any device but does require internet access.
 
 At left: Elena Aguilar, graduate student with San Diego State University, tests mobile MDMAP data entry (Credit: NOAA).
@@ -20,7 +20,7 @@ At left: Elena Aguilar, graduate student with San Diego State University, tests 
 
 <div class="m_-2332561867194686856govd_hr" style="padding: 0px;"><div class="m_-2332561867194686856govd_hr_inner">With Student Help, All MDMAP Data in One Place
 
-<table border="1" style="border-collapse: collapse; width: 100%;"><tbody><tr><td style="width: 49.9288%;">![](../../media/posts/24//unnamed2.jpg =296x222)</td><td style="width: 49.9288%;">
+<table border="1" style="border-collapse: collapse; width: 100%;"><tbody><tr><td style="width: 49.9288%;">![](../../media/posts/featured-in-the-wrack-line-noaa//unnamed2.jpg =296x222)</td><td style="width: 49.9288%;">
 We are so excited to now have the full MDMAP dataset available in one place! If you collected data using the accumulation method, those data can now be viewed alongside other MDMAP data in the visualizations and downloaded via data exports in a single spreadsheet. This integration represents over 4,400 surveys. 
 
 This effort was supported by summer intern Phileas Dazeley-Gaist. Phileas is student at College of the Atlantic. Over the course of 10 weeks, they applied and honed their coding skills by helping enter data, performing quality control checks, and cleaning the MDMAP dataset. Of their internship experience, Phileas shared that they "most enjoyed developing visualizations of the data to better explore problems and communicate  solutions, all while making a  meaningful contribution to important and compelling work." Thank you Phileas!
@@ -44,7 +44,7 @@ Results from MDMAP made appearances in at least six talks, including:
 
 </td><td style="width: 49.9288%;">
 
-![](../../media/posts/24/unnamed5.jpg =348x223)
+![](../../media/posts/featured-in-the-wrack-line-noaa/unnamed5.jpg =348x223)
 
 </td></tr></tbody></table>
 
@@ -59,7 +59,7 @@ Above: Marine Debris Program Science Team Staff at the 7th International Marine 
 
 <table border="1" style="border-collapse: collapse; width: 100%;"><tbody><tr><td style="width: 49.9288%;">[
 
-![](../../media/posts/24/unnamed6.jpg =389x220)
+![](../../media/posts/featured-in-the-wrack-line-noaa/unnamed6.jpg =389x220)
 
 ](https://lnks.gd/l/eyJhbGciOiJIUzI1NiJ9.eyJidWxsZXRpbl9saW5rX2lkIjoxMDksInVyaSI6ImJwMjpjbGljayIsImJ1bGxldGluX2lkIjoiMjAyMjEyMTMuNjgxMjA1NTEiLCJ1cmwiOiJodHRwczovL3d3dy5zY2llbmNlZGlyZWN0LmNvbS9zY2llbmNlL2FydGljbGUvcGlpL1MwMjY5NzQ5MTIyMDEwNzY0P3V0bV9tZWRpdW09ZW1haWwmdXRtX3NvdXJjZT1Hb3ZEZWxpdmVyeSJ9.OTCKRtQ4wW5pYj8mWgivxFjSuAxU5qowzI8IzLUFcZM/s/2580731833/br/150277375178-l)</td><td style="width: 49.9288%;">
 
@@ -83,7 +83,7 @@ Grouping data from multiple sites is a powerful tool. However, be careful about 
 
 [
 
-![](../../media/posts/24/unnamed7.png =560x245)
+![](../../media/posts/featured-in-the-wrack-line-noaa/unnamed7.png =560x245)
 
 ](https://lnks.gd/l/eyJhbGciOiJIUzI1NiJ9.eyJidWxsZXRpbl9saW5rX2lkIjoxMTMsInVyaSI6ImJwMjpjbGljayIsImJ1bGxldGluX2lkIjoiMjAyMjEyMTMuNjgxMjA1NTEiLCJ1cmwiOiJodHRwczovL21kbWFwLm9yci5ub2FhLmdvdi92aXN1YWxpemU_dXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPUdvdkRlbGl2ZXJ5In0.9g2Kqolq0mO8O_YAEHsMjFiOnhpFT_tvdp3GdM34KX0/s/2580731833/br/150277375178-l)
 
@@ -95,14 +95,14 @@ The default display is to all debris items. Filter by material or item type to l
 
 <div class="m_-2332561867194686856govd_hr" style="padding: 0px;"><div class="m_-2332561867194686856govd_hr_inner">Participant Highlights
 
-<div class="m_-2332561867194686856govd_hr" style="padding: 0px;"><div class="m_-2332561867194686856govd_hr_inner"><table border="0" cellpadding="0" cellspacing="0" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal); width: 100%;" width="100%"><tbody><tr><td style="width: 33.0956%;">![](../../media/posts/24/unnamed8.jpg =233x173)</td><td style="width: 66.9044%;">
+<div class="m_-2332561867194686856govd_hr" style="padding: 0px;"><div class="m_-2332561867194686856govd_hr_inner"><table border="0" cellpadding="0" cellspacing="0" style="color: var(--text-primary-color); font-family: var(--editor-font-family); font-size: inherit; font-weight: var(--font-weight-normal); width: 100%;" width="100%"><tbody><tr><td style="width: 33.0956%;">![](../../media/posts/featured-in-the-wrack-line-noaa/unnamed8.jpg =233x173)</td><td style="width: 66.9044%;">
 During the Chesapeake Bay Foundation's fall student leadership conference near Lorton, Virginia, high schoolers did an MDMAP survey along the Potomac River. The students learned about scientific data collection and discussed the issues of plastics and marine debris in the Chesapeake Bay (Credit: Kassie Fenn).
-</td></tr><tr><td style="width: 33.0956%;">![](../../media/posts/24/unnamed9.jpg =234x177)</td><td style="width: 66.9044%;">
+</td></tr><tr><td style="width: 33.0956%;">![](../../media/posts/featured-in-the-wrack-line-noaa/unnamed9.jpg =234x177)</td><td style="width: 66.9044%;">
 AO Latinoamérica, an ocean education and stewardship volunteer organization based in Ensenada, Mexico established the first MDMAP site on the Baja peninsula: Playa Pacifica. Bienvenida al equipo! (Credit: Fernando Castillo).
-</td></tr><tr><td style="width: 33.0956%;">![](../../media/posts/24/unnamed10.jpg =234x271)</td><td style="width: 66.9044%;">
+</td></tr><tr><td style="width: 33.0956%;">![](../../media/posts/featured-in-the-wrack-line-noaa/unnamed10.jpg =234x271)</td><td style="width: 66.9044%;">
 NOAA Marine Debris Program staff Mark Manuel, Amy Gohres, and Shanelle Naone hosted an MDMAP training for the Mariana Islands Nature Alliance. Ten participants spent a half day learning the ropes of MDMAP and established the first MDMAP sites on the Northern Mariana Islands. We warmly welcome to the team! At left, trainees sort, count, and categorize debris (Credit: NOAA).
-</td></tr><tr><td class="m_-2332561867194686856gd_combo_image_cell" style="width: 33.0956%;" width="232">![](../../media/posts/24/unnamed11.jpg =232x138)</td><td class="m_-2332561867194686856gd_combo_text_cell" style="width: 66.9044%;">
+</td></tr><tr><td class="m_-2332561867194686856gd_combo_image_cell" style="width: 33.0956%;" width="232">![](../../media/posts/featured-in-the-wrack-line-noaa/unnamed11.jpg =232x138)</td><td class="m_-2332561867194686856gd_combo_text_cell" style="width: 66.9044%;">
 During a creative writing and art retreat hosted by Heart of Cartm, participants conducted an MDMAP survey near Manzanita, Oregon. They then used the debris to create works of art. The retreat hosted people from diverse geography and professions united by a common interest in ocean health (Credit: Denise Harrington).
-</td></tr><tr><td style="width: 33.0956%;">![](../../media/posts/24/unnamed12.jpg =233x175)</td><td style="width: 66.9044%;">
+</td></tr><tr><td style="width: 33.0956%;">![](../../media/posts/featured-in-the-wrack-line-noaa/unnamed12.jpg =233x175)</td><td style="width: 66.9044%;">
 At left, 11th grade students from the Taipei European School survey Venice beach on the coral island of XiaoLiuQiu in Taiwan. Through MDMAP, students learned science concepts, data collection skills, and explored the issue and solutions to marine debris (Credit: Nans Bujan).
 </td></tr></tbody></table>

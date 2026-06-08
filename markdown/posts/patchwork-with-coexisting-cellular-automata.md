@@ -8,7 +8,7 @@ One approach that I did not have time to dive into but that showed promise was t
 
 Here's a teaser of what we're working toward: Programs that operate on a cellular automaton state arrays by applying a list of cellular automata rules to a list of non-overlapping regions of the state, such that each defined region is subject to its own dynamics, determined both by the region's assigned rule and the dynamics near the region boundary.
 
-![](https://phileasdg.github.io/media/posts/53/cellsetup.gif =559x406)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/cellsetup.gif =559x406)
 
 ## Cellular automata with custom boundary conditions
 
@@ -22,7 +22,7 @@ In Wolfram Language, cellular automata default to having periodic boundary condi
 
 *Elementary cellular automaton trajectory with periodic boundary conditions:<br>*
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.31.52.png =225x226)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-11.31.52.png =225x226)
 
 Notice the ripple cascade that wraps around horizontal space as it leaves to the right and simultaneously enters to the left.
 
@@ -30,7 +30,7 @@ The natively supported alternative to periodic boundary conditions in the Cellul
 
 *Elementary cellular automaton trajectory on an infinite canvas:*
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.33.15.png =225x226)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-11.33.15.png =225x226)
 
 Here, the width of the state array is not fixed. In this case, the ripple cascade simply propagates outwards forever, uninterrupted.
 
@@ -42,7 +42,7 @@ To confine a rule to a spatial region within a CA state, the simplest general ap
 
 *Trajectory of a rule 30 CA confined to a small region of the simulation space:*
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.34.19.png =225x227)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-11.34.19.png =225x227)
 
 In the plot above, the green region represents the spatial domain of the automaton rule. Changes made to the state by the rule will only take effect inside the green region. 
 
@@ -54,7 +54,7 @@ Another important clarification is that while in the simulations above, the chos
 
 *Trajectory of a rule 30 CA confined to a region that wraps around the periodic boundaries of the simulation space:*
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.35.45.png =225x227)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-11.35.45.png =225x227)
 
 <h4>Removing spatial periodicity</h4>
 
@@ -62,7 +62,7 @@ To also get rid of the periodic boundary conditions of the space itself, my sugg
 
 *Cellular automaton trajectory with a rule 30 CA confined to a visually identical region as in the previous example, but that does not wrap around the periodic boundaries of the simulation space:*
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.36.30.png =225x226)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-11.36.30.png =225x226)
 
 Now, on the left and right sides of the state array, the background is effectively taken to be all zeros, so the rightmost cascade can never wrap around to the left, and the simulation space is fixed. In this specific case, the change also causes both green regions to start with the same initial conditions. As the neighbours to the left of the leftmost cell of each green region at t=0 are now considered to be zero, the initial conditions cause two cascades instead of one.
 
@@ -70,7 +70,7 @@ We chose to have uniform and constant zero boundary conditions for the entire si
 
 *Rule 30 CA trajectory confined to a region subject to random and dynamic boundary conditions:*
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.37.05.png =225x226)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-11.37.05.png =225x226)
 
 Here, the states of the cells that make up the boundary change at random, affecting the dynamics of the green automaton, although the boundary itself does not move around. The boundary is fixed in space, but not fixed in state.
 
@@ -82,7 +82,7 @@ Here's a setup in two dimensions that confines a totalistic 9-neighbour CA to a 
 
 *Dynamics of a totalistic 9-neighbor CA confined to a square region of the simulation space:*
 
-![](https://phileasdg.github.io/media/posts/53/squaresetup.gif =300x300)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/squaresetup.gif =300x300)
 
 Just as before:
 
@@ -98,17 +98,17 @@ Here's a setup where the green region allows the dynamics to wrap around along e
 
 *Totalistic 9-neighbor CA dynamics constrained to a region with an isolated central component subject to fixed zero boundary conditions, and a surrounding component subject to the periodic boundary conditions of the simulation space:*
 
-![](https://phileasdg.github.io/media/posts/53/crosssetupperiodic.gif =300x300)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/crosssetupperiodic.gif =300x300)
 
 You can think of the space as wrapping around a torus like this:
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.45.55.png =225x205)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-11.45.55.png =225x205)
 
 Here's a setup with the same green region specification, but with constant zero boundary conditions applied to the simulation space.
 
 *Totalistic 9-neighbor CA dynamics constrained to a region with an isolated central component subject to fixed zero boundary conditions, and a surrounding component also subject to fixed boundary conditions:*
 
-![](https://phileasdg.github.io/media/posts/53/crosssetupconstantzero-2.gif =300x300)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/crosssetupconstantzero-2.gif =300x300)
 
 Setting constant zero boundary conditions turns the boundaries of the simulation window into smooth, solid, impenetrable walls, preventing the dynamics of the green CA from wrapping around.
 
@@ -116,7 +116,7 @@ Finally, here's an example in which these boundary conditions are made random an
 
 *Totalistic 9-neighbor CA dynamics constrained to a region with an isolated central component subject to fixed zero boundary conditions, and a surrounding component subject to random dynamic boundary conditions:*
 
-![](https://phileasdg.github.io/media/posts/53/crosssetupdynamicrandom.gif =301x301)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/crosssetupdynamicrandom.gif =301x301)
 
 In this last case, the dynamics in the outer part appear quite random.
 
@@ -126,11 +126,11 @@ Just to show that it's possible, here's a complicated 3D example using a state g
 
 *Dynamics of a 3D CA confined to a complex 3D region:*
 
-![](https://phileasdg.github.io/media/posts/53/3Dsetup.gif =300x326)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/3Dsetup.gif =300x326)
 
 And here's a simulation of the process in six dimensions, just for fun, although there's no longer a simple way to visualize its output, so all I'll show you is this preview of the final state array: 
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.52.45.png =1224x126)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-11.52.45.png =1224x126)
 
 ### Bonus: miscellaneous interesting examples
 
@@ -138,21 +138,21 @@ And here's a simulation of the process in six dimensions, just for fun, although
 
 *First, generate a maze to use as a mask:*
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.53.16.png =225x229)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-11.53.16.png =225x229)
 
 *Compute the trajectory of a 9-neighbour 2D totalistic CA confined by the mask:*
 
-![](https://phileasdg.github.io/media/posts/53/mazesetup.gif =300x300)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/mazesetup.gif =300x300)
 
 <h4>Other complex shapes</h4>
 
 *Define an organic shape shape to use as a mask:*
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-11.55.53.png =225x234)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-11.55.53.png =225x234)
 
 *Compute the trajectory of a 9-neighbour 2D totalistic CA confined by the mask:*
 
-![](https://phileasdg.github.io/media/posts/53/flowersetup.gif =300x308)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/flowersetup.gif =300x308)
 
 ### Review
 
@@ -192,9 +192,9 @@ The core steps of the process are:
 
 This next code snippet demonstrates the process I settled on in my final implementation to compute a single Coexisting CA simulation step. I've included comments to describe the process alongside the code, and calls to Echo and EchoFunction to show key variables generated or used in the throughout its execution.
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.02.24.png =600x605)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-12.02.24.png =600x605)
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.03.30.png =600x496)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-12.03.30.png =600x496)
 
 ### Performing a full Coexisting CA simulation
 
@@ -202,17 +202,17 @@ The CoexistingCellularAutomata function makes simulations of interacting CAs qui
 
 I'll start by defining my simulation parameters. For this example, I'll pick 10 rules at random. Each rule domain will be assigned its own colour.
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.04.25.png =272x98)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-12.04.25.png =272x98)
 
 *Pick some 2 colour range 9-neighbour totalistic CA rules at random:*
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.05.09.png =609x117)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-12.05.09.png =609x117)
 
 I'll set constant zero initial conditions across the initial state.
 
 *Define an initial array representing the state at t=0:*
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.05.51.png =396x101)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-12.05.51.png =396x101)
 
 The spatial domains of each CA rule in the simulation must be specified using a single array of integer values corresponding to indices of the supplied rules in the rule list, or zero, meaning "no rules apply here". 
 
@@ -220,27 +220,27 @@ We can arbitrarily partition the simulation space and assign whichever parts we 
 
 *Define the spatial domains of each rule in the simulation space:*
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.07.05.png =529x52)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-12.07.05.png =529x52)
 
 *Preview the domain masks:*
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.07.31.png =575x168)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-12.07.31.png =575x168)
 
 To perform a simulation, simply supply the list of rules, domain mask, initial state, and number of steps to the CoexistingCellularAutomata function.
 
 *Perform a simulation using CoexistingCellularAutomata:*
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.08.45.png =405x205)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-12.08.45.png =405x205)
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.09.03.png =680x372)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-12.09.03.png =680x372)
 
 The result is a list of arrays representing the sequence of Coexisting CA states, each of which we can plot to make the frames of an animation of the full simulation trajectory.
 
 *Animate the resulting simulation of interacting CAs, using the masks to colour the frames:*
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.09.50.png =586x172)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-12.09.50.png =586x172)
 
-![](https://phileasdg.github.io/media/posts/53/voronoisetup-2.gif =650x473)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/voronoisetup-2.gif =650x473)
 
 ### Using images as Coexisting CA domain Masks
 
@@ -250,21 +250,21 @@ For this next example, I posterized a webcam selfie so as to only have pixel val
 
 *Define a mask to use in the simulation:*
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.15.08.png =651x180)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-12.15.08.png =651x180)
 
-<figure class="post__image"><em>![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.15.31.png =302x192)</figure>
+<figure class="post__image"><em>![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-12.15.31.png =302x192)</figure>
 
 </em>
 
 *Set up and run a 20 step simulation with the chosen rules, rule domains defined by the image mask, and an initial condition array made of all zeros:*
 
-![](https://phileasdg.github.io/media/posts/53/picturesetup.gif =671x366)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/picturesetup.gif =671x366)
 
 ## Global boundary conditions of Coexisting CA simulations
 
 By default, CoexistingCellularAutomata assumes periodic boundary conditions on the simulation space, as in this trajectory of rule 10 and rule 90, where the leftmost cells of the array interact with the rightmost cells:
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.29.51.png =251x212)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-12.29.51.png =251x212)
 
 As a convenience to the end user, CoexistingCellularAutomata also supports specifying global boundary conditions using the *"GlobalMaskFunction"* and *"GlobalMaskValueFunction"* options. As their names suggest, these options are designed to receive function arguments. These should be functions of the state array at any given time, though they can also be made to ignore the state array input. 
 
@@ -272,27 +272,27 @@ The *"GlobalMaskFunction"* option defines the boundary of the simulation by retu
 
 To add constant zero boundary conditions on the left and right ends of the state arrays in the previous simulation, only minimal changes to the code are needed. By adding 
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.30.42.png =492x42)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-12.30.42.png =492x42)
 
 and 
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.31.08.png =283x31)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-12.31.08.png =283x31)
 
 to the CoexistingCellularAutomata function call, we restrict the rule domains to all cells other than those near the border, and set the excluded border cells to be equal to 0 throughout the simulation:
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.31.40.png =250x214)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-12.31.40.png =250x214)
 
 Because *"GlobalMaskFunction"* and *"GlobalMaskValueFunction"* expect functions, and these functions are computed for every step of a Coexisting CA simulation, it's also quite easy to set dynamic boundary conditions. If instead, we had specified the options
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.32.30.png =508x34)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-12.32.30.png =508x34)
 
 and 
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.32.50.png =446x33)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-12.32.50.png =446x33)
 
 we would get random dynamic boundary conditions on the boundaries of the simulation space:
 
-![](https://phileasdg.github.io/media/posts/53/Screenshot-2026-01-17-at-12.33.11.png =250x207)
+![](https://phileasdg.github.io/media/posts/patchwork-with-coexisting-cellular-automata/Screenshot-2026-01-17-at-12.33.11.png =250x207)
 
 ## Closing thoughts
 

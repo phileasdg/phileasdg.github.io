@@ -20,7 +20,7 @@ You can also view other WSS projects [here](https://www.wolframcloud.com/obj/mic
 
 To install the RemoteSensing paclet to your version of Wolfram Language, you'll need to run the following lines of code:
 
-![](../../media/posts/28/Screenshot-2023-07-21-at-18.46.45.png =1290x318)
+![](../../media/posts/remote-sensing-for-the-wolfram-language/Screenshot-2023-07-21-at-18.46.45.png =1290x318)
 
 The second line is not strictly necessary, but it will help you to make sure the paclet installed correctly, and you have the latest version (1.0.3 as of Jul 21 2023, when I am writing this blog post). 
 
@@ -43,19 +43,19 @@ Here's an example showing how you might use them:
 
 Find a layer of interest:
 
-![](../../media/posts/28/Screenshot-2023-07-21-at-20.21.34.png =1352x198)
+![](../../media/posts/remote-sensing-for-the-wolfram-language/Screenshot-2023-07-21-at-20.21.34.png =1352x198)
 
 Consult information about the layer:
 
-![](../../media/posts/28/Screenshot-2023-07-21-at-20.22.02.png =519x187)
+![](../../media/posts/remote-sensing-for-the-wolfram-language/Screenshot-2023-07-21-at-20.22.02.png =519x187)
 
 Visualise layer using either `GeoGraphics` or `GeoImage`:
 
-![](../../media/posts/28/Screenshot-2023-07-21-at-20.23.39.png =1376x384)
+![](../../media/posts/remote-sensing-for-the-wolfram-language/Screenshot-2023-07-21-at-20.23.39.png =1376x384)
 
 Customise your visualisation as you might with any other `GeoGraphics` or `GeoImage` plot:
 
-![](../../media/posts/28/Screenshot-2023-07-21-at-20.24.07.png =1316x584)
+![](../../media/posts/remote-sensing-for-the-wolfram-language/Screenshot-2023-07-21-at-20.24.07.png =1316x584)
 
 And there you go! You've made a visualisation using a NASA GIBS WMTS product.
 
@@ -72,19 +72,19 @@ Now, the AρρEEARS workflow is a little different because depending on your tas
 
 Get a list of available AρρEEARS products with `AppEEARSData`:
 
-![](../../media/posts/28/Screenshot-2023-07-21-at-21.29.03.png =1538x114)
+![](../../media/posts/remote-sensing-for-the-wolfram-language/Screenshot-2023-07-21-at-21.29.03.png =1538x114)
 
 Get information about a product:
 
-![](../../media/posts/28/Screenshot-2023-07-21-at-21.28.21.png =625x452)
+![](../../media/posts/remote-sensing-for-the-wolfram-language/Screenshot-2023-07-21-at-21.28.21.png =625x452)
 
 The above dataset contains the names of available AρρEEARS layers for the MYDO9GA product. Now, to request information about a specific layer, you might do this:
 
-![](../../media/posts/28/Screenshot-2023-07-21-at-21.27.33.png =617x565)
+![](../../media/posts/remote-sensing-for-the-wolfram-language/Screenshot-2023-07-21-at-21.27.33.png =617x565)
 
 And you might make a request for AρρEEARS imagery using <code style="font-weight: var(--font-weight-normal);">AppEEARSImages</code> like this (note that this might take some time to process):
 
-![](../../media/posts/28/Screenshot-2023-07-21-at-21.27.00.png =580x607)
+![](../../media/posts/remote-sensing-for-the-wolfram-language/Screenshot-2023-07-21-at-21.27.00.png =580x607)
 
 ## Closing thoughts
 

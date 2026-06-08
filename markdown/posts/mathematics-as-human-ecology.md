@@ -38,11 +38,11 @@ In 1968, Aristid Lindenmayer proposed a method to model the branching patterns p
 
 Imagine a string of characters or a single character such as “B”. Suppose we want to transform this object according to the following rule:
 
-![](../../media/posts/26//rule.png =225x30)
+![](../../media/posts/mathematics-as-human-ecology//rule.png =225x30)
 
 We can apply this rule to “B” by replacing every A with AA and every B with A[+B]-B. Starting with “B”, what happens when we apply the substitution rule three times? As we go, we get:
 
-![](../../media/posts/26/rules.png =587x117)
+![](../../media/posts/mathematics-as-human-ecology/rules.png =587x117)
 
 Let’s interpret the final transformed string as instructions to draw a tree: Start at any point on the page. This is the base of your tree. As you read through the string, refer to the following table for specific instructions.
 
@@ -82,7 +82,7 @@ Start a new branch leaning to the left from branching point one level back from 
 
 By the end, you should have one of these (try it and find out which one 😁):
 
-![](../../media/posts/26/Screenshot-2023-02-23-at-13.49.09.png =396x95)
+![](../../media/posts/mathematics-as-human-ecology/Screenshot-2023-02-23-at-13.49.09.png =396x95)
 
 Isn’t it fascinating and exciting to see that such a simple process can capture the branching patterns in the growth of plants? Doesn’t it animate you with wonder and curiosity?
 
@@ -92,11 +92,11 @@ In 1636, Leonard Euler published *Solutio problematis ad geometriam situs pertin
 
 At its core, a graph is a bunch of points (called vertices) that are connected by lines (called edges) to each other in an arbitrary way. For example: Some of my friends know each other, and all my friends have other friends that I have never met. Suppose I was to make a graph where all of us were points connected by lines to our respective friends, it might look something like this:
 
-![](../../media/posts/26/g1.png =337x230)
+![](../../media/posts/mathematics-as-human-ecology/g1.png =337x230)
 
 There are many directions one might go from here. Maybe we want to know the fastest ways for gossip to spread throughout the network; to do this, we would compute the “betweenness centrality” of the graph, a measure of how often a node is on the shortest path between two other nodes. The nodes with highest betweenness centrality are the ones which have the most influence on the flow of information through the network (*Betweenness Centrality - Neo4j Graph Data Science*, n.d.).
 
-![](../../media/posts/26/Screenshot-2023-02-23-at-13.51.13.png =1004x384)
+![](../../media/posts/mathematics-as-human-ecology/Screenshot-2023-02-23-at-13.51.13.png =1004x384)
 
 Another thing we might do is look for communities in the network. Communities are “subset[s] of nodes within the graph such that connections between the nodes are denser than connections with the rest of the network” (Radicchi et al., 2004). These communities are easier to analyse qualitatively. For instance, one might contain my friends from college, another might be family friends, or maybe friends from high school.
 

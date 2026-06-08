@@ -4,4 +4,4 @@ Thank you for your interest in my work. To view my resume in English, please fol
 ## Français
 
 Merci de l'intérêt que vous portez pour mon travail. Pour consulter mon CV en Français, je vous invite à suivre le lien suivant : [CV en Francais](../cv-francais/)
-# ![](../../media/posts/5/profile-banner-calm.png)
+# ![](../../media/posts/resume-cv/profile-banner-calm.png)

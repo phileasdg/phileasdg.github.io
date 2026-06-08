@@ -6,4 +6,4 @@ Business email: phileasdg [at] gmail.com
 ## Other inquiries:
 
 For all other inquiries, please feel free to reach out to me through Instagram or any of the contact links at the bottom of this page.
-![](../../media/posts/1/profile-banner-pier-2.jpg)
+![](../../media/posts/inquiries/profile-banner-pier-2.jpg)

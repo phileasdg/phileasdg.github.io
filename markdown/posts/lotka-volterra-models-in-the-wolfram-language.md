@@ -44,7 +44,7 @@
 
 <div class="native-layout native-layout-simple">Using these parameters, we can write the coupled system of ordinary differential equations:
 
-<div class="cell" id="cell-4a78be8d-14d9-414a-be6b-8d0cff42114c"><div class="_3Dqn7hOe5vVS6Nh0S54gcV">![](../../media/posts/32/Screenshot-2024-05-01-at-13.03.23.png =198x127)
+<div class="cell" id="cell-4a78be8d-14d9-414a-be6b-8d0cff42114c"><div class="_3Dqn7hOe5vVS6Nh0S54gcV">![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-13.03.23.png =198x127)
 
 <div class="cell" id="cell-e07d02be-46c2-4e1e-b152-dc7aa7f24459"><div class="native-layout native-layout-simple">We assume that each of these parameters is positive. The terms <em>-b x y</em> and <em>d x y</em> indicate that the larger prey and predator species are, the higher the mass/population/energy transfer from prey to predators will be.<br/>
 
@@ -56,25 +56,25 @@ Setting up a Lotka-Volterra model in the Wolfram Language is very straightforwar
 
 *Set up the ODEs and initial conditions describing a two-species Lotka-Volterra model:*
 
-![](../../media/posts/32/Screenshot-2024-05-01-at-13.14.07.png =415x264)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-13.14.07.png =415x264)
 
 *Example:*
 
-![](../../media/posts/32/Screenshot-2024-05-01-at-13.14.36.png =323x116)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-13.14.36.png =323x116)
 
 - Now, we can simply call our helper function inside NDSolve, specifying our initial conditions and parameters. Additionally, we supply a list of variables to solve for, and another containing the name and range of the independent variable, *t*.
 
-![](../../media/posts/32/Screenshot-2023-10-10-at-14.28.14.png =1388x198)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2023-10-10-at-14.28.14.png =1388x198)
 
 - Finally, we can plot these results in the time domain and state space:
 
 *Time domain plot:*
 
-![](../../media/posts/32/Screenshot-2024-05-01-at-13.09.18.png =461x298)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-13.09.18.png =461x298)
 
 *State space portrait: (I have iconised the options to make the code more readable, please visit the original community post to view the full code)*
 
-![](../../media/posts/32/Screenshot-2024-05-01-at-13.12.40.png =1452x1238)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-13.12.40.png =1452x1238)
 
 ## Relationships and Food Webs
 
@@ -86,11 +86,11 @@ Notice that as the number of species n in our model grows, so does the number of
 
 In a food web, predation relationships are usually represented as arrows from prey to predator species, representing transfer of energy up the web’s component food chains.
 
-![](../../media/posts/32/Screenshot-2024-05-01-at-13.15.55.png =234x278)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-13.15.55.png =234x278)
 
 Since food webs are graphs, we can express them directly in the Wolfram Language using Graph objects (see documentation: `[Graph](https://reference.wolfram.com/language/ref/Graph.html)`). Not all food web configurations will be ecologically meaningful, and some will be analogous to one-another, but expressing them like this helps to get a strong qualitative impression of the relationships they depict (Are we modelling a really simple web, or is it very complicated? How tangled is it? How loopy? How close together are the species? Do they form clusters? And so on). We can also answer questions about the food web parameter spaces. For instance: what structurally distinct categories of 3-species food web are there?
 
-![](../../media/posts/32/Screenshot-2024-05-01-at-13.17.56.png =481x577)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-13.17.56.png =481x577)
 
 ### Aside: What species relationships are possible in an *n*-species system?
 
@@ -98,21 +98,21 @@ We can write a function to generate the possible predation configurations for a 
 
 *Predation configurations for a species in an n-species food web:*
 
-![](../../media/posts/32/Screenshot-2024-05-01-at-13.18.42.png =1568x514)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-13.18.42.png =1568x514)
 
 In a 3-species food web, the predation relationship configurations for a species N1 are:
 
-![](../../media/posts/32/Screenshot-2024-05-01-at-15.18.48.png =276x414)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-15.18.48.png =276x414)
 
 We can sample possible food web configurations randomly, but this will rarely yield realistic food webs for most contexts. Instead, we might restrict configurations to a subset of forms that fit our criteria, or we might simply look to real world systems for examples.
 
 *Random valid 3-species food webs (with cannibalism):*
 
-![](../../media/posts/32/Screenshot-2024-05-01-at-13.19.19.png =1498x282)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-13.19.19.png =1498x282)
 
 *Random valid 3-species food webs (without cannibalism):*
 
-![](../../media/posts/32/Screenshot-2024-05-01-at-13.19.48.png =1526x298)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-13.19.48.png =1526x298)
 
 ### Species to Species Effects Representation: The Community Matrix
 
@@ -120,7 +120,7 @@ Whereas graphs are great at helping us intuit the nature of interactions in a co
 
 Community matrices are a key concept in quantitative ecology and are used in many competition and predation models. A community matrix A is a square matrix where each element represents the interaction strength between pairs of species in an ecological community. Each cell *A[i,j]* represents the effect of the average species *j* individual on species *i*’s population growth rate (Novak et al. 2016). The principal diagonal of the matrix captures the species self-interactions, which we usually assume to be negative, to capture the effect of interspecific competition. This constrains species growth in the absence of prey, imposing implicit instantaneous carrying capacities of the system for different species.
 
-![](../../media/posts/32/Screenshot-2024-05-01-at-13.21.29.png =354x120)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-13.21.29.png =354x120)
 
 Note that values in an interaction matrix don’t necessarily correspond to predation relationships. If both *A[i,j]* and *A[j,i]* are negative, then the two species are considered to be in direct competition with one another as they negatively affect each other’s population. If *A[i,j]* is positive but *A[i,j]* is negative then species *i* is a predator or parasite of species *j*, since *i*’s population grows at *j*’s expense (Positive values for *A[i,j] *and *A[j,i] *would be considered mutualism, but we won’t go into that).
 
@@ -130,7 +130,7 @@ To translate between community matrices and food webs, I have implemented some s
 
 We can model competition and predation systems with more than two species using the generalised form of the Lotka-Volterra model, which we write: 
 
-![](../../media/posts/32/Screenshot-2024-05-01-at-13.24.26.png =181x94)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-13.24.26.png =181x94)
 
 where
 
@@ -140,7 +140,7 @@ where
 We will define the intrinsic growth rates slightly differently from our approach for the two-species model, as we assume that each species has a positive intrinsic growth rate. We account for the negative effect of a species' intraspecific competition in the absence of food (on its intrinsic growth rates) in the diagonal of the community matrix.<br/>## Three Species Lotka-Volterra in the Wolfram Language
 
 First, let's define a function to generate ODEs for an n-species Lotka-Volterra model:
-![](../../media/posts/32/Screenshot-2024-05-01-at-13.23.34.png =2102x886)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-13.23.34.png =2102x886)
 We can use <code>GeneralizedLotkaVolterraODEs</code> to generate the system of ODEs for the given initial parameters:
 
 - <em>vars</em> - a list of variable names (optional),
@@ -149,30 +149,30 @@ We can use <code>GeneralizedLotkaVolterraODEs</code> to generate the system of O
 - <em>interactionMatrix</em> - a matrix describing community interactions (in our examples, a community matrix)
 
 <em>Generate a system of ODEs for a Generalised Lotka-Volterra model from provided parameters:</em>
-![](../../media/posts/32/Screenshot-2024-05-01-at-16.20.24.png =582x310)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-16.20.24.png =582x310)
 Using <code>CommunityMatrixGraph</code> (see definition in original post), we can construct a weighted graph from the community matrix to get an idea of the relationships that define the system at a glance.
 
 <em>Visualise the community interactions described by the community matrix:</em>
-![](../../media/posts/32/Screenshot-2024-05-01-at-16.22.53.png =1278x526)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-16.22.53.png =1278x526)
 And <code>NDSolve</code> to numerically approximate the population trajectories of the model.
 
 <em>Numerical solutions to the model ODEs:</em>
-![](../../media/posts/32/Screenshot-2024-05-01-at-16.23.38.png =1774x390)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-16.23.38.png =1774x390)
 We can then plot the solutions in the time domain and state space:
 
 <em>Time domain plot:</em>
-![](../../media/posts/32/Screenshot-2024-05-01-at-16.24.12.png =1564x638)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-16.24.12.png =1564x638)
 <em>State space portrait (now in 3D!):</em>
-![](../../media/posts/32/Screenshot-2024-05-01-at-16.24.34.png =472x469)## Closing Notes: Four species and more
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-16.24.34.png =472x469)## Closing Notes: Four species and more
 
 The generalised model we have discussed in this short text extends beyond three species systems. In fact, the tools we have developed will allow us to model any finite n-species closed-food web, that is, any system that we can express using a finite number of species initial population sizes, intrinsic growth rates, and interactions. It should be noted that just because we can specify a model does not always mean we can accurately solve for its behaviour: we are restricted by the limits of numerical approximation and our available computational power)
 
 Still, we can easily model four species webs. Let’s prepare two four species models. We’ll define some weighted webs describing the various interaction effects of our system:
-![](../../media/posts/32/Screenshot-2024-05-01-at-16.25.03.png =380x318)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-16.25.03.png =380x318)
 We can construct the community matrix describing either of these using the <code>CommunityMatrix</code> function defined in the original version of this post. For example, take the first row of interaction webs from the above dataset:
-![](../../media/posts/32/Screenshot-2023-10-10-at-15.20.16.png =403x136)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2023-10-10-at-15.20.16.png =403x136)
 <em>Time domain plot:</em>
-![](../../media/posts/32/Screenshot-2024-05-01-at-16.25.51.png =1932x1216)![](../../media/posts/32/Screenshot-2024-05-01-at-16.25.31.png =1892x938)
+![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-16.25.51.png =1932x1216)![](../../media/posts/lotka-volterra-models-in-the-wolfram-language/Screenshot-2024-05-01-at-16.25.31.png =1892x938)
 To interact with this graphical user interface, head to the original version of this post.
 
 <strong>Note:</strong> What happened to the state-space plot? Well, we’ve run out of spatial dimensions to express the behaviour of the system, and in the interest of keeping this post short, we’ll leave things there for now.

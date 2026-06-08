@@ -32,9 +32,9 @@ On July 24 2024, [the Associated Press reported that July 22, 2024 broke the rec
 
 Climate Pulse conveniently provides a [link](https://sites.ecmwf.int/data/climatepulse/data/series/era5_daily_series_2t_global.csv) to download a table of global surface air temperature data from 1940 to the latest data available. Let’s import these data:
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.20.10.png =2014x180)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.20.10.png =2014x180)
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.20.43.png =371x190)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.20.43.png =371x190)
 
 Neat! The columns key (dropped from the .csv table during the import) defines the columns as: 
 
@@ -42,37 +42,37 @@ Neat! The columns key (dropped from the .csv table during the import) defines th
 
 To construct time series from these data, it'll help to convert the values from the date column into Wolfram Language date objects:
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.21.51.png =2204x76)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.21.51.png =2204x76)
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.22.06.png =371x186)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.22.06.png =371x186)
 
 ### Constructing and Plotting Time Series from the Data:
 
 Now that we have the data, we can get a time series of daily mean absolute temperatures like so:
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.22.57.png =1490x62)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.22.57.png =1490x62)
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.23.35.png =352x66)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.23.35.png =352x66)
 
 Plotting it is as easy as: 
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.24.05.png =548x96)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.24.05.png =548x96)
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.24.32.png =1458x982)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.24.32.png =1458x982)
 
 ### Verifying the Claims Made by the AP &amp; Others:
 
 Based on these data, was the hottest day on record really last Monday? Let's confirm:
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.25.02.png =270x29)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.25.02.png =270x29)
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.25.15.png =371x67)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.25.15.png =371x67)
 
 What were the top 5 hottest recorded days since 1940?
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.25.45.png =276x26)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.25.45.png =276x26)
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.26.05.png =373x155)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.26.05.png =373x155)
 
 Note that the top four hottest days on record were this month.
 
@@ -80,9 +80,9 @@ Note that the top four hottest days on record were this month.
 
 With the data we have collected, we can now reproduce the now famous year over year plot of global mean surface temperatures from Climate Pulse.
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.26.54.png =2610x1398)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.26.54.png =2610x1398)
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.27.20.png =1266x1586)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.27.20.png =1266x1586)
 
 ## Getting These Data for Specific Time Ranges and Regions from Climate Reanalyzer
 
@@ -90,7 +90,7 @@ It would be helpful to have a function that automates the process of importing t
 
 *Define a function to import time series from Climate Reanalyzer:*
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.28.05.png =1978x424)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.28.05.png =1978x424)
 
 The function supports importing data from six regions, specified with the area parameter: 
 
@@ -112,15 +112,15 @@ Consider the following examples:
 
 *Request and plot the time series of daily surface temperatures in the Arctic from 1990 to 2000:*
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.29.31.png =530x126)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.29.31.png =530x126)
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.31.09.png =1180x786)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.31.09.png =1180x786)
 
 ## Map Animations:
 
 Climate Pulse hosts recent raster maps of global surface temperatures. Here is the one corresponding to last Monday:
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.31.40.png =1348x784)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.31.40.png =1348x784)
 
 I'd like to take a moment to highlight my RemoteSensing paclet, which presently provides a WL interface to NASA's GIBS and AppEEARS APIs for remote sensing data retrieval. While my paclet does not yet support access to Copernicus ERA5 data (look out for future releases), GIBS and AppEEARS both provide access to similar data products, which we can import and work with directly in the Wolfram Language.
 
@@ -132,19 +132,19 @@ Please feel free to consult the paclet documentation here: [https://resources.wo
 
 *Load the paclet: *
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.32.55.png =347x29)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.32.55.png =347x29)
 
 *Using GIBSData, list global surface air temperature products:*
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.33.17.png =1520x44)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.33.17.png =1520x44)
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.33.30.png =2434x96)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.33.30.png =2434x96)
 
 *Animate a map using one of these products:*
 
-![](https://phileasdg.github.io/media/posts/37/Screenshot-2024-07-28-at-03.37.14.png =1732x212)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Screenshot-2024-07-28-at-03.37.14.png =1732x212)
 
-![](https://phileasdg.github.io/media/posts/37/Animation2.gif =1114x484)
+![](https://phileasdg.github.io/media/posts/earths-hottest-day-ever-recorded-july-22-2024-analyzed-and-visualised-through-climate-data/Animation2.gif =1114x484)
 
 ## Conclusion
 

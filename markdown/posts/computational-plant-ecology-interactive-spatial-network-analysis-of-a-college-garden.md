@@ -24,15 +24,15 @@ This post is a short reflection on that process, and how I used Wolfram to proto
 
 The first step was to import a copy of the [map from the brochure](https://www.coa.edu/live/files/841-appendix-1-sunken-garden-brochure-pdf):
 
-![](https://phileasdg.github.io/media/posts/49/0ockt0ex1876r.png =200x)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/0ockt0ex1876r.png =200x)
 
 I traced the map image twice: once for plant label coordinates, and once for a rough sample of points along the garden path using the image Coordinates tool described in [this tutorial](https://reference.wolfram.com/language/workflow/GetCoordinatesFromAnImage.html) (and I later found [this one too](https://mathematica.stackexchange.com/questions/214497/making-a-graph-or-network-interactively-over-an-image)). It was a surprisingly meditative experience. I grouped points corresponding to the same species together, and constructed a network representation of the garden path based on my path point sample. I was left with a dataset of plant positions, and a path network.
 
 Here’s a preview of the plant positions data:
 
-![](https://phileasdg.github.io/media/posts/49/1mp0w9zxnu82m.png =250x)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/1mp0w9zxnu82m.png =250x)
 
-![Image description](https://phileasdg.github.io/media/posts/49/Screenshot-2025-09-13-at-20.43.44.png =300x)
+![Image description](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/Screenshot-2025-09-13-at-20.43.44.png =300x)
 
 Here’s the original map with digital labels:
 
@@ -44,13 +44,13 @@ In[]:= With[
   ]
 ```
 
-![](https://phileasdg.github.io/media/posts/49/1vekqgrzks5j4.png =1492x1224)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/1vekqgrzks5j4.png =1492x1224)
 
 And here’s the network representation of the path:
 
-![](https://phileasdg.github.io/media/posts/49/1kzout3gawhly.png =329x216)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/1kzout3gawhly.png =329x216)
 
-![](https://phileasdg.github.io/media/posts/49/0s66s0ibad5d5.png =562x864)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/0s66s0ibad5d5.png =562x864)
 
 ## Investigating the structure of the digital garden
 
@@ -93,15 +93,15 @@ In[]:= ListAnimate[
    AnimationRunning -> False, AnimationTimeIndex -> 5, DefaultDuration -> 10]
 ```
 
-![](https://phileasdg.github.io/media/posts/49/randomwalk.gif =569x864)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/randomwalk.gif =569x864)
 
 Okay, so if I were to randomly wander around the garden for a long time, never backtracking, what locations along the path am I likely to spend most of my time in? 
 
 To estimate an answer to this question, we can take a sample of simulated random non-backtracking walks through the garden, and tally the number of visits to each location. We should make the additional assumption that the walks start at one of the garden entrances, chosen at random. Here’s what that looks like with the tallies represented as the sizes of the nodes on the garden path network:
 
-![](https://phileasdg.github.io/media/posts/49/1rxncra20r6yl.png =2358x1488)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/1rxncra20r6yl.png =2358x1488)
 
-![](https://phileasdg.github.io/media/posts/49/1ni29au7ly1tt.png =1255x948)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/1ni29au7ly1tt.png =1255x948)
 
 Of course, this is an approximation and the results are biased by the specific choices involved in my translation of the continuous real-world path into a discrete network representation. That said, it’s a reasonable approximation, and one that matches my personal experience of leisurely strolling through the garden with no clear direction.
 
@@ -115,7 +115,7 @@ In[]:= Histogram[
    ChartStyle -> Lighter[StandardBlue, .5]]
 ```
 
-![](https://phileasdg.github.io/media/posts/49/1ndgnsonoyh3f.png =720x427)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/1ndgnsonoyh3f.png =720x427)
 
 Here’s a model distribution that fits the observed histogram well:
 
@@ -139,7 +139,7 @@ Likewise, I can generate histograms of visit frequencies for specific locations 
 In[]:= Dataset[Dataset[KeySort@DeleteMissing[Normal[Transpose[Dataset[Map[Counts, walks]]]], \[Infinity]]][All, Histogram[#, ChartStyle -> Lighter[StandardBlue, .5]] &], MaxItems -> 4]
 ```
 
-![](https://phileasdg.github.io/media/posts/49/08x6b11a9yb4b.png =362x720)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/08x6b11a9yb4b.png =362x720)
 
 And I can estimate fit distributions to the histograms for each location:
 
@@ -147,7 +147,7 @@ And I can estimate fit distributions to the histograms for each location:
 In[]:= Dataset[Dataset[KeySort@DeleteMissing[Normal[Transpose[Dataset[Map[Counts, walks]]]], \[Infinity]]][All, FindDistribution], MaxItems -> 4]
 ```
 
-![Image description](https://phileasdg.github.io/media/posts/49/Screenshot-2025-09-13-at-20.49.05.png =2086x284)
+![Image description](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/Screenshot-2025-09-13-at-20.49.05.png =2086x284)
 
 Since these distributions are not normal, we can use the median as our measure of central tendency:
 
@@ -155,7 +155,7 @@ Since these distributions are not normal, we can use the median as our measure o
 In[]:= Dataset[Dataset[KeySort@Map[Values, GroupBy[Flatten[Map[Normal@*Counts, walks]], First]]][All, Median], MaxItems -> 4]
 ```
 
-![Image description](https://phileasdg.github.io/media/posts/49/Screenshot-2025-09-13-at-20.49.35.png =250x)
+![Image description](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/Screenshot-2025-09-13-at-20.49.35.png =250x)
 
 ### The skeleton of the garden path
 
@@ -171,7 +171,7 @@ In[]:= With[{m = EdgeCycleMatrix[gardenPath]},
   ]
 ```
 
-![](https://phileasdg.github.io/media/posts/49/122y8z9xg3lkd.png =793x266)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/122y8z9xg3lkd.png =793x266)
 
 Up to this point I’ve presented the garden path network with its vertices in positions that match their locations on the garden map, but I can use other layouts. Here it is laid out using a spring embedding method:
 
@@ -179,7 +179,7 @@ Up to this point I’ve presented the garden path network with its vertices in p
 In[]:= Graph[EdgeList[gardenPath]]
 ```
 
-![](https://phileasdg.github.io/media/posts/49/0gbdnpkehdzsx.png =720x298)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/0gbdnpkehdzsx.png =720x298)
 
 The network looks different, but as far as I’m concerned, it’s the same. The patterns that matter to me (the cycles) are preserved. So how might I simplify the network as much as possible while still preserving all the cycles? 
 
@@ -203,7 +203,7 @@ Here’s the simplified path network with a geographic layout:
 In[]:= deletePassThroughNodes[gardenPath]
 ```
 
-![](https://phileasdg.github.io/media/posts/49/1e5ofbtjscfec.png =573x864)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/1e5ofbtjscfec.png =573x864)
 
 And here it is with a spring layout:
 
@@ -211,15 +211,15 @@ And here it is with a spring layout:
 In[]:= Graph[EdgeList[deletePassThroughNodes[gardenPath]]]
 ```
 
-![](https://phileasdg.github.io/media/posts/49/0fjxv0l1wnb10.png =720x261)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/0fjxv0l1wnb10.png =720x261)
 
 ### Spatial network community analysis of the Sunken Garden plants
 
 Let’s shift from the paths to the plants themselves. Here’s a breakdown of the Sunken Garden’s plant community make-up (the human-designed component):
 
-![](https://phileasdg.github.io/media/posts/49/1v0p13ny7tbkc.png =2539x369)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/1v0p13ny7tbkc.png =2539x369)
 
-![](https://phileasdg.github.io/media/posts/49/0966puyqeqwz7.png =500x)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/0966puyqeqwz7.png =500x)
 
 We’ve been thinking about how people might move through the space, but the plants have spatial relationships of their own: clusters and neighborhoods that form based on proximity, growing conditions, etc. Can we detect these plant communities computationally? How do they change depending on the scale at which we search for them? 
 
@@ -245,17 +245,17 @@ In[]:= Manipulate[
     ]], {{radius, 5}, 0, 10}, SaveDefinitions -> True]
 ```
 
-![](https://phileasdg.github.io/media/posts/49/1rs758hzqi6w9.gif =500x)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/1rs758hzqi6w9.gif =500x)
 
 Since we can now estimate spatial networks of plant interactions based on distance, we can also apply community detection methods to these networks to make estimates of where interactions concentrate in the network at different scales:
 
-![](https://phileasdg.github.io/media/posts/49/0ydgmlj7ow2fk.png =2014x726)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/0ydgmlj7ow2fk.png =2014x726)
 
-![](https://phileasdg.github.io/media/posts/49/1betucekiu8z2.gif =500x)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/1betucekiu8z2.gif =500x)
 
 This spatial network analysis reveals how the Sunken Garden’s plant communities might emerge at different interaction scales. For radii under approximately 1.75 feet, there are no detected communities, as no plants are within that distance of one another. At radii between two and three feet, we see tightly clustered micro-communities. For radii between four and five feet, we find medium-sized communities that overlap meaningfully with the intentional design and pattern of the garden. At this scale, the garden path seems to contribute to delineating the community structure. As we increase the interaction radius to six to ten feet, these smaller communities merge. For a radius of ten feet, there are four detected communities, two of which cover the majority of the garden:
 
-![](https://phileasdg.github.io/media/posts/49/0zb92jxye00nb.png =500x)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/0zb92jxye00nb.png =500x)
 
 The modularity-based community detection shows that even under our simplified assumption of uniform distance-based interactions, the garden shows clear spatial clustering that changes meaningfully with scale. At intermediate scales, the communities appear to align with the garden’s major design elements—the central beds, perimeter plantings, and transitional zones.
 
@@ -267,9 +267,9 @@ Despite these limitations, the spatial community analysis shows how computationa
 
 I reached out to some contacts at the college for information about the garden plants that I could add to the garden website. [**Name**], the current Sunken Garden curator shared a species information booklet he wrote with me, the Edible Plant List of the Sunken Garden, which contained all sorts of helpful information about the plants. I used OCR alongside a mix of methods to extract the data from the booklet, and convert them to a JSON dataset, which I’ve reproduced here:
 
-![](https://phileasdg.github.io/media/posts/49/0krwxhsw9rjxb.png =831x39)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/0krwxhsw9rjxb.png =831x39)
 
-![Image description](https://phileasdg.github.io/media/posts/49/Screenshot-2025-09-13-at-20.50.42.png =1882x636)
+![Image description](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/Screenshot-2025-09-13-at-20.50.42.png =1882x636)
 
 The dataset contains detailed information about 56 plant species in the Sunken Garden, including their Latin names, families, growing requirements, physical characteristics, and seasonal information.
 
@@ -328,7 +328,7 @@ In[]:= Histogram[Flatten[Normal[Values[Dataset[ConstructColumns[plantData, {
    PlotRange -> Full, ChartStyle -> Lighter[StandardBlue]]
 ```
 
-![](https://phileasdg.github.io/media/posts/49/02ft24cmj2pt4.png =720x449)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/02ft24cmj2pt4.png =720x449)
 
 Spread values show a similar pattern, with most plants staying compact:
 
@@ -339,7 +339,7 @@ In[]:= Histogram[Flatten[Normal[Values[Dataset[ConstructColumns[plantData, {
    PlotRange -> Full, ChartStyle -> Lighter[StandardBlue]]
 ```
 
-![](https://phileasdg.github.io/media/posts/49/1n0e1h3g3zydg.png =720x449)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/1n0e1h3g3zydg.png =720x449)
 
 Height and spread scatter plot with a LOESS fit:
 
@@ -352,7 +352,7 @@ In[]:= ListFitPlot[Normal[Values[Dataset[ConstructColumns[plantData, {
    PlotRange -> Full, PlotFit -> &quot;Local&quot;, PlotFitElements -> &quot;BandCurves&quot;]
 ```
 
-![](https://phileasdg.github.io/media/posts/49/0ifdxwc5akzzx.png =720x458)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/0ifdxwc5akzzx.png =720x458)
 
 The plant data analysis confirms that the Sunken Garden prioritizes adaptable, compact species that do well in variable conditions.
 
@@ -364,9 +364,9 @@ The computational analyses presented here emerged from my curiosity about the un
 
 Here’s the sunken garden website directory tree:
 
-![](https://phileasdg.github.io/media/posts/49/1mjnn1jubt0kw.png =1995x40)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/1mjnn1jubt0kw.png =1995x40)
 
-![](https://phileasdg.github.io/media/posts/49/1vhdd4pplaj9f.png =1355x965)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/1vhdd4pplaj9f.png =1355x965)
 
 The website uses a straightforward structure with JSON data files containing the computational representations developed through the Wolfram analysis. The network visualizations use the force-graph library, while most of the implementation work went into defining the logic for different information modals and user interactions. I deployed the site using GitHub Pages for free hosting.
 
@@ -384,13 +384,13 @@ You can explore the interactive map [here](https://phileasdg.github.io/coa-sunke
 
 ### Project variables
 
-![](https://phileasdg.github.io/media/posts/49/1phbx87cq593e.png =266x216)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/1phbx87cq593e.png =266x216)
 
-![](https://phileasdg.github.io/media/posts/49/19f9obkqzl49e.png =394x40)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/19f9obkqzl49e.png =394x40)
 
-![](https://phileasdg.github.io/media/posts/49/17sc7czxhzxy4.png =314x216)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/17sc7czxhzxy4.png =314x216)
 
-![](https://phileasdg.github.io/media/posts/49/01wokmrx0usvg.png =765x38)
+![](https://phileasdg.github.io/media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/01wokmrx0usvg.png =765x38)
 
 ```wl
 In[]:= walks = With[{

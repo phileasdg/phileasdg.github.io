@@ -19,6 +19,14 @@ You can write headings, sub-headings, and standard body text with simple styling
 2. Add YAML frontmatter at the top.
 3. Commit and push!
 
+Here is a sample table showing various data alignments:
+
+| Item ID | Description | Quantity | Unit Price | Total |
+| :--- | :--- | :---: | ---: | ---: |
+| 101 | Standard Widget with long text description to test responsive wrapping | 2 | $10.00 | $20.00 |
+| 102 | Premium Widget | 1 | $45.00 | $45.00 |
+| 103 | Deluxe Edition | 5 | $100.00 | $500.00 |
+
 ---
 
 ## 2. Lists and Lists Items
@@ -34,25 +42,19 @@ You can create ordered and unordered lists easily:
 ## 3. Code Blocks with Syntax Highlighting
 Write multi-line code blocks with language-specific syntax highlighting (powered by Prism.js):
 
-```javascript
-// A simple JavaScript function to calculate the Fibonacci sequence
-function fibonacci(n) {
-  if (n <= 1) return n;
-  return fibonacci(n - 1) + fibonacci(n - 2);
-}
+### Wolfram Language (WL) Example
+Sampling and plotting an Erdős-Rényi random graph:
 
-console.log(fibonacci(10)); // Outputs: 55
+```mathematica
+(* Sample and plot an Erdős-Rényi random graph G(n, p) *)
+g = RandomGraph[BernoulliGraphDistribution[40, 0.07]];
+Graph[g, 
+  VertexSize -> Medium, 
+  VertexStyle -> RGBColor[0.0, 0.48, 0.65], 
+  EdgeStyle -> Directive[Opacity[0.25], RGBColor[0.0, 0.48, 0.65]]]
 ```
 
-```python
-# A simple Python class
-class Agent:
-    def __init__(self, name):
-        self.name = name
-        
-    def greet(self):
-        return f"Hello, I am {self.name}!"
-```
+![Wolfram Language Erdos-Renyi Graph](../../media/posts/example-markdown-post/wolfram-graph-showcase.png)
 
 ---
 
@@ -65,6 +67,14 @@ You can embed images using simple Markdown syntax. By default, the build system 
 ### Image with Custom Dimensions:
 You can specify the image width and height using the `=widthxheight` syntax (e.g. `=600x380` or `=600x` to specify width only) in the image target brackets:
 ![Hypergraph Plotter Card Thumbnail](media/imgs/hypergraph-plotter.png =600x380)
+
+### Image with Custom Alignment:
+You can also specify the alignment (`left`, `right`, or `center`) by appending it after the image path or size. The default alignment is `center`:
+![Hypergraph Plotter Card Thumbnail](media/imgs/hypergraph-plotter.png =300x left)
+
+This paragraph of text will wrap around the left-aligned image. It showcases how simple it is to lay out dynamic content with varying visual components on your blog using standard Markdown syntax extensions.
+
+<div style="clear: both;"></div>
 
 ---
 

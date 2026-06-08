@@ -4,7 +4,7 @@ You can read an expanded exploration of this project at [this Wolfram community 
 
 ## Pre(r)amble
 
-<figure class="post__image">I still haven't found the best way to share Mathematica projects, which is a shame because it has quickly become my favourite prototyping and computational exploration programming language. Somehow, linking to Mathematica notebooks in the cloud just doesn't feel right. It feels like cheating, like I'm getting away with a pretend blog post. It's all pretty silly, but there you go. <br/><br/>Just a couple days ago, I wrote a notebook implementing a video feedback synthesis process diagram by José María Castelo from his project [MorphogenCV](https://github.com/jmcastelo/MorphogenCV). <br/><br/>Here is José's diagram: <br/><br/>![](../../media/posts/23//image.png =449x824)</figure>
+<figure class="post__image">I still haven't found the best way to share Mathematica projects, which is a shame because it has quickly become my favourite prototyping and computational exploration programming language. Somehow, linking to Mathematica notebooks in the cloud just doesn't feel right. It feels like cheating, like I'm getting away with a pretend blog post. It's all pretty silly, but there you go. <br/><br/>Just a couple days ago, I wrote a notebook implementing a video feedback synthesis process diagram by José María Castelo from his project [MorphogenCV](https://github.com/jmcastelo/MorphogenCV). <br/><br/>Here is José's diagram: <br/><br/>![](../../media/posts/digital-image-feedback-synthesis//image.png =449x824)</figure>
 
 <br/><br/>In this blog post, I'm going to write about this implementation and the cool things it does. I'll explore the code, providing explanations and code output as examples. Note: In this project, I wrote my code above all to be readable. It is quite slow, and I may rewrite it some day to be much faster. There are many obvious ways it could be improved, but I am satisfied now with how easy it is to parse when reading.
 
@@ -24,60 +24,60 @@ José's diagram allows us to break the feedback synthesis into discrete steps fo
 
 Let's see what this looks like in practice! First, let's define an input image:
 
-![](../../media/posts/23/Screenshot-2022-12-08-at-22.01.52.png =214x115)
+![](../../media/posts/digital-image-feedback-synthesis/Screenshot-2022-12-08-at-22.01.52.png =214x115)
 
 Let's preprocess the image: 
 
-![](../../media/posts/23/Screenshot-2022-12-09-at-17.59.13.png =697x276)
+![](../../media/posts/digital-image-feedback-synthesis/Screenshot-2022-12-09-at-17.59.13.png =697x276)
 
 Now, let's take the prepared image, and apply the processes described in the previous section to three separate copies:
 
 The first process: 
 
-![](../../media/posts/23/Screenshot-2022-12-09-at-18.00.13.png =694x270)
+![](../../media/posts/digital-image-feedback-synthesis/Screenshot-2022-12-09-at-18.00.13.png =694x270)
 
 The second process: 
 
-![](../../media/posts/23/Screenshot-2022-12-09-at-18.00.42.png =698x213)
+![](../../media/posts/digital-image-feedback-synthesis/Screenshot-2022-12-09-at-18.00.42.png =698x213)
 
 The third process:
 
-![](../../media/posts/23/Screenshot-2022-12-09-at-18.01.11.png =693x302)
+![](../../media/posts/digital-image-feedback-synthesis/Screenshot-2022-12-09-at-18.01.11.png =693x302)
 
 Finally, we blend the resulting images together:
 
-![](../../media/posts/23/Screenshot-2022-12-09-at-18.15.41.png =693x309)
+![](../../media/posts/digital-image-feedback-synthesis/Screenshot-2022-12-09-at-18.15.41.png =693x309)
 
 Here is a visualisation of the steps of the process: 
 
-![](../../media/posts/23/Screenshot-2022-12-09-at-18.16.52.png =698x165)
+![](../../media/posts/digital-image-feedback-synthesis/Screenshot-2022-12-09-at-18.16.52.png =698x165)
 
 All that's left to do is tie these steps together in a function:
 
-![](../../media/posts/23/Screenshot-2022-12-09-at-18.18.03.png =696x537)
+![](../../media/posts/digital-image-feedback-synthesis/Screenshot-2022-12-09-at-18.18.03.png =696x537)
 
 Let's visualise the first few iterations of feedback from a starting image at some arbitrary settings:
 
-![](../../media/posts/23/Screenshot-2022-12-09-at-18.19.36.png =696x234)
+![](../../media/posts/digital-image-feedback-synthesis/Screenshot-2022-12-09-at-18.19.36.png =696x234)
 
-![](../../media/posts/23/Screenshot-2022-12-09-at-18.20.34.png =696x446)
+![](../../media/posts/digital-image-feedback-synthesis/Screenshot-2022-12-09-at-18.20.34.png =696x446)
 
 Then let's visualise the result after many iterations starting from the same input.
 
-![](../../media/posts/23/Screenshot-2022-12-09-at-18.22.42.png =694x245)
+![](../../media/posts/digital-image-feedback-synthesis/Screenshot-2022-12-09-at-18.22.42.png =694x245)
 
-![](../../media/posts/23/Screenshot-2022-12-09-at-18.25.43.png =697x382)
+![](../../media/posts/digital-image-feedback-synthesis/Screenshot-2022-12-09-at-18.25.43.png =697x382)
 
 Here are some examples of output I got from playing around with the settings for a bit:
 
-![](../../media/posts/23/Screenshot-2022-12-09-at-18.26.26.png =696x358)
+![](../../media/posts/digital-image-feedback-synthesis/Screenshot-2022-12-09-at-18.26.26.png =696x358)
 
 You get these interesting stripy shapes for even very simple inputs, for instance: 
 
-![](../../media/posts/23/Screenshot-2022-12-09-at-18.28.21.png =695x372)
+![](../../media/posts/digital-image-feedback-synthesis/Screenshot-2022-12-09-at-18.28.21.png =695x372)
 
-![](../../media/posts/23/Screenshot-2022-12-09-at-18.28.41.png =1336x738)
+![](../../media/posts/digital-image-feedback-synthesis/Screenshot-2022-12-09-at-18.28.41.png =1336x738)
 
 I hope this exploration was fun! I'll end this post with a gallery of curated outputs from playing around with different inputs and settings: 
 
-<div class="gallery-wrapper"><div class="gallery" data-columns="3" data-is-empty="false" data-translation="Add images"><figure class="gallery__item"><a data-size="1000x992" href="../../media/posts/23/gallery/pattern1-3.png">![](../../media/posts/23/gallery/pattern1-3-thumbnail.png =768x762)</a></figure><figure class="gallery__item"><a data-size="1000x992" href="../../media/posts/23/gallery/pattern2-3.png">![](../../media/posts/23/gallery/pattern2-3-thumbnail.png =768x762)</a></figure><figure class="gallery__item"><a data-size="1000x992" href="../../media/posts/23/gallery/pattern3-3.png">![](../../media/posts/23/gallery/pattern3-3-thumbnail.png =768x762)</a></figure><figure class="gallery__item"><a data-size="1000x992" href="../../media/posts/23/gallery/pattern4-3.png">![](../../media/posts/23/gallery/pattern4-3-thumbnail.png =768x762)</a></figure><figure class="gallery__item"><a data-size="1000x992" href="../../media/posts/23/gallery/pattern5-3.png">![](../../media/posts/23/gallery/pattern5-3-thumbnail.png =768x762)</a></figure><figure class="gallery__item"><a data-size="1000x1000" href="../../media/posts/23/gallery/pattern6-3.png">![](../../media/posts/23/gallery/pattern6-3-thumbnail.png =768x768)</a></figure><figure class="gallery__item"><a data-size="1000x1000" href="../../media/posts/23/gallery/pattern7-3.png">![](../../media/posts/23/gallery/pattern7-3-thumbnail.png =768x768)</a></figure><figure class="gallery__item"><a data-size="1000x1000" href="../../media/posts/23/gallery/pattern8-3.png">![](../../media/posts/23/gallery/pattern8-3-thumbnail.png =768x768)</a></figure><figure class="gallery__item"><a data-size="1000x1000" href="../../media/posts/23/gallery/pattern9-3.png">![](../../media/posts/23/gallery/pattern9-3-thumbnail.png =768x768)</a></figure>
+<div class="gallery-wrapper"><div class="gallery" data-columns="3" data-is-empty="false" data-translation="Add images"><figure class="gallery__item"><a data-size="1000x992" href="../../media/posts/digital-image-feedback-synthesis/gallery/pattern1-3.png">![](../../media/posts/digital-image-feedback-synthesis/gallery/pattern1-3-thumbnail.png =768x762)</a></figure><figure class="gallery__item"><a data-size="1000x992" href="../../media/posts/digital-image-feedback-synthesis/gallery/pattern2-3.png">![](../../media/posts/digital-image-feedback-synthesis/gallery/pattern2-3-thumbnail.png =768x762)</a></figure><figure class="gallery__item"><a data-size="1000x992" href="../../media/posts/digital-image-feedback-synthesis/gallery/pattern3-3.png">![](../../media/posts/digital-image-feedback-synthesis/gallery/pattern3-3-thumbnail.png =768x762)</a></figure><figure class="gallery__item"><a data-size="1000x992" href="../../media/posts/digital-image-feedback-synthesis/gallery/pattern4-3.png">![](../../media/posts/digital-image-feedback-synthesis/gallery/pattern4-3-thumbnail.png =768x762)</a></figure><figure class="gallery__item"><a data-size="1000x992" href="../../media/posts/digital-image-feedback-synthesis/gallery/pattern5-3.png">![](../../media/posts/digital-image-feedback-synthesis/gallery/pattern5-3-thumbnail.png =768x762)</a></figure><figure class="gallery__item"><a data-size="1000x1000" href="../../media/posts/digital-image-feedback-synthesis/gallery/pattern6-3.png">![](../../media/posts/digital-image-feedback-synthesis/gallery/pattern6-3-thumbnail.png =768x768)</a></figure><figure class="gallery__item"><a data-size="1000x1000" href="../../media/posts/digital-image-feedback-synthesis/gallery/pattern7-3.png">![](../../media/posts/digital-image-feedback-synthesis/gallery/pattern7-3-thumbnail.png =768x768)</a></figure><figure class="gallery__item"><a data-size="1000x1000" href="../../media/posts/digital-image-feedback-synthesis/gallery/pattern8-3.png">![](../../media/posts/digital-image-feedback-synthesis/gallery/pattern8-3-thumbnail.png =768x768)</a></figure><figure class="gallery__item"><a data-size="1000x1000" href="../../media/posts/digital-image-feedback-synthesis/gallery/pattern9-3.png">![](../../media/posts/digital-image-feedback-synthesis/gallery/pattern9-3-thumbnail.png =768x768)</a></figure>

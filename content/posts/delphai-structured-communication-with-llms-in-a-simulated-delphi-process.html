@@ -1,26 +1,19 @@
 <p>--------\n&quot;], #1] &@Normal[participantData[&quot;Prior Perspectives&quot;]])</p>
 <p>|>]] /; MemberQ[{Association, Dataset}, Head[participantData]]</p>
 <pre><code class="language-plaintext">
-
 *Initialise a participant chat object:*
-
 </code></pre>
 <p>In[]:= initialiseParticipantChat[participantParameterDataset[[1]]]</p>
-<pre><code class="language-plaintext">
-
-</code></pre>
+<pre><code class="language-plaintext"></code></pre>
 <p>Out[]= &quot;The garden should feature a diverse range of exotic plants to make it visually appealing and unique.--------------It should be on the outskirts of town, where it&#39;s quieter and more peaceful for gardening without disturbances.--------------The primary purpose of the garden is to grow food for the community, and any surplus should be donated to local food banks.&quot;</p>
 <pre><code class="language-plaintext">
-
-![](https://phileasdg.github.io/media/posts/45/1ny77ybl4x6ee-2.png =237x86)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/1ny77ybl4x6ee-2.png =237x86)
 
 *Initializing all participant chat objects at once:*
-
 </code></pre>
 <p>In[]:= ClearAll[participantChats]</p>
 <p>participantChats = Dataset[Association[Map[#Name -> initialiseParticipantChat[#] &, Normal[participantParameterDataset]]]]</p>
 <pre><code class="language-plaintext">
-
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -43,22 +36,17 @@
 
 *Construct facilitator instructions to participants:*
 
-![](https://phileasdg.github.io/media/posts/45/0aykn2josyvjv.png =1739x119)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/0aykn2josyvjv.png =1739x119)
 
 *Construct the initial instructions to participants from the facilitator:*
-
 </code></pre>
 <p>In[]:= (<em>constructInstructionsFromFacilitator[]</em>)</p>
 <pre><code class="language-plaintext">
-
 *Construct instructions from the facilitator, a list of materials:*
-
 </code></pre>
 <p>In[]:= (<em>constructInstructionsFromFacilitator[{<|Step->1,Report->REPORT CONTENTS|>}]</em>)</p>
 <pre><code class="language-plaintext">
-
 *Request an initial (first round) contribution from one participant:*
-
 </code></pre>
 <p>In[]:= (*ChatEvaluate[</p>
 <p>initialiseParticipantChat[participantParameterDataset[[1]]],</p>
@@ -66,37 +54,29 @@
 <p>constructInstructionsFromFacilitator[]</p>
 <p>]*)</p>
 <pre><code class="language-plaintext">
-
 *Request initial (first round) participant contributions from all participants:*
-
 </code></pre>
 <p>In[]:= (<em>Map[ChatEvaluate[#,constructInstructionsFromFacilitator[]]&,participantChats]</em>)</p>
 <pre><code class="language-plaintext">
-
 &lt;h4 id="providing-instructions-to-the-facilitator-and-getting-the-facilitator-to-produce-intermediate-reports"&gt;Providing instructions to the facilitator, and getting the facilitator to produce intermediate reports&lt;/h4&gt;
 
 *Initialize a facilitator chat object:*
-
 </code></pre>
 <p>In[]:= ClearAll[facilitatorChat]</p>
 <p>facilitatorChat = ChatObject[promptBank[&quot;Initial instructions to facilitator&quot;]]</p>
 <pre><code class="language-plaintext">
-
-![Chat object](https://phileasdg.github.io/media/posts/45/15vejcwe3gdmg.png =237x86)
+![Chat object](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/15vejcwe3gdmg.png =237x86)
 
 *Extract the latest participant responses:*
-
 </code></pre>
 <p>In[]:= ClearAll[latestParticipantResponses]</p>
 <p>latestParticipantResponses[participantChats_Dataset] := participantChats[All, Last[#[&quot;Messages&quot;]] &][Select[#&quot;Role&quot; == &quot;Assistant&quot; &], &quot;Content&quot;, Last, #&quot;Data&quot; &]</p>
 <pre><code class="language-plaintext">
-
 *Example:*
 
-![](https://phileasdg.github.io/media/posts/45/0y00znl27qdxv-2.png =545x41)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/0y00znl27qdxv-2.png =545x41)
 
 *Construct an instructions prompt for the facilitator to produce a report based on the latest round of participant contributions:*
-
 </code></pre>
 <p>In[]:= ClearAll[constructInstructionsToFacilitator]</p>
 <p>constructInstructionsToFacilitator[latestParticipantResponses_Dataset] := StringTemplate[</p>
@@ -104,48 +84,38 @@
 <p>StringTemplate[&quot;Contributor: <code>1</code>\nContribution:\n<code>2</code>&quot;][##] &,</p>
 <p>Normal[latestParticipantResponses]], &quot;\n--------------\n\n&quot;]|>]</p>
 <pre><code class="language-plaintext">
-
 *Example:*
 
 *Submit people’s latest round of contributions to the facilitator and ask the facilitator to produce a report:*
 
-![](https://phileasdg.github.io/media/posts/45/1a62mzg18g6x8.png =1378x41)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/1a62mzg18g6x8.png =1378x41)
 
 &lt;h4 id="sending-facilitator-reports-to-participants"&gt;Sending facilitator reports to participants&lt;/h4&gt;
 
 *Get the latest response (report) from the facilitator:*
-
 </code></pre>
 <p>In[]:= ClearAll[latestFacilitatorResponse]</p>
 <p>latestFacilitatorResponse[facilitatorChat<em>ChatObject, defaultResponse</em> : promptBank[&quot;Initial writing prompt&quot;]] := If[Length[#] == 1,</p>
 <p>defaultResponse, Last[Last[Select[#, #Role == &quot;Assistant&quot; &]][[&quot;Content&quot;]]][&quot;Data&quot;]] &@facilitatorChat[&quot;Messages&quot;]</p>
 <pre><code class="language-plaintext">
-
 *Example:*
-
 </code></pre>
 <p>In[]:= (<em>latestFacilitatorResponse[facilitatorChat]</em>)</p>
 <pre><code class="language-plaintext">
-
 *Send all participants the report for the latest round, and prompt them to share their perspectives again:*
-
 </code></pre>
 <p>In[]:= (*Map[ChatEvaluate[#,constructInstructionsFromFacilitator[</p>
 <p>{<|Round->1,Report->latestFacilitatorResponse[facilitatorChat]|>}]]&,participantChats]*)</p>
 <pre><code class="language-plaintext">
-
 *Extract the new latest responses:*
-
 </code></pre>
 <p>In[]:= (<em>latestParticipantResponses[%]</em>)</p>
 <pre><code class="language-plaintext">
-
 ### Tying it all together: simulating the Delphi process
 
 A Delphi process round is made from the contributions of participants + the report produced by the facilitator.
 
 *Define a function to perform a single round of an automated Delphi process:*
-
 </code></pre>
 <p>In[]:= ClearAll[delphiProcessRound]</p>
 <p>delphiProcessRound[{round<em>Integer, participantChats</em>Dataset, facilitatorChat_ChatObject}] := {round + 1, #, ChatEvaluate[</p>
@@ -154,64 +124,49 @@ A Delphi process round is made from the contributions of participants + the repo
 <p>{<|&quot;Round&quot; -> round, If[round == 0, &quot;Instructions&quot;, &quot;Report&quot;] -> latestFacilitatorResponse[facilitatorChat]|>}]] &,</p>
 <p>participantChats]</p>
 <pre><code class="language-plaintext">
-
 After the last round, the facilitator produces a final report.
 
 *Define a function to produce the final Delphi process report from the facilitator:*
-
 </code></pre>
 <p>In[]:= ClearAll[delphiProcessFinalReport]</p>
 <p>delphiProcessFinalReport[facilitatorChat_ChatObject] := ChatEvaluate[facilitatorChat, promptBank[&quot;Final report generation prompt&quot;]]</p>
 <pre><code class="language-plaintext">
-
 *Run 1 round of a Delphi process:*
-
 </code></pre>
 <p>In[]:= (<em>delphiProcessRound[{0,participantChats,facilitatorChat}]</em>)</p>
 <pre><code class="language-plaintext">
-
 *Run a 3 round Delphi process:*
-
 </code></pre>
 <p>In[]:= (<em>threeRoundDelphiProcessData=AbsoluteTiming[Nest[delphiProcessRound,{0,participantChats,facilitatorChat},3]];</em>)</p>
 <pre><code class="language-plaintext">
-
 *Conclude the 3 round Delphi process with a final report:*
-
 </code></pre>
 <p>In[]:= (<em>latestFacilitatorResponse[delphiProcessFinalReport[Last[Last[threeRoundDelphiProcessData]]]]</em>)</p>
 <pre><code class="language-plaintext">
-
 *In one go, perform a 3 round Delphi process, and generate the final report:*
-
 </code></pre>
 <p>In[]:= threeRoundDelphiProcessData = MapAt[delphiProcessFinalReport, Nest[delphiProcessRound, {0, participantChats, facilitatorChat}, 3],3];</p>
-<pre><code class="language-plaintext">
-
-</code></pre>
+<pre><code class="language-plaintext"></code></pre>
 <p>In[]:= Iconize[threeRoundDelphiProcessData]</p>
 <pre><code class="language-plaintext">
-
-![Iconized data](https://phileasdg.github.io/media/posts/45/04f11y5b1vhzy.png =88x41)
+![Iconized data](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/04f11y5b1vhzy.png =88x41)
 
 Let’s load a precomputed simulation result:
 
-![Image description](https://phileasdg.github.io/media/posts/45/17ugn9x2lpitf.png =1089x38)
+![Image description](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/17ugn9x2lpitf.png =1089x38)
 
 ### Fetching participant contributions/facilitator reports from completed simulations
 
 &lt;h4 id="implementation-nthroundcontributions-nthroundcontributionspeechbubbles-nthroundreport-nthroundreportspeechbubble"&gt;*Implementation:* (nthRoundContributions, nthRoundContributionSpeechBubbles, nthRoundReport, nthRoundReportSpeechBubble)&lt;/h4&gt;
 
 *Define a function to retrieve the contributions of the participants at the nth Delphi process round:*
-
 </code></pre>
 <p>In[]:= ClearAll[nthRoundContributions]</p>
 <p>nthRoundContributions[participantChats<em>Dataset, n</em>Integer?Positive] :=participantChats[All, Select[#[&quot;Messages&quot;], #Role == &quot;Assistant&quot; &][[n]][&quot;Content&quot;][[1]][&quot;Data&quot;] &]</p>
 <pre><code class="language-plaintext">
-
 *Retrieve the nth round participant contributions:*
 
-![](https://phileasdg.github.io/media/posts/45/Screenshot-2025-08-15-at-22.55.37.png =1706x572)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/Screenshot-2025-08-15-at-22.55.37.png =1706x572)
 
 1. **Understanding Soil Composition and Local Climate**: The notion that any plant can thrive with enough watering and fertilization overlooks the critical role of soil health and structure. Different plants have varying requirements for soil pH, drainage, and nutrient availability. For example, root vegetables like carrots and beets prefer sandy loam for proper growth, while leafy greens may do better in richer, loamy soils. It is essential to assess soil composition and amend it appropriately before deciding on plant varieties.
 
@@ -263,37 +218,37 @@ In conclusion, I believe that through a combination of native planting, organic 
 
 Define a function to construct speech bubbles for the nth round contribution of a participant specification *participants* (which could be All, a single participant name, or a list of participant names):
 
-![](https://phileasdg.github.io/media/posts/45/090s6if3in8jv.png =1106x233)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/090s6if3in8jv.png =1106x233)
 
 *Example: *
 
-![](https://phileasdg.github.io/media/posts/45/1gaifup1y9wd1.png =1520x41)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/1gaifup1y9wd1.png =1520x41)
 
-![](https://phileasdg.github.io/media/posts/45/1h5ybo970k9qi.png =1226x855)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/1h5ybo970k9qi.png =1226x855)
 
 *Define a function to retrieve the facilitator reports at the nth Delphi process round:*
 
-![](https://phileasdg.github.io/media/posts/45/0ljlk3quiqz29.png =2262x68)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/0ljlk3quiqz29.png =2262x68)
 
 *Retrieve the nth round facilitator report:*
 
-![](https://phileasdg.github.io/media/posts/45/1l0peedx4yo34.png =478x41)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/1l0peedx4yo34.png =478x41)
 
 *Define a function to construct nth round facilitator report speech bubbles:*
 
-![](https://phileasdg.github.io/media/posts/45/0lv37w7ofd568.png =1577x236)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/0lv37w7ofd568.png =1577x236)
 
 *Example: *
 
-![](https://phileasdg.github.io/media/posts/45/1cm44wjglqejj.png =1194x41)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/1cm44wjglqejj.png =1194x41)
 
-![](https://phileasdg.github.io/media/posts/45/0m65zjrnlrk4h.png =1181x774)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/0m65zjrnlrk4h.png =1181x774)
 
 &lt;h4 id="visualising-the-full-dialogue-from-a-simulated-delphi-process"&gt;Visualising the full dialogue from a simulated Delphi process:&lt;/h4&gt;
 
 *Visualise the sequence of communications between agents in the Delphi process:*
 
-![](https://phileasdg.github.io/media/posts/45/1v8y6wfhn3sfw.png =1801x349)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/1v8y6wfhn3sfw.png =1801x349)
 
 (see the included visualisation at the end of this text)
 
@@ -303,14 +258,13 @@ Define a function to construct speech bubbles for the nth round contribution of 
 
 *Create disk frame around an expression:*
 
-![](https://phileasdg.github.io/media/posts/45/090s6if3in8jv-2.png =1106x233)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/090s6if3in8jv-2.png =1106x233)
 
 *Create a Delphi process illustration:*
 
-![](https://phileasdg.github.io/media/posts/45/1vzaoomjz8zr0.png =2536x403)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/1vzaoomjz8zr0.png =2536x403)
 
 *Make an animation illustrating the process:*
-
 </code></pre>
 <p>In[]:= ListAnimate[Join[Join @@ Table[Join[</p>
 <p>Table[delphiMethodPlot[distanceFromOrigin, True, False, &quot;Round &quot; <> ToString[i]], {distanceFromOrigin, Subdivide[0, .75, 30]}],</p>
@@ -319,8 +273,7 @@ Define a function to construct speech bubbles for the nth round contribution of 
 <p>Table[delphiMethodPlot[0, False, False, &quot;Round &quot; <> ToString[i]],15], Table[delphiMethodPlot[0, True, False, &quot;Round &quot; <> ToString[i]], 15]], {i, 3}],</p>
 <p>Table[delphiMethodPlot[0, True, False, &quot;End: The facilitator produces a final report.&quot;], 30]], AnimationRate -> 30]</p>
 <pre><code class="language-plaintext">
-
-![](https://phileasdg.github.io/media/posts/45/1jrowcy9twoa8.png =820x907)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/1jrowcy9twoa8.png =820x907)
 
 ## Case Study: Establishing and Maintaining a Community Garden
 
@@ -345,43 +298,39 @@ Plus a Facilitator (🕵️) who guides the process, summarizes findings, and pr
 The LLM expert participants are given the following shared instructions: 
 
 Shared participant system prompt:
-
 </code></pre>
 <p>In[]:= Framed[Text[Style[promptBank[&quot;Shared participant prompt&quot;], Italic]], RoundingRadius -> 5]</p>
 <pre><code class="language-plaintext">
-
-![](https://phileasdg.github.io/media/posts/45/1hq1mwjuuylfb.png =2786x289)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/1hq1mwjuuylfb.png =2786x289)
 
 In addition to these shared instructions, each participant gets their own persona prompt which describes the general , and some of the beliefs they should defend. For example:
 
 Participant persona prompt example: The Horticulturist
 
-![](https://phileasdg.github.io/media/posts/45/0l7d8px336ljg.png =1880x137)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/0l7d8px336ljg.png =1880x137)
 
-![](https://phileasdg.github.io/media/posts/45/1cozki4smkasv.png =2182x680)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/1cozki4smkasv.png =2182x680)
 
 Participant beliefs are generated automatically using an LLM using the prompt:
 
-![](https://phileasdg.github.io/media/posts/45/1m8rvekmhvg8o.png =685x41)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/1m8rvekmhvg8o.png =685x41)
 
-![](https://phileasdg.github.io/media/posts/45/0bgll1krzz5nh.png =1721x56)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/0bgll1krzz5nh.png =1721x56)
 
 The resulting text is then converted into a list of first person statements using the prompt:
 
-![](https://phileasdg.github.io/media/posts/45/1adufvrvtmh3b.png =685x41)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/1adufvrvtmh3b.png =685x41)
 
-![](https://phileasdg.github.io/media/posts/45/0gwv7g2o5hcwh.png =1864x250)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/0gwv7g2o5hcwh.png =1864x250)
 
 where $\text{$\grave{ }$1$\grave{ }$}$ stands for the conflicting opinions list generated at the last step. 
 
 The participants are then assigned three randomly sampled perspectives. The sampling is set up such that no two personas will share identical beliefs.
 
 Here is the dataset of the participant perspectives used in this case-study: 
-
 </code></pre>
 <p>In[]:= participantParameterDataset[KeyDrop[&quot;Persona Prompt&quot;], <|#, &quot;Prior Perspectives&quot; -> Column[#&quot;Prior Perspectives&quot;]|> &]</p>
 <pre><code class="language-plaintext">
-
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -431,32 +380,26 @@ When designing AI personas to represent different viewpoints in a multi-party di
 The experimental justification for assigning the participant AI agents heterogenous perspectives is to ensure that the participants will disagree on some issues, and to echo real-world group negotiation processes. LLMs tend to be very inoffensive by design and will rarely diverge from mainstream social, political, or cultural norms. When we don’t explicitly enforce heterogeneity of agent opinions, they tend to converge to unanimous agreement very quickly, obstructing meaningful study of group decision-making and consensus-building processes.
 
 At the start of each round, the participants are sent instructions from the facilitator in the following form:
-
 </code></pre>
 <p>In[]:= Framed[Text[Style[promptBank[&quot;Instructions from facilitator template&quot;], Italic]],RoundingRadius -> 5]</p>
 <pre><code class="language-plaintext">
-
-![](https://phileasdg.github.io/media/posts/45/0mls12ptpekcj.png =2478x563)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/0mls12ptpekcj.png =2478x563)
 
 Each participant then responds to this prompt.
 
 ### The facilitator system prompt
 
 The facilitator has the task of coordinating and directing the Delphi process. Unlike the expert participants who are given specific personas and perspectives, the facilitator is instructed to remain neutral and focus on process management. The facilitator is instructed using the following system prompt:
-
 </code></pre>
 <p>In[]:= Framed[Text[Style[promptBank[&quot;Initial instructions to facilitator&quot;], Italic]], RoundingRadius -> 5]</p>
 <pre><code class="language-plaintext">
-
-![](https://phileasdg.github.io/media/posts/45/035sfh91ajxpx.png =2452x250)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/035sfh91ajxpx.png =2452x250)
 
 At each round, when the participants have completed their contributions, the facilitator is sent the latest list of contributions in the following template:
-
 </code></pre>
 <p>In[]:= Framed[Text[Style[promptBank[&quot;Facilitator materials template&quot;], Italic]], RoundingRadius -> 5]</p>
 <pre><code class="language-plaintext">
-
-![](https://phileasdg.github.io/media/posts/45/06nt3vbqzfi37.png =2741x563)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/06nt3vbqzfi37.png =2741x563)
 
 The report the facilitator produces in response is sent out to the participants at the start of the next round. For the final round, the facilitator uses its latest report to produce a final report concluding the Delphi process.
 
@@ -473,50 +416,42 @@ The core simulation can be executed with just three key components:
 3. The number of rounds to perform.
 
 Here’s the code that runs the complete process: 
-
 </code></pre>
 <p>In[]:= threeRoundDelphiProcessData = MapAt[delphiProcessFinalReport, Nest[delphiProcessRound, {</p>
 <p>(<em>Initial step number:</em>) 0,</p>
 <p>(<em>Dataset of participant chat objects:</em>) participantChats,</p>
 <p>(<em>Facilitator chat object:</em>) facilitatorChat},(<em>Number of rounds:</em>)3], 3];</p>
 <pre><code class="language-plaintext">
-
 The result looks like this:
-
 </code></pre>
 <p>In[]:= Dataset[AssociationThread[{&quot;Round Count&quot;, &quot;Participant Chats&quot;, &quot;Facilitator Chat&quot;}, threeRoundDelphiProcessData]]</p>
 <pre><code class="language-plaintext">
-
-![](https://phileasdg.github.io/media/posts/45/11da8zqwcppmx.png =1359x1023)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/11da8zqwcppmx.png =1359x1023)
 
 The simulation results can be retrieved as plain text or speech bubbles. For more detail on this functionality, see the *Fetching participant contributions/facilitator reports from completed simulations* subsection of the *LLM Delphi Process Implementation* section of this article. 
 
 To make a speech bubble of the nth round response from a participant, we might write:
-
 </code></pre>
 <p>In[]:= First[nthRoundContributionSpeechBubbles[threeRoundDelphiProcessData[[2]], 2,</p>
 <p>&quot;Landscape architect&quot;,</p>
 <p>&quot;SnippetForm&quot; -> True, &quot;SnippetLength&quot; -> 10]]</p>
 <pre><code class="language-plaintext">
-
-![](https://phileasdg.github.io/media/posts/45/13qyjo9rab6t5.png =1244x632)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/13qyjo9rab6t5.png =1244x632)
 
 Likewise, to make a speech bubble for the nth round report, we might say:
-
 </code></pre>
 <p>In[]:= nthRoundReportSpeechBubble[Last[threeRoundDelphiProcessData], 1,</p>
 <p>&quot;SnippetForm&quot; -> True, &quot;SnippetLength&quot; -> 10]</p>
 <pre><code class="language-plaintext">
-
-![](https://phileasdg.github.io/media/posts/45/0g9j5mu9p8p5g.png =1178x620)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/0g9j5mu9p8p5g.png =1178x620)
 
 ### *Case-study full exchange transcript*
 
 Visualise the full sequence of exchanges between agents in the case-study Delphi process simulation:
 
-![](https://phileasdg.github.io/media/posts/45/010t8jgipvpxf.png =1801x349)
+![](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/010t8jgipvpxf.png =1801x349)
 
-![Full transcript](https://phileasdg.github.io/media/posts/45/fulltranscript.png =902x13790)
+![Full transcript](https://phileasdg.github.io/media/posts/delphai-structured-communication-with-llms-in-a-simulated-delphi-process/fulltranscript.png =902x13790)
 
 ### Qualitatively speaking, how did the LLM participants and facilitator do?
 
@@ -549,5 +484,4 @@ The code and methodology presented here provide a foundation for researchers int
 [DelphAI: Structured communication with LLMs in a simulated Delphi process](https://community.wolfram.com/groups/-/m/t/3393596)
 by [Phileas Dazeley-Gaist](https://community.wolfram.com/web/phileasdg)
 Wolfram Community, STAFF PICKS, February 14, 2025
-[https://community.wolfram.com/groups/-/m/t/3393596](https://community.wolfram.com/groups/-/m/t/3393596)
-</code></pre>
+[https://community.wolfram.com/groups/-/m/t/3393596](https://community.wolfram.com/groups/-/m/t/3393596)</code></pre>

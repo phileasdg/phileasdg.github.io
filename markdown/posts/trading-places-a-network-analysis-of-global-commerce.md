@@ -14,25 +14,25 @@ The first thing we need to do is gather data on import and export relationships 
 
 Let’s start by creating a list of all countries: 
 
-![countries](https://phileasdg.github.io/media/posts/46/0mhu7w08drqns.png =914x49)
+![countries](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/0mhu7w08drqns.png =914x49)
 
 We’re going to extract values associated with country entities above. Manually, we might access one such value like this:
 
-![](https://phileasdg.github.io/media/posts/46/1axwz1yc3p4za.png =424x47)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/1axwz1yc3p4za.png =424x47)
 
-![](https://phileasdg.github.io/media/posts/46/0rhtbmil6fzi4.png =1084x48)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/0rhtbmil6fzi4.png =1084x48)
 
 We can also ask Wolfram Language to check the source of entity property data like so: 
 
-![](https://phileasdg.github.io/media/posts/46/096za5tfkwtq2.png =606x47)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/096za5tfkwtq2.png =606x47)
 
-![](https://phileasdg.github.io/media/posts/46/1hbx1q5bewf0p-2.png =276x48)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/1hbx1q5bewf0p-2.png =276x48)
 
 Now, let’s create a dataset of import and export information for these countries. We’ll extract key trade properties and remove entries with missing data.
 
-![](https://phileasdg.github.io/media/posts/46/0ob3dcrtldzxu.png =2243x278)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/0ob3dcrtldzxu.png =2243x278)
 
-![dataset preview](https://phileasdg.github.io/media/posts/46/0ovu7bhsqczea.png =1452x546)
+![dataset preview](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/0ovu7bhsqczea.png =1452x546)
 
 Since these are tabular data, we can represent them in a [Tabular](https://reference.wolfram.com/language/ref/Tabular) object (introduced in Wolfram Language 14.2). The Tabular representation makes it possible to apply [standard data science pipeline ](https://reference.wolfram.com/language/guide/TabularProcessing)techniques including filtering, aggregation, transformation, and visualisation to our data easily.
 
@@ -74,7 +74,7 @@ In[]:= globalImportRelationships = Graph[Normal[Dataset[internationalCommerceDat
        &quot;Edges&quot; -> (Thread[#Entity -> #ImportPartners] &)], &quot;Matrix&quot;]], ImageSize -> Small]
 ```
 
-![](https://phileasdg.github.io/media/posts/46/1m3tks5pkbkxu.png =360x305)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/1m3tks5pkbkxu.png =360x305)
 
 *Construct the global major export partner graph:*
 
@@ -85,7 +85,7 @@ In[]:= globalExportRelationships = Graph[
        &quot;Edges&quot; -> (Thread[#Entity -> #ExportPartners] &)], &quot;Matrix&quot;]], ImageSize -> Small]
 ```
 
-![](https://phileasdg.github.io/media/posts/46/1g9a5cg22b41i.png =360x367)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/1g9a5cg22b41i.png =360x367)
 
 These networks are quite tangled, so it will help to represent them geographically.
 
@@ -106,9 +106,9 @@ In[]:= Row[Rasterize[#, ImageSize -> Large, RasterSize -> 1500] & /@ {
     }]
 ```
 
-![](https://phileasdg.github.io/media/posts/46/GlobalMajorImportPartnerNetwork.png =1500x1543)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/GlobalMajorImportPartnerNetwork.png =1500x1543)
 
-![](https://phileasdg.github.io/media/posts/46/GlobalMajorExportPartnerNetwork.png =1500x1543)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/GlobalMajorExportPartnerNetwork.png =1500x1543)
 
 ### Analysis of discrepancies between import and export networks
 
@@ -124,21 +124,21 @@ Let’s examine which countries most frequently appear in these “one-way” re
 
 The charts below show the 20 countries which most frequently appear as the “source” country (country A) in these asymmetric import and export relationships. The left chart ranks countries by the number of major trade partners with whom they have major import dependencies. The right chart ranks countries by the number of major trade partners with whom they have major export dependencies.
 
-![](https://phileasdg.github.io/media/posts/46/0qssf2f86q1zq.png =1386x539)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/0qssf2f86q1zq.png =1386x539)
 
-![](https://phileasdg.github.io/media/posts/46/Top20CountryOneWayImportDependencies.png =1086x577)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/Top20CountryOneWayImportDependencies.png =1086x577)
 
-![](https://phileasdg.github.io/media/posts/46/Top20CountryOneWayExportDependencies.png =1000x580)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/Top20CountryOneWayExportDependencies.png =1000x580)
 
 Notably, smaller economies like Vanuatu, Samoa, and Guinea appear frequently in these one-way relationships, suggesting they may have significant dependencies on specific trading partners that don’t reciprocally depend on them.
 
 These next charts reveal which countries most frequently appear as the “destination” country (country B) in asymmetric relationships. The left chart shows countries that are most frequently considered important import sources, but not major export destinations for their partners goods. The right chart shows countries that are most frequently considered important export destinations, but not major import sources:
 
-![](https://phileasdg.github.io/media/posts/46/1sv1x08hlj4a0.png =1383x539)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/1sv1x08hlj4a0.png =1383x539)
 
-![](https://phileasdg.github.io/media/posts/46/Top20CountryCriticalImportSources.png =1000x596)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/Top20CountryCriticalImportSources.png =1000x596)
 
-![](https://phileasdg.github.io/media/posts/46/Top20CountryCriticalExportMarkets.png =1000x626)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/Top20CountryCriticalExportMarkets.png =1000x626)
 
 China dominates as a critical import source for numerous countries that don’t reciprocally consider China a major export destination. Meanwhile, the United Kingdom and United States serve as vital export markets for many nations that don’t rely heavily on them for imports. These patterns highlight the uneven dependencies in global trade - smaller economies often have one-way trade relationships with economic powerhouses, while major economies maintain more balanced bilateral trade relationships with their key partners. This asymmetry creates potential vulnerabilities where countries depend economically on partners who don’t equally depend on them.
 
@@ -160,7 +160,7 @@ In[]:= Module[{g = globalImportRelationships},
   ]
 ```
 
-![](https://phileasdg.github.io/media/posts/46/1l8auoboznwi6.png =1304x829)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/1l8auoboznwi6.png =1304x829)
 
 *Visualization of vertex betweenness centrality on the global exports network:*
 
@@ -174,7 +174,7 @@ In[]:= Module[{g = globalExportRelationships},
   ]
 ```
 
-![](https://phileasdg.github.io/media/posts/46/0j6jsiinemtns.png =1301x827)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/0j6jsiinemtns.png =1301x827)
 
 Nations like the United States, China, and Germany show substantial centrality, reflecting their critical positions in both importing and exporting goods. These countries are central players in the international market, not just due to their economic size but also because they serve as major conduits for international trade.
 
@@ -188,15 +188,15 @@ By incorporating the percentage data from our dataset (ImportPartnersFractions a
 
 *Construct the weighted global import partner graph: *
 
-![](https://phileasdg.github.io/media/posts/46/1us4mokwx5dfd.png =2660x259)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/1us4mokwx5dfd.png =2660x259)
 
-![](https://phileasdg.github.io/media/posts/46/1gp61mwnbbhvs.png =360x405)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/1gp61mwnbbhvs.png =360x405)
 
 *Construct the weighted global export partner graph: *
 
-![](https://phileasdg.github.io/media/posts/46/12nuslpcvt9tk.png =2654x259)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/12nuslpcvt9tk.png =2654x259)
 
-![](https://phileasdg.github.io/media/posts/46/17a0eaya4u61j.png =360x300)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/17a0eaya4u61j.png =360x300)
 
 Once again, let’s plot these networks geographically:
 
@@ -217,9 +217,9 @@ In[]:= Row[Rasterize[#, ImageSize -> Large, RasterSize -> 1500] & /@ {
     }]
 ```
 
-![](https://phileasdg.github.io/media/posts/46/GlobalWeightedMajorImportPartnerNetwork.png =1500x1339)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/GlobalWeightedMajorImportPartnerNetwork.png =1500x1339)
 
-![](https://phileasdg.github.io/media/posts/46/GlobalWeightedMajorExportPartnerNetwork.png =1500x1339)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/GlobalWeightedMajorExportPartnerNetwork.png =1500x1339)
 
 These plots highlight strong regional trade patterns and commerce hubs centred at major economic powers. Thicker lines represent relationships where a higher percentage of a country’s imports or exports flow through that connection. 
 
@@ -249,7 +249,7 @@ In[]:= Module[{
    ] // Rasterize[#, ImageSize -> Large, RasterSize -> 1500] &
 ```
 
-![](https://phileasdg.github.io/media/posts/46/1x8fe3jjsmh5a.png =1230x871)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/1x8fe3jjsmh5a.png =1230x871)
 
 In this scatter plot:
 
@@ -273,7 +273,7 @@ In[]:= With[{
    ] // Rasterize[#, ImageSize -> Large, RasterSize -> 1500] &
 ```
 
-![](https://phileasdg.github.io/media/posts/46/1pi2xibkyrpkm.png =1194x816)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/1pi2xibkyrpkm.png =1194x816)
 
 The x-axis measures the difference between import and export dependencies for each trading relationship. A value of zero on this axis represents a balanced trade relationship, in the sense that a country’s reliance on imports from another is equal to its reliance on exports to that same country. Negative values indicate a stronger import dependency, meaning a country imports more goods from another than it exports to them. Positive values suggest a stronger export dependency, where a country exports more to another than it imports.
 
@@ -293,7 +293,7 @@ In[]:= With[{
     ] // Reverse // Row[#, Spacer[10]] &
 ```
 
-![](https://phileasdg.github.io/media/posts/46/Screenshot-2025-08-16-at-11.31.11.png =1666x744)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/Screenshot-2025-08-16-at-11.31.11.png =1666x744)
 
 Countries at the top of the import-dependent list (like Uruguay with Argentina) rely heavily on specific partners for their imports while exporting proportionally less to those same partners. Conversely, countries at the top of the export-dependent list (like Chad with the United States) are highly dependent on specific markets for their exports while importing proportionally less from those partners.
 
@@ -303,13 +303,13 @@ The network visualizations we’ve examined so far don’t immediately show us h
 
 *Visualise groups of countries whose mutual exports represent larger shares of total national exports than exports from other countries (white represents missing data):*
 
-![](https://phileasdg.github.io/media/posts/46/1whb0nt21kpwe.png =2758x462)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/1whb0nt21kpwe.png =2758x462)
 
-![](https://phileasdg.github.io/media/posts/46/1a1ddw0auqv6f.png =2637x2009)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/1a1ddw0auqv6f.png =2637x2009)
 
 *Compare the plot above to this map of free trade areas worldwide form Wikipedia:*
 
-![](https://phileasdg.github.io/media/posts/46/0pk71zdgnpvxx.png =1386x639)
+![](https://phileasdg.github.io/media/posts/trading-places-a-network-analysis-of-global-commerce/0pk71zdgnpvxx.png =1386x639)
 
 *(**[Wikipedia: Trade bloc](https://en.wikipedia.org/wiki/Trade_bloc)**, Free trade areas worldwide, by user* *[Emilfaro](https://commons.wikimedia.org/wiki/User:Emilfaro)**)*
 

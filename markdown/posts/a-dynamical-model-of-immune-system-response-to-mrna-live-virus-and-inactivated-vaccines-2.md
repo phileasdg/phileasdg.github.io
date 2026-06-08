@@ -20,7 +20,7 @@ The accomplishments of vaccination are numerous, leading to significant advances
 
 We will make use of the [CompartmentalModelling](https://resources.wolframcloud.com/PacletRepository/resources/RobertNachbar/CompartmentalModeling/) paclet. You can install and load the paclet like so:
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-09.49.26.png =560x178)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-09.49.26.png =560x178)
 
 You can find documentation for this paclet by following [this link](https://resources.wolframcloud.com/PacletRepository/resources/RobertNachbar/CompartmentalModeling/).
 
@@ -40,23 +40,23 @@ The authors of the paper helpfully provide three tables fully specifying the int
 
 For a more in depth explanation of these parameters and initial conditions, please refer to [the paper](https://www.medrxiv.org/content/10.1101/2023.10.05.23296578v1).
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.05.51.png =1266x1226)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.05.51.png =1266x1226)
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.06.39.png =1330x1144)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.06.39.png =1330x1144)
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.06.54.png =1330x578)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.06.54.png =1330x578)
 
 ## Extracting Model Information
 
 We can use tools from the **CompartmentalModelling** paclet to extract useful information about the model. For instance, we can use **CompartmentalModelGraph** from the CompartmentalModelling paclet to visualise the model’s structure:
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.10.06.png =1682x840)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.10.06.png =1682x840)
 
 The CompartmentalModelling paclet contains convenient functions to streamline the process of building models. For instance, we can use **KineticCompartmentalModel** to generate differential equations for from a list of component transitions (the reactions).
 
 *Fetch the model data:*
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.16.18.png =476x929)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.16.18.png =476x929)
 
 These data are very useful for quickly building and simulating compartmental models.
 
@@ -68,13 +68,13 @@ Owing to details related to the original code implementation of the model, the a
 
 *Reproduce the ODEs from the paper:*
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.17.43.png =1308x484)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.17.43.png =1308x484)
 
 Let’s also get some replacement rules to easily convert between the variable names in plain English, and the symbols used in the paper for the model’s system of ODEs.
 
 *Plain English variables &lt;--&gt; ODE variables:*
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.18.28.png =588x57)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.18.28.png =588x57)
 
 ### Vaccine Treatment Simulations
 
@@ -102,23 +102,23 @@ Model-specific parameters and initial conditions:
 
 *Define model parameters corresponding to the inactivated vaccine setup:*
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.21.55.png =1484x186)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.21.55.png =1484x186)
 
 *Define initial conditions of the system corresponding to the inactivated vaccine setup:*
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.22.21.png =1414x632)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.22.21.png =1414x632)
 
 *Construct the system of equations for NDSolve, with parameter values and initial conditions:*
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.22.40.png =599x29)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.22.40.png =599x29)
 
 *Solve numerically with NDSolve, from *t=0* to *t=100*:*
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.23.23.png =485x29)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.23.23.png =485x29)
 
 *Plot the solution:*
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.23.50.png =1448x642)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.23.50.png =1448x642)
 
 ### 2. Attenuated Live Virus Vaccine
 
@@ -132,23 +132,23 @@ Model-specific parameters and initial conditions:
 
 *Define model parameters corresponding to the inactivated vaccine setup:*
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.25.32.png =1484x194)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.25.32.png =1484x194)
 
 *Define initial conditions of the system corresponding to the inactivated vaccine setup:*
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.25.49.png =1402x638)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.25.49.png =1402x638)
 
 *Construct the system of equations for NDSolve, with parameter values and initial conditions:*
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.26.00.png =378x35)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.26.00.png =378x35)
 
 *Solve numerically with NDSolve, from *t=0* to *t=100*:*
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.26.19.png =494x38)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.26.19.png =494x38)
 
 *Plot the solution:*
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.26.44.png =1478x646)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.26.44.png =1478x646)
 
 ### 3. mRNA Vaccine
 
@@ -156,23 +156,23 @@ Model-specific parameters and initial conditions:<br><br>Replication rate of vir
 
 *Define model parameters corresponding to the inactivated vaccine setup:*
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.30.46.png =1492x206)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.30.46.png =1492x206)
 
 *Define initial conditions of the system corresponding to the inactivated vaccine setup:*
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.31.19.png =1398x646)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.31.19.png =1398x646)
 
 *Construct the system of equations for NDSolve, with parameter values and initial conditions:*
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.31.32.png =649x37)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.31.32.png =649x37)
 
 *Solve numerically with NDSolve, from t=0 to t=100:*
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.31.48.png =519x37)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.31.48.png =519x37)
 
 *Plot the solution:*
 
-![](https://phileasdg.github.io/media/posts/35/Screenshot-2024-05-02-at-10.32.06.png =1460x646)
+![](https://phileasdg.github.io/media/posts/a-dynamical-model-of-immune-system-response-to-mrna-live-virus-and-inactivated-vaccines-2/Screenshot-2024-05-02-at-10.32.06.png =1460x646)
 
 ## Closing Notes
 

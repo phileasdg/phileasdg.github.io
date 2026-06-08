@@ -2,7 +2,7 @@
 
 Graphical iteration is one graphical way to visualise the orbits of a function for different initial conditions. The main advantages of graphical iteration over other ways to visualise function orbits are that graphical iteration provides a visualisation of the orbits as a trajectory on the plot of the function being iterated. This can give insights into the behaviour of the orbits that might not be apparent from other ways of visualising the orbits. It is another way to conceptualise the behaviour of orbits.
 
-<figure class="post__image">![graphical iteration illustration ](../../media/posts/7/graphical_iteration.png =720x536)<figcaption>Graphical iteration illustration from https://www.mathscard.co.uk/online/numerical-methods/</figcaption></figure>
+<figure class="post__image">![graphical iteration illustration ](../../media/posts/graphical-iteration-in-r/graphical_iteration.png =720x536)<figcaption>Graphical iteration illustration from https://www.mathscard.co.uk/online/numerical-methods/</figcaption></figure>
 
 ## How does graphical iteration work?
 
@@ -20,7 +20,7 @@ This past winter, I wrote a short program in R to produce graphical iteration pl
 
 Although I think of myself usually more as a python programmer, I find R has some great advantages when it comes to plotting thanks to the tidyverse library collection, which includes the excellent ggplot.
 
-<figure class="post__image">![Graphical Iteration plot for the orbits of the function f(x) = -2 * sin(x) + x, given initial conditions 3.6, 4.43, and 7](../../media/posts/7/graphical-iteration.png =1400x865)<figcaption>Graphical iteration plot of the orbits of the function f(x) = -2 * sin(x) + x, for the initial conditions 3.6, 4.43, and 7. Made using ggplot.</figcaption></figure>
+<figure class="post__image">![Graphical Iteration plot for the orbits of the function f(x) = -2 * sin(x) + x, given initial conditions 3.6, 4.43, and 7](../../media/posts/graphical-iteration-in-r/graphical-iteration.png =1400x865)<figcaption>Graphical iteration plot of the orbits of the function f(x) = -2 * sin(x) + x, for the initial conditions 3.6, 4.43, and 7. Made using ggplot.</figcaption></figure>
 
 ## The program
 
@@ -150,7 +150,7 @@ plot_data %&gt;%
                                           yend = yends, colour=as.factor(x_0s))) +
   coord_cartesian(xlim = c(x_min, x_max), ylim = c(y_min, y_max)) </pre>
 
-![](../../media/posts/7/figure1.png =672x480)
+![](../../media/posts/graphical-iteration-in-r/figure1.png =672x480)
 
 **Time-series plot: **
 
@@ -159,7 +159,7 @@ trajectories %&gt;%
   ggplot(aes(ns, trajectories, colour = as.factor(x_0s))) +
   geom_line() + labs(x="n")</pre>
 
-![](../../media/posts/7/figure2.png =672x480)
+![](../../media/posts/graphical-iteration-in-r/figure2.png =672x480)
 
 ## Closing remarks 
 

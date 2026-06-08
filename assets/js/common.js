@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const getPostsData = async () => {
     if (!postsData) {
-      const res = await fetch('data/posts.json');
+      const res = await fetch(`data/posts.json?v=${Date.now()}`);
       postsData = await res.json();
     }
     return postsData;
@@ -172,10 +172,65 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const getPagesData = async () => {
     if (!pagesData) {
-      const res = await fetch('data/pages.json');
+      const res = await fetch(`data/pages.json?v=${Date.now()}`);
       pagesData = await res.json();
     }
     return pagesData;
+  };
+
+  const setupCodeBlocks = (container) => {
+    const preElements = container.querySelectorAll('pre');
+    preElements.forEach(pre => {
+      if (pre.parentNode.classList.contains('code-block-wrapper')) return;
+
+      const code = pre.querySelector('code');
+      if (!code) return;
+
+      let lang = 'plaintext';
+      const classes = code.className.split(' ');
+      classes.forEach(c => {
+        if (c.startsWith('language-')) {
+          lang = c.replace('language-', '');
+        }
+      });
+
+      let displayLang = lang.toUpperCase();
+      if (lang === 'mathematica') displayLang = 'Wolfram Language';
+      else if (lang === 'python') displayLang = 'Python';
+      else if (lang === 'javascript') displayLang = 'JavaScript';
+      else if (lang === 'html') displayLang = 'HTML';
+      else if (lang === 'css') displayLang = 'CSS';
+      else if (lang === 'bash' || lang === 'shell') displayLang = 'Shell';
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-block-wrapper';
+
+      const header = document.createElement('div');
+      header.className = 'code-block-header';
+      header.innerHTML = `
+        <span class="code-block-lang">${displayLang}</span>
+        <button class="code-block-copy-btn" type="button">Copy</button>
+      `;
+
+      const copyBtn = header.querySelector('.code-block-copy-btn');
+      copyBtn.addEventListener('click', () => {
+        const textToCopy = code.innerText;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          copyBtn.textContent = 'Copied!';
+          copyBtn.classList.add('copied');
+          setTimeout(() => {
+            copyBtn.textContent = 'Copy';
+            copyBtn.classList.remove('copied');
+          }, 2000);
+        }).catch(err => {
+          console.error('Failed to copy code: ', err);
+        });
+      });
+
+      pre.parentNode.insertBefore(wrapper, pre);
+      wrapper.appendChild(header);
+      wrapper.appendChild(pre);
+    });
   };
 
 
@@ -288,14 +343,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const imgs = tempDiv.querySelectorAll('img');
     imgs.forEach(img => {
-      const src = img.getAttribute('src');
+      let src = img.getAttribute('src');
+      if (src) {
+        src = src.replace(/^https?:\/\/phileasdg\.github\.io\//, '');
+        img.setAttribute('src', src);
+      }
       if (src && !src.startsWith('http') && !src.startsWith('/') && !src.startsWith('#')) {
         if (!src.startsWith('media/') && !src.startsWith('assets/') && !src.startsWith('data/')) {
           img.setAttribute('src', resolveRelativePath(src, originalPathContext));
         }
       }
-      const srcset = img.getAttribute('srcset');
+      let srcset = img.getAttribute('srcset');
       if (srcset) {
+        srcset = srcset.replace(/https?:\/\/phileasdg\.github\.io\//g, '');
+        img.setAttribute('srcset', srcset);
         const parts = srcset.split(',').map(part => {
           const trimmed = part.trim();
           const firstSpace = trimmed.indexOf(' ');
@@ -322,7 +383,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const links = tempDiv.querySelectorAll('a');
     links.forEach(a => {
-      const href = a.getAttribute('href');
+      let href = a.getAttribute('href');
+      if (href) {
+        href = href.replace(/^https?:\/\/phileasdg\.github\.io\//, '');
+        a.setAttribute('href', href);
+      }
       if (href && !href.startsWith('http') && !href.startsWith('/') && !href.startsWith('#') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
         if (!href.startsWith('media/') && !href.startsWith('assets/') && !href.startsWith('data/')) {
           a.setAttribute('href', resolveRelativePath(href, originalPathContext));
@@ -590,12 +655,13 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.className = 'post-template';
         mainEl.className = 'post';
         try {
-          const contentRes = await fetch(`content/posts/${slug}.html`);
+          const contentRes = await fetch(`content/posts/${slug}.html?v=${Date.now()}`);
           if (!contentRes.ok) throw new Error(`Failed to load content for post: ${slug}`);
           const contentHtml = await contentRes.text();
           mainEl.innerHTML = renderPost(postMeta, contentHtml);
           if (window.Prism) {
             Prism.highlightAllUnder(mainEl);
+            setupCodeBlocks(mainEl);
           }
         } catch (err) {
           console.error(err);
@@ -615,14 +681,14 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.className = bodyClass;
         mainEl.className = page.main_class || '';
         try {
-          const contentRes = await fetch(`content/pages/${slug}.html`);
+          const contentRes = await fetch(`content/pages/${slug}.html?v=${Date.now()}`);
           if (!contentRes.ok) throw new Error(`Failed to load content for page: ${slug}`);
           let contentHtml = await contentRes.text();
           mainEl.innerHTML = normalizeContentHTML(contentHtml, `pages/${page.slug}/`);
 
           if (slug === 'playgrounds') {
             try {
-              const playgroundsRes = await fetch('data/playgrounds.json');
+              const playgroundsRes = await fetch(`data/playgrounds.json?v=${Date.now()}`);
               const playgrounds = await playgroundsRes.json();
               const container = mainEl.querySelector('#playgrounds-container');
               if (container) {
@@ -648,6 +714,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
           if (window.Prism) {
             Prism.highlightAllUnder(mainEl);
+            setupCodeBlocks(mainEl);
           }
         } catch (err) {
           console.error(err);

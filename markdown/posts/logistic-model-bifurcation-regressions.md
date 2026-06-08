@@ -1,6 +1,6 @@
 In this project, I will build nonlinear models using spline regressions, and a general additive model to predict the initial conditions of sets of points of the bifurcation diagram (final state diagram) of the logistic function:
 
-![](../../media/posts/11/logistic_equation.png =382x55)
+![](../../media/posts/logistic-model-bifurcation-regressions/logistic_equation.png =382x55)
 
 ## The bifurcation diagram of the logistic equation
 
@@ -42,7 +42,7 @@ head(bifurcation_data(x, x_0))</code></pre>
   labs(title=paste0("Bifurcation diagram of the logistic equation for x_0 = ", x_0)) +
   theme_tufte()</code></pre>
 
-![](../../media/posts/11/figure1.png =1344x960)
+![](../../media/posts/logistic-model-bifurcation-regressions/figure1.png =1344x960)
 
 The bifurcation diagram of the logistic equation, (also known as a final state diagram), shows the orbits of the logistic function <span class="math" id="MathJax-Span-22"><span class="mrow" id="MathJax-Span-23"><span class="msubsup" id="MathJax-Span-24"><span class="mi" id="MathJax-Span-25">x<span class="mrow" id="MathJax-Span-27"><span class="mi" id="MathJax-Span-28">n+1</span></span>=rxn(1−xn)</span></span>xn+1=rxn(1−xn)</span></span> for values of <span class="math" id="MathJax-Span-43"><span class="mrow" id="MathJax-Span-44"><span class="mi" id="MathJax-Span-45">r</span>r</span></span> between 0 and 1. The resolution of the plot/set is determined by the cardinality of the set of <span class="math" id="MathJax-Span-46"><span class="mrow" id="MathJax-Span-47"><span class="mi" id="MathJax-Span-48">r</span>r</span></span> values used as the x axis, and the number of iterations computed by the `bifurcation_data()` function, plotted on the y axis. In the plot above, orbits were computed for 301 iterations, (iterations 0 to 300 as it is specified in the code), but the points corresponding to the first 101 iterations were skipped, resulting in a plot that ignores the beginning of the orbits. We could also choose to not skip iterates, which would result in a plot like the following:
 
@@ -53,7 +53,7 @@ The bifurcation diagram of the logistic equation, (also known as a final state d
   labs(title=paste0("Bifurcation diagram of the logistic equation for x_0 = ", x_0)) +
   theme_tufte()</code></pre>
 
-![](../../media/posts/11/figure2.png =1344x960)
+![](../../media/posts/logistic-model-bifurcation-regressions/figure2.png =1344x960)
 
 For ease of computation and interpretability, in this project I will first constitute a working data set from which to produce visualisations and models from low-resolution data sets of points on the bifurcation diagram of the logistic equation. The resolution in r values and in number of iterations will be `resolution`, and `resolution` respectively, with no iterates skipped. I have plotted an example below:
 
@@ -67,7 +67,7 @@ bifurcation_data(x, x_0, 0, resolution-1) %&gt;% unnest(everything()) %&gt;% ggp
   labs(title=paste0("Bifurcation diagram of the logistic equation for x_0 = ", x_0)) +
   theme_tufte()</code></pre>
 
-![](../../media/posts/11/figure3-2.png =1344x960)
+![](../../media/posts/logistic-model-bifurcation-regressions/figure3-2.png =1344x960)
 
 ## Data generation and formatting
 
@@ -110,7 +110,7 @@ Let’s also preview the data graphically altogether as a scatter plot:
   ggplot(aes(r, final_state, colour=x_0)) + 
   geom_point(size=0.01) + 
   scale_colour_gradientn(colours = rainbow(10)) + # + theme(legend.position = "none")
-  theme_tufte()</code></pre>![](../../media/posts/11/figure4.png =1344x960)
+  theme_tufte()</code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure4.png =1344x960)
 The scatter plot gives us limited insight because values are stacked upon one another. But we can plot the <code>x_0</code> axis in the third dimension, as a 3d point cloud, as below:
 
 <code class="hljs">data %&gt;% unnest(everything()) %&gt;% plot_ly(data=., 
@@ -126,7 +126,7 @@ The scatter plot gives us limited insight because values are stacked upon one an
   layout(scene=list(xaxis = list(title = "r"),
                     yaxis = list(title = "x_0"),
                     zaxis = list(title = "final state"), 
-                    camera = list(eye = list(x = -1.25, y = 1.25, z = 1.25))))</code></pre>![](../../media/posts/11/figure5.png =1404x890)
+                    camera = list(eye = list(x = -1.25, y = 1.25, z = 1.25))))</code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure5.png =1404x890)
 Note that the structure produced by the point cloud in the plot above has symmetry along the <code>x_0</code> axis. This tells us that for any r value and iteration step, a function cannot approach the orbit values for an initial condition between 0 and 1, as there will be two initial conditions for which the orbits are identical.
 
 However, all hope is not lost! The good news is that we can make a cheaper model that will work just as well! All we need to do is to cut the data set in half so as to contain only <code><span class="math" id="MathJax-Span-66"><span class="mrow" id="MathJax-Span-67"><span class="msubsup" id="MathJax-Span-68"><span class="mi" id="MathJax-Span-69">x_0</span></span></span></span></code> values above or below <code>0.5</code> to obtain non-mirrored data for which the orbit coordinates for an iteration step and r value can be approached by a deterministic function.
@@ -145,7 +145,7 @@ While we’re at it, let’s also visualise how the orbits gravitate towards a s
   layout(scene=list(xaxis = list(title = "r"),
                     yaxis = list(title = "iteration number"),
                     zaxis = list(title = "orbit values"), 
-                    camera = list(eye = list(x = -1.25, y = 1.25, z = 1.25))))</code></pre>![](../../media/posts/11/figure6.png =1324x886)
+                    camera = list(eye = list(x = -1.25, y = 1.25, z = 1.25))))</code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure6.png =1324x886)
 And let’s observe how the initial condition <code>x_0</code> affects the orbit values at different iterations:
 
 <code class="hljs">data %&gt;% unnest(everything()) %&gt;% plot_ly(data=., 
@@ -160,7 +160,7 @@ And let’s observe how the initial condition <code>x_0</code> affects the orbit
   layout(scene=list(xaxis = list(title = "x_0"),
                     yaxis = list(title = "iteration number"),
                     zaxis = list(title = "orbit values"), 
-                    camera = list(eye = list(x = 1.25, y = -1.25, z = 1.25))))</code></pre>![](../../media/posts/11/figure7.png =1232x902)
+                    camera = list(eye = list(x = 1.25, y = -1.25, z = 1.25))))</code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure7.png =1232x902)
 Let’s take slices of <code>x_0</code> by final state at different iteration numbers values and have a look at the shapes they form. But first, let’s generate higher resolution data to get nicer, more detailed plots.
 
 <code class="hljs">resolution &lt;- 200 # resolution, in number of units per dimension
@@ -178,27 +178,27 @@ Let’s preview a few slices:
   ggplot(aes(x_0, final_state, alpha=r)) + geom_point(size=0.1) + 
   labs(title=paste0("Orbit value by initial condition for iterate ", 1),
        y="orbit values") +
-  theme_tufte()</code></pre>![](../../media/posts/11/figure8.png =1344x960)
+  theme_tufte()</code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure8.png =1344x960)
 <code class="hljs">data %&gt;% unnest(everything()) %&gt;% filter(iter_num==iter_num[5]) %&gt;% 
   ggplot(aes(x_0, final_state, alpha=r)) + geom_point(size=0.1) + 
   labs(title=paste0("Orbit value by initial condition for iterate ", 5),
        y="orbit values") +
-  theme_tufte()</code></pre>![](../../media/posts/11/figure9.png =1344x960)
+  theme_tufte()</code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure9.png =1344x960)
 <code class="hljs">data %&gt;% unnest(everything()) %&gt;% filter(iter_num==iter_num[25]) %&gt;% 
   ggplot(aes(x_0, final_state, alpha=r)) + geom_point(size=0.1) + 
   labs(title=paste0("Orbit value by initial condition for iterate ", 25),
        y="orbit values") +
-  theme_tufte()</code></pre>![](../../media/posts/11/figure10.png =1344x960)
+  theme_tufte()</code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure10.png =1344x960)
 <code class="hljs">data %&gt;% unnest(everything()) %&gt;% filter(iter_num==iter_num[50]) %&gt;% 
   ggplot(aes(x_0, final_state, alpha=r)) + geom_point(size=0.1) + 
   labs(title=paste0("Orbit value by initial condition for iterate ", 50),
        y="orbit values") +
-  theme_tufte()</code></pre>![](../../media/posts/11/figure11.png =1344x960)
+  theme_tufte()</code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure11.png =1344x960)
 <code class="hljs">data %&gt;% unnest(everything()) %&gt;% filter(iter_num==iter_num[100]) %&gt;% 
   ggplot(aes(x_0, final_state, alpha=r)) + geom_point(size=0.1) + 
   labs(title=paste0("Orbit value by initial condition for iterate ", 100),
        y="orbit values") +
-  theme_tufte()</code></pre>![](../../media/posts/11/figure12.png =1344x960)
+  theme_tufte()</code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure12.png =1344x960)
 Optionally, we couls save an image sequence for <code>iter_num</code> values
 
 <code class="hljs"># iter_num &lt;- min_iter:max_iter
@@ -240,7 +240,7 @@ Finally, let’s observe how orbit values for different iteration steps and init
   add_markers() %&gt;% 
   layout(scene=list(xaxis = list(title = "x_0"),
                     yaxis = list(title = "iteration number"),
-                    zaxis = list(title = "r")))</code></pre>![](../../media/posts/11/figure13.png =1274x906)## Model-planning considerations
+                    zaxis = list(title = "r")))</code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure13.png =1274x906)## Model-planning considerations
 
 Now that we have a solid understanding of the shape of our data set, we can design a modelling approach.
 
@@ -258,7 +258,7 @@ We can confirm this hypothesis quite easily: Firstly, simply compare the orbit v
   theme_tufte() +
   labs(title=paste0("Bifurcation diagram of the logistic map points \nfor x_0 = ", 
                     round(x_0s[25], 2)," and iterates [0 - 5)"), y="orbit values") +
-  theme(legend.position = "none")</code></pre>![](../../media/posts/11/figure14.png =1344x960)
+  theme(legend.position = "none")</code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure14.png =1344x960)
 <code class="hljs">data %&gt;% unnest(everything()) %&gt;% 
   filter(iter_num&gt;=55) %&gt;% filter(x_0==x_0s[25]) %&gt;% 
   ggplot(aes(r, final_state, colour=as.factor(iter_num))) + 
@@ -267,7 +267,7 @@ We can confirm this hypothesis quite easily: Firstly, simply compare the orbit v
   theme_tufte() +
   labs(title=paste0("Bifurcation diagram of the logistic map points \nfor x_0 = ", 
                     round(x_0s[25], 2)," and iterates [55 - 60)"), y="orbit values") +
-  theme(legend.position = "none")</code></pre>![](../../media/posts/11/figure15.png =1344x960)
+  theme(legend.position = "none")</code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure15.png =1344x960)
 We can also note that points where <span class="math" id="MathJax-Span-135"><span class="mrow" id="MathJax-Span-136"><span class="mi" id="MathJax-Span-137">r≥3</span>r≥3</span></span> are less approachable by curves. Comparing the following plots should help convey this behaviour more intiutively:
 
 <code class="hljs">data %&gt;% unnest(everything()) %&gt;% 
@@ -277,7 +277,7 @@ We can also note that points where <span class="math" id="MathJax-Span-135"><spa
   labs(title=paste0("Orbits for different initial conditions, r = ", 
                     round(x[15], 3)), x="x_n", y="orbit values") + 
   theme_tufte() +
-  theme(legend.position = "none")</code></pre>![](../../media/posts/11/figure16.png =1344x960)
+  theme(legend.position = "none")</code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure16.png =1344x960)
 <code class="hljs">data %&gt;% unnest(everything()) %&gt;% 
   filter(r==x[20]) %&gt;% 
   ggplot(aes(iter_num, final_state, colour=as.factor(x_0))) + 
@@ -285,7 +285,7 @@ We can also note that points where <span class="math" id="MathJax-Span-135"><spa
   labs(title=paste0("Orbits for different initial conditions, r = ", 
                     round(x[20], 3)), x="x_n", y="orbit values") + 
   theme_tufte() +
-  theme(legend.position = "none")</code></pre>![](../../media/posts/11/figure17.png =1344x960)
+  theme(legend.position = "none")</code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure17.png =1344x960)
 <code class="hljs">data %&gt;% unnest(everything()) %&gt;% 
   filter(r==x[59]) %&gt;% 
   ggplot(aes(iter_num, final_state, colour=as.factor(x_0))) + 
@@ -293,7 +293,7 @@ We can also note that points where <span class="math" id="MathJax-Span-135"><spa
   labs(title=paste0("Orbits for different initial conditions, r = ", 
                     round(x[59], 3)), x="x_n", y="orbit values") + 
   theme_tufte() +
-  theme(legend.position = "none")</code></pre>![](../../media/posts/11/figure18.png =1344x960)## Model
+  theme(legend.position = "none")</code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure18.png =1344x960)## Model
 
 We’ve seen from the data exploration above that we should build our model on a subset of the data composed of early iterates orbit values, at one value of <code>r</code>.
 
@@ -390,7 +390,7 @@ print(paste("RMSE:", rmse(pred$y, test_data$x_0)))</code></pre>
         labs(x = "orbit values", y = "x_0", 
        title = paste0("Smooth spline regression on orbit values \nof the logistic equation at iterate = ", 
                       model_iterate_value, ", and r = ", round(model_r_value, 2))) + 
-        theme_tufte() </code></pre>![](../../media/posts/11/figure19.png =1344x960)
+        theme_tufte() </code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure19.png =1344x960)
 Excellent! But can we do better? What if we tried to fit a spline of any degree on our data?
 
 <code class="hljs"># We can also fit a spline of any degree, which in this case, should give us excellent results: 
@@ -437,7 +437,7 @@ summary(any_degree_spline_model)</code></pre>
   labs(x = "orbit values", y = "x_0", 
        title = paste0("Any degree spline regression on orbit values \nof the logistic equation at iterate = ", 
                       model_iterate_value, ", and r = ", round(model_r_value, 2))) +
-  theme_tufte()</code></pre>![](../../media/posts/11/figure20.png =1344x960)
+  theme_tufte()</code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure20.png =1344x960)
 Perfect! That’s a really stellar fit! (But it makes sense, because the original data came from a smooth clean function!) In principle, it should be possible to choose any slice of the original data set for unique iterate number and r value combinations, and perform a spline regression on them to very reliably predict the initial condition used to generate the set of points on the bifurcation diagram of the logistic equation.
 
 Talking about slices is all fine and dandy, but what exactly do I mean? Let’s take a look at the next plot to get a better idea! Note: in the following plot, the slice on which we built our last model is coloured in red.
@@ -461,7 +461,7 @@ Talking about slices is all fine and dandy, but what exactly do I mean? Let’s 
          scene=list(xaxis = list(title = "r"),
                     yaxis = list(title = "x_0"),
                     zaxis = list(title = "orbit values"), 
-                    camera = list(eye = list(x = -1.25, y = 1.25, z = 1.25))))</code></pre>![](../../media/posts/11/figure21.png =1216x942)
+                    camera = list(eye = list(x = -1.25, y = 1.25, z = 1.25))))</code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure21.png =1216x942)
 Note that if we change the iteration step, we get a different surface. Here is the surface we would have got if we had chosen to take a slice of the data at the 10th iteration step:
 
 <code class="hljs">iterate_value &lt;- 10
@@ -481,7 +481,7 @@ data %&gt;% unnest(everything()) %&gt;%
          scene=list(xaxis = list(title = "r"),
                     yaxis = list(title = "x_0"),
                     zaxis = list(title = "orbit values"), 
-                    camera = list(eye = list(x = -1.25, y = 1.25, z = 1.25))))</code></pre>![](../../media/posts/11/figure22.png =900x950)<div class="section level2" id="model">
+                    camera = list(eye = list(x = -1.25, y = 1.25, z = 1.25))))</code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure22.png =900x950)<div class="section level2" id="model">
 From the plot, you can see that the point cloud becomes harder to describe with a surface past 3 units along the <span class="math" id="MathJax-Span-140"><span class="mrow" id="MathJax-Span-141"><span class="mi" id="MathJax-Span-142">r</span>r</span></span> axis. This indicates it would be harder to approach it with a spline model.
 
 <div class="section level2" id="multivariate-model">## Multivariate model
@@ -523,7 +523,7 @@ summary(bifurcation_gam_multivariate)</code></pre>
 <code class="hljs">predictions_gam &lt;- predict(bifurcation_gam_multivariate, test_data)
 RMSE(predictions_gam, test_data$x_0)</code></pre>
 <code class="hljs">## [1] 0.07323365</code></pre>
-<code class="hljs">plot(bifurcation_gam_multivariate)</code></pre>![](../../media/posts/11/figure23.png =1344x960)![](../../media/posts/11/figure24.png =1344x960)
+<code class="hljs">plot(bifurcation_gam_multivariate)</code></pre>![](../../media/posts/logistic-model-bifurcation-regressions/figure23.png =1344x960)![](../../media/posts/logistic-model-bifurcation-regressions/figure24.png =1344x960)
 Also excellent!
 
 I am curious to try to apply models to later iteration steps, but for now I feel this project has gone on enough, and you probably have other stuff to get to, so I’ll come back to it later.
