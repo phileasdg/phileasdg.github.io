@@ -1,3 +1,14 @@
+---
+title: "Computational Plant Ecology: Interactive Spatial Network Analysis of a College Garden"
+date: "2025-08-23T02:06"
+tags: ["Complex Systems", "Ecology", "Environmental Science", "Geography & GIS", "Modelling", "Network Science", "Wolfram Language", "Art"]
+thumbnail: "media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/banner.png"
+thumbWidth: 2286
+thumbHeight: 1076
+date_modified: "2026-01-17T21:09:00+01:00"
+date_published: "2025-08-23T02:06:57+02:00"
+---
+
 **Note:** This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live code or to download this text alongside the source code, please visit the original post [here](https://community.wolfram.com/groups/-/m/t/3535315). 
 
 ## Introduction

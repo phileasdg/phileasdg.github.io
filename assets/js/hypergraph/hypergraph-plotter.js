@@ -1,5 +1,5 @@
-import { Vec, getBlobPath } from './geom.js?v=1.0.76';
-import { BipartiteForceLayout, circularLayout, gridLayout } from './layout.js?v=1.0.76';
+import { Vec, getBlobPath } from './geom.js?v=1.0.77';
+import { BipartiteForceLayout, circularLayout, gridLayout } from './layout.js?v=1.0.77';
 
 function getNodeHullPoints(node) {
   if (node.isHub) {

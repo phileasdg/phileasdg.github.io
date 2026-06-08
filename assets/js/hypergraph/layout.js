@@ -1,4 +1,4 @@
-import { Vec } from './geom.js?v=1.0.76';
+import { Vec } from './geom.js?v=1.0.77';
 
 /**
  * Helper to find the closest point on segment [a, b] to point p.
