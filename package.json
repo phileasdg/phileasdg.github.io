@@ -5,6 +5,8 @@
   "main": "scratch/build-posts.js",
   "type": "module",
   "scripts": {
-    "build": "node scratch/build-posts.js"
+    "build": "node scratch/build-posts.js",
+    "validate": "node scratch/validate.js",
+    "test": "node scratch/validate.js"
   }
 }

@@ -137,40 +137,44 @@
 <p>The dataset contains detailed information about 56 plant species in the Sunken Garden, including their Latin names, families, growing requirements, physical characteristics, and seasonal information.</p>
 <p>The data reveal clear patterns in plant selection. Most species are adaptable to varying light conditions:</p>
 <pre><code class="language-wl">In[]:= Dataset[ReverseSort@KeyMap[First, Normal[Counts[Values[Dataset[ConstructColumns[plantData, &amp;quot;sun&amp;quot;]]]]]]]</code></pre>
-<p><table></p>
-<p><thead></p>
-<p><tr></p>
-<p><th>Full sun to partial shade</th></p>
-<p><th>Partial shade to full shade</th></p>
-<p><th>Full sun</th></p>
-<p><th>Partial shade</th></p>
+<div class="post__table-wrapper">
+<table>
+<thead>
+<tr>
+<th>Full sun to partial shade</th>
+<th>Partial shade to full shade</th>
+<th>Full sun</th>
+<th>Partial shade</th>
 </tr>
 </thead>
-<p><tbody><tr></p>
-<p><td>32</td></p>
-<p><td>13</td></p>
-<p><td>8</td></p>
-<p><td>3</td></p>
+<tbody><tr>
+<td>32</td>
+<td>13</td>
+<td>8</td>
+<td>3</td>
 </tr>
 </tbody></table>
+</div>
 <p>The tally of plant water requirements show a similar preference for adaptable species:</p>
 <pre><code class="language-wl">In[]:= Dataset[ReverseSort@KeyMap[First, Normal[Counts[Values[Dataset[ConstructColumns[plantData, &amp;quot;water&amp;quot;]]]]]]]</code></pre>
-<p><table></p>
-<p><thead></p>
-<p><tr></p>
-<p><th>Medium</th></p>
-<p><th>Medium to wet</th></p>
-<p><th>Dry to medium</th></p>
-<p><th>Low</th></p>
+<div class="post__table-wrapper">
+<table>
+<thead>
+<tr>
+<th>Medium</th>
+<th>Medium to wet</th>
+<th>Dry to medium</th>
+<th>Low</th>
 </tr>
 </thead>
-<p><tbody><tr></p>
-<p><td>38</td></p>
-<p><td>11</td></p>
-<p><td>6</td></p>
-<p><td>1</td></p>
+<tbody><tr>
+<td>38</td>
+<td>11</td>
+<td>6</td>
+<td>1</td>
 </tr>
 </tbody></table>
+</div>
 <p>Plant heights cluster around smaller values, with almost all species under 10 feet, and most 5 feet or under:</p>
 <pre><code class="language-wl">In[]:= Histogram[Flatten[Normal[Values[Dataset[ConstructColumns[plantData, {
          &amp;quot;height&amp;quot; -&gt; Function[Around[Mean[#], Mean[#] - Last[#]] &amp;@ToExpression[

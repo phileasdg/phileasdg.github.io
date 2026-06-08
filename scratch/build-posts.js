@@ -364,8 +364,15 @@ function parseMarkdown(md) {
       }
 
       // If it's already an HTML block tag, don't wrap it in <p>
-      if (processedLine.startsWith('<h') || processedLine.startsWith('<ul') || processedLine.startsWith('<li') || processedLine.startsWith('<div') || processedLine.startsWith('<p') || processedLine.startsWith('<figure') || processedLine.startsWith('<iframe') || processedLine.startsWith('</') || processedLine.startsWith('<pre') || processedLine.startsWith('<img')) {
+      const isHtmlBlock = /^\s*<\/?(table|thead|tbody|tr|th|td|h[1-6]|ul|ol|li|div|p|figure|figcaption|iframe|pre|img|blockquote|hr|aside|section|script|style|details|summary|form|input|button|label)\b/i.test(processedLine) || processedLine.startsWith('<!--');
+      if (isHtmlBlock) {
+        if (/^\s*<table\b/i.test(processedLine)) {
+          result.push('<div class="post__table-wrapper">');
+        }
         result.push(processedLine);
+        if (/<\/table>\s*$/i.test(processedLine)) {
+          result.push('</div>');
+        }
       } else {
         result.push(`<p>${processedLine}</p>`);
       }
