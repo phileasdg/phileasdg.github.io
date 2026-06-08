@@ -407,6 +407,12 @@ function parseFrontMatter(fileContent) {
         val = val.substring(1, val.length - 1);
       }
       
+      if (val === 'true') {
+        val = true;
+      } else if (val === 'false') {
+        val = false;
+      }
+      
       // Parse arrays like ["a", "b"]
       if (val.startsWith('[') && val.endsWith(']')) {
         val = val.substring(1, val.length - 1).split(',').map(s => {

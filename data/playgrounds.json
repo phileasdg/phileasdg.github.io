@@ -3,72 +3,84 @@
     "title": "Hypergraph Plotter",
     "url": "https://phileasdg.github.io/hypergraph-plotter/",
     "thumbnail": "media/imgs/hypergraph-plotter.png",
-    "description": "An interactive, client-side hypergraph visualizer and vector layout engine. Use it to create interactive hypergraphs for your own exploration or classes, or to generate professional plots for your research."
+    "description": "An interactive, client-side hypergraph visualizer and vector layout engine. Use it to create interactive hypergraphs for your own exploration or classes, or to generate professional plots for your research.",
+    "tags": ["Web Development", "Showcase", "Interactive"]
   },
   {
     "title": "Complexity Coffee",
     "url": "https://complexitycoffee.org",
     "thumbnail": "media/imgs/complexity-coffee.png",
-    "description": "A community-driven virtual series from Complexity Global School alums, dedicated to fostering discussion and sharing new ideas in the field of complexity science."
+    "description": "A community-driven virtual series from Complexity Global School alums, dedicated to fostering discussion and sharing new ideas in the field of complexity science.",
+    "tags": ["Complex Systems", "Showcase"]
   },
   {
     "title": "Sympoietic Art Organism",
     "url": "https://phileasdg.github.io/sympoietic-art-organism",
     "thumbnail": "media/imgs/sympoietic-organism.png",
-    "description": "An exploration of collaborative artmaking and complexity, a co-creative process for growing and evolving a digital lifeform."
+    "description": "An exploration of collaborative artmaking and complexity, a co-creative process for growing and evolving a digital lifeform.",
+    "tags": ["Art", "Complex Systems", "Showcase"]
   },
   {
     "title": "Global Trade Network",
     "url": "https://phileasdg.github.io/global-trade-network",
     "thumbnail": "media/imgs/global-trade-network.png",
-    "description": "An online global trade network visualization tool using UN ComTrade and WTO data."
+    "description": "An online global trade network visualization tool using UN ComTrade and WTO data.",
+    "tags": ["Web Development", "Showcase", "Interactive"]
   },
   {
     "title": "COA Sunken Garden Explorer",
     "url": "https://phileasdg.github.io/coa-sunken-garden/",
     "thumbnail": "media/imgs/sunken-garden.png",
-    "description": "An interactive map and guide to the College of the Atlantic Sunken Garden."
+    "description": "An interactive map and guide to the College of the Atlantic Sunken Garden.",
+    "tags": ["Web Development", "Interactive"]
   },
   {
     "title": "Marbler",
     "url": "https://phileasdg.github.io/marbler/",
     "thumbnail": "media/imgs/marbler.png",
-    "description": "A creative simulation tool that generates fluid, marble-like textures and patterns in the browser."
+    "description": "A creative simulation tool that generates fluid, marble-like textures and patterns in the browser.",
+    "tags": ["Art", "Web Development", "Interactive"]
   },
   {
     "title": "Boid Ecosystem",
     "url": "https://phileasdg.github.io/boid-ecosystem/",
     "thumbnail": "media/imgs/boid-ecosystem.png",
-    "description": "A simple 3D boid simulator based on the 1987 paper by Craig Reynolds."
+    "description": "A simple 3D boid simulator based on the 1987 paper by Craig Reynolds.",
+    "tags": ["Complex Systems", "Programming", "Interactive"]
   },
   {
     "title": "Weaver",
     "url": "https://phileasdg.github.io/weaver/",
     "thumbnail": "media/imgs/weaver.png",
-    "description": "A creative tool for weaving pattern design and exploration in the browser."
+    "description": "A creative tool for weaving pattern design and exploration in the browser.",
+    "tags": ["Art", "Web Development", "Interactive"]
   },
   {
     "title": "Parchment",
     "url": "https://phileasdg.github.io/parchment/",
     "thumbnail": "media/imgs/parchment.png",
-    "description": "A no fuss Markdown editor with LaTeX and syntax highlighting support."
+    "description": "A no fuss Markdown editor with LaTeX and syntax highlighting support.",
+    "tags": ["Markdown", "Web Development"]
   },
   {
     "title": "Abulafia",
     "url": "https://phileasdg.github.io/abulafia/",
     "thumbnail": "media/imgs/abulafia.png",
-    "description": "A device for textual transmutation based on Foucault's Pendulum, by Umberto Eco."
+    "description": "A device for textual transmutation based on Foucault's Pendulum, by Umberto Eco.",
+    "tags": ["Programming", "Interactive"]
   },
   {
     "title": "Synapse: Networked Notes",
     "url": "https://phileasdg.github.io/synapse",
     "thumbnail": "media/imgs/synapse.png",
-    "description": "A networked Markdown notetaking tool with some fancy features."
+    "description": "A networked Markdown notetaking tool with some fancy features.",
+    "tags": ["Markdown", "Web Development", "Showcase"]
   },
   {
     "title": "ASCII3D",
     "url": "https://phileasdg.github.io/ASCII3D/",
     "thumbnail": "media/imgs/ASCII3D.png",
-    "description": "A browser-based 3D object ASCII viewer and converter."
+    "description": "A browser-based 3D object ASCII viewer and converter.",
+    "tags": ["Web Development", "Interactive"]
   }
 ]

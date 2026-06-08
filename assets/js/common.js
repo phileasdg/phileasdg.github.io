@@ -161,6 +161,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let postsData = null;
   let pagesData = null;
+  let playgroundsData = null;
+  let currentViewMode = 'grid';
+  let plotterInstance = null;
+  const disabledTagSlugs = new Set();
+  const activeByDefaultSlugs = new Set([
+    'art',
+    'complex-systems',
+    'environmental-science',
+    'network-science',
+    'economics',
+    'ai'
+  ]);
+  let isDefaultTagsInitialized = false;
 
   const getPostsData = async () => {
     if (!postsData) {
@@ -176,6 +189,17 @@ document.addEventListener("DOMContentLoaded", () => {
       pagesData = await res.json();
     }
     return pagesData;
+  };
+
+  const getPlaygroundsData = async () => {
+    if (!playgroundsData) {
+      const res = await fetch(`data/playgrounds.json?v=${Date.now()}`);
+      playgroundsData = await res.json();
+      playgroundsData.forEach(pg => {
+        pg.id = pg.slug || pg.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      });
+    }
+    return playgroundsData;
   };
 
   const setupCodeBlocks = (container) => {
@@ -617,13 +641,23 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const route = async () => {
+    if (plotterInstance) {
+      try {
+        plotterInstance.stopSimulation();
+      } catch (e) {
+        console.warn("Error stopping plotter simulation:", e);
+      }
+      plotterInstance = null;
+    }
+
     const hash = window.location.hash || '#/';
     const cleanHash = hash.replace(/^#\/?/, '').replace(/\/$/, '');
 
     const posts = await getPostsData();
     const pages = await getPagesData();
+    const playgrounds = await getPlaygroundsData();
 
-    if (cleanHash === '') {
+    if (cleanHash === '' || cleanHash === 'graph') {
       updateStyleSheets('home', originalBodyClass, '');
       document.title = originalTitle;
       document.body.className = originalBodyClass;
@@ -632,18 +666,235 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const grid = mainEl.querySelector('.l-masonry');
       const paginationContainer = mainEl.querySelector('#pagination-container');
+      const toggleBtn = mainEl.querySelector('#btn-toggle-view');
+      const hypergraphContainer = mainEl.querySelector('#hypergraph-view-container');
 
-      if (grid) {
-        const visiblePosts = posts.filter(p => p.hideFromHome !== true);
-        const initialChunk = visiblePosts.slice(0, 12);
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = initialChunk.map(p => renderCard(p, '')).join('');
-        Array.from(tempDiv.children).forEach(item => grid.appendChild(item));
-        handleLazyImages(grid);
-        initGridMasonry(grid);
+      currentViewMode = cleanHash === 'graph' ? 'hypergraph' : 'grid';
+      if (currentViewMode === 'hypergraph') {
+        document.body.classList.add('has-hypergraph-view');
+      } else {
+        document.body.classList.remove('has-hypergraph-view');
+      }
 
-        if (paginationContainer) {
-          setupPagination(visiblePosts, paginationContainer, grid, '');
+      if (toggleBtn) {
+        toggleBtn.textContent = currentViewMode === 'grid' ? 'Switch to Hypergraph View' : 'Switch to Grid View';
+      }
+
+      if (currentViewMode === 'hypergraph') {
+        window.scrollTo(0, 0);
+        if (grid) grid.style.display = 'none';
+        if (paginationContainer) paginationContainer.style.display = 'none';
+        if (hypergraphContainer) {
+          hypergraphContainer.style.display = 'block';
+
+          if (!hypergraphContainer.dataset.wheelListenerAdded) {
+            hypergraphContainer.dataset.wheelListenerAdded = 'true';
+            hypergraphContainer.addEventListener('wheel', (e) => {
+              // Allow normal scrolling inside the legend and zoom controls
+              if (e.target.closest('#hypergraph-legend') || e.target.closest('#hypergraph-controls')) {
+                return;
+              }
+              e.preventDefault();
+              const originalScrollBehavior = document.documentElement.style.scrollBehavior;
+              document.documentElement.style.scrollBehavior = 'auto';
+              window.scrollBy(0, e.deltaY);
+              document.documentElement.style.scrollBehavior = originalScrollBehavior;
+            }, { passive: false });
+          }
+
+          const container = mainEl.querySelector('#hypergraph-canvas');
+          if (container) {
+            const visiblePosts = posts.filter(p => p.hideFromHome !== true && p.hideFromHome !== 'true');
+            const visibleItems = [
+              ...visiblePosts.map(p => ({
+                id: p.slug,
+                label: p.name,
+                tags: p.tags || [],
+                thumbnail: p.thumbnail || '',
+                isPlayground: false
+              })),
+              ...playgrounds.map(pg => ({
+                id: pg.id,
+                label: pg.title,
+                tags: pg.tags || [],
+                thumbnail: pg.thumbnail || '',
+                isPlayground: true,
+                url: pg.url
+              }))
+            ];
+
+            const tagToItems = {};
+            visibleItems.forEach(item => {
+              if (item.tags) {
+                item.tags.forEach(tag => {
+                  if (!tagToItems[tag]) {
+                    tagToItems[tag] = [];
+                  }
+                  tagToItems[tag].push(item.id);
+                });
+              }
+            });
+
+            const hyperedges = Object.keys(tagToItems).map(tagName => ({
+              id: getTagSlug(tagName),
+              label: tagName,
+              vertices: tagToItems[tagName]
+            }));
+
+            const vertices = visibleItems.map(item => {
+              const primaryTag = item.tags && item.tags.length > 0 ? item.tags[0] : null;
+              const edgeIdx = primaryTag ? hyperedges.findIndex(e => e.label === primaryTag) : -1;
+              return {
+                id: item.id,
+                label: item.label,
+                edgeIdx: edgeIdx,
+                primaryTag: primaryTag,
+                thumbnail: item.thumbnail || '',
+                isPlayground: item.isPlayground,
+                url: item.url || ''
+              };
+            });
+
+              try {
+                const plotterUrl = new URL('./assets/js/hypergraph/hypergraph-plotter.js?v=1.0.21', window.location.href).href;
+                const { HypergraphPlotter } = await import(plotterUrl);
+                plotterInstance = new HypergraphPlotter(container, {
+                  width: container.clientWidth || 800,
+                  height: container.clientHeight || 600,
+                  layoutType: 'spring-embedding',
+                  plotTheme: 'name-labeled',
+                  edgePalette: 'rainbow',
+                  showSubsetBoundary: true,
+                  showSubsetEdge: true,
+                  canvasBg: 'white',
+                  physicsPlaying: true,
+                  allowZoom: false,
+                  allowPan: true,
+                  // Stronger node attraction and edge repulsion with cooling stability
+                  kAttract: 0.15,
+                  kRepel: 5000,
+                  kHyperedgeRepel: 12000,
+                  kCenter: 0.005,
+                  damping: 0.75,
+                  maxSpeed: 6,
+                  restLength: 40
+                });
+
+                // Pre-calculate stable colors for all hyperedges based on full list
+                hyperedges.forEach((edge, idx) => {
+                  edge.color = plotterInstance.getPaletteColor(idx, hyperedges.length, 'rainbow');
+                });
+
+                // Add tagColor to vertices based on stable hyperedge color
+                vertices.forEach(v => {
+                  v.tagColor = (v.edgeIdx !== undefined && v.edgeIdx !== -1)
+                    ? hyperedges[v.edgeIdx].color
+                    : '#6D6E6F';
+                });
+
+                // Zoom Controls wiring (wired early to capture initial fit viewport changes)
+                const slider = mainEl.querySelector('#hypergraph-zoom-slider');
+                const btnIn = mainEl.querySelector('#hypergraph-zoom-btn-in');
+                const btnOut = mainEl.querySelector('#hypergraph-zoom-btn-out');
+                const btnReset = mainEl.querySelector('#hypergraph-zoom-btn-reset');
+
+                if (slider) {
+                  slider.addEventListener('input', (e) => {
+                    plotterInstance.zoomTo(parseFloat(e.target.value));
+                  });
+                }
+
+                if (btnIn) {
+                  btnIn.addEventListener('click', () => {
+                    let val = parseFloat(slider.value) + 0.1;
+                    if (val > 2.5) val = 2.5;
+                    slider.value = String(val);
+                    plotterInstance.zoomTo(val);
+                  });
+                }
+
+                if (btnOut) {
+                  btnOut.addEventListener('click', () => {
+                    let val = parseFloat(slider.value) - 0.1;
+                    if (val < 0.1) val = 0.1;
+                    slider.value = String(val);
+                    plotterInstance.zoomTo(val);
+                  });
+                }
+
+                if (btnReset) {
+                  btnReset.addEventListener('click', () => {
+                    plotterInstance.zoomToFit();
+                  });
+                }
+
+                plotterInstance.onViewportChanged = (zoomValue) => {
+                  if (slider) {
+                    slider.value = String(Math.max(0.1, Math.min(2.5, zoomValue)));
+                  }
+                };
+
+                plotterInstance.onSelectionChanged = (id) => {
+                  const foundItem = visibleItems.find(item => item.id === id);
+                  if (foundItem && foundItem.isPlayground && foundItem.url) {
+                    window.open(foundItem.url, '_blank');
+                  } else {
+                    window.location.hash = `#/posts/${id}/`;
+                  }
+                };
+
+                if (!isDefaultTagsInitialized) {
+                  hyperedges.forEach(edge => {
+                    if (!activeByDefaultSlugs.has(edge.id)) {
+                      disabledTagSlugs.add(edge.id);
+                    }
+                  });
+                  isDefaultTagsInitialized = true;
+                }
+
+                const activeHyperedges = hyperedges.filter(edge => !disabledTagSlugs.has(edge.id));
+                plotterInstance.setData({ vertices, hyperedges: activeHyperedges });
+
+                // Sync slider value manually on initial load to match fitted zoom
+                if (slider) {
+                  slider.value = String(Math.max(0.1, Math.min(2.5, plotterInstance.zoom)));
+                }
+
+                const legendContainer = mainEl.querySelector('#legend-items-container');
+                if (legendContainer) {
+                  legendContainer.innerHTML = hyperedges.map((edge, idx) => {
+                    const color = edge.color;
+                    const isDisabled = disabledTagSlugs.has(edge.id);
+                    return `
+                      <div class="legend-item" data-tag-slug="${edge.id}" data-color="${color}" style="display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; opacity: ${isDisabled ? '0.4' : '1.0'}; text-decoration: ${isDisabled ? 'line-through' : 'none'};">
+                        <span style="display: inline-block; width: 12px; height: 12px; border-radius: 3px; background-color: ${isDisabled ? '#ccc' : color}; opacity: 0.7; border: 1.5px solid ${isDisabled ? '#999' : color}; flex-shrink: 0;"></span>
+                        <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px;" title="${edge.label}">${edge.label}</span>
+                      </div>
+                    `;
+                  }).join('');
+                }
+
+              } catch (err) {
+                console.error("Failed to load or initialize HypergraphPlotter:", err);
+              }
+          }
+        }
+      } else {
+        if (hypergraphContainer) hypergraphContainer.style.display = 'none';
+        if (grid) {
+          grid.style.display = '';
+          const visiblePosts = posts.filter(p => p.hideFromHome !== true);
+          const initialChunk = visiblePosts.slice(0, 12);
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = initialChunk.map(p => renderCard(p, '')).join('');
+          Array.from(tempDiv.children).forEach(item => grid.appendChild(item));
+          handleLazyImages(grid);
+          initGridMasonry(grid);
+
+          if (paginationContainer) {
+            paginationContainer.style.display = '';
+            setupPagination(visiblePosts, paginationContainer, grid, '');
+          }
         }
       }
     } else if (cleanHash.startsWith('posts/')) {
@@ -692,7 +943,12 @@ document.addEventListener("DOMContentLoaded", () => {
               const playgrounds = await playgroundsRes.json();
               const container = mainEl.querySelector('#playgrounds-container');
               if (container) {
-                container.innerHTML = playgrounds.map(item => `
+                container.innerHTML = playgrounds.map(item => {
+                  const primaryTag = item.tags && item.tags.length > 0 ? item.tags[0] : null;
+                  const tagHtml = primaryTag 
+                    ? `<div class="c-card__tag" style="margin-bottom: 0.5rem;"><a href="#/tags/${getTagSlug(primaryTag)}/">${primaryTag}</a></div>`
+                    : '';
+                  return `
         <article class="c-card">
             <a class="c-card__image" href="${item.url}" rel="noopener noreferrer" target="_blank">
                 <img alt="${item.title} Project Thumbnail"
@@ -701,12 +957,14 @@ document.addEventListener("DOMContentLoaded", () => {
             </a>
             <div class="c-card__wrapper">
                 <header class="c-card__header">
+                    ${tagHtml}
                     <h2 class="c-card__title"><a class="invert" href="${item.url}" rel="noopener noreferrer" target="_blank">${item.title}</a></h2>
                 </header>
                 <p class="c-card__description">${item.description}</p>
             </div>
         </article>
-                `).join('');
+                  `;
+                }).join('');
               }
             } catch (err) {
               console.error("Failed to load playgrounds data:", err);
@@ -823,6 +1081,78 @@ document.addEventListener("DOMContentLoaded", () => {
       window.updateActiveLinks();
     }
   };
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('#btn-toggle-view') || e.target.closest('#hypergraph-grid-toggle');
+    if (btn) {
+      if (currentViewMode === 'grid') {
+        window.location.hash = '#/graph/';
+      } else {
+        window.location.hash = '#/';
+      }
+      return;
+    }
+
+    const legendItem = e.target.closest('.legend-item');
+    if (legendItem) {
+      const tagSlug = legendItem.getAttribute('data-tag-slug');
+      if (disabledTagSlugs.has(tagSlug)) {
+        disabledTagSlugs.delete(tagSlug);
+      } else {
+        disabledTagSlugs.add(tagSlug);
+      }
+      
+      // Update graph data smoothly
+      if (plotterInstance && currentViewMode === 'hypergraph' && postsData) {
+        const visiblePosts = postsData.filter(p => p.hideFromHome !== true);
+        const tagToPosts = {};
+        visiblePosts.forEach(p => {
+          if (p.tags) {
+            p.tags.forEach(tag => {
+              if (!tagToPosts[tag]) {
+                tagToPosts[tag] = [];
+              }
+              tagToPosts[tag].push(p.slug);
+            });
+          }
+        });
+
+        const hyperedges = Object.keys(tagToPosts).map(tagName => ({
+          id: getTagSlug(tagName),
+          label: tagName,
+          vertices: tagToPosts[tagName]
+        }));
+
+        // Assign stable colors to reconstructed hyperedges
+        hyperedges.forEach((edge, idx) => {
+          edge.color = plotterInstance.getPaletteColor(idx, hyperedges.length, 'rainbow');
+        });
+
+        const activeHyperedges = hyperedges.filter(edge => !disabledTagSlugs.has(edge.id));
+        
+        // Re-heat layout and set new data
+        plotterInstance.physicsLayout.temperature = 1.0; 
+        plotterInstance.setData({ vertices: plotterInstance.vertices, hyperedges: activeHyperedges });
+
+        // Update legend styles
+        const legendContainer = document.getElementById('legend-items-container');
+        if (legendContainer) {
+          legendContainer.querySelectorAll('.legend-item').forEach(item => {
+            const slug = item.getAttribute('data-tag-slug');
+            const isDisabled = disabledTagSlugs.has(slug);
+            item.style.opacity = isDisabled ? '0.4' : '1.0';
+            item.style.textDecoration = isDisabled ? 'line-through' : 'none';
+            const spanDot = item.querySelector('span');
+            if (spanDot) {
+              const originalColor = item.getAttribute('data-color');
+              spanDot.style.backgroundColor = isDisabled ? '#ccc' : originalColor;
+              spanDot.style.borderColor = isDisabled ? '#999' : originalColor;
+            }
+          });
+        }
+      }
+    }
+  });
 
   window.addEventListener('hashchange', route);
   route();
