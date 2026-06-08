@@ -387,12 +387,18 @@ function parseMarkdown(md) {
 
 // --- FRONTMATTER PARSER ---
 function parseFrontMatter(fileContent) {
-  const parts = fileContent.split('---');
-  if (parts.length < 3) {
+  const normalized = fileContent.replace(/^\uFEFF/, '').replace(/\r\n/g, '\n');
+  if (!normalized.startsWith('---\n')) {
     return { data: {}, content: fileContent };
   }
-  const frontmatterText = parts[1];
-  const content = parts.slice(2).join('---').trim();
+  
+  const closingIndex = normalized.indexOf('\n---\n', 4);
+  if (closingIndex === -1) {
+    return { data: {}, content: fileContent };
+  }
+  
+  const frontmatterText = normalized.substring(4, closingIndex);
+  const content = normalized.substring(closingIndex + 5).trim();
 
   const lines = frontmatterText.split('\n');
   const data = {};
@@ -430,6 +436,7 @@ function parseFrontMatter(fileContent) {
 
   return { data, content };
 }
+
 
 // --- COMPILE POSTS ---
 function compilePosts() {

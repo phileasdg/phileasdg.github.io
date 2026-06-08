@@ -15,107 +15,127 @@
 <h2>The program</h2>
 <p>The program is fairly simple. It is composed of several blocks. First, a setup block, in which the user specifies the program settings such as the function to iterate, initial conditions, number of iterations, and the plot window. Then, the block where most of the code lifes, the main body of the program, which is composed of a function to collect plotting data for the user-specified function, a function to collect and return graphical iteration plotting data, and a last function to collect and return time series plotting data according to the program settings. In the final block of this program, we run the functions from the last block with the user-specified setup settings, and plot the graphical iteration and time series orbit plots using the tibbles the functions return.</p>
 <h3>Setup</h3>
-<div class="highlight highlight-source-r position-relative overflow-auto">
-<h1>set your initial condition and desired number of iterations:</h1>
-<p>x_0s &lt;- c(3.43, 4.43, 7)</p>
-<p>N &lt;- 100</p>
-<h1>set the iteration plot x axis range (lower and upper bounds):</h1>
-<p>x<em>min &lt;- 0; x</em>max &lt;- 8</p>
-<p>y<em>min &lt;- -2; y</em>max &lt;- 8</p>
-<p>use<em>custom</em>range_x &lt;- FALSE</p>
-<p>use<em>custom</em>range_y &lt;- FALSE</p>
-<h1>declare your function here:</h1>
-<p>func &lt;- function(x){</p>
-<p>return(-2 * sin(x) + x) # function goes here</p>
-<p>}</pre></p>
+<pre><code class="language-r"># set your initial condition and desired number of iterations:
+x_0s &lt;- c(3.43, 4.43, 7)
+N &lt;- 100
+
+# set the iteration plot x axis range (lower and upper bounds):
+x_min &lt;- 0; x_max &lt;- 8
+y_min &lt;- -2; y_max &lt;- 8
+
+use_custom_range_x &lt;- FALSE
+use_custom_range_y &lt;- FALSE
+
+# declare your function here:
+func &lt;- function(x){
+  return(-2 * sin(x) + x) # function goes here
+}</code></pre>
 <h3>The nitty-gritty</h3>
-<div class="highlight highlight-source-r position-relative overflow-auto">
-<p>get<em>function</em>data &lt;- function(range = c(-1, 1), steps = 100){</p>
-<p>steps_multiplier &lt;- (range[2]-range[1])/10</p>
-<p>if(steps<em>multiplier &lt; 1){steps</em>multiplier &lt;- 1}</p>
-<h1>adds steps to get data for depending on the number of 10s</h1>
-<h1>in the specified plot x range</h1>
-<p>x &lt;- seq(from = range[1], to = range[2], length.out = steps * steps_multiplier)</p>
-<p>y &lt;- array(dim = steps * steps_multiplier)</p>
-<p>for(i in 1:length(x)){</p>
-<p>y[i] &lt;- func(x[i])</p>
-<p>}</p>
-<p>return(data.frame(x = x, y = y))</p>
-<p>}</p>
-<p>graphical<em>iterator &lt;- function(x</em>0s, N = 100){</p>
-<p>segments &lt;- data.frame()</p>
-<p>for(i in x_0s){</p>
-<p>start &lt;- i</p>
-<p>vert &lt;- FALSE</p>
-<p>x_0 &lt;- rep(i,times=1+(N*2))</p>
-<p>xstarts &lt;- c(start)</p>
-<p>ystarts &lt;- c(y_min)</p>
-<p>xends &lt;- c(start)</p>
-<p>yends &lt;- c(func(start))</p>
-<h1>iteratively get the coordinates of the next segment points</h1>
-<p>for(i in 1:(2 * N))</p>
-<h1>range = 2 * N because every step will be described by two segments</h1>
-<p>{</p>
-<h1>if the last segment was vertical, the next must be horizontal</h1>
-<p>if(vert){</p>
-<p>xstarts &lt;- c(xstarts, start)</p>
-<p>ystarts &lt;- c(ystarts, start)</p>
-<p>xends &lt;- c(xends, start)</p>
-<p>yends &lt;- c(yends, func(start))</p>
-<p>vert &lt;- FALSE</p>
-<p>}</p>
-<p>else{</p>
-<p>xstarts &lt;- c(xstarts, start)</p>
-<p>ystarts &lt;- c(ystarts, func(start))</p>
-<p>xends &lt;- c(xends, func(start))</p>
-<p>yends &lt;- c(yends, func(start))</p>
-<p>vert &lt;- TRUE</p>
-<p>start &lt;- func(start) # update start value</p>
-<p>}</p>
-<p>}</p>
-<p>segments &lt;- rbind(segments, data.frame(x<em>0s = x</em>0, xstarts, ystarts, xends, yends))</p>
-<p>}</p>
-<p>return(segments)</p>
-<p>}</p>
-<p>cobweb<em>trajects &lt;- graphical</em>iterator(x<em>0s = x</em>0s, N = N)</p>
-<p>if(use<em>custom</em>range_x == FALSE){</p>
-<p>x<em>min &lt;- min(cobweb</em>trajects$xstarts); x<em>max &lt;- max(cobweb</em>trajects$xends)</p>
-<p>}</p>
-<p>if(use<em>custom</em>range_y == FALSE){</p>
-<p>y<em>min &lt;- min(cobweb</em>trajects$xstarts); y<em>max &lt;- max(cobweb</em>trajects$xends)</p>
-<p>}</p>
-<p>plot<em>data &lt;- get</em>function<em>data(range = c(x</em>min,x_max)) # gets the plotting data</p>
-<p>get<em>function</em>iteration<em>trajectories &lt;- function(x</em>0s, N = 100){</p>
-<p>trajectories &lt;- data.frame()</p>
-<p>for(i in x_0s){</p>
-<p>x_t &lt;- i</p>
-<p>x_0 &lt;- rep(i,times=N+1)</p>
-<p>n &lt;- 0:N</p>
-<p>trajectory &lt;- c(x_t)</p>
-<p>for(t in 0:(N-1)){</p>
-<p>x<em>t &lt;- func(x</em>t)</p>
-<p>trajectory &lt;- c(trajectory, x<em>t) # add x</em>t_1's value to the trajectory vector</p>
-<p>}</p>
-<p>trajectories &lt;- rbind(trajectories, data.frame(x<em>0s = x</em>0, ns = n, trajectories = trajectory))</p>
-<p>}</p>
-<p>return(trajectories)</p>
-<p>}</p>
-<p>trajectories &lt;- get<em>function</em>iteration<em>trajectories(x</em>0s = x_0s, N = N)</pre>### Plots</p>
+<pre><code class="language-r">get_function_data &lt;- function(range = c(-1, 1), steps = 100){
+  
+  steps_multiplier &lt;- (range[2]-range[1])/10 
+  if(steps_multiplier &lt; 1){steps_multiplier &lt;- 1}
+  # adds steps to get data for depending on the number of 10s 
+  # in the specified plot x range
+  
+  x &lt;- seq(from = range[1], to = range[2], length.out = steps * steps_multiplier)
+  
+  y &lt;- array(dim = steps * steps_multiplier) 
+  for(i in 1:length(x)){
+    y[i] &lt;- func(x[i])
+    } 
+  
+  return(data.frame(x = x, y = y))
+}
+
+graphical_iterator &lt;- function(x_0s, N = 100){ 
+  
+  segments &lt;- data.frame()
+  for(i in x_0s){
+    
+    start &lt;- i 
+    vert &lt;- FALSE 
+    
+    x_0 &lt;- rep(i,times=1+(N*2))
+    xstarts &lt;- c(start)
+    ystarts &lt;- c(y_min)
+    xends &lt;- c(start)
+    yends &lt;- c(func(start))
+    
+    # iteratively get the coordinates of the next segment points
+    for(i in 1:(2 * N)) 
+      # range = 2 * N because every step will be described by two segments
+    {
+      # if the last segment was vertical, the next must be horizontal
+      if(vert){
+        xstarts &lt;- c(xstarts, start)
+        ystarts &lt;- c(ystarts, start)
+        xends &lt;- c(xends, start)
+        yends &lt;- c(yends, func(start)) 
+        vert &lt;- FALSE
+      }
+      else{
+        xstarts &lt;- c(xstarts, start)
+        ystarts &lt;- c(ystarts, func(start)) 
+        xends &lt;- c(xends, func(start)) 
+        yends &lt;- c(yends, func(start)) 
+        vert &lt;- TRUE
+        start &lt;- func(start) # update start value
+      }
+    }
+    segments &lt;- rbind(segments, data.frame(x_0s = x_0, xstarts, ystarts, xends, yends))
+  }
+  return(segments)
+}
+
+cobweb_trajects &lt;- graphical_iterator(x_0s = x_0s, N = N)
+
+if(use_custom_range_x == FALSE){
+  x_min &lt;- min(cobweb_trajects$xstarts); x_max &lt;- max(cobweb_trajects$xends)
+}
+if(use_custom_range_y == FALSE){
+  y_min &lt;- min(cobweb_trajects$xstarts); y_max &lt;- max(cobweb_trajects$xends)
+}
+
+plot_data &lt;- get_function_data(range = c(x_min,x_max)) # gets the plotting data
+
+get_function_iteration_trajectories &lt;- function(x_0s, N = 100){
+  
+  trajectories &lt;- data.frame()
+  
+  for(i in x_0s){
+    x_t &lt;- i
+    
+    x_0 &lt;- rep(i,times=N+1)
+    n &lt;- 0:N
+    
+    trajectory &lt;- c(x_t)
+    
+    for(t in 0:(N-1)){
+      x_t &lt;- func(x_t)
+      trajectory &lt;- c(trajectory, x_t) # add x_t_1's value to the trajectory vector
+    }
+    trajectories &lt;- rbind(trajectories, data.frame(x_0s = x_0, ns = n, trajectories = trajectory))
+  }
+  return(trajectories)
+}
+
+trajectories &lt;- get_function_iteration_trajectories(x_0s = x_0s, N = N)</code></pre>
+<h3>Plots</h3>
 <p><strong>Graphical iteration plot:</strong></p>
-<div class="highlight highlight-source-r position-relative overflow-auto">
-<p>plot_data %&gt;%</p>
-<p>ggplot(aes(x, y)) +</p>
-<p>geom_line(colour = "black") +</p>
-<p>geom_abline(linetype = "dashed") +</p>
-<p>geom<em>segment(data = cobweb</em>trajects, aes(x = xstarts, y = ystarts, xend = xends,</p>
-<p>yend = yends, colour=as.factor(x_0s))) +</p>
-<p>coord<em>cartesian(xlim = c(x</em>min, x<em>max), ylim = c(y</em>min, y_max)) </pre></p>
+<pre><code class="language-r">plot_data %&gt;% 
+  ggplot(aes(x, y)) +
+  geom_line(colour = "black") +
+  geom_abline(linetype = "dashed") + 
+  geom_segment(data = cobweb_trajects, aes(x = xstarts, y = ystarts, xend = xends, 
+                                          yend = yends, colour=as.factor(x_0s))) +
+  coord_cartesian(xlim = c(x_min, x_max), ylim = c(y_min, y_max))</code></pre>
 <figure class="post__image post__image--center"><img src="../../media/posts/graphical-iteration-in-r/figure1.png" alt="" width="672" height="480" srcset="../../media/posts/graphical-iteration-in-r/responsive/figure1-xs.png 300w, ../../media/posts/graphical-iteration-in-r/responsive/figure1-sm.png 480w, ../../media/posts/graphical-iteration-in-r/responsive/figure1-md.png 768w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
 <p><strong>Time-series plot: </strong></p>
-<h1>trajectory plot</h1>
-<p>trajectories %&gt;%</p>
-<p>ggplot(aes(ns, trajectories, colour = as.factor(x_0s))) +</p>
-<p>geom_line() + labs(x="n")</pre></p>
+<pre><code class="language-r"># trajectory plot
+trajectories %&gt;% 
+  ggplot(aes(ns, trajectories, colour = as.factor(x_0s))) +
+  geom_line() + labs(x="n")</code></pre>
 <figure class="post__image post__image--center"><img src="../../media/posts/graphical-iteration-in-r/figure2.png" alt="" width="672" height="480" srcset="../../media/posts/graphical-iteration-in-r/responsive/figure2-xs.png 300w, ../../media/posts/graphical-iteration-in-r/responsive/figure2-sm.png 480w, ../../media/posts/graphical-iteration-in-r/responsive/figure2-md.png 768w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
 <h2>Closing remarks</h2>
 <p>I hope that this tool might be useful in education settings for demonstration purposes, or for analysis, as the program also produces data frames of the plotting data which contain all the orbit information. I am hopeful that this tool might be useful to undergraduate students. I have seen graphical iteration used in economics courses at the university level, so perhaps this tool could help economists in training, for instance, to model poverty traps.</p>

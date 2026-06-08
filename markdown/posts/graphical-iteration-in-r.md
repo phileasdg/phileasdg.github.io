@@ -28,56 +28,57 @@ The program is fairly simple. It is composed of several blocks. First, a setup b
 
 ### Setup
 
-<div class="highlight highlight-source-r position-relative overflow-auto">
+```r
 # set your initial condition and desired number of iterations:
-x_0s &lt;- c(3.43, 4.43, 7)
-N &lt;- 100
+x_0s <- c(3.43, 4.43, 7)
+N <- 100
 
 # set the iteration plot x axis range (lower and upper bounds):
-x_min &lt;- 0; x_max &lt;- 8
-y_min &lt;- -2; y_max &lt;- 8
+x_min <- 0; x_max <- 8
+y_min <- -2; y_max <- 8
 
-use_custom_range_x &lt;- FALSE
-use_custom_range_y &lt;- FALSE
+use_custom_range_x <- FALSE
+use_custom_range_y <- FALSE
 
 # declare your function here:
-func &lt;- function(x){
+func <- function(x){
   return(-2 * sin(x) + x) # function goes here
-}</pre>
+}
+```
 
 ### The nitty-gritty
 
-<div class="highlight highlight-source-r position-relative overflow-auto">
-get_function_data &lt;- function(range = c(-1, 1), steps = 100){
+```r
+get_function_data <- function(range = c(-1, 1), steps = 100){
   
-  steps_multiplier &lt;- (range[2]-range[1])/10 
-  if(steps_multiplier &lt; 1){steps_multiplier &lt;- 1}
+  steps_multiplier <- (range[2]-range[1])/10 
+  if(steps_multiplier < 1){steps_multiplier <- 1}
   # adds steps to get data for depending on the number of 10s 
   # in the specified plot x range
   
-  x &lt;- seq(from = range[1], to = range[2], length.out = steps * steps_multiplier)
+  x <- seq(from = range[1], to = range[2], length.out = steps * steps_multiplier)
   
-  y &lt;- array(dim = steps * steps_multiplier) 
+  y <- array(dim = steps * steps_multiplier) 
   for(i in 1:length(x)){
-    y[i] &lt;- func(x[i])
+    y[i] <- func(x[i])
     } 
   
   return(data.frame(x = x, y = y))
 }
 
-graphical_iterator &lt;- function(x_0s, N = 100){ 
+graphical_iterator <- function(x_0s, N = 100){ 
   
-  segments &lt;- data.frame()
+  segments <- data.frame()
   for(i in x_0s){
     
-    start &lt;- i 
-    vert &lt;- FALSE 
+    start <- i 
+    vert <- FALSE 
     
-    x_0 &lt;- rep(i,times=1+(N*2))
-    xstarts &lt;- c(start)
-    ystarts &lt;- c(y_min)
-    xends &lt;- c(start)
-    yends &lt;- c(func(start))
+    x_0 <- rep(i,times=1+(N*2))
+    xstarts <- c(start)
+    ystarts <- c(y_min)
+    xends <- c(start)
+    yends <- c(func(start))
     
     # iteratively get the coordinates of the next segment points
     for(i in 1:(2 * N)) 
@@ -85,79 +86,85 @@ graphical_iterator &lt;- function(x_0s, N = 100){
     {
       # if the last segment was vertical, the next must be horizontal
       if(vert){
-        xstarts &lt;- c(xstarts, start)
-        ystarts &lt;- c(ystarts, start)
-        xends &lt;- c(xends, start)
-        yends &lt;- c(yends, func(start)) 
-        vert &lt;- FALSE
+        xstarts <- c(xstarts, start)
+        ystarts <- c(ystarts, start)
+        xends <- c(xends, start)
+        yends <- c(yends, func(start)) 
+        vert <- FALSE
       }
       else{
-        xstarts &lt;- c(xstarts, start)
-        ystarts &lt;- c(ystarts, func(start)) 
-        xends &lt;- c(xends, func(start)) 
-        yends &lt;- c(yends, func(start)) 
-        vert &lt;- TRUE
-        start &lt;- func(start) # update start value
+        xstarts <- c(xstarts, start)
+        ystarts <- c(ystarts, func(start)) 
+        xends <- c(xends, func(start)) 
+        yends <- c(yends, func(start)) 
+        vert <- TRUE
+        start <- func(start) # update start value
       }
     }
-    segments &lt;- rbind(segments, data.frame(x_0s = x_0, xstarts, ystarts, xends, yends))
+    segments <- rbind(segments, data.frame(x_0s = x_0, xstarts, ystarts, xends, yends))
   }
   return(segments)
 }
 
-cobweb_trajects &lt;- graphical_iterator(x_0s = x_0s, N = N)
+cobweb_trajects <- graphical_iterator(x_0s = x_0s, N = N)
 
 if(use_custom_range_x == FALSE){
-  x_min &lt;- min(cobweb_trajects$xstarts); x_max &lt;- max(cobweb_trajects$xends)
+  x_min <- min(cobweb_trajects$xstarts); x_max <- max(cobweb_trajects$xends)
 }
 if(use_custom_range_y == FALSE){
-  y_min &lt;- min(cobweb_trajects$xstarts); y_max &lt;- max(cobweb_trajects$xends)
+  y_min <- min(cobweb_trajects$xstarts); y_max <- max(cobweb_trajects$xends)
 }
 
-plot_data &lt;- get_function_data(range = c(x_min,x_max)) # gets the plotting data
+plot_data <- get_function_data(range = c(x_min,x_max)) # gets the plotting data
 
-get_function_iteration_trajectories &lt;- function(x_0s, N = 100){
+get_function_iteration_trajectories <- function(x_0s, N = 100){
   
-  trajectories &lt;- data.frame()
+  trajectories <- data.frame()
   
   for(i in x_0s){
-    x_t &lt;- i
+    x_t <- i
     
-    x_0 &lt;- rep(i,times=N+1)
-    n &lt;- 0:N
+    x_0 <- rep(i,times=N+1)
+    n <- 0:N
     
-    trajectory &lt;- c(x_t)
+    trajectory <- c(x_t)
     
     for(t in 0:(N-1)){
-      x_t &lt;- func(x_t)
-      trajectory &lt;- c(trajectory, x_t) # add x_t_1's value to the trajectory vector
+      x_t <- func(x_t)
+      trajectory <- c(trajectory, x_t) # add x_t_1's value to the trajectory vector
     }
-    trajectories &lt;- rbind(trajectories, data.frame(x_0s = x_0, ns = n, trajectories = trajectory))
+    trajectories <- rbind(trajectories, data.frame(x_0s = x_0, ns = n, trajectories = trajectory))
   }
   return(trajectories)
 }
 
-trajectories &lt;- get_function_iteration_trajectories(x_0s = x_0s, N = N)</pre>### Plots
+trajectories <- get_function_iteration_trajectories(x_0s = x_0s, N = N)
+```
+
+### Plots
 
 **Graphical iteration plot:**
 
-<div class="highlight highlight-source-r position-relative overflow-auto">
-plot_data %&gt;% 
+```r
+plot_data %>% 
   ggplot(aes(x, y)) +
   geom_line(colour = "black") +
   geom_abline(linetype = "dashed") + 
   geom_segment(data = cobweb_trajects, aes(x = xstarts, y = ystarts, xend = xends, 
                                           yend = yends, colour=as.factor(x_0s))) +
-  coord_cartesian(xlim = c(x_min, x_max), ylim = c(y_min, y_max)) </pre>
+  coord_cartesian(xlim = c(x_min, x_max), ylim = c(y_min, y_max))
+```
 
 ![](../../media/posts/graphical-iteration-in-r/figure1.png =672x480)
 
 **Time-series plot: **
 
+```r
 # trajectory plot
-trajectories %&gt;% 
+trajectories %>% 
   ggplot(aes(ns, trajectories, colour = as.factor(x_0s))) +
-  geom_line() + labs(x="n")</pre>
+  geom_line() + labs(x="n")
+```
 
 ![](../../media/posts/graphical-iteration-in-r/figure2.png =672x480)
 
