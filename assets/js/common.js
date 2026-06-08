@@ -302,31 +302,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let imageHtml = '';
     if (post.thumbnail) {
-      const srcsetHtml = getResponsiveSrcset(post.thumbnail, prefix);
-      const widthAttr = post.thumbWidth ? `width="${post.thumbWidth}"` : '';
-      const heightAttr = post.thumbHeight ? `height="${post.thumbHeight}"` : '';
-      imageHtml = `
-        <a href="#/posts/${post.slug}/" class="c-card__image">
-          <img src="${prefix}${post.thumbnail}" ${srcsetHtml} ${widthAttr} ${heightAttr} sizes="(min-width: 56.25em) 100vw, (min-width: 37.5em) 50vw, 100vw" loading="lazy" alt="">
-        </a>
-      `;
+      if (post.isPlayground) {
+        imageHtml = `
+          <a href="${post.url}" rel="noopener noreferrer" target="_blank" class="c-card__image">
+            <img src="${prefix}${post.thumbnail}" onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';" loading="lazy" alt="">
+          </a>
+        `;
+      } else {
+        const srcsetHtml = getResponsiveSrcset(post.thumbnail, prefix);
+        const widthAttr = post.thumbWidth ? `width="${post.thumbWidth}"` : '';
+        const heightAttr = post.thumbHeight ? `height="${post.thumbHeight}"` : '';
+        imageHtml = `
+          <a href="#/posts/${post.slug}/" class="c-card__image">
+            <img src="${prefix}${post.thumbnail}" ${srcsetHtml} ${widthAttr} ${heightAttr} sizes="(min-width: 56.25em) 100vw, (min-width: 37.5em) 50vw, 100vw" loading="lazy" alt="">
+          </a>
+        `;
+      }
     }
 
-    const formattedDate = formatDate(post.date);
+    const titleLink = post.isPlayground
+      ? `<a href="${post.url}" rel="noopener noreferrer" target="_blank" class="invert">${post.name}</a>`
+      : `<a href="#/posts/${post.slug}/" class="invert">${post.name}</a>`;
+
+    const metaHtml = post.isPlayground
+      ? `<div class="c-card__description" style="font-size: 0.8rem; color: #6D6E6F; margin-top: 0.5rem; line-height: 1.5;">${post.description}</div>`
+      : `<footer class="c-card__meta"><time datetime="${post.date}">${formatDate(post.date)}</time></footer>`;
 
     return `
-      <article class="c-card default">
+      <article class="c-card default ${post.isPlayground ? 'playground-card' : ''}">
         ${imageHtml}
         <div class="c-card__wrapper">
           <header class="c-card__header">
             ${tagHtml}
             <h2 class="c-card__title">
-              <a href="#/posts/${post.slug}/" class="invert">${post.name}</a>
+              ${titleLink}
             </h2>
           </header>
-          <footer class="c-card__meta">
-            <time datetime="${post.date}">${formattedDate}</time>
-          </footer>
+          ${metaHtml}
         </div>
       </article>
     `;
@@ -422,18 +434,20 @@ document.addEventListener("DOMContentLoaded", () => {
     return tempDiv.innerHTML;
   };
 
-  const getTagsDataFromPosts = (posts) => {
+  const getTagsDataFromPosts = (posts, playgrounds = []) => {
     const tagsMap = {};
-    posts.forEach(post => {
-      if (post.tags) {
-        post.tags.forEach(tag => {
+    const processItem = item => {
+      if (item.tags) {
+        item.tags.forEach(tag => {
           if (!tagsMap[tag]) {
             tagsMap[tag] = { name: tag, count: 0, slug: getTagSlug(tag) };
           }
           tagsMap[tag].count++;
         });
       }
-    });
+    };
+    posts.forEach(processItem);
+    playgrounds.forEach(processItem);
     return Object.values(tagsMap).sort((a, b) => a.name.localeCompare(b.name));
   };
 
@@ -704,179 +718,229 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const container = mainEl.querySelector('#hypergraph-canvas');
           if (container) {
-            const visiblePosts = posts.filter(p => p.hideFromHome !== true && p.hideFromHome !== 'true');
-            const visibleItems = [
-              ...visiblePosts.map(p => ({
-                id: p.slug,
-                label: p.name,
-                tags: p.tags || [],
-                thumbnail: p.thumbnail || '',
-                isPlayground: false
-              })),
-              ...playgrounds.map(pg => ({
-                id: pg.id,
-                label: pg.title,
-                tags: pg.tags || [],
-                thumbnail: pg.thumbnail || '',
-                isPlayground: true,
-                url: pg.url
-              }))
-            ];
+            requestAnimationFrame(() => {
+              requestAnimationFrame(async () => {
+                if (mainEl.querySelector('#hypergraph-canvas') !== container || currentViewMode !== 'hypergraph') return;
 
-            const tagToItems = {};
-            visibleItems.forEach(item => {
-              if (item.tags) {
-                item.tags.forEach(tag => {
-                  if (!tagToItems[tag]) {
-                    tagToItems[tag] = [];
+                const visiblePosts = posts.filter(p => p.hideFromHome !== true && p.hideFromHome !== 'true');
+                const visibleItems = [
+                  ...visiblePosts.map(p => ({
+                    id: p.slug,
+                    label: p.name,
+                    tags: p.tags || [],
+                    thumbnail: p.thumbnail || '',
+                    isPlayground: false
+                  })),
+                  ...playgrounds.map(pg => ({
+                    id: pg.id,
+                    label: pg.title,
+                    tags: pg.tags || [],
+                    thumbnail: pg.thumbnail || '',
+                    isPlayground: true,
+                    url: pg.url
+                  }))
+                ];
+
+                const tagToItems = {};
+                visibleItems.forEach(item => {
+                  if (item.tags) {
+                    item.tags.forEach(tag => {
+                      if (!tagToItems[tag]) {
+                        tagToItems[tag] = [];
+                      }
+                      tagToItems[tag].push(item.id);
+                    });
                   }
-                  tagToItems[tag].push(item.id);
-                });
-              }
-            });
-
-            const hyperedges = Object.keys(tagToItems).map(tagName => ({
-              id: getTagSlug(tagName),
-              label: tagName,
-              vertices: tagToItems[tagName]
-            }));
-
-            const vertices = visibleItems.map(item => {
-              const primaryTag = item.tags && item.tags.length > 0 ? item.tags[0] : null;
-              const edgeIdx = primaryTag ? hyperedges.findIndex(e => e.label === primaryTag) : -1;
-              return {
-                id: item.id,
-                label: item.label,
-                edgeIdx: edgeIdx,
-                primaryTag: primaryTag,
-                thumbnail: item.thumbnail || '',
-                isPlayground: item.isPlayground,
-                url: item.url || ''
-              };
-            });
-
-              try {
-                const plotterUrl = new URL('./assets/js/hypergraph/hypergraph-plotter.js?v=1.0.21', window.location.href).href;
-                const { HypergraphPlotter } = await import(plotterUrl);
-                plotterInstance = new HypergraphPlotter(container, {
-                  width: container.clientWidth || 800,
-                  height: container.clientHeight || 600,
-                  layoutType: 'spring-embedding',
-                  plotTheme: 'name-labeled',
-                  edgePalette: 'rainbow',
-                  showSubsetBoundary: true,
-                  showSubsetEdge: true,
-                  canvasBg: 'white',
-                  physicsPlaying: true,
-                  allowZoom: false,
-                  allowPan: true,
-                  // Stronger node attraction and edge repulsion with cooling stability
-                  kAttract: 0.15,
-                  kRepel: 5000,
-                  kHyperedgeRepel: 12000,
-                  kCenter: 0.005,
-                  damping: 0.75,
-                  maxSpeed: 6,
-                  restLength: 40
                 });
 
-                // Pre-calculate stable colors for all hyperedges based on full list
-                hyperedges.forEach((edge, idx) => {
-                  edge.color = plotterInstance.getPaletteColor(idx, hyperedges.length, 'rainbow');
+                const hyperedges = Object.keys(tagToItems).map(tagName => ({
+                  id: getTagSlug(tagName),
+                  label: tagName,
+                  vertices: tagToItems[tagName]
+                }));
+
+                const vertices = visibleItems.map(item => {
+                  const primaryTag = item.tags && item.tags.length > 0 ? item.tags[0] : null;
+                  const edgeIdx = primaryTag ? hyperedges.findIndex(e => e.label === primaryTag) : -1;
+                  return {
+                    id: item.id,
+                    label: item.label,
+                    edgeIdx: edgeIdx,
+                    primaryTag: primaryTag,
+                    thumbnail: item.thumbnail || '',
+                    isPlayground: item.isPlayground,
+                    url: item.url || ''
+                  };
                 });
 
-                // Add tagColor to vertices based on stable hyperedge color
-                vertices.forEach(v => {
-                  v.tagColor = (v.edgeIdx !== undefined && v.edgeIdx !== -1)
-                    ? hyperedges[v.edgeIdx].color
-                    : '#6D6E6F';
-                });
-
-                // Zoom Controls wiring (wired early to capture initial fit viewport changes)
-                const slider = mainEl.querySelector('#hypergraph-zoom-slider');
-                const btnIn = mainEl.querySelector('#hypergraph-zoom-btn-in');
-                const btnOut = mainEl.querySelector('#hypergraph-zoom-btn-out');
-                const btnReset = mainEl.querySelector('#hypergraph-zoom-btn-reset');
-
-                if (slider) {
-                  slider.addEventListener('input', (e) => {
-                    plotterInstance.zoomTo(parseFloat(e.target.value));
+                try {
+                  const plotterUrl = new URL('./assets/js/hypergraph/hypergraph-plotter.js?v=1.0.57', window.location.href).href;
+                  const { HypergraphPlotter } = await import(plotterUrl);
+                  plotterInstance = new HypergraphPlotter(container, {
+                    width: container.clientWidth || 800,
+                    height: container.clientHeight || 600,
+                    layoutType: 'spring-embedding',
+                    plotTheme: 'name-labeled',
+                    edgePalette: 'rainbow',
+                    showSubsetBoundary: true,
+                    showSubsetEdge: false,
+                    canvasBg: 'white',
+                    physicsPlaying: true,
+                    allowZoom: true,
+                    allowPan: true,
+                    kAttract: 0.18,
+                    kRepel: 7000,
+                    kHyperedgeRepel: 20000,
+                    kCenter: 0.008,
+                    damping: 0.82,
+                    maxSpeed: 8,
+                    restLength: 0,
+                    componentSpacing: 120,
+                    kSharedAttract: 0.08,
+                    kNonMemberRepel: 1.2,
+                    coolingRate: 0.998,
+                    temperatureThreshold: 0.001,
+                    maxBlobReach: 140,
+                    sameCompRepelScale: 0.4,
+                    sameCompRepelCap: 40.0,
+                    nonMemberGap: 40
                   });
-                }
 
-                if (btnIn) {
-                  btnIn.addEventListener('click', () => {
-                    let val = parseFloat(slider.value) + 0.1;
-                    if (val > 2.5) val = 2.5;
-                    slider.value = String(val);
-                    plotterInstance.zoomTo(val);
+                  // Pre-calculate stable colors for all hyperedges based on full list
+                  hyperedges.forEach((edge, idx) => {
+                    edge.color = plotterInstance.getPaletteColor(idx, hyperedges.length, 'rainbow');
                   });
-                }
 
-                if (btnOut) {
-                  btnOut.addEventListener('click', () => {
-                    let val = parseFloat(slider.value) - 0.1;
-                    if (val < 0.1) val = 0.1;
-                    slider.value = String(val);
-                    plotterInstance.zoomTo(val);
+                  // Add tagColor to vertices based on stable hyperedge color
+                  vertices.forEach(v => {
+                    v.tagColor = (v.edgeIdx !== undefined && v.edgeIdx !== -1)
+                      ? hyperedges[v.edgeIdx].color
+                      : '#6D6E6F';
                   });
-                }
 
-                if (btnReset) {
-                  btnReset.addEventListener('click', () => {
-                    plotterInstance.zoomToFit();
-                  });
-                }
+                  // Zoom Controls wiring (wired early to capture initial fit viewport changes)
+                  const slider = mainEl.querySelector('#hypergraph-zoom-slider');
+                  const btnIn = mainEl.querySelector('#hypergraph-zoom-btn-in');
+                  const btnOut = mainEl.querySelector('#hypergraph-zoom-btn-out');
+                  const btnReset = mainEl.querySelector('#hypergraph-zoom-btn-reset');
 
-                plotterInstance.onViewportChanged = (zoomValue) => {
                   if (slider) {
-                    slider.value = String(Math.max(0.1, Math.min(2.5, zoomValue)));
+                    slider.addEventListener('input', (e) => {
+                      plotterInstance.zoomTo(parseFloat(e.target.value));
+                    });
                   }
-                };
 
-                plotterInstance.onSelectionChanged = (id) => {
-                  const foundItem = visibleItems.find(item => item.id === id);
-                  if (foundItem && foundItem.isPlayground && foundItem.url) {
-                    window.open(foundItem.url, '_blank');
-                  } else {
-                    window.location.hash = `#/posts/${id}/`;
+                  if (btnIn) {
+                    btnIn.addEventListener('click', () => {
+                      let val = parseFloat(slider.value) + 0.1;
+                      if (val > 2.5) val = 2.5;
+                      slider.value = String(val);
+                      plotterInstance.zoomTo(val);
+                    });
                   }
-                };
 
-                if (!isDefaultTagsInitialized) {
-                  hyperedges.forEach(edge => {
-                    if (!activeByDefaultSlugs.has(edge.id)) {
-                      disabledTagSlugs.add(edge.id);
+                  if (btnOut) {
+                    btnOut.addEventListener('click', () => {
+                      let val = parseFloat(slider.value) - 0.1;
+                      if (val < 0.1) val = 0.1;
+                      slider.value = String(val);
+                      plotterInstance.zoomTo(val);
+                    });
+                  }
+
+                  if (btnReset) {
+                    btnReset.addEventListener('click', () => {
+                      plotterInstance.zoomToFit();
+                    });
+                  }
+
+                  plotterInstance.onViewportChanged = (zoomValue) => {
+                    if (slider) {
+                      slider.value = String(Math.max(0.1, Math.min(2.5, zoomValue)));
                     }
-                  });
-                  isDefaultTagsInitialized = true;
+                  };
+
+                  plotterInstance.onSelectionChanged = (id) => {
+                    const foundItem = visibleItems.find(item => item.id === id);
+                    if (foundItem && foundItem.isPlayground && foundItem.url) {
+                      window.open(foundItem.url, '_blank');
+                    } else {
+                      window.location.hash = `#/posts/${id}/`;
+                    }
+                  };
+
+                  if (!isDefaultTagsInitialized) {
+                    hyperedges.forEach(edge => {
+                      if (!activeByDefaultSlugs.has(edge.id)) {
+                        disabledTagSlugs.add(edge.id);
+                      }
+                    });
+                    isDefaultTagsInitialized = true;
+                  }
+
+                  const activeHyperedges = hyperedges.filter(edge => !disabledTagSlugs.has(edge.id));
+                  plotterInstance.setData({ vertices, hyperedges: activeHyperedges });
+
+                  // Sync slider value manually on initial load to match fitted zoom
+                  if (slider) {
+                    slider.value = String(Math.max(0.1, Math.min(2.5, plotterInstance.zoom)));
+                  }
+
+                  const searchInput = mainEl.querySelector('#tag-search-input');
+                  const legendContainer = mainEl.querySelector('#legend-items-container');
+
+                  const renderLegendItems = () => {
+                    if (!legendContainer) return;
+                    const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+                    const filteredEdges = hyperedges.filter(edge => edge.label.toLowerCase().includes(query));
+
+                    legendContainer.innerHTML = filteredEdges.map((edge) => {
+                      const color = edge.color;
+                      const isDisabled = disabledTagSlugs.has(edge.id);
+                      return `
+                        <div class="legend-item" data-tag-slug="${edge.id}" style="display: flex; align-items: center; gap: 6px; padding: 4px 6px; border-radius: 4px; cursor: pointer; user-select: none; opacity: ${isDisabled ? '0.4' : '1.0'}; text-decoration: ${isDisabled ? 'line-through' : 'none'}; transition: opacity 0.2s, background-color 0.15s;">
+                          <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: ${isDisabled ? '#ccc' : color}; border: 1px solid ${isDisabled ? '#999' : color}; flex-shrink: 0; transition: background-color 0.2s, border-color 0.2s;"></span>
+                          <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px; color: #101011; font-weight: 500;" title="${edge.label}">${edge.label}</span>
+                        </div>
+                      `;
+                    }).join('');
+                  };
+
+                  const syncTagUIAndGraph = () => {
+                    const activeHyperedges = hyperedges.filter(edge => !disabledTagSlugs.has(edge.id));
+                    if (plotterInstance) {
+                      plotterInstance.physicsLayout.temperature = 1.0;
+                      plotterInstance.setData({ vertices, hyperedges: activeHyperedges });
+                    }
+                    renderLegendItems();
+                  };
+
+                  if (searchInput) {
+                    searchInput.addEventListener('input', renderLegendItems);
+                  }
+
+                  if (legendContainer) {
+                    legendContainer.addEventListener('click', (e) => {
+                      const item = e.target.closest('.legend-item');
+                      if (item) {
+                        const tagSlug = item.getAttribute('data-tag-slug');
+                        if (disabledTagSlugs.has(tagSlug)) {
+                          disabledTagSlugs.delete(tagSlug);
+                        } else {
+                          disabledTagSlugs.add(tagSlug);
+                        }
+                        syncTagUIAndGraph();
+                      }
+                    });
+                  }
+
+                  syncTagUIAndGraph();
+
+                } catch (err) {
+                  console.error("Failed to load or initialize HypergraphPlotter:", err);
                 }
-
-                const activeHyperedges = hyperedges.filter(edge => !disabledTagSlugs.has(edge.id));
-                plotterInstance.setData({ vertices, hyperedges: activeHyperedges });
-
-                // Sync slider value manually on initial load to match fitted zoom
-                if (slider) {
-                  slider.value = String(Math.max(0.1, Math.min(2.5, plotterInstance.zoom)));
-                }
-
-                const legendContainer = mainEl.querySelector('#legend-items-container');
-                if (legendContainer) {
-                  legendContainer.innerHTML = hyperedges.map((edge, idx) => {
-                    const color = edge.color;
-                    const isDisabled = disabledTagSlugs.has(edge.id);
-                    return `
-                      <div class="legend-item" data-tag-slug="${edge.id}" data-color="${color}" style="display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; opacity: ${isDisabled ? '0.4' : '1.0'}; text-decoration: ${isDisabled ? 'line-through' : 'none'};">
-                        <span style="display: inline-block; width: 12px; height: 12px; border-radius: 3px; background-color: ${isDisabled ? '#ccc' : color}; opacity: 0.7; border: 1.5px solid ${isDisabled ? '#999' : color}; flex-shrink: 0;"></span>
-                        <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px;" title="${edge.label}">${edge.label}</span>
-                      </div>
-                    `;
-                  }).join('');
-                }
-
-              } catch (err) {
-                console.error("Failed to load or initialize HypergraphPlotter:", err);
-              }
+              });
+            });
           }
         }
       } else {
@@ -986,7 +1050,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const slug = cleanHash.substring(5);
       updateStyleSheets('tag', 'tags-template', slug);
       if (slug === '') {
-        const tagsList = getTagsDataFromPosts(posts);
+        const tagsList = getTagsDataFromPosts(posts, playgrounds);
         document.title = `All tags - Phileas Dazeley-Gaist`;
         document.body.className = 'tags-template';
         mainEl.className = 'page page--tags';
@@ -1015,18 +1079,21 @@ document.addEventListener("DOMContentLoaded", () => {
         const grid = mainEl.querySelector('.l-masonry');
         initGridMasonry(grid);
       } else {
-        const tagsList = getTagsDataFromPosts(posts);
+        const tagsList = getTagsDataFromPosts(posts, playgrounds);
         const matchedTag = tagsList.find(t => t.slug === slug);
         const tagName = matchedTag ? matchedTag.name : slug;
         
-        const filteredPosts = posts.filter(p => p.tags && p.tags.some(t => getTagSlug(t) === slug));
+        const filteredPosts = posts.filter(p => p.tags && p.tags.some(t => getTagSlug(t) === slug)).map(p => ({ ...p, isPlayground: false }));
+        const filteredPlaygrounds = playgrounds.filter(pg => pg.tags && pg.tags.some(t => getTagSlug(t) === slug)).map(pg => ({ ...pg, isPlayground: true, name: pg.title, slug: pg.id }));
+        const combinedItems = [...filteredPosts, ...filteredPlaygrounds];
+        
         document.title = `Tag: ${tagName} - Phileas Dazeley-Gaist`;
         document.body.className = 'tag-template';
         mainEl.className = 'page page--tag';
 
         mainEl.innerHTML = `
           <div class="wrapper">
-            <div class="hero"><h1>${tagName} <sup>(${filteredPosts.length})</sup></h1></div>
+            <div class="hero"><h1>${tagName} <sup>(${combinedItems.length})</sup></h1></div>
             <div class="l-masonry l-masonry--3">
               <div class="gutter-sizer"></div>
             </div>
@@ -1035,7 +1102,7 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
 
         const grid = mainEl.querySelector('.l-masonry');
-        const initialChunk = filteredPosts.slice(0, 12);
+        const initialChunk = combinedItems.slice(0, 12);
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = initialChunk.map(p => renderCard(p, '')).join('');
         Array.from(tempDiv.children).forEach(item => grid.appendChild(item));
@@ -1043,7 +1110,7 @@ document.addEventListener("DOMContentLoaded", () => {
         initGridMasonry(grid);
 
         const paginationContainer = mainEl.querySelector('#pagination-container');
-        setupPagination(filteredPosts, paginationContainer, grid, '');
+        setupPagination(combinedItems, paginationContainer, grid, '');
       }
     } else if (cleanHash.startsWith('authors/')) {
       const slug = cleanHash.substring(8);
@@ -1091,66 +1158,6 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.hash = '#/';
       }
       return;
-    }
-
-    const legendItem = e.target.closest('.legend-item');
-    if (legendItem) {
-      const tagSlug = legendItem.getAttribute('data-tag-slug');
-      if (disabledTagSlugs.has(tagSlug)) {
-        disabledTagSlugs.delete(tagSlug);
-      } else {
-        disabledTagSlugs.add(tagSlug);
-      }
-      
-      // Update graph data smoothly
-      if (plotterInstance && currentViewMode === 'hypergraph' && postsData) {
-        const visiblePosts = postsData.filter(p => p.hideFromHome !== true);
-        const tagToPosts = {};
-        visiblePosts.forEach(p => {
-          if (p.tags) {
-            p.tags.forEach(tag => {
-              if (!tagToPosts[tag]) {
-                tagToPosts[tag] = [];
-              }
-              tagToPosts[tag].push(p.slug);
-            });
-          }
-        });
-
-        const hyperedges = Object.keys(tagToPosts).map(tagName => ({
-          id: getTagSlug(tagName),
-          label: tagName,
-          vertices: tagToPosts[tagName]
-        }));
-
-        // Assign stable colors to reconstructed hyperedges
-        hyperedges.forEach((edge, idx) => {
-          edge.color = plotterInstance.getPaletteColor(idx, hyperedges.length, 'rainbow');
-        });
-
-        const activeHyperedges = hyperedges.filter(edge => !disabledTagSlugs.has(edge.id));
-        
-        // Re-heat layout and set new data
-        plotterInstance.physicsLayout.temperature = 1.0; 
-        plotterInstance.setData({ vertices: plotterInstance.vertices, hyperedges: activeHyperedges });
-
-        // Update legend styles
-        const legendContainer = document.getElementById('legend-items-container');
-        if (legendContainer) {
-          legendContainer.querySelectorAll('.legend-item').forEach(item => {
-            const slug = item.getAttribute('data-tag-slug');
-            const isDisabled = disabledTagSlugs.has(slug);
-            item.style.opacity = isDisabled ? '0.4' : '1.0';
-            item.style.textDecoration = isDisabled ? 'line-through' : 'none';
-            const spanDot = item.querySelector('span');
-            if (spanDot) {
-              const originalColor = item.getAttribute('data-color');
-              spanDot.style.backgroundColor = isDisabled ? '#ccc' : originalColor;
-              spanDot.style.borderColor = isDisabled ? '#999' : originalColor;
-            }
-          });
-        }
-      }
     }
   });
 

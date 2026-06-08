@@ -1,5 +1,5 @@
-import { Vec, getBlobPath } from './geom.js?v=1.0.21';
-import { BipartiteForceLayout, circularLayout, gridLayout } from './layout.js?v=1.0.21';
+import { Vec, getBlobPath } from './geom.js?v=1.0.57';
+import { BipartiteForceLayout, circularLayout, gridLayout } from './layout.js?v=1.0.57';
 
 function getNodeHullPoints(node) {
   if (node.isHub) {
@@ -85,14 +85,21 @@ export class HypergraphPlotter {
       initialZoom: null,
 
       // Force-directed layout physics parameters
-      kAttract: 0.2,
-      kRepel: 10000,
-      kHyperedgeRepel: 10000,
-      kCenter: 0.004,
+      kAttract: 0.18,
+      kRepel: 7000,
+      kHyperedgeRepel: 20000,
+      kCenter: 0.008,
       restLength: 0,
-      componentSpacing: 90,
-      damping: 0.88,
-      maxSpeed: 10,
+      componentSpacing: 120,
+      damping: 0.82,
+      maxSpeed: 8,
+      sameCompRepelScale: 0.3,
+      sameCompRepelCap: 10.0,
+      kSharedAttract: 0.08,
+      coolingRate: 0.985,
+      temperatureThreshold: 0.005,
+      maxBlobReach: 140,
+      nonMemberGap: 40,
       ...options
     };
 
@@ -235,7 +242,14 @@ export class HypergraphPlotter {
       restLength: this.options.restLength,
       componentSpacing: this.options.componentSpacing,
       damping: this.options.damping,
-      maxSpeed: this.options.maxSpeed
+      maxSpeed: this.options.maxSpeed,
+      sameCompRepelScale: this.options.sameCompRepelScale,
+      sameCompRepelCap: this.options.sameCompRepelCap,
+      kSharedAttract: this.options.kSharedAttract,
+      coolingRate: this.options.coolingRate,
+      temperatureThreshold: this.options.temperatureThreshold,
+      maxBlobReach: this.options.maxBlobReach,
+      nonMemberGap: this.options.nonMemberGap
     });
     this.physicsLayout.fixedNodeIds = this.pinnedNodeIds;
   }
@@ -245,6 +259,8 @@ export class HypergraphPlotter {
    */
   _initEvents() {
     this.svg.addEventListener('mousedown', (e) => {
+      this.mouseDownTime = Date.now();
+      this.mouseDownPos = { x: e.clientX, y: e.clientY };
       const target = e.target;
       const vertexGroup = target.closest('.vertex');
       if (vertexGroup) {
@@ -302,19 +318,30 @@ export class HypergraphPlotter {
       }
     });
 
-    window.addEventListener('mouseup', () => {
+    window.addEventListener('mouseup', (e) => {
       if (this.draggedNodeId) {
-        if (this.hasDragged && this.options.pinOnDrag) {
-          this.pinnedNodeIds.add(this.draggedNodeId);
-          this.draw();
-        } else if (!this.hasDragged) {
-          // Node was clicked, not dragged. Release it if it is currently locked.
+        const clickDuration = Date.now() - (this.mouseDownTime || 0);
+        const dragDist = this.mouseDownPos ? Math.sqrt(
+          Math.pow(e.clientX - this.mouseDownPos.x, 2) +
+          Math.pow(e.clientY - this.mouseDownPos.y, 2)
+        ) : 0;
+
+        const isQuickClick = clickDuration < 250 && dragDist < 8;
+
+        if (isQuickClick) {
+          // Node was clicked quickly without drag. Release it if it is currently locked.
           if (this.pinnedNodeIds.has(this.draggedNodeId)) {
             this.pinnedNodeIds.delete(this.draggedNodeId);
             this.draw();
           }
           if (!String(this.draggedNodeId).startsWith('_hub_') && this.onSelectionChanged) {
             this.onSelectionChanged(this.draggedNodeId);
+          }
+        } else {
+          // Dragged or held. Pin if pinOnDrag is enabled.
+          if (this.hasDragged && this.options.pinOnDrag) {
+            this.pinnedNodeIds.add(this.draggedNodeId);
+            this.draw();
           }
         }
         if (this.onNodeDragged) {
@@ -440,10 +467,8 @@ export class HypergraphPlotter {
 
         if (coords.length === 0) return;
 
-        const hubNode = this.physicsLayout.nodeMap.get(`_hub_${edge.id}`);
-        if (hubNode) {
-          coords.push({ x: hubNode.x, y: hubNode.y });
-        }
+        // Do NOT add the hub to the hull — the hub is a physics anchor, not a visible member node.
+        // Including it caused blobs to inflate and waste space around the hub position.
 
         const blobRadius = vertexRadius * this.options.boundaryScale;
         const pathData = getBlobPath(coords, blobRadius);
@@ -496,6 +521,8 @@ export class HypergraphPlotter {
           const v0 = this.physicsLayout.nodeMap.get(edge.vertices[0]);
           if (!v0) return;
 
+          // Quadratic bezier arcs from the first vertex to each other vertex,
+          // using the hub as the curve control point. Gives a pleasing radial fan shape.
           for (let i = 1; i < edge.vertices.length; i++) {
             const vi = this.physicsLayout.nodeMap.get(edge.vertices[i]);
             if (!vi) continue;
@@ -506,7 +533,7 @@ export class HypergraphPlotter {
             path.setAttribute('fill', 'none');
             path.setAttribute('stroke', edgeColor);
             path.setAttribute('stroke-width', `${this.options.edgeWidth}px`);
-            path.setAttribute('opacity', '0.85');
+            path.setAttribute('opacity', '0.7');
             this.edgesLayer.appendChild(path);
           }
         }
@@ -768,23 +795,27 @@ export class HypergraphPlotter {
 
     if (this.options.layoutType === 'spring-embedding') {
       // Warm up the simulation so it is mostly settled before framing/rendering
-      const ticks = isFirstLoad ? 250 : 100;
+      const ticks = isFirstLoad ? 250 : 0;
       for (let i = 0; i < ticks; i++) {
         this.physicsLayout.tick();
+      }
+      if (isFirstLoad) {
+        this.physicsLayout.temperature = 1.0; // Reset temperature to 1.0 after static warmup
       }
     } else {
       this._applyStaticLayout();
     }
 
-    if (isFirstLoad && this.options.initialZoom != null) {
-      this.zoom  = this.options.initialZoom;
-      this.pan.x = actualWidth / 2 - (this.physicsLayout.width  / 2) * this.zoom;
-      this.pan.y = actualHeight / 2 - (this.physicsLayout.height / 2) * this.zoom;
-      this.applyTransform();
-    } else {
-      // Fit to viewport. On first load, we apply a 1.0x zoom to fit all nodes cleanly.
-      const zoomMultiplier = isFirstLoad ? 1.0 : 1.0;
-      this.zoomToFit(null, zoomMultiplier);
+    if (isFirstLoad) {
+      if (this.options.initialZoom != null) {
+        this.zoom  = this.options.initialZoom;
+        this.pan.x = actualWidth / 2 - (this.physicsLayout.width  / 2) * this.zoom;
+        this.pan.y = actualHeight / 2 - (this.physicsLayout.height / 2) * this.zoom;
+        this.applyTransform();
+      } else {
+        // Fit to viewport. On first load, we apply a 1.0x zoom to fit all nodes cleanly.
+        this.zoomToFit(null, 1.0);
+      }
     }
 
     if (this.onDataChanged) {
@@ -818,6 +849,9 @@ export class HypergraphPlotter {
       this.physicsLayout.componentSpacing = this.options.componentSpacing;
       this.physicsLayout.damping = this.options.damping;
       this.physicsLayout.maxSpeed = this.options.maxSpeed;
+      this.physicsLayout.sameCompRepelScale = this.options.sameCompRepelScale;
+      this.physicsLayout.sameCompRepelCap = this.options.sameCompRepelCap;
+      this.physicsLayout.kSharedAttract = this.options.kSharedAttract;
 
       this.physicsLayout.updateNodeDimensions(this.options);
 
@@ -887,7 +921,7 @@ export class HypergraphPlotter {
     const tickLoop = () => {
       if (this.options.physicsPlaying && this.options.layoutType === 'spring-embedding') {
         const isDragging = this.draggedNodeId !== null;
-        const isWarm = this.physicsLayout.temperature >= 0.005;
+        const isWarm = this.physicsLayout.temperature >= this.options.temperatureThreshold;
         if (isWarm || isDragging) {
           if (this.isAutoSettling && !isDragging) {
             this.container.classList.add('is-simulating');
@@ -961,7 +995,8 @@ export class HypergraphPlotter {
     this.zoom = Math.max(0.1, Math.min(10.0, targetZoom));
 
     const svgRect = this.svg.getBoundingClientRect();
-    const cx = svgRect.width / 2;
+    const isDesktop = svgRect.width > 768;
+    const cx = isDesktop ? (svgRect.width / 2 + 90) : (svgRect.width / 2);
     const cy = svgRect.height / 2;
 
     const localX = (cx - this.pan.x) / oldZoom;
@@ -1020,7 +1055,9 @@ export class HypergraphPlotter {
     const graphCenterX = minX + graphW / 2;
     const graphCenterY = minY + graphH / 2;
 
-    this.pan.x = width / 2 - graphCenterX * this.zoom;
+    const isDesktop = width > 768;
+    const viewportCenterX = isDesktop ? (width / 2 + 90) : (width / 2);
+    this.pan.x = viewportCenterX - graphCenterX * this.zoom;
     this.pan.y = height / 2 - graphCenterY * this.zoom;
 
     this.applyTransform();
@@ -1061,7 +1098,7 @@ export class HypergraphPlotter {
     if (graphW <= 0 || graphH <= 0) return;
 
     // Default to a clean, responsive padding to fit the viewport nicely
-    const finalPadding = padding !== null ? padding : Math.max(40, Math.min(width * 0.12, height * 0.12));
+    const finalPadding = padding !== null ? padding : Math.max(25, Math.min(width * 0.05, height * 0.05));
     const scaleX = (width - finalPadding * 2) / graphW;
     const scaleY = (height - finalPadding * 2) / graphH;
     let targetZoom = Math.max(0.1, Math.min(2.5, Math.min(scaleX, scaleY)));
@@ -1073,7 +1110,9 @@ export class HypergraphPlotter {
     const graphCenterY = minY + graphH / 2;
 
     this.zoom = targetZoom;
-    this.pan.x = width / 2 - graphCenterX * targetZoom;
+    const isDesktop = width > 768;
+    const viewportCenterX = isDesktop ? (width / 2 + 90) : (width / 2);
+    this.pan.x = viewportCenterX - graphCenterX * targetZoom;
     this.pan.y = height / 2 - graphCenterY * targetZoom;
 
     this.applyTransform();

@@ -1,4 +1,4 @@
-import { Vec } from './geom.js';
+import { Vec } from './geom.js?v=1.0.57';
 
 /**
  * Manages the force-directed simulation for a bipartite representation of the hypergraph.
@@ -11,14 +11,23 @@ export class BipartiteForceLayout {
     this.height = options.height || 600;
     
     // Hypergraph physics coefficients
-    this.kAttract = options.kAttract !== undefined ? options.kAttract : 0.2;
-    this.kRepel = options.kRepel !== undefined ? options.kRepel : 10000;
-    this.kHyperedgeRepel = options.kHyperedgeRepel !== undefined ? options.kHyperedgeRepel : 10000;
-    this.kCenter = options.kCenter !== undefined ? options.kCenter : 0.004;
+    this.kAttract = options.kAttract !== undefined ? options.kAttract : 0.18;
+    this.kRepel = options.kRepel !== undefined ? options.kRepel : 7000;
+    this.kHyperedgeRepel = options.kHyperedgeRepel !== undefined ? options.kHyperedgeRepel : 20000;
+    this.kCenter = options.kCenter !== undefined ? options.kCenter : 0.008;
     this.restLength = options.restLength !== undefined ? options.restLength : 0;
-    this.componentSpacing = options.componentSpacing !== undefined ? options.componentSpacing : 90;
-    this.damping = options.damping !== undefined ? options.damping : 0.88;
-    this.maxSpeed = options.maxSpeed !== undefined ? options.maxSpeed : 10;
+    this.componentSpacing = options.componentSpacing !== undefined ? options.componentSpacing : 120;
+    this.damping = options.damping !== undefined ? options.damping : 0.82;
+    this.maxSpeed = options.maxSpeed !== undefined ? options.maxSpeed : 8;
+    this.sameCompRepelScale = options.sameCompRepelScale !== undefined ? options.sameCompRepelScale : 0.3;
+    this.sameCompRepelCap = options.sameCompRepelCap !== undefined ? options.sameCompRepelCap : 10.0;
+    this.kSharedAttract = options.kSharedAttract !== undefined ? options.kSharedAttract : 0.08;
+    // Force pushing non-member vertices out of foreign blob regions
+    this.kNonMemberRepel = options.kNonMemberRepel !== undefined ? options.kNonMemberRepel : 1.8;
+    this.coolingRate = options.coolingRate !== undefined ? options.coolingRate : 0.985;
+    this.temperatureThreshold = options.temperatureThreshold !== undefined ? options.temperatureThreshold : 0.005;
+    this.maxBlobReach = options.maxBlobReach !== undefined ? options.maxBlobReach : 140;
+    this.nonMemberGap = options.nonMemberGap !== undefined ? options.nonMemberGap : 40;
 
     this.nodes = []; // All nodes (vertices + hubs)
     this.nodeMap = new Map(); // id -> node reference
@@ -43,7 +52,8 @@ export class BipartiteForceLayout {
     this.nodeMap.clear();
     this.links = [];
 
-    const centerX = this.width / 2;
+    const isDesktop = this.width > 768;
+    const centerX = isDesktop ? (this.width / 2 + 90) : (this.width / 2);
     const centerY = this.height / 2;
 
     // Detect Connected Components of the hypergraph (bipartite BFS)
@@ -109,23 +119,32 @@ export class BipartiteForceLayout {
     components.forEach((comp, idx) => {
       // Angle on spawning circle
       const angle = numComponents <= 1 ? 0 : (idx / numComponents) * 2 * Math.PI;
-      const spawnX = numComponents <= 1 ? centerX : centerX + R * Math.cos(angle);
-      const spawnY = numComponents <= 1 ? centerY : centerY + R * Math.sin(angle);
+      const compR = numComponents <= 1 ? 0 : (this.componentSpacing > 0 ? this.componentSpacing * 2.5 : 250);
+      const offsetX = compR * Math.cos(angle);
+      const offsetY = compR * Math.sin(angle);
+      const spawnX = centerX + offsetX;
+      const spawnY = centerY + offsetY;
 
-      // Target centers for simulation is always the global center (centerX, centerY)
+      // Target centers for simulation space components out
       comp.vertices.forEach(vId => nodeTargetCenters.set(vId, {
         spawnX,
         spawnY,
-        targetX: centerX,
-        targetY: centerY,
-        componentId: idx
+        targetX: centerX + offsetX,
+        targetY: centerY + offsetY,
+        targetOffsetX: offsetX,
+        targetOffsetY: offsetY,
+        componentId: idx,
+        componentSize: comp.vertices.length
       }));
       comp.edges.forEach(eId => nodeTargetCenters.set(`_hub_${eId}`, {
         spawnX,
         spawnY,
-        targetX: centerX,
-        targetY: centerY,
-        componentId: idx
+        targetX: centerX + offsetX,
+        targetY: centerY + offsetY,
+        targetOffsetX: offsetX,
+        targetOffsetY: offsetY,
+        componentId: idx,
+        componentSize: comp.vertices.length
       }));
     });
 
@@ -134,7 +153,7 @@ export class BipartiteForceLayout {
     // 1. Add Vertices
     vertices.forEach(v => {
       const oldNode = oldNodeMap.get(v.id);
-      const target = nodeTargetCenters.get(v.id) || { spawnX: centerX, spawnY: centerY, targetX: centerX, targetY: centerY, componentId: 0 };
+      const target = nodeTargetCenters.get(v.id) || { spawnX: centerX, spawnY: centerY, targetX: centerX, targetY: centerY, componentId: 0, componentSize: 1 };
 
       // Spawn vertices in a ring around their COMPONENT spawn center instead of the global center
       // to start them pre-separated and prevent overlapping components on load.
@@ -155,7 +174,10 @@ export class BipartiteForceLayout {
         thumbnail: v.thumbnail || '',
         targetX: target.targetX,
         targetY: target.targetY,
+        targetOffsetX: target.targetOffsetX !== undefined ? target.targetOffsetX : 0,
+        targetOffsetY: target.targetOffsetY !== undefined ? target.targetOffsetY : 0,
         componentId: target.componentId !== undefined ? target.componentId : 0,
+        componentSize: target.componentSize !== undefined ? target.componentSize : 1,
         x: oldNode ? oldNode.x : target.spawnX + Math.cos(angle) * radiusX,
         y: oldNode ? oldNode.y : target.spawnY + Math.sin(angle) * radiusY,
         vx: oldNode ? oldNode.vx : 0,
@@ -170,7 +192,7 @@ export class BipartiteForceLayout {
       if (e.vertices.length <= 1) return;
       const hubId = `_hub_${e.id}`;
       const oldNode = oldNodeMap.get(hubId);
-      const target = nodeTargetCenters.get(hubId) || { x: centerX, y: centerY };
+      const target = nodeTargetCenters.get(hubId) || { x: centerX, y: centerY, componentSize: 1 };
 
       // Initial position of hub is center of gravity of its vertices
       let initX = 0;
@@ -199,7 +221,10 @@ export class BipartiteForceLayout {
         label: '',
         targetX: target.targetX,
         targetY: target.targetY,
+        targetOffsetX: target.targetOffsetX !== undefined ? target.targetOffsetX : 0,
+        targetOffsetY: target.targetOffsetY !== undefined ? target.targetOffsetY : 0,
         componentId: target.componentId !== undefined ? target.componentId : 0,
+        componentSize: target.componentSize !== undefined ? target.componentSize : 1,
         x: oldNode ? oldNode.x : initX,
         y: oldNode ? oldNode.y : initY,
         vx: oldNode ? oldNode.vx : 0,
@@ -219,7 +244,67 @@ export class BipartiteForceLayout {
       });
     });
 
+    // 3. Compute shared vertex pairs for direct attraction
+    this.sharedVertexPairs = [];
+    const numVertices = vertices.length;
+    for (let i = 0; i < numVertices; i++) {
+      const v1Id = vertices[i].id;
+      const set1 = adj.get(v1Id);
+      if (!set1) continue;
+      for (let j = i + 1; j < numVertices; j++) {
+        const v2Id = vertices[j].id;
+        const set2 = adj.get(v2Id);
+        if (!set2) continue;
+
+        let sharedCount = 0;
+        for (const edgeId of set1) {
+          if (set2.has(edgeId)) {
+            sharedCount++;
+          }
+        }
+
+        if (sharedCount > 0) {
+          this.sharedVertexPairs.push({
+            v1Id,
+            v2Id,
+            count: sharedCount
+          });
+        }
+      }
+    }
+
+    // 4. Build per-vertex edge membership set (for non-member blob avoidance in tick)
+    this.vertexEdgeSet = new Map(); // vId -> Set<eId>
+    vertices.forEach(v => this.vertexEdgeSet.set(v.id, new Set()));
+    hyperedges.forEach(e => {
+      e.vertices.forEach(vId => {
+        if (this.vertexEdgeSet.has(vId)) this.vertexEdgeSet.get(vId).add(e.id);
+      });
+    });
+    // Store hyperedges reference for tick()
+    this.hyperedges = hyperedges;
+
     this.updateNodeDimensions(options);
+  }
+
+  /**
+   * Calculates the direction-sensitive radius of a node along a unit vector (ux, uy).
+   * Rectangular nodes are simulated as their isotropic minimum enclosing disks to allow smooth sliding.
+   */
+  getNodeRadius(node, ux, uy) {
+    if (node.isHub) {
+      return node.radius || 4;
+    }
+    if (node.shape === 'rect') {
+      return Math.sqrt(node.halfWidth * node.halfWidth + node.halfHeight * node.halfHeight);
+    }
+    if (node.shape === 'capsule') {
+      return Math.min(
+        node.halfWidth / Math.max(0.0001, Math.abs(ux)),
+        node.halfHeight / Math.max(0.0001, Math.abs(uy))
+      );
+    }
+    return node.radius || 12;
   }
 
   /**
@@ -233,7 +318,7 @@ export class BipartiteForceLayout {
     const currentMaxSpeed = this.maxSpeed * this.temperature;
     
     // If temperature is extremely low and we are not dragging, freeze layout
-    if (this.temperature < 0.005 && this.draggedNodeId === null) {
+    if (this.temperature < this.temperatureThreshold && this.draggedNodeId === null) {
       for (let i = 0; i < n; i++) {
         this.nodes[i].vx = 0;
         this.nodes[i].vy = 0;
@@ -244,7 +329,7 @@ export class BipartiteForceLayout {
     if (this.draggedNodeId !== null) {
       this.temperature = 1.0; // Melt on drag
     } else {
-      this.temperature *= 0.985; // Cool down
+      this.temperature *= this.coolingRate; // Cool down
     }
 
     // Visual blob margin: how far the rendered blob extends past each node's surface.
@@ -288,7 +373,7 @@ export class BipartiteForceLayout {
         const vReach = d + (v.radius || v.halfWidth || vertexRadius);
         if (vReach > maxDist) maxDist = vReach;
       });
-      const rawReach = maxDist + blobMargin;
+      const rawReach = Math.min(maxDist + blobMargin, this.maxBlobReach);
       // EMA: 95% previous value + 5% new measurement — smooths out frame-to-frame jitter
       node.blobReach = node.blobReach != null
         ? 0.95 * node.blobReach + 0.05 * rawReach
@@ -324,26 +409,9 @@ export class BipartiteForceLayout {
           continue;
         }
 
-        // Compute radius for node 1: same-component repulsion uses isotropic bounding circles (n1.radius)
-        // to prevent vibration/jitter. Cross-component uses direction-sensitive ray-cast for accuracy.
-        let r1 = 0;
-        if (n1.isHub) {
-          r1 = n1.radius || 4;
-        } else if (!sameComp && (n1.shape === 'capsule' || n1.shape === 'rect')) {
-          r1 = Math.min(n1.halfWidth / Math.max(0.0001, Math.abs(ux)), n1.halfHeight / Math.max(0.0001, Math.abs(uy)));
-        } else {
-          r1 = n1.radius || 12;
-        }
-
-        // Compute radius for node 2
-        let r2 = 0;
-        if (n2.isHub) {
-          r2 = n2.radius || 4;
-        } else if (!sameComp && (n2.shape === 'capsule' || n2.shape === 'rect')) {
-          r2 = Math.min(n2.halfWidth / Math.max(0.0001, Math.abs(ux)), n2.halfHeight / Math.max(0.0001, Math.abs(uy)));
-        } else {
-          r2 = n2.radius || 12;
-        }
+        // Compute direction-sensitive radius. Rectangles are treated as minimum enclosing ellipses.
+        const r1 = this.getNodeRadius(n1, ux, uy);
+        const r2 = this.getNodeRadius(n2, ux, uy);
 
         const R_repel = r1 + r2;
 
@@ -355,10 +423,18 @@ export class BipartiteForceLayout {
           repelCoeff = (this.kRepel + this.kHyperedgeRepel) / 2;
         }
 
-        // 1. Long-range standard / linear overlap repulsion
+        // 1. Long-range standard / linear overlap repulsion with smooth range cutoff
         if (d >= R_repel) {
-          const dEff = d - R_repel + 24.0;
-          force = repelCoeff / (dEff * dEff);
+          const maxRepelRange = R_repel + 180.0;
+          if (d >= maxRepelRange) {
+            force = 0;
+          } else {
+            const dEff = d - R_repel + 24.0;
+            const baseForce = repelCoeff / (dEff * dEff);
+            // Smoothly fade repulsion force to 0 as distance approaches the cutoff
+            const fade = (maxRepelRange - d) / 180.0;
+            force = baseForce * fade;
+          }
         } else {
           const overlap = R_repel - d;
           const kOverlap = repelCoeff / 500;
@@ -367,18 +443,38 @@ export class BipartiteForceLayout {
 
         // 2. Blob-surface non-overlap enforcement (for non-member vertex-to-hub or hub-to-hub pairs)
         let blobGoal = 0;
-        if (n1.isHub && !n2.isHub) {
-          blobGoal = (n1.blobReach || blobMargin) + r2 + blobGap;
-        } else if (n2.isHub && !n1.isHub) {
-          blobGoal = (n2.blobReach || blobMargin) + r1 + blobGap;
-        } else if (n1.isHub && n2.isHub) {
+        if (n1.isHub && n2.isHub) {
+          // Repel distinct hyperedge hubs to keep their blobs from overlapping
           const reach1 = n1.blobReach || blobMargin;
           const reach2 = n2.blobReach || blobMargin;
           blobGoal = reach1 + reach2 + blobGap;
-        }
-
-        if (!sameComp) {
+          if (!sameComp) {
+            blobGoal = Math.max(blobGoal, this.componentSpacing);
+          }
+        } else if (!sameComp) {
+          // Cross-component vertex-hub repulsion
+          if (n1.isHub && !n2.isHub) {
+            blobGoal = (n1.blobReach || blobMargin) + r2 + blobGap;
+          } else if (n2.isHub && !n1.isHub) {
+            blobGoal = (n2.blobReach || blobMargin) + r1 + blobGap;
+          }
           blobGoal = Math.max(blobGoal, this.componentSpacing);
+        } else {
+          if (n1.isHub && !n2.isHub) {
+            const memberSet = this.vertexEdgeSet.get(n2.id);
+            const isMember = memberSet && memberSet.has(n1.edgeId);
+            if (!isMember) {
+              const r2_eff = this.getNodeRadius(n2, ux, uy);
+              blobGoal = (n1.blobReach || blobMargin) + r2_eff + blobGap;
+            }
+          } else if (n2.isHub && !n1.isHub) {
+            const memberSet = this.vertexEdgeSet.get(n1.id);
+            const isMember = memberSet && memberSet.has(n2.edgeId);
+            if (!isMember) {
+              const r1_eff = this.getNodeRadius(n1, ux, uy);
+              blobGoal = (n2.blobReach || blobMargin) + r1_eff + blobGap;
+            }
+          }
         }
 
         if (blobGoal > 0 && d < blobGoal) {
@@ -387,7 +483,12 @@ export class BipartiteForceLayout {
             factor = repelCoeff / this.kRepel;
           }
           // Dynamic spring force to separate overlapping blobs / non-member nodes
-          const overlapForce = 0.35 * factor * (blobGoal - d);
+          let overlapForce = 0.35 * factor * (blobGoal - d);
+          if (sameComp) {
+            // For same-component, limit the force so it doesn't tear the component apart
+            overlapForce = this.sameCompRepelScale * factor * (blobGoal - d);
+            overlapForce = Math.min(overlapForce, this.sameCompRepelCap);
+          }
           force = Math.max(force, overlapForce);
         }
 
@@ -418,10 +519,8 @@ export class BipartiteForceLayout {
       if (d < 0.1) return;
 
       // Spring force: F = kAttract * (d - effRestLength)
-      // Account for the vertex's own radius in the spring's rest length.
-      // This gives larger nodes more "slack" (space to repel each other) by pulling
-      // based on their surface distance rather than center distance.
-      const effRestLength = this.restLength + (vNode.radius || 12);
+      // The rest length is now exactly this.restLength (defaulting to 0) to pull nodes closer to hubs.
+      const effRestLength = this.restLength;
       const force = this.kAttract * (d - effRestLength);
       const fX = (dx / d) * force;
       const fY = (dy / d) * force;
@@ -432,11 +531,113 @@ export class BipartiteForceLayout {
       fy[idxH] += fY;
     });
 
+    // 2b. Direct attraction between vertices sharing hyperedges
+    this.sharedVertexPairs.forEach(pair => {
+      const v1Node = this.nodeMap.get(pair.v1Id);
+      const v2Node = this.nodeMap.get(pair.v2Id);
+      if (!v1Node || !v2Node) return;
+
+      const idx1 = this.nodes.indexOf(v1Node);
+      const idx2 = this.nodes.indexOf(v2Node);
+
+      const dx = v2Node.x - v1Node.x;
+      const dy = v2Node.y - v1Node.y;
+
+      // Hookean spring force (rest length = 0) proportional to shared edges count
+      const forceX = dx * this.kSharedAttract * pair.count;
+      const forceY = dy * this.kSharedAttract * pair.count;
+
+      fx[idx1] += forceX;
+      fy[idx1] += forceY;
+      fx[idx2] -= forceX;
+      fy[idx2] -= forceY;
+    });
+
+    // 2c. Non-member blob avoidance:
+    //   For each vertex V that does NOT belong to edge E, if V falls inside E's blob
+    //   boundary (centroid of E's members + blob reach), push V radially outward.
+    //   Direction: V - centroid(E members), which points toward the nearest exit.
+    if (this.hyperedges && this.vertexEdgeSet) {
+      this.hyperedges.forEach(edge => {
+        if (edge.vertices.length < 2) return;
+
+        // Compute centroid of this edge's member vertices
+        let cx = 0, cy = 0, cnt = 0;
+        edge.vertices.forEach(vId => {
+          const vn = this.nodeMap.get(vId);
+          if (vn) { cx += vn.x; cy += vn.y; cnt++; }
+        });
+        if (cnt === 0) return;
+        cx /= cnt; cy /= cnt;
+
+        // Blob reach for this edge: use hub's blobReach if available, else estimate
+        const hubNode = this.nodeMap.get(`_hub_${edge.id}`);
+        const reach = (hubNode && hubNode.blobReach != null)
+          ? hubNode.blobReach
+          : blobMargin;
+
+        // For every non-member vertex, repel it from inside the blob
+        const nonMemberRepelStrength = this.kNonMemberRepel;
+        for (let i = 0; i < n; i++) {
+          const node = this.nodes[i];
+          if (node.isHub) continue;
+          // Skip member vertices
+          const memberSet = this.vertexEdgeSet.get(node.id);
+          if (memberSet && memberSet.has(edge.id)) continue;
+          // Also skip nodes with NO edge memberships — they have no home blob,
+          // and being repelled from every blob just sends them flying to infinity.
+          if (!memberSet || memberSet.size === 0) continue;
+
+          // Vector from centroid to this node
+          let dx = node.x - cx;
+          let dy = node.y - cy;
+          let d = Math.sqrt(dx * dx + dy * dy);
+
+          if (d < 0.1) {
+            // Exactly at centroid — nudge randomly
+            dx = (Math.random() - 0.5);
+            dy = (Math.random() - 0.5);
+            d = Math.sqrt(dx * dx + dy * dy);
+          }
+
+          // Node half-extent in the direction toward centroid
+          const ux = dx / d;
+          const uy = dy / d;
+          const nodeReach = this.getNodeRadius(node, ux, uy);
+          // The "inside threshold": node surface is inside the blob + gap if d - nodeReach < reach + nonMemberGap
+          const penetration = (reach + this.nonMemberGap) - (d - nodeReach);
+          if (penetration <= 0) continue; // already outside the buffer zone
+
+          // Force proportional to penetration depth, directed away from centroid
+          const force = nonMemberRepelStrength * penetration;
+          const pushX = (dx / d) * force;
+          const pushY = (dy / d) * force;
+
+          fx[i] += pushX;
+          fy[i] += pushY;
+
+          // Distribute equal and opposite reaction force to member nodes of the edge to conserve momentum
+          const reactX = pushX / cnt;
+          const reactY = pushY / cnt;
+          edge.vertices.forEach(vId => {
+            const memberNode = this.nodeMap.get(vId);
+            if (memberNode) {
+              const idxM = this.nodes.indexOf(memberNode);
+              if (idxM !== -1) {
+                fx[idxM] -= reactX;
+                fy[idxM] -= reactY;
+              }
+            }
+          });
+        }
+      });
+    }
+
     // 3. Gravity / Centering force (attraction to component center target)
     // Scale centering forces according to aspect ratio to flatten the layout and expand horizontally.
     const aspectRatio = this.width / this.height;
-    const kCenterX = this.kCenter / (aspectRatio > 1 ? aspectRatio * 1.2 : 1);
-    const kCenterY = this.kCenter * (aspectRatio > 1 ? aspectRatio * 1.2 : 1);
+    const kCenterX = this.kCenter * (aspectRatio > 1 ? 0.85 : 1);
+    const kCenterY = this.kCenter * (aspectRatio > 1 ? 1.15 : 1);
 
     for (let i = 0; i < n; i++) {
       const node = this.nodes[i];
@@ -445,8 +646,18 @@ export class BipartiteForceLayout {
       const dx = targetX - node.x;
       const dy = targetY - node.y;
       
-      fx[i] += dx * kCenterX;
-      fy[i] += dy * kCenterY;
+      // Pull isolated/loose nodes and small components stronger to prevent drift due to other component repulsions
+      let sizeFactor = 1.0;
+      if (node.componentSize === 1) {
+        sizeFactor = 10.0;
+      } else if (node.componentSize === 2) {
+        sizeFactor = 2.0;
+      } else if (node.componentSize <= 4) {
+        sizeFactor = 1.5;
+      }
+      
+      fx[i] += dx * kCenterX * sizeFactor;
+      fy[i] += dy * kCenterY * sizeFactor;
     }
 
     // 4. Update velocities and positions
@@ -488,8 +699,6 @@ export class BipartiteForceLayout {
         if (n1.isHub) continue;
 
         const isFixed1 = (n1.id === this.draggedNodeId || (this.fixedNodeIds && this.fixedNodeIds.has(n1.id)));
-        const w1 = n1.width || (n1.radius ? n1.radius * 2 : 24);
-        const h1 = n1.height || (n1.radius ? n1.radius * 2 : 24);
 
         for (let j = i + 1; j < n; j++) {
           const n2 = this.nodes[j];
@@ -498,46 +707,37 @@ export class BipartiteForceLayout {
           const isFixed2 = (n2.id === this.draggedNodeId || (this.fixedNodeIds && this.fixedNodeIds.has(n2.id)));
           if (isFixed1 && isFixed2) continue; // both fixed, can't separate
 
-          const w2 = n2.width || (n2.radius ? n2.radius * 2 : 24);
-          const h2 = n2.height || (n2.radius ? n2.radius * 2 : 24);
-
           // Center difference
           const dx = n2.x - n1.x;
           const dy = n2.y - n1.y;
-          const absDx = Math.abs(dx);
-          const absDy = Math.abs(dy);
+          let d = Math.sqrt(dx * dx + dy * dy);
+          if (d < 0.1) {
+            d = 0.1;
+          }
+          const ux = dx / d;
+          const uy = dy / d;
 
-          // Required distance along x and y to avoid overlap including margin
-          const reqX = (w1 + w2) / 2 + clearanceMargin;
-          const reqY = (h1 + h2) / 2 + clearanceMargin;
+          // Treat cards as minimum enclosing ellipses to resolve overlaps and slide smoothly
+          const r1 = this.getNodeRadius(n1, ux, uy);
+          const r2 = this.getNodeRadius(n2, ux, uy);
+          const reqDist = r1 + r2 + clearanceMargin;
 
-          if (absDx < reqX && absDy < reqY) {
-            // Overlapping on both axes! Push them apart along the axis of minimum penetration.
-            const penX = reqX - absDx;
-            const penY = reqY - absDy;
+          if (d < reqDist) {
+            const overlap = reqDist - d;
+            const pushX = overlap * ux;
+            const pushY = overlap * uy;
 
-            if (penX < penY) {
-              const pushX = penX;
-              const sign = dx >= 0 ? 1 : -1;
-              if (isFixed1) {
-                n2.x += pushX * sign;
-              } else if (isFixed2) {
-                n1.x -= pushX * sign;
-              } else {
-                n1.x -= pushX * 0.5 * sign;
-                n2.x += pushX * 0.5 * sign;
-              }
+            if (isFixed1) {
+              n2.x += pushX;
+              n2.y += pushY;
+            } else if (isFixed2) {
+              n1.x -= pushX;
+              n1.y -= pushY;
             } else {
-              const pushY = penY;
-              const sign = dy >= 0 ? 1 : -1;
-              if (isFixed1) {
-                n2.y += pushY * sign;
-              } else if (isFixed2) {
-                n1.y -= pushY * sign;
-              } else {
-                n1.y -= pushY * 0.5 * sign;
-                n2.y += pushY * 0.5 * sign;
-              }
+              n1.x -= pushX * 0.5;
+              n1.y -= pushY * 0.5;
+              n2.x += pushX * 0.5;
+              n2.y += pushY * 0.5;
             }
           }
         }
@@ -624,11 +824,12 @@ export class BipartiteForceLayout {
   updateCenter(w, h) {
     this.width = w;
     this.height = h;
-    const centerX = w / 2;
+    const isDesktop = w > 768;
+    const centerX = isDesktop ? (w / 2 + 90) : (w / 2);
     const centerY = h / 2;
     this.nodes.forEach(node => {
-      node.targetX = centerX;
-      node.targetY = centerY;
+      node.targetX = centerX + (node.targetOffsetX || 0);
+      node.targetY = centerY + (node.targetOffsetY || 0);
     });
   }
 }
