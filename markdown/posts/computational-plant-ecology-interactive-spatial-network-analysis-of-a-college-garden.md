@@ -1,7 +1,7 @@
 ---
 title: "Computational Plant Ecology: Interactive Spatial Network Analysis of a College Garden"
 date: "2025-08-23T02:06"
-tags: ["Complex Systems", "Ecology", "Environmental Science", "Geography & GIS", "Modelling", "Network Science", "Wolfram Language", "Art"]
+tags: ["Complex Systems", "Ecology", "Environmental Science", "Geography & GIS", "Modelling", "Network Science", "Wolfram Language", "Art", "Programming", "Work at Wolfram"]
 thumbnail: "media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/banner.png"
 thumbWidth: 2286
 thumbHeight: 1076

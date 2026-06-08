@@ -23,7 +23,8 @@
       "Complex Systems",
       "Modelling",
       "Programming",
-      "Wolfram Language"
+      "Wolfram Language",
+      "Work at Wolfram"
     ],
     "thumbnail": "media/posts/patchwork-with-coexisting-cellular-automata/banner-2.png",
     "thumbWidth": 3083,
@@ -41,7 +42,8 @@
       "Environmental Science",
       "Geography & GIS",
       "Programming",
-      "Wolfram Language"
+      "Wolfram Language",
+      "Work at Wolfram"
     ],
     "thumbnail": "media/posts/mapping-global-land-cover-with-european-space-agency-data/banner.png",
     "thumbWidth": 1959,
@@ -62,7 +64,9 @@
       "Modelling",
       "Network Science",
       "Wolfram Language",
-      "Art"
+      "Art",
+      "Programming",
+      "Work at Wolfram"
     ],
     "thumbnail": "media/posts/computational-plant-ecology-interactive-spatial-network-analysis-of-a-college-garden/banner.png",
     "thumbWidth": 2286,
@@ -81,7 +85,8 @@
       "Environmental Science",
       "Geography & GIS",
       "Programming",
-      "Wolfram Language"
+      "Wolfram Language",
+      "Work at Wolfram"
     ],
     "thumbnail": "media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/Ecoregions_BannerImage-2.png",
     "thumbWidth": 1600,
@@ -176,6 +181,7 @@
       "Environmental Science",
       "Modelling",
       "Programming",
+      "Wolfram Language",
       "Work at Wolfram"
     ],
     "thumbnail": "media/posts/a-forest-fire-model-in-1-2-and-3-dimensions/Animation1.gif",
@@ -208,7 +214,10 @@
     "name": "Wolfram Contributions and Publications",
     "slug": "wolfram-contributions-and-publications",
     "date": "2023-10-10T20:21",
-    "tags": [],
+    "tags": [
+      "Wolfram Language",
+      "Work at Wolfram"
+    ],
     "thumbnail": "",
     "hideFromHome": true
   },
@@ -239,6 +248,7 @@
       "Complex Systems",
       "Environmental Science",
       "Geography & GIS",
+      "Modelling",
       "Programming",
       "Undergraduate work"
     ],
@@ -269,6 +279,7 @@
     "date": "2023-03-11T01:19",
     "tags": [
       "Ecology",
+      "Economics",
       "Environmental Science",
       "Geography & GIS",
       "Undergraduate work"
