@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { execSync } from 'child_process';
 
 // --- CONFIGURATION ---
 const POSTS_MARKDOWN_DIR = './markdown/posts';
@@ -11,7 +12,14 @@ const PAGES_OUTPUT_HTML_DIR = './content/pages';
 const PAGES_JSON_PATH = './data/pages.json';
 const CUSTOM_PAGES_DIR = './content/custom-pages';
 
-const isProduction = process.env.NODE_ENV === 'production';
+let currentBranch = '';
+try {
+  currentBranch = execSync('git symbolic-ref --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
+} catch (e) {
+  // Ignore if git is not initialized or fails
+}
+
+const isProduction = process.env.NODE_ENV === 'production' || currentBranch === 'master';
 
 // Ensure directories exist
 if (!fs.existsSync(POSTS_MARKDOWN_DIR)) {
