@@ -25,7 +25,7 @@ if (!fs.existsSync(PAGES_MARKDOWN_DIR)) {
 function getResponsiveSrcsetAndSizes(imgPath) {
   // Strip origin if present
   let cleanPath = imgPath.replace(/^https?:\/\/phileasdg\.github\.io\//, '/');
-  
+
   // Normalize relative parts
   cleanPath = cleanPath.replace(/^(\.\.\/)+/, '');
   if (cleanPath.startsWith('/')) {
@@ -65,7 +65,7 @@ function getResponsiveSrcsetAndSizes(imgPath) {
       } else if (imgPath.startsWith('/')) {
         prefix = '/';
       }
-      
+
       const relativeHtmlPath = `${prefix}${dir}/responsive/${base}${item.suffix}${ext}`;
       foundSrcset.push(`${relativeHtmlPath} ${item.width}`);
     }
@@ -87,7 +87,7 @@ function splitCells(row) {
   const cells = [];
   let current = '';
   for (let j = 0; j < row.length; j++) {
-    if (row[j] === '|' && (j === 0 || row[j-1] !== '\\')) {
+    if (row[j] === '|' && (j === 0 || row[j - 1] !== '\\')) {
       cells.push(current);
       current = '';
     } else {
@@ -95,7 +95,7 @@ function splitCells(row) {
     }
   }
   cells.push(current);
-  
+
   let result = cells.map(c => c.trim().replace(/\\\|/g, '|'));
   if (row.trim().startsWith('|')) {
     result.shift();
@@ -123,7 +123,7 @@ function parseAlignments(separatorRow) {
 // Helper to parse inline markdown elements
 function parseInlineMarkdown(text) {
   let processed = text;
-  
+
   // 1. Links
   processed = processed.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
 
@@ -143,7 +143,7 @@ function parseInlineMarkdown(text) {
 
   // 4. Bold
   processed = processed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  
+
   // 5. Italic
   processed = processed.replace(/\*(.*?)\*/g, '<em>$1</em>');
   processed = processed.replace(/_(.*?)_/g, '<em>$1</em>');
@@ -170,7 +170,7 @@ function renderTableHTML(headers, alignments, rows) {
   let html = [];
   html.push('<div class="post__table-wrapper">');
   html.push('<table>');
-  
+
   if (headers && headers.length > 0) {
     html.push('<thead>');
     html.push('<tr>');
@@ -182,7 +182,7 @@ function renderTableHTML(headers, alignments, rows) {
     html.push('</tr>');
     html.push('</thead>');
   }
-  
+
   if (rows && rows.length > 0) {
     html.push('<tbody>');
     rows.forEach(row => {
@@ -198,7 +198,7 @@ function renderTableHTML(headers, alignments, rows) {
     });
     html.push('</tbody>');
   }
-  
+
   html.push('</table>');
   html.push('</div>');
   return html.join('\n');
@@ -262,7 +262,7 @@ function parseMarkdown(md) {
 
     // Check if table starts
     if (!inTable && line.includes('|') && i + 1 < lines.length) {
-      const nextLine = lines[i+1];
+      const nextLine = lines[i + 1];
       const separatorRegex = /^\s*\|?\s*(?:\s*:?-+:?\s*\|)+\s*(?:\s*:?-+:?\s*)?\|?\s*$/;
       if (separatorRegex.test(nextLine)) {
         inTable = true;
@@ -277,6 +277,12 @@ function parseMarkdown(md) {
     // Process inline markdown for non-code block lines
     let processedLine = line.trim();
 
+    // Horizontal rule / separator delimiter
+    if (processedLine === '---' || processedLine === '***' || processedLine === '___') {
+      result.push('<hr class="separator" />');
+      continue;
+    }
+
     // 1. Images (must be BEFORE links and BEFORE extracting HTML tags)
     processedLine = processedLine.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, imgTarget) => {
       const parts = imgTarget.trim().split(/\s+/);
@@ -284,7 +290,7 @@ function parseMarkdown(md) {
       let widthAttr = '';
       let heightAttr = '';
       let alignment = 'center';
-      
+
       for (let i = 1; i < parts.length; i++) {
         const part = parts[i].trim();
         const sizeMatch = part.match(/^=(\d*)x(\d*)$/);
@@ -326,7 +332,7 @@ function parseMarkdown(md) {
 
     // 6. Bold
     processedLine = processedLine.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    
+
     // 7. Italic
     processedLine = processedLine.replace(/\*(.*?)\*/g, '<em>$1</em>');
     processedLine = processedLine.replace(/_(.*?)_/g, '<em>$1</em>');
@@ -398,12 +404,12 @@ function parseFrontMatter(fileContent) {
   if (!normalized.startsWith('---\n')) {
     return { data: {}, content: fileContent };
   }
-  
+
   const closingIndex = normalized.indexOf('\n---\n', 4);
   if (closingIndex === -1) {
     return { data: {}, content: fileContent };
   }
-  
+
   const frontmatterText = normalized.substring(4, closingIndex);
   const content = normalized.substring(closingIndex + 5).trim();
 
@@ -414,18 +420,18 @@ function parseFrontMatter(fileContent) {
     if (match) {
       let key = match[1].trim();
       let val = match[2].trim();
-      
+
       // Strip outer quotes
       if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
         val = val.substring(1, val.length - 1);
       }
-      
+
       if (val === 'true') {
         val = true;
       } else if (val === 'false') {
         val = false;
       }
-      
+
       // Parse arrays like ["a", "b"]
       if (val.startsWith('[') && val.endsWith(']')) {
         val = val.substring(1, val.length - 1).split(',').map(s => {
@@ -436,7 +442,7 @@ function parseFrontMatter(fileContent) {
           return s;
         }).filter(Boolean);
       }
-      
+
       data[key] = val;
     }
   });
@@ -469,17 +475,17 @@ function compilePosts() {
     const fileContent = fs.readFileSync(filePath, 'utf8');
     const { data, content } = parseFrontMatter(fileContent);
     const slug = path.basename(file, '.md');
-    
+
     // Look up existing metadata in posts.json
     const existingIndex = posts.findIndex(p => p.slug === slug);
     const existingMeta = existingIndex > -1 ? posts[existingIndex] : {};
-    
+
     // Merge: frontmatter overrides existing, which overrides defaults
     const mergedData = { ...existingMeta, ...data };
 
     const htmlContent = parseMarkdown(content);
     fs.writeFileSync(path.join(POSTS_OUTPUT_HTML_DIR, `${slug}.html`), htmlContent, 'utf8');
-    
+
     const metadata = {
       id: mergedData.id || slug,
       name: mergedData.title || mergedData.name || slug,
@@ -547,15 +553,15 @@ function compilePages() {
     // Look up existing page metadata
     const existingMeta = existingPages.find(p => p.slug === slug) || {};
     const mergedData = { ...existingMeta, ...data };
-    
+
     // Compile markdown body
     const bodyHtml = parseMarkdown(content);
 
     // Wrap in standard page layout
     const finalHtml = `<div class="wrapper"><article class="content"><header class="content__header"><h1 class="content__title">${mergedData.title || slug}</h1></header><div class="content__inner"><div class="content__entry">${bodyHtml}</div><footer><div class="content__tags-share"><aside class="content__share"></aside></div></footer></div></article></div>`;
-    
+
     fs.writeFileSync(path.join(PAGES_OUTPUT_HTML_DIR, `${slug}.html`), finalHtml, 'utf8');
-    
+
     const metadata = {
       slug: slug,
       title: mergedData.title || slug,
@@ -572,7 +578,7 @@ function compilePages() {
     const slug = path.basename(file, '.html');
     const srcPath = path.join(CUSTOM_PAGES_DIR, file);
     const destPath = path.join(PAGES_OUTPUT_HTML_DIR, file);
-    
+
     // Copy the custom HTML file
     fs.copyFileSync(srcPath, destPath);
     console.log(`  Copied custom page: ${file} -> ${destPath}`);
@@ -600,7 +606,7 @@ function compilePages() {
     'cv-francais': 7,
     'inquiries': 8
   };
-  
+
   updatedPages.sort((a, b) => {
     const orderA = orderMap[a.slug] || 99;
     const orderB = orderMap[b.slug] || 99;
