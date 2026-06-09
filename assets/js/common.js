@@ -557,12 +557,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let imageHtml = '';
     if (postMeta.thumbnail) {
-      const srcsetHtml = getResponsiveSrcset(postMeta.thumbnail, '');
+      const prefix = basePath ? basePath + '/' : '/';
+      const srcsetHtml = getResponsiveSrcset(postMeta.thumbnail, prefix);
       const widthAttr = postMeta.thumbWidth ? `width="${postMeta.thumbWidth}"` : '';
       const heightAttr = postMeta.thumbHeight ? `height="${postMeta.thumbHeight}"` : '';
       imageHtml = `
         <figure class="content__featured-image">
-          <img src="${postMeta.thumbnail}" ${srcsetHtml} ${widthAttr} ${heightAttr} sizes="(min-width: 56.25em) 100vw, (min-width: 37.5em) 50vw, 100vw" loading="eager" alt="">
+          <img src="${prefix}${postMeta.thumbnail}" ${srcsetHtml} ${widthAttr} ${heightAttr} sizes="(min-width: 56.25em) 100vw, (min-width: 37.5em) 50vw, 100vw" loading="eager" alt="">
         </figure>
       `;
     }
@@ -651,6 +652,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const route = async () => {
     const basePath = getSiteBasePath();
+    const prefix = basePath ? basePath + '/' : '/';
     const siteRelativePath = getSiteRelativePath(window.location.pathname);
     const cleanRoute = siteRelativePath.replace(/^\//, '').replace(/\/$/, '');
 
@@ -677,14 +679,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const visiblePosts = posts.filter(p => p.hideFromHome !== true);
         const initialChunk = visiblePosts.slice(0, 12);
         const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = initialChunk.map(p => renderCard(p, '')).join('');
+        tempDiv.innerHTML = initialChunk.map(p => renderCard(p, prefix)).join('');
         Array.from(tempDiv.children).forEach(item => grid.appendChild(item));
         handleLazyImages(grid);
         initGridMasonry(grid);
 
         if (paginationContainer) {
           paginationContainer.style.display = '';
-          setupPagination(visiblePosts, paginationContainer, grid, '');
+          setupPagination(visiblePosts, paginationContainer, grid, prefix);
         }
       }    } else if (cleanRoute.startsWith('posts/')) {
       const slug = cleanRoute.substring(6);
@@ -743,7 +745,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <a class="c-card__image" href="${item.url}" rel="noopener noreferrer" target="_blank">
                 <img alt="${item.title} Project Thumbnail"
                     onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
-                    src="${item.thumbnail}" />
+                    src="${basePath}/${item.thumbnail}" />
             </a>
             <div class="c-card__wrapper">
                 <header class="c-card__header">
@@ -831,13 +833,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const grid = mainEl.querySelector('.l-masonry');
         const initialChunk = combinedItems.slice(0, 12);
         const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = initialChunk.map(p => renderCard(p, '')).join('');
+        tempDiv.innerHTML = initialChunk.map(p => renderCard(p, prefix)).join('');
         Array.from(tempDiv.children).forEach(item => grid.appendChild(item));
         handleLazyImages(grid);
         initGridMasonry(grid);
 
         const paginationContainer = mainEl.querySelector('#pagination-container');
-        setupPagination(combinedItems, paginationContainer, grid, '');
+        setupPagination(combinedItems, paginationContainer, grid, prefix);
       }
     } else if (cleanRoute.startsWith('authors/')) {
       const slug = cleanRoute.substring(8);
@@ -860,13 +862,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const visiblePosts = posts.filter(p => p.hideFromHome !== true);
       const initialChunk = visiblePosts.slice(0, 12);
       const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = initialChunk.map(p => renderCard(p, '')).join('');
+      tempDiv.innerHTML = initialChunk.map(p => renderCard(p, prefix)).join('');
       Array.from(tempDiv.children).forEach(item => grid.appendChild(item));
       handleLazyImages(grid);
       initGridMasonry(grid);
 
       const paginationContainer = mainEl.querySelector('#pagination-container');
-      setupPagination(visiblePosts, paginationContainer, grid, '');
+      setupPagination(visiblePosts, paginationContainer, grid, prefix);
     } else {
       history.replaceState(null, null, basePath + '/');
       route();
