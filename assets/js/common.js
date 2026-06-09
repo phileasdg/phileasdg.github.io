@@ -652,6 +652,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const route = async () => {
     const basePath = getSiteBasePath();
+
+    // Handle legacy/fallback hash routing from 404.html redirects
+    if (window.location.hash.startsWith('#/')) {
+      const newPath = basePath + window.location.hash.substring(1);
+      history.replaceState(null, null, newPath);
+    }
+
     const prefix = basePath ? basePath + '/' : '/';
     const siteRelativePath = getSiteRelativePath(window.location.pathname);
     const cleanRoute = siteRelativePath.replace(/^\//, '').replace(/\/$/, '');
