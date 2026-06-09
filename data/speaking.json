@@ -1,0 +1,406 @@
+[
+  {
+    "title": "Conference Poster: Growing a Sympoietic Art Organism: An Experimental Framework for Tracking the Micro-Dynamics of Cultural Evolution",
+    "host": "NetSci 2026",
+    "date": "June 2026",
+    "year": 2026,
+    "status": "past",
+    "featured": true,
+    "links": [
+      {
+        "type": "poster",
+        "url": "https://phileasdg.github.io/sympoietic/research.html"
+      }
+    ]
+  },
+  {
+    "title": "A Framework for Dialogical AI",
+    "host": "Northeastern University College of Social Sciences and Humanities: NULab for Digital Humanities and Computational Social Science",
+    "date": "May 1st, 2026",
+    "year": 2026,
+    "status": "past",
+    "featured": true,
+    "links": []
+  },
+  {
+    "title": "A Crash Course in Data Visualization with Wolfram Language",
+    "host": "Kent State University Business Analytics Student Group",
+    "date": "February 5, 2026",
+    "year": 2026,
+    "status": "past",
+    "links": [
+      {
+        "type": "slides (nb)",
+        "url": "https://www.wolframcloud.com/obj/9cb34c68-c43a-4ff6-8fd3-d545cb51e279"
+      }
+    ]
+  },
+  {
+    "title": "A Crash Course in Data Visualization with Wolfram Language",
+    "host": "Illinois Wesleyan University IEEE Student Group",
+    "date": "February 5, 2026",
+    "year": 2026,
+    "status": "past",
+    "links": [
+      {
+        "type": "slides (nb)",
+        "url": "https://www.wolframcloud.com/obj/9cb34c68-c43a-4ff6-8fd3-d545cb51e279"
+      }
+    ]
+  },
+  {
+    "title": "Computational Graph Theory",
+    "host": "Wentworth Institute of Technology",
+    "date": "February 18, 2026",
+    "year": 2026,
+    "status": "past",
+    "links": [
+      {
+        "type": "slides (nb)",
+        "url": "https://www.wolframcloud.com/obj/36c7b881-06e7-433f-89de-7761f8f20da6"
+      }
+    ]
+  },
+  {
+    "title": "Wolfram for Geography and Environmental Science",
+    "host": "Boston University",
+    "date": "February 17, 2026",
+    "year": 2026,
+    "status": "past",
+    "links": []
+  },
+  {
+    "title": "A Crash Course in Data Visualization with Wolfram Language",
+    "host": "Florida International University: Students in Undergraduate Math and Computing (student organization)",
+    "date": "February 5, 2026",
+    "year": 2026,
+    "status": "past",
+    "links": []
+  },
+  {
+    "title": "Wolfram Language for Geography and Environmental Science",
+    "host": "Princeton University: Princeton Research Computing",
+    "date": "January 21, 2026",
+    "year": 2026,
+    "status": "past",
+    "links": [
+      {
+        "type": "slides (pdf)",
+        "url": "https://drive.google.com/file/d/1zm9OUIaiWO8k3KrZVKNMDvqrF4YHVWsz/view?usp=sharing"
+      }
+    ]
+  },
+  {
+    "title": "Wolfram Language for Machine Learning and A.I.",
+    "host": "Princeton University: Princeton Research Computing",
+    "date": "January 21, 2026",
+    "year": 2026,
+    "status": "past",
+    "featured": true,
+    "links": [
+      {
+        "type": "slides (pdf)",
+        "url": "https://drive.google.com/file/d/1N-6lc1TCsTWc81kvc4XMnNnx0iKF0jWE/view?usp=sharing"
+      }
+    ]
+  },
+  {
+    "title": "Introduction to the Wolfram Language",
+    "host": "Princeton University: Princeton Research Computing",
+    "date": "January 21, 2026",
+    "year": 2026,
+    "status": "past",
+    "links": [
+      {
+        "type": "slides (pdf)",
+        "url": "https://drive.google.com/file/d/1YQ3zcmH9bzfuALxll7kiS0r9pFmILTa1/view?usp=sharing"
+      }
+    ]
+  },
+  {
+    "title": "A constellation of creative projects with Wolfram Language: from video feedback to modeling cultural evolution",
+    "host": "Wolfram Winter School",
+    "date": "January 9, 2026",
+    "year": 2026,
+    "status": "past",
+    "links": [
+      {
+        "type": "slides (nb)",
+        "url": "https://www.wolframcloud.com/obj/3edc0140-e52d-4d7c-92dc-e37928fe7b1e"
+      }
+    ]
+  },
+  {
+    "title": "Networked Creativity: Citation Network Analysis of a Small Artist Community",
+    "host": "Wolfram Technology Conference",
+    "date": "November 5, 2025",
+    "year": 2025,
+    "status": "past",
+    "featured": true,
+    "links": [
+      {
+        "type": "slides (pdf)",
+        "url": "https://drive.google.com/file/d/11zREhD44UuKQKP89s87fIfF44yYXn88W/view?usp=sharing"
+      }
+    ]
+  },
+  {
+    "title": "Growing a Sympoietic Art Organism: Structured co-creativity in a small artist community",
+    "host": "Santa Fe Institute Complexity Coffee: Nascent Research Ideas",
+    "date": "October 15, 2025",
+    "year": 2025,
+    "status": "past",
+    "featured": true,
+    "links": [
+      {
+        "type": "slides (nb)",
+        "url": "https://www.wolframcloud.com/obj/1ed9c8dd-ef84-4df9-9407-399f7451a22d"
+      }
+    ]
+  },
+  {
+    "title": "Computational Modeling for Complex Systems",
+    "host": "Indiana University",
+    "date": "October 22, 2025",
+    "year": 2025,
+    "status": "past",
+    "links": [
+      {
+        "type": "slides (nb)",
+        "url": "https://www.wolframcloud.com/obj/9b45e0b1-5766-41ac-aebf-9a3587260393"
+      }
+    ]
+  },
+  {
+    "title": "A Crash Course in Data Visualization with Wolfram Language",
+    "host": "Cornell College of Human Ecology",
+    "date": "October 6, 2025",
+    "year": 2025,
+    "status": "past",
+    "links": [
+      {
+        "type": "slides (nb)",
+        "url": "https://www.wolframcloud.com/obj/88a127ac-8f30-46e3-93e5-da26b01aba0a"
+      }
+    ]
+  },
+  {
+    "title": "Creative Generative Design with Mathematical Marbling",
+    "host": "Augmentation Lab Human Augmentation Summit @ MIT Media Lab",
+    "date": "August 23, 2025",
+    "year": 2025,
+    "status": "past",
+    "featured": true,
+    "links": []
+  },
+  {
+    "title": "A Framework for Dialogical AI",
+    "host": "Complexity Global School - Universidad de los Andes TREES & Santa Fe Institute",
+    "date": "August 5, 2025",
+    "year": 2025,
+    "status": "past",
+    "links": [
+      {
+        "type": "slides (pdf)",
+        "url": "https://drive.google.com/file/d/19USUn25uNdDALVC7JvnBA5lPpEsEGShZ/view?usp=sharing"
+      }
+    ]
+  },
+  {
+    "title": "External Data in Wolfram Language",
+    "host": "Wolfram Summer School",
+    "date": "July 1, 2025",
+    "year": 2025,
+    "status": "past",
+    "links": []
+  },
+  {
+    "title": "An Introduction to Functional Programming in Wolfram Language",
+    "host": "Wolfram Summer School",
+    "date": "June 27, 2025",
+    "year": 2025,
+    "status": "past",
+    "links": [
+      {
+        "type": "slides (nb)",
+        "url": "https://community.wolfram.com/groups/-/m/t/3437953"
+      }
+    ]
+  },
+  {
+    "title": "AI For Human Ecology - A Reusable Framework for Dialogical AI",
+    "host": "XXVI International Conference of the Society for Human Ecology",
+    "date": "June 20, 2025",
+    "year": 2025,
+    "status": "past",
+    "featured": true,
+    "links": [
+      {
+        "type": "slides (pdf)",
+        "url": "https://drive.google.com/file/d/19USUn25uNdDALVC7JvnBA5lPpEsEGShZ/view?usp=sharing"
+      }
+    ]
+  },
+  {
+    "title": "Functional Programming in Wolfram Language",
+    "host": "MIT Future Tech Lab",
+    "date": "February 11, 2025",
+    "year": 2025,
+    "status": "past",
+    "links": [
+      {
+        "type": "slides (nb)",
+        "url": "https://www.wolframcloud.com/obj/phileasd/Published/MIT%20Future%20Tech%20Lab%20-%20Introduction%20to%20Functional%20Programming%20in%20WL.nb"
+      }
+    ]
+  },
+  {
+    "title": "Wolfram Language for GIS Coursework",
+    "host": "College of the Atlantic GIS Lab",
+    "date": "October 22, 2024",
+    "year": 2024,
+    "status": "past",
+    "links": [
+      {
+        "type": "slides (nb)",
+        "url": "https://www.wolframcloud.com/obj/30e6c1fe-208b-4a06-8ef3-8ec6ef76f367"
+      },
+      {
+        "type": "recording",
+        "url": "https://youtu.be/Fqq3TxDN5F8"
+      }
+    ]
+  },
+  {
+    "title": "Human Ecology Seminar - Towards a Human Ecology App with Artificial Intelligence",
+    "host": "College of the Atlantic",
+    "date": "October 18, 2024",
+    "year": 2024,
+    "status": "past",
+    "links": []
+  },
+  {
+    "title": "Waves, Sound, Sonification, and Algorithmic Music Composition",
+    "host": "College of the Atlantic",
+    "date": "October 18, 2024",
+    "year": 2024,
+    "status": "past",
+    "links": [
+      {
+        "type": "slides (nb)",
+        "url": "https://www.wolframcloud.com/obj/76ab4f27-ba31-4810-8102-570a2b1d7015"
+      }
+    ]
+  },
+  {
+    "title": "Wolfram Notebooks for GIS Coursework",
+    "host": "Wolfram Technology Conference",
+    "date": "October 16, 2024",
+    "year": 2024,
+    "status": "past",
+    "featured": true,
+    "links": [
+      {
+        "type": "recording",
+        "url": "https://www.youtube.com/watch?v=cf-GTAOoiNg"
+      },
+      {
+        "type": "slides (nb)",
+        "url": "https://www.wolframcloud.com/obj/810d6e2a-cc43-47f9-88a3-9bccaa7da747"
+      }
+    ]
+  },
+  {
+    "title": "Wolfram Language for GIS Applications",
+    "host": "MIT Undergraduate Research Technology Conference (MIT URTC - IEEE)",
+    "date": "October 12, 2024",
+    "year": 2024,
+    "status": "past",
+    "featured": true,
+    "links": [
+      {
+        "type": "slides (nb)",
+        "url": "https://www.wolframcloud.com/obj/2c658a9a-bee8-42f5-afdc-b484cab24c43"
+      }
+    ]
+  },
+  {
+    "title": "Wolfram Language for GIS - Introductory Tutorial",
+    "host": "College of the Atlantic GIS Lab",
+    "date": "September 20, 2024",
+    "year": 2024,
+    "status": "past",
+    "links": [
+      {
+        "type": "slides (nb)",
+        "url": "https://www.wolframcloud.com/obj/9cc21460-5273-4625-8fae-a398d363825a"
+      }
+    ]
+  },
+  {
+    "title": "Wolfram Colloquium Series: Ecological Research with Wolfram Language",
+    "host": "Wolfram U",
+    "date": "August 23, 2024",
+    "year": 2024,
+    "status": "past",
+    "featured": true,
+    "links": [
+      {
+        "type": "recording",
+        "url": "https://www.youtube.com/watch?v=-3S4kw_kHSY"
+      }
+    ]
+  },
+  {
+    "title": "Complex Systems for Human Ecology",
+    "host": "College of the Atlantic",
+    "date": "May 14, 2024",
+    "year": 2024,
+    "status": "past",
+    "links": [
+      {
+        "type": "slides (pdf)",
+        "url": "https://drive.google.com/file/d/1f_kLPxv8EKVnejGKEA_lfaNUQIfxyCdY/view?usp=sharing"
+      }
+    ]
+  },
+  {
+    "title": "Complex Systems for Biology and Environmental Science",
+    "host": "University of the West Indies",
+    "date": "May 3, 2024",
+    "year": 2024,
+    "status": "past",
+    "links": [
+      {
+        "type": "slides (nb)",
+        "url": "https://www.wolframcloud.com/obj/879ccc72-6f68-4d24-a323-619288c21a84"
+      }
+    ]
+  },
+  {
+    "title": "Wolfram Colloquium Series: Ecological Research with Wolfram Language",
+    "host": "Wolfram U",
+    "date": "April 26, 2024",
+    "year": 2024,
+    "status": "past",
+    "links": [
+      {
+        "type": "recording",
+        "url": "https://www.youtube.com/watch?v=WgyqZlZI0BE"
+      }
+    ]
+  },
+  {
+    "title": "Ecology and Environmental Science Modelling in Wolfram Language",
+    "host": "Wolfram U",
+    "date": "April 12, 2024",
+    "year": 2024,
+    "status": "past",
+    "links": [
+      {
+        "type": "recording",
+        "url": "https://www.wolfram.com/wolfram-u/courses/mathematics/ecology-and-environmental-science-modeling-in-wolfram-language/"
+      }
+    ]
+  }
+]

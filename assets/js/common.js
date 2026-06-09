@@ -183,6 +183,16 @@ document.addEventListener("DOMContentLoaded", () => {
     return playgroundsData;
   };
 
+  let speakingData = null;
+  const getSpeakingData = async () => {
+    if (!speakingData) {
+      const basePath = getSiteBasePath();
+      const res = await fetch(`${basePath}/data/speaking.json?v=${Date.now()}`);
+      speakingData = await res.json();
+    }
+    return speakingData;
+  };
+
 
   const setupCodeBlocks = (container) => {
     const preElements = container.querySelectorAll('pre');
@@ -514,9 +524,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const existingPlaygroundsLink = document.querySelector('link[href*="playgrounds.css"]');
     const existingMasonryLink = document.querySelector('link[href*="masonry.css"]');
     const existingPostLink = document.querySelector('link[href*="post.css"]');
+    const existingSpeakingLink = document.querySelector('link[href*="speaking.css"]');
     
     const loadPlaygrounds = (slug === 'playgrounds' || bodyClass === 'playgrounds-body');
     const loadPostCss = (routeType === 'post' || bodyClass === 'post-template');
+    const loadSpeaking = (slug === 'guest-lectures-and-public-speaking-events');
 
     if (loadPlaygrounds) {
       if (!existingPlaygroundsLink) {
@@ -545,6 +557,17 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     } else {
       if (existingPostLink) existingPostLink.remove();
+    }
+
+    if (loadSpeaking) {
+      if (!existingSpeakingLink) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = `${basePath}/assets/css/speaking.css`;
+        document.head.appendChild(link);
+      }
+    } else {
+      if (existingSpeakingLink) existingSpeakingLink.remove();
     }
   };
 
@@ -767,6 +790,106 @@ document.addEventListener("DOMContentLoaded", () => {
               }
             } catch (err) {
               console.error("Failed to load playgrounds data:", err);
+            }
+          } else if (slug === 'guest-lectures-and-public-speaking-events') {
+            try {
+              const speakingEvents = await getSpeakingData();
+              const container = mainEl.querySelector('#speaking-events-container');
+              if (container) {
+                const upcoming = speakingEvents.filter(e => e.status === 'upcoming');
+                const past = speakingEvents.filter(e => e.status !== 'upcoming');
+
+                let html = '';
+
+                if (upcoming.length > 0) {
+                  html += `
+                    <div class="speaking-year-section" data-section="upcoming">
+                      <h2 class="speaking-section-title collapsible-header">
+                        <span class="collapse-toggle-icon">▼</span> Upcoming Events
+                      </h2>
+                      <div class="speaking-year-content">
+                        <div class="speaking-list">
+                  `;
+                  upcoming.forEach(item => {
+                    const linksHtml = item.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener" class="speaking-event__link">${l.type}</a>`).join(' <span class="speaking-event__link-sep">·</span> ');
+                    html += `
+                      <div class="speaking-event-row">
+                        <div class="speaking-event__title">${item.title}</div>
+                        <div class="speaking-event__meta">
+                          <span class="speaking-event__date">${item.date}</span>
+                          ${item.host ? `<span class="speaking-event__meta-sep">·</span> <span class="speaking-event__host">${item.host}</span>` : ''}
+                          ${linksHtml ? `<span class="speaking-event__meta-sep">·</span> <span class="speaking-event__links">${linksHtml}</span>` : ''}
+                        </div>
+                      </div>
+                    `;
+                  });
+                  html += `
+                        </div>
+                      </div>
+                    </div>
+                  `;
+                }
+
+                if (past.length > 0) {
+                  html += `<h2 class="speaking-past-title">Past Events</h2>`;
+                  
+                  const pastByYear = {};
+                  past.forEach(e => {
+                    pastByYear[e.year] = pastByYear[e.year] || [];
+                    pastByYear[e.year].push(e);
+                  });
+
+                  const years = Object.keys(pastByYear).sort((a,b) => b.localeCompare(a));
+                  years.forEach((year, index) => {
+                    const yearEvents = pastByYear[year];
+                    
+                    // Index 0 (most recent year, e.g. 2026) is expanded, older years collapsed by default
+                    const isCollapsed = index > 0;
+
+                    html += `
+                      <div class="speaking-year-section ${isCollapsed ? 'is-collapsed' : ''}" data-year="${year}">
+                        <h3 class="speaking-year-header collapsible-header">
+                          <span class="collapse-toggle-icon">▼</span> ${year}
+                        </h3>
+                        <div class="speaking-year-content">
+                          <div class="speaking-list">
+                    `;
+
+                    yearEvents.forEach(item => {
+                      const linksHtml = item.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener" class="speaking-event__link">${l.type}</a>`).join(' <span class="speaking-event__link-sep">·</span> ');
+                      html += `
+                        <div class="speaking-event-row">
+                          <div class="speaking-event__title">${item.title}</div>
+                          <div class="speaking-event__meta">
+                            <span class="speaking-event__date">${item.date}</span>
+                            ${item.host ? `<span class="speaking-event__meta-sep">·</span> <span class="speaking-event__host">${item.host}</span>` : ''}
+                            ${linksHtml ? `<span class="speaking-event__meta-sep">·</span> <span class="speaking-event__links">${linksHtml}</span>` : ''}
+                          </div>
+                        </div>
+                      `;
+                    });
+
+                    html += `
+                          </div>
+                        </div>
+                      </div>
+                    `;
+                  });
+                }
+
+                container.innerHTML = html;
+
+                // Bind collapsible header events
+                const headers = container.querySelectorAll('.collapsible-header');
+                headers.forEach(h => {
+                  h.addEventListener('click', () => {
+                    const section = h.closest('.speaking-year-section');
+                    section.classList.toggle('is-collapsed');
+                  });
+                });
+              }
+            } catch (err) {
+               console.error("Failed to load speaking data:", err);
             }
           }
           if (window.Prism) {
