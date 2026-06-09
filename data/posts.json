@@ -1,18 +1,5 @@
 [
   {
-    "id": "example-markdown-post",
-    "name": "Example Markdown Post: Code, Math, and Media",
-    "slug": "example-markdown-post",
-    "date": "2026-06-07T12:00",
-    "tags": [
-      "Markdown",
-      "Tutorial",
-      "Web Development",
-      "Showcase"
-    ],
-    "thumbnail": "media/imgs/hypergraph-plotter.png"
-  },
-  {
     "id": "patchwork-with-coexisting-cellular-automata",
     "name": "Patchwork with Coexisting Cellular Automata",
     "slug": "patchwork-with-coexisting-cellular-automata",
