@@ -155,7 +155,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const getPostsData = async () => {
     if (!postsData) {
-      const res = await fetch(`data/posts.json?v=${Date.now()}`);
+      const basePath = getSiteBasePath();
+      const res = await fetch(`${basePath}/data/posts.json?v=${Date.now()}`);
       postsData = await res.json();
     }
     return postsData;
@@ -163,7 +164,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const getPagesData = async () => {
     if (!pagesData) {
-      const res = await fetch(`data/pages.json?v=${Date.now()}`);
+      const basePath = getSiteBasePath();
+      const res = await fetch(`${basePath}/data/pages.json?v=${Date.now()}`);
       pagesData = await res.json();
     }
     return pagesData;
@@ -171,7 +173,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const getPlaygroundsData = async () => {
     if (!playgroundsData) {
-      const res = await fetch(`data/playgrounds.json?v=${Date.now()}`);
+      const basePath = getSiteBasePath();
+      const res = await fetch(`${basePath}/data/playgrounds.json?v=${Date.now()}`);
       playgroundsData = await res.json();
       playgroundsData.forEach(pg => {
         pg.id = pg.slug || pg.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
@@ -356,42 +359,52 @@ document.addEventListener("DOMContentLoaded", () => {
   const normalizeContentHTML = (htmlContent, originalPathContext) => {
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = htmlContent;
+    const basePath = getSiteBasePath();
+
+    const getAbsoluteUrl = (urlStr) => {
+      if (!urlStr) return urlStr;
+      if (urlStr.startsWith('http') || urlStr.startsWith('/') || urlStr.startsWith('#') || urlStr.startsWith('mailto:') || urlStr.startsWith('tel:') || urlStr.startsWith('javascript:')) {
+        return urlStr;
+      }
+      return basePath + '/' + urlStr;
+    };
 
     const imgs = tempDiv.querySelectorAll('img');
     imgs.forEach(img => {
       let src = img.getAttribute('src');
       if (src) {
         src = src.replace(/^https?:\/\/phileasdg\.github\.io\//, '');
-        img.setAttribute('src', src);
-      }
-      if (src && !src.startsWith('http') && !src.startsWith('/') && !src.startsWith('#')) {
-        if (!src.startsWith('media/') && !src.startsWith('assets/') && !src.startsWith('data/')) {
-          img.setAttribute('src', resolveRelativePath(src, originalPathContext));
+        if (!src.startsWith('http') && !src.startsWith('/') && !src.startsWith('#')) {
+          if (!src.startsWith('media/') && !src.startsWith('assets/') && !src.startsWith('data/')) {
+            src = resolveRelativePath(src, originalPathContext);
+          }
         }
+        img.setAttribute('src', getAbsoluteUrl(src));
       }
+
       let srcset = img.getAttribute('srcset');
       if (srcset) {
         srcset = srcset.replace(/https?:\/\/phileasdg\.github\.io\//g, '');
-        img.setAttribute('srcset', srcset);
         const parts = srcset.split(',').map(part => {
           const trimmed = part.trim();
           const firstSpace = trimmed.indexOf(' ');
           if (firstSpace === -1) {
-            if (!trimmed.startsWith('http') && !trimmed.startsWith('/') && !trimmed.startsWith('#')) {
-              if (!trimmed.startsWith('media/') && !trimmed.startsWith('assets/') && !trimmed.startsWith('data/')) {
-                return resolveRelativePath(trimmed, originalPathContext);
+            let url = trimmed;
+            if (!url.startsWith('http') && !url.startsWith('/') && !url.startsWith('#')) {
+              if (!url.startsWith('media/') && !url.startsWith('assets/') && !url.startsWith('data/')) {
+                url = resolveRelativePath(url, originalPathContext);
               }
             }
-            return trimmed;
+            return getAbsoluteUrl(url);
           }
-          const url = trimmed.substring(0, firstSpace);
+          let url = trimmed.substring(0, firstSpace);
           const rest = trimmed.substring(firstSpace);
           if (!url.startsWith('http') && !url.startsWith('/') && !url.startsWith('#')) {
             if (!url.startsWith('media/') && !url.startsWith('assets/') && !url.startsWith('data/')) {
-              return resolveRelativePath(url, originalPathContext) + rest;
+              url = resolveRelativePath(url, originalPathContext);
             }
           }
-          return trimmed;
+          return getAbsoluteUrl(url) + rest;
         });
         img.setAttribute('srcset', parts.join(', '));
       }
@@ -402,12 +415,12 @@ document.addEventListener("DOMContentLoaded", () => {
       let href = a.getAttribute('href');
       if (href) {
         href = href.replace(/^https?:\/\/phileasdg\.github\.io\//, '');
-        a.setAttribute('href', href);
-      }
-      if (href && !href.startsWith('http') && !href.startsWith('/') && !href.startsWith('#') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
-        if (!href.startsWith('media/') && !href.startsWith('assets/') && !href.startsWith('data/')) {
-          a.setAttribute('href', resolveRelativePath(href, originalPathContext));
+        if (!href.startsWith('http') && !href.startsWith('/') && !href.startsWith('#') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
+          if (!href.startsWith('media/') && !href.startsWith('assets/') && !href.startsWith('data/')) {
+            href = resolveRelativePath(href, originalPathContext);
+          }
         }
+        a.setAttribute('href', getAbsoluteUrl(href));
       }
     });
 
@@ -497,6 +510,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const updateStyleSheets = (routeType, bodyClass, slug) => {
+    const basePath = getSiteBasePath();
     const existingPlaygroundsLink = document.querySelector('link[href*="playgrounds.css"]');
     const existingMasonryLink = document.querySelector('link[href*="masonry.css"]');
     const existingPostLink = document.querySelector('link[href*="post.css"]');
@@ -508,13 +522,13 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!existingPlaygroundsLink) {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = 'assets/css/playgrounds.css';
+        link.href = `${basePath}/assets/css/playgrounds.css`;
         document.head.appendChild(link);
       }
       if (!existingMasonryLink) {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = 'assets/css/masonry.css';
+        link.href = `${basePath}/assets/css/masonry.css`;
         document.head.appendChild(link);
       }
     } else {
@@ -526,7 +540,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!existingPostLink) {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = 'assets/css/post.css';
+        link.href = `${basePath}/assets/css/post.css`;
         document.head.appendChild(link);
       }
     } else {
@@ -681,7 +695,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.className = 'post-template';
         mainEl.className = 'post';
         try {
-          const contentRes = await fetch(`content/posts/${slug}.html?v=${Date.now()}`);
+          const contentRes = await fetch(`${basePath}/content/posts/${slug}.html?v=${Date.now()}`);
           if (!contentRes.ok) throw new Error(`Failed to load content for post: ${slug}`);
           const contentHtml = await contentRes.text();
           mainEl.innerHTML = renderPost(postMeta, contentHtml);
@@ -708,14 +722,14 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.className = bodyClass;
         mainEl.className = page.main_class || '';
         try {
-          const contentRes = await fetch(`content/pages/${slug}.html?v=${Date.now()}`);
+          const contentRes = await fetch(`${basePath}/content/pages/${slug}.html?v=${Date.now()}`);
           if (!contentRes.ok) throw new Error(`Failed to load content for page: ${slug}`);
           let contentHtml = await contentRes.text();
           mainEl.innerHTML = normalizeContentHTML(contentHtml, `pages/${page.slug}/`);
 
           if (slug === 'playgrounds') {
             try {
-              const playgroundsRes = await fetch(`data/playgrounds.json?v=${Date.now()}`);
+              const playgroundsRes = await fetch(`${basePath}/data/playgrounds.json?v=${Date.now()}`);
               const playgrounds = await playgroundsRes.json();
               const container = mainEl.querySelector('#playgrounds-container');
               if (container) {
