@@ -1,21 +1,42 @@
+// Global Click Interception & Routing Helpers
+const getSiteRelativePath = (resolvedPathname) => {
+  let path = resolvedPathname;
+  const match = path.match(/[\/\\](phileasdg\.github\.io|newsite)/i);
+  if (match) {
+    path = path.substring(match.index + match[0].length);
+  }
+  if (!path.startsWith('/')) {
+    path = '/' + path;
+  }
+  return path;
+};
+
+const getSiteBasePath = () => {
+  const pathname = window.location.pathname;
+  const siteRelative = getSiteRelativePath(pathname);
+  const base = pathname.substring(0, pathname.length - siteRelative.length);
+  return base.endsWith('/') ? base.slice(0, -1) : base;
+};
+
 // Dynamic Header Component
 class SiteHeader extends HTMLElement {
   connectedCallback() {
+    const basePath = getSiteBasePath();
     this.innerHTML = `
       <header class="header" id="js-header">
-        <a href="#/" class="logo">Phileas Dazeley-Gaist</a>
+        <a href="${basePath}/" class="logo">Phileas Dazeley-Gaist</a>
         <nav class="navbar js-navbar">
           <button class="navbar__toggle js-toggle" aria-label="Menu">
             <span class="navbar__toggle-box"><span class="navbar__toggle-inner">Menu</span></span>
           </button>
           <ul class="navbar__menu">
-            <li><a href="#/" target="_self">Home</a></li>
-            <li><a href="#/pages/guest-lectures-and-public-speaking-events/" target="_self">Public Speaking</a></li>
-            <li><a href="#/pages/playgrounds/" target="_self">Playgrounds</a></li>
-            <li><a href="#/pages/publications/" target="_self">Publications</a></li>
-            <li><a href="#/pages/a-few-words-about-me/" target="_self">About</a></li>
-            <li><a href="#/pages/resume-cv/" target="_self">Resume / CV</a></li>
-            <li><a href="#/pages/inquiries/" target="_self">Inquiries</a></li>
+            <li><a href="${basePath}/" target="_self">Home</a></li>
+            <li><a href="${basePath}/pages/guest-lectures-and-public-speaking-events/" target="_self">Public Speaking</a></li>
+            <li><a href="${basePath}/pages/playgrounds/" target="_self">Playgrounds</a></li>
+            <li><a href="${basePath}/pages/publications/" target="_self">Publications</a></li>
+            <li><a href="${basePath}/pages/a-few-words-about-me/" target="_self">About</a></li>
+            <li><a href="${basePath}/pages/resume-cv/" target="_self">Resume / CV</a></li>
+            <li><a href="${basePath}/pages/inquiries/" target="_self">Inquiries</a></li>
           </ul>
         </nav>
       </header>
@@ -54,17 +75,17 @@ customElements.define('site-footer', SiteFooter);
 
 // Active Links Handler
 window.updateActiveLinks = () => {
-  const hash = window.location.hash || '#/';
+  const relativePath = getSiteRelativePath(window.location.pathname);
   const menuItems = document.querySelectorAll('.navbar__menu li, .navbar_mobile_sidebar li, .navbar_mobile_overlay li');
   menuItems.forEach(li => {
     const a = li.querySelector('a');
     if (!a) return;
-    const href = a.getAttribute('href');
-    if (href === hash || (hash === '#/' && href === '#/')) {
+    const hrefRelative = getSiteRelativePath(new URL(a.href, window.location.href).pathname);
+    if (hrefRelative === relativePath) {
       li.classList.add('active');
-    } else if (hash.startsWith('#/pages/') && href.startsWith('#/pages/')) {
-      const pageSlug = hash.replace(/^#\/?pages\//, '').replace(/\/$/, '');
-      const menuSlug = href.replace(/^#\/?pages\//, '').replace(/\/$/, '');
+    } else if (relativePath.startsWith('/pages/') && hrefRelative.startsWith('/pages/')) {
+      const pageSlug = relativePath.replace(/^\/pages\//, '').replace(/\/$/, '');
+      const menuSlug = hrefRelative.replace(/^\/pages\//, '').replace(/\/$/, '');
       if (menuSlug === 'resume-cv' && (pageSlug === 'resume-english' || pageSlug === 'cv-francais' || pageSlug === 'resume-cv')) {
         li.classList.add('active');
       } else if (pageSlug === menuSlug) {
@@ -77,20 +98,9 @@ window.updateActiveLinks = () => {
     }
   });
 };
-window.addEventListener('hashchange', window.updateActiveLinks);
+window.addEventListener('popstate', window.updateActiveLinks);
 
-// Global Click Interception & Routing Helper
-const getSiteRelativePath = (resolvedPathname) => {
-  let path = resolvedPathname;
-  const match = path.match(/[\/\\](phileasdg\.github\.io|newsite)/i);
-  if (match) {
-    path = path.substring(match.index + match[0].length);
-  }
-  if (!path.startsWith('/')) {
-    path = '/' + path;
-  }
-  return path;
-};
+// Legacy getSiteRelativePath helper removed (moved to top of file)
 
 document.addEventListener('click', (event) => {
   const anchor = event.target.closest('a');
@@ -114,34 +124,10 @@ document.addEventListener('click', (event) => {
       return;
     }
 
-    const sitePath = getSiteRelativePath(url.pathname);
-    let routeHash = '';
-
-    if (sitePath === '/' || sitePath === '/index.html') {
-      routeHash = '#/';
-    } else {
-      const postsMatch = sitePath.match(/^\/posts\/([^\/]+)/);
-      const pagesMatch = sitePath.match(/^\/pages\/([^\/]+)/);
-      const tagsMatch = sitePath.match(/^\/tags\/([^\/]+)/);
-      const tagsIndexMatch = sitePath.match(/^\/tags\/?(index\.html)?$/);
-      const authorsMatch = sitePath.match(/^\/authors\/([^\/]+)/);
-
-      if (postsMatch) {
-        routeHash = `#/posts/${postsMatch[1]}/`;
-      } else if (pagesMatch) {
-        routeHash = `#/pages/${pagesMatch[1]}/`;
-      } else if (tagsMatch) {
-        routeHash = `#/tags/${tagsMatch[1]}/`;
-      } else if (tagsIndexMatch) {
-        routeHash = `#/tags/`;
-      } else if (authorsMatch) {
-        routeHash = `#/authors/${authorsMatch[1]}/`;
-      }
-    }
-
-    if (routeHash) {
-      event.preventDefault();
-      window.location.hash = routeHash;
+    event.preventDefault();
+    history.pushState(null, null, url.href);
+    if (window.spaRoute) {
+      window.spaRoute();
     }
   } catch (err) {
     console.warn("URL parsing failed for link:", href, err);
@@ -288,9 +274,10 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const renderCard = (post, prefix = '') => {
+    const basePath = getSiteBasePath();
     const primaryTag = post.tags && post.tags.length > 0 ? post.tags[0] : null;
     const tagHtml = primaryTag 
-      ? `<div class="c-card__tag"><a href="#/tags/${getTagSlug(primaryTag)}/">${primaryTag}</a></div>`
+      ? `<div class="c-card__tag"><a href="${basePath}/tags/${getTagSlug(primaryTag)}/">${primaryTag}</a></div>`
       : '';
 
     let imageHtml = '';
@@ -306,7 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const widthAttr = post.thumbWidth ? `width="${post.thumbWidth}"` : '';
         const heightAttr = post.thumbHeight ? `height="${post.thumbHeight}"` : '';
         imageHtml = `
-          <a href="#/posts/${post.slug}/" class="c-card__image">
+          <a href="${basePath}/posts/${post.slug}/" class="c-card__image">
             <img src="${prefix}${post.thumbnail}" ${srcsetHtml} ${widthAttr} ${heightAttr} sizes="(min-width: 56.25em) 100vw, (min-width: 37.5em) 50vw, 100vw" loading="lazy" alt="">
           </a>
         `;
@@ -315,7 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const titleLink = post.isPlayground
       ? `<a href="${post.url}" rel="noopener noreferrer" target="_blank" class="invert">${post.name}</a>`
-      : `<a href="#/posts/${post.slug}/" class="invert">${post.name}</a>`;
+      : `<a href="${basePath}/posts/${post.slug}/" class="invert">${post.name}</a>`;
 
     const metaHtml = post.isPlayground
       ? `<div class="c-card__description" style="font-size: 0.8rem; color: #6D6E6F; margin-top: 0.5rem; line-height: 1.5;">${post.description}</div>`
@@ -548,9 +535,10 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const renderPost = (postMeta, contentHtml) => {
+    const basePath = getSiteBasePath();
     const primaryTag = postMeta.tags && postMeta.tags.length > 0 ? postMeta.tags[0] : null;
     const tagHtml = primaryTag 
-      ? `<a class="content__maintag" href="#/tags/${getTagSlug(primaryTag)}/">${primaryTag}</a>`
+      ? `<a class="content__maintag" href="${basePath}/tags/${getTagSlug(primaryTag)}/">${primaryTag}</a>`
       : '';
 
     let imageHtml = '';
@@ -577,7 +565,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const tagsListHtml = postMeta.tags && postMeta.tags.length > 0
       ? `<ul class="content__tag">
-          ${postMeta.tags.map(t => `<li><a href="#/tags/${getTagSlug(t)}/">${t}</a></li>`).join('')}
+          ${postMeta.tags.map(t => `<li><a href="${basePath}/tags/${getTagSlug(t)}/">${t}</a></li>`).join('')}
          </ul>`
       : '';
 
@@ -590,7 +578,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let prevLinkHtml = prevPost
           ? `<div class="content__nav__prev">
-              <a class="content__nav__link" href="#/posts/${prevPost.slug}/" rel="prev">
+              <a class="content__nav__link" href="${basePath}/posts/${prevPost.slug}/" rel="prev">
                 Previous Post
                 <h3 class="h6">${prevPost.name}</h3>
               </a>
@@ -599,7 +587,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let nextLinkHtml = nextPost
           ? `<div class="content__nav__next">
-              <a class="content__nav__link" href="#/posts/${nextPost.slug}/" rel="next">
+              <a class="content__nav__link" href="${basePath}/posts/${nextPost.slug}/" rel="next">
                 Next Post
                 <h3 class="h6">${nextPost.name}</h3>
               </a>
@@ -648,16 +636,17 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const route = async () => {
-    const hash = window.location.hash || '#/';
-    const cleanHash = hash.replace(/^#\/?/, '').replace(/\/$/, '');
+    const basePath = getSiteBasePath();
+    const siteRelativePath = getSiteRelativePath(window.location.pathname);
+    const cleanRoute = siteRelativePath.replace(/^\//, '').replace(/\/$/, '');
 
     const posts = await getPostsData();
     const pages = await getPagesData();
     const playgrounds = await getPlaygroundsData();
 
-    if (cleanHash === '' || cleanHash === 'graph') {
-      if (cleanHash === 'graph') {
-        window.location.hash = '#/';
+    if (cleanRoute === '' || cleanRoute === 'index.html' || cleanRoute === 'graph') {
+      if (cleanRoute === 'graph') {
+        history.replaceState(null, null, basePath + '/');
         return;
       }
       updateStyleSheets('home', originalBodyClass, '');
@@ -683,8 +672,8 @@ document.addEventListener("DOMContentLoaded", () => {
           paginationContainer.style.display = '';
           setupPagination(visiblePosts, paginationContainer, grid, '');
         }
-      }    } else if (cleanHash.startsWith('posts/')) {
-      const slug = cleanHash.substring(6);
+      }    } else if (cleanRoute.startsWith('posts/')) {
+      const slug = cleanRoute.substring(6);
       const postMeta = posts.find(p => p.slug === slug);
       if (postMeta) {
         updateStyleSheets('post', 'post-template', slug);
@@ -706,10 +695,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         handleLazyImages(mainEl);
       } else {
-        window.location.hash = '#/';
+        history.replaceState(null, null, basePath + '/');
+        route();
       }
-    } else if (cleanHash.startsWith('pages/')) {
-      const slug = cleanHash.substring(6);
+    } else if (cleanRoute.startsWith('pages/')) {
+      const slug = cleanRoute.substring(6);
       const page = pages.find(p => p.slug === slug);
       if (page) {
         const bodyClass = page.body_class || '';
@@ -732,7 +722,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 container.innerHTML = playgrounds.map(item => {
                   const primaryTag = item.tags && item.tags.length > 0 ? item.tags[0] : null;
                   const tagHtml = primaryTag 
-                    ? `<div class="c-card__tag" style="margin-bottom: 0.5rem;"><a href="#/tags/${getTagSlug(primaryTag)}/">${primaryTag}</a></div>`
+                    ? `<div class="c-card__tag" style="margin-bottom: 0.5rem;"><a href="${basePath}/tags/${getTagSlug(primaryTag)}/"/>${primaryTag}</a></div>`
                     : '';
                   return `
         <article class="c-card">
@@ -766,10 +756,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         handleLazyImages(mainEl);
       } else {
-        window.location.hash = '#/';
+        history.replaceState(null, null, basePath + '/');
+        route();
       }
-    } else if (cleanHash.startsWith('tags/')) {
-      const slug = cleanHash.substring(5);
+    } else if (cleanRoute.startsWith('tags/')) {
+      const slug = cleanRoute.substring(5);
       updateStyleSheets('tag', 'tags-template', slug);
       if (slug === '') {
         const tagsList = getTagsDataFromPosts(posts, playgrounds);
@@ -782,7 +773,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="c-card__wrapper">
               <div class="c-card__header">
                 <h2 class="c-card__title">
-                  <a class="invert" href="#/tags/${tag.slug}/">${tag.name} </a><sup>(${tag.count})</sup>
+                  <a class="invert" href="${basePath}/tags/${tag.slug}/">${tag.name} </a><sup>(${tag.count})</sup>
                 </h2>
               </div>
             </div>
@@ -834,8 +825,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const paginationContainer = mainEl.querySelector('#pagination-container');
         setupPagination(combinedItems, paginationContainer, grid, '');
       }
-    } else if (cleanHash.startsWith('authors/')) {
-      const slug = cleanHash.substring(8);
+    } else if (cleanRoute.startsWith('authors/')) {
+      const slug = cleanRoute.substring(8);
       updateStyleSheets('author', 'author-template', slug);
       document.title = `Author: Phileas Dazeley-Gaist - Phileas Dazeley-Gaist`;
       document.body.className = 'author-template';
@@ -863,7 +854,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const paginationContainer = mainEl.querySelector('#pagination-container');
       setupPagination(visiblePosts, paginationContainer, grid, '');
     } else {
-      window.location.hash = '#/';
+      history.replaceState(null, null, basePath + '/');
+      route();
     }
 
     if (window.updateActiveLinks) {
@@ -871,8 +863,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  // Helper to handle the hash redirect from 404.html on initial boot
+  const handleInitialRedirectHash = () => {
+    const hash = window.location.hash;
+    if (hash && hash.startsWith('#/')) {
+      const cleanPath = hash.substring(1); // e.g. "/pages/some-page/"
+      const basePath = getSiteBasePath();
+      const targetUrl = basePath + cleanPath;
+      history.replaceState(null, null, targetUrl);
+    }
+  };
 
-  window.addEventListener('hashchange', route);
+  window.spaRoute = route;
+  window.addEventListener('popstate', route);
+  handleInitialRedirectHash();
   route();
 });
 
