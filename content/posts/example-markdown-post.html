@@ -1,0 +1,92 @@
+<p>Welcome to the new Markdown publishing workflow! This example post showcases all the content types and formatting options you might want to use when writing your articles.</p>
+<h2>1. Text Formatting & Hierarchy</h2>
+<p>You can write headings, sub-headings, and standard body text with simple styling:</p>
+<ul>
+<li><strong>Bold Text:</strong> Wrap text in double asterisks (<code>**bold**</code>).</li>
+</ul>
+<p><em> </em>Italic Text:* Wrap text in single asterisks (<code>*italic*</code>) or underscores (<code>_italic_</code>).</p>
+<ul>
+<li><code>Inline Code</code>: Wrap code or terms in backticks (`<code> </code>code<code> </code>`).</li>
+</ul>
+<h3>Subsection Checklist</h3>
+<p>1. Write the draft in Markdown.</p>
+<p>2. Add YAML frontmatter at the top.</p>
+<p>3. Commit and push!</p>
+<p>Here is a sample table showing various data alignments:</p>
+<div class="post__table-wrapper">
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Item ID</th>
+<th style="text-align: left;">Description</th>
+<th style="text-align: center;">Quantity</th>
+<th style="text-align: right;">Unit Price</th>
+<th style="text-align: right;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">101</td>
+<td style="text-align: left;">Standard Widget with long text description to test responsive wrapping</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: right;">$10.00</td>
+<td style="text-align: right;">$20.00</td>
+</tr>
+<tr>
+<td style="text-align: left;">102</td>
+<td style="text-align: left;">Premium Widget</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: right;">$45.00</td>
+<td style="text-align: right;">$45.00</td>
+</tr>
+<tr>
+<td style="text-align: left;">103</td>
+<td style="text-align: left;">Deluxe Edition</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: right;">$100.00</td>
+<td style="text-align: right;">$500.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr class="separator" />
+<h2>2. Lists and Lists Items</h2>
+<p>You can create ordered and unordered lists easily:</p>
+<ul>
+<li><strong>Unordered List Item 1</strong></li>
+<li><strong>Unordered List Item 2</strong></li>
+<li>Indented sub-items are also supported.</li>
+<li>Another sub-item.</li>
+</ul>
+<hr class="separator" />
+<h2>3. Code Blocks with Syntax Highlighting</h2>
+<p>Write multi-line code blocks with language-specific syntax highlighting (powered by Prism.js):</p>
+<h3>Wolfram Language (WL) Example</h3>
+<p>Sampling and plotting an Erdős-Rényi random graph:</p>
+<pre><code class="language-mathematica">(* Sample and plot an Erdős-Rényi random graph G(n, p) *)
+g = RandomGraph[BernoulliGraphDistribution[40, 0.07]];
+Graph[g, 
+  VertexSize -&gt; Medium, 
+  VertexStyle -&gt; RGBColor[0.0, 0.48, 0.65], 
+  EdgeStyle -&gt; Directive[Opacity[0.25], RGBColor[0.0, 0.48, 0.65]]]</code></pre>
+<figure class="post__image post__image--center"><img src="../../media/posts/example-markdown-post/wolfram-graph-showcase.png" alt="Wolfram Language Erdos-Renyi Graph" loading="lazy" /></figure>
+<hr class="separator" />
+<h2>4. Media & Embeds</h2>
+<p>You can embed images using simple Markdown syntax. By default, the build system automatically wraps them in a <code><figure class="post__image"></code> container and generates responsive <code>srcset</code> and <code>sizes</code> attributes if matching sizes are found on disk under the image's <code>responsive/</code> directory.</p>
+<h3>Standard Image:</h3>
+<figure class="post__image post__image--center"><img src="media/imgs/hypergraph-plotter.png" alt="Hypergraph Plotter Card Thumbnail" loading="lazy" /></figure>
+<h3>Image with Custom Dimensions:</h3>
+<p>You can specify the image width and height using the <code>=widthxheight</code> syntax (e.g. <code>=600x380</code> or <code>=600x</code> to specify width only) in the image target brackets:</p>
+<figure class="post__image post__image--center"><img src="media/imgs/hypergraph-plotter.png" alt="Hypergraph Plotter Card Thumbnail" width="600" height="380" loading="lazy" /></figure>
+<h3>Image with Custom Alignment:</h3>
+<p>You can also specify the alignment (<code>left</code>, <code>right</code>, or <code>center</code>) by appending it after the image path or size. The default alignment is <code>center</code>:</p>
+<figure class="post__image post__image--left"><img src="media/imgs/hypergraph-plotter.png" alt="Hypergraph Plotter Card Thumbnail" width="300" loading="lazy" /></figure>
+<p>This paragraph of text will wrap around the left-aligned image. It showcases how simple it is to lay out dynamic content with varying visual components on your blog using standard Markdown syntax extensions.</p>
+<div style="clear: both;"></div>
+<hr class="separator" />
+<h2>5. Raw HTML Support</h2>
+<p>You can drop raw HTML blocks directly into the page (e.g. for embeds, customized styling, or video players). The Markdown compiler protects these tags and keeps them as-is:</p>
+<figure class="post__video">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/mBQfjY_g-pI?si=Dcqqdh0GYgURq4XK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</figure>
+<p>Enjoy writing!</p>
