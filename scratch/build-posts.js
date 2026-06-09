@@ -319,10 +319,10 @@ function parseMarkdown(md) {
     // 2. Links (must be BEFORE extracting HTML tags)
     processedLine = processedLine.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
 
-    // 3. Headers (must match start of line, must be BEFORE extracting HTML tags)
-    processedLine = processedLine.replace(/^### (.*$)/gim, '<h3>$1</h3>');
-    processedLine = processedLine.replace(/^## (.*$)/gim, '<h2>$1</h2>');
-    processedLine = processedLine.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+    // 3. Headers (must match start of line or follow an HTML tag, must be BEFORE extracting HTML tags)
+    processedLine = processedLine.replace(/(^|>)\s*### (.*$)/gim, '$1<h3>$2</h3>');
+    processedLine = processedLine.replace(/(^|>)\s*## (.*$)/gim, '$1<h2>$2</h2>');
+    processedLine = processedLine.replace(/(^|>)\s*# (.*$)/gim, '$1<h1>$2</h1>');
 
     // 4. Temporarily extract HTML tags (original + newly generated) to prevent modifying them
     const htmlTags = [];
