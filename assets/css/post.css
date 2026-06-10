@@ -114,7 +114,7 @@
   color:var(--gray-2)!important;
   display:block;
   font-size:.624295077rem;
-  text-transform:uppercase;
+  text-transform: none;
   -webkit-transition:all .12s linear;
   transition:all .12s linear
 }
@@ -776,7 +776,7 @@ pre[class*="language-"] {
 }
 
 .code-block-lang {
-  text-transform: uppercase;
+  text-transform: none;
   font-size: 0.55rem;
   letter-spacing: 0.03em;
   opacity: 0.7;
@@ -801,7 +801,7 @@ pre[class*="language-"] {
   padding: 0 !important;
   font-size: 0.6rem !important;
   font-weight: 600 !important;
-  text-transform: uppercase !important;
+  text-transform: none !important;
   letter-spacing: 0.03em !important;
   transition: color 0.1s ease-in-out !important;
   width: auto !important;

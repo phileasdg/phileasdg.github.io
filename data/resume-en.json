@@ -1,0 +1,198 @@
+{
+  "title": "Resume",
+  "name": "Phileas Dazeley-Gaist",
+  "tagline": "Human Ecologist, Data Scientist & Scientific Programmer",
+  "contact": {
+    "email": "phileasdg[at]gmail.com",
+    "linkedin": "https://www.linkedin.com/in/phileas/",
+    "github": "https://github.com/phileasdg"
+  },
+  "work_experience": [
+    {
+      "role": "Academic Innovation Applications Developer",
+      "company": "Wolfram Research",
+      "type": "Full-time",
+      "start_date": "August 2024",
+      "end_date": "Present",
+      "location": "Salem, Massachusetts, Remote",
+      "description": "Organising training, outreach and scientific communication events with users of Wolfram Language. Attending local conferences and events relevant to the mission of the Academic Innovation Support team. Giving conference talks and training events as appropriate to promote usage of Wolfram Language. Incorporating user feedback and use cases to inform the development of new demonstrations, training content and repository items. Contributing to \"open projects\" including the Wolfram Function Repository, Example Repository, Paclet Repository, etc. Staying up to date with trends in specific academic fields as they are identified as business-relevant, such as ed-tech, GIS, etc. Consulting with faculty, administrators or other business contacts regarding the Wolfram technology stack in their projects. Coordinating with relevant teams for the creation of user-relevant PR content, including social media posts."
+    },
+    {
+      "role": "Academic Content Developer",
+      "company": "Wolfram Research",
+      "type": "Full-time",
+      "start_date": "July 2023",
+      "end_date": "July 2024",
+      "location": "Salem, Massachusetts, Remote",
+      "description": "Developing exemplar projects for computational thinking, GIS, ecology, digital art, and digital humanities courses using Wolfram Language. Collaborating with external organisations to create educational content using Wolfram Language. Providing coordination and logistical support for Academic Innovation Support workshops in college and research settings. Researching and following up on new opportunities for collaboration on Wolfram Language workshops for external academic organisations, faculty, and students."
+    },
+    {
+      "role": "Data Science Intern",
+      "company": "National Oceanic & Atmospheric Administration",
+      "type": "Full-time",
+      "start_date": "May 2022",
+      "end_date": "October 2022",
+      "location": "Washington DC + Remote",
+      "description": "US Federal Government Marine Debris Database Management Work (MDMAP API). Programmatically corrected errors in marine debris survey site surface definitions (R and QGIS). Data entry of NOAA surveys of Marine debris accumulation and standing stock data spanning approximately 8 years. Statistical analysis on these and other MDMAP data (R)."
+    },
+    {
+      "role": "Network and Website Manager",
+      "company": "Society for Human Ecology",
+      "type": "Part-time",
+      "start_date": "Apr 2020",
+      "end_date": "Aug 2020",
+      "location": "Bar Harbor, Maine, United States",
+      "description": "Managed updates, layout, and coordination for the Society's main website and digital networking portals."
+    },
+    {
+      "role": "Resident Advisor",
+      "company": "College of the Atlantic",
+      "type": "Full-time",
+      "start_date": "Aug 2020",
+      "end_date": "June 2023",
+      "location": "Bar Harbor, Maine, United States",
+      "description": "Supported student residential life, managed conflict resolution, and organized community events."
+    }
+  ],
+  "education": [
+    {
+      "institution": "Santa Fe Institute & Universidad de Los Andes",
+      "degree": "Complexity Global School",
+      "start_date": "July 2025",
+      "end_date": "November 2025",
+      "location": "Bogota, Colombia",
+      "description": "Engaged with complexity science practitioners among the programme faculty and attendees. Currently collaborating with two research groups: one investigating the effects of global trade network changes on the economic centrality of nations, and another exploring engineered complexity in a co-creative artistic process."
+    },
+    {
+      "institution": "College of the Atlantic",
+      "degree": "Bachelor of Arts in Human Ecology",
+      "start_date": "Aug 2019",
+      "end_date": "June 2023",
+      "location": "Bar Harbor, Maine, United States",
+      "meta": "GPA 3.92",
+      "courses": [
+        "Geographic Information Systems",
+        "Applied Machine Learning on Large Datasets",
+        "Applied Data Science I & II",
+        "Biostatistics",
+        "Statistics and Research Design",
+        "Physics and Mathematics of Sustainable Energy",
+        "Dynamical Systems and Differential Equations",
+        "Chaos and Fractals",
+        "Sensors Controllers and Robots",
+        "Analytical Chemistry",
+        "Environmental History",
+        "Economics & the Economy",
+        "Seminar in Human Ecology",
+        "AI: Futures Studies and Philosophy of Technology"
+      ]
+    },
+    {
+      "institution": "Wolfram Summer School 2023",
+      "degree": "Research Fellow",
+      "start_date": "June 2023",
+      "end_date": "July 2023",
+      "location": "Waltham, Massachusetts, United States"
+    },
+    {
+      "institution": "University of Nantes",
+      "degree": "Faculty of Sociology",
+      "start_date": "Sept 2018",
+      "end_date": "June 2019",
+      "location": "Nantes, Pays de la Loire, France",
+      "courses": [
+        "Anthropology",
+        "Research Methods I & II",
+        "Socialisation",
+        "Sociology of the Family",
+        "Sociology of Institutions",
+        "Geography of Populations and Demographics",
+        "Political Sociology",
+        "Sociology of Education",
+        "Contemporary Environmental Challenges"
+      ]
+    },
+    {
+      "institution": "United World College Robert Bosch",
+      "degree": "International Baccalaureate",
+      "start_date": "Aug 2015",
+      "end_date": "June 2017",
+      "location": "Freiburg im Breisgau, Baden-Württemberg, Germany"
+    }
+  ],
+  "teaching_experience": [
+    {
+      "role": "Wolfram Summer School Mentor (2025)",
+      "dates": "22 June 2025 – 13 July 2025"
+    },
+    {
+      "role": "Wolfram Summer School Mentor (2024)",
+      "dates": "22 June 2024 – 13 July 2024"
+    }
+  ],
+  "publications": [
+    {
+      "citation": "Dazeley-Gaist, Phileas, and Mohammad Bahrami, eds. “RemoteSensing Paclet: GIBS Satellite Imagery and AppEEARS Geographic Data Products.” In Wolfram Summer School Research Reports 2023. Wolfram Summer School Research Reports. Champaign, Illinois: Wolfram Media, 2025."
+    },
+    {
+      "citation": "Phileas Dazeley-Gaist. “Mathematics as Human Ecology.” In Human Ecology Essay Collection - 2023, 34–39. Human Ecology Essays. College of the Atlantic, 2023."
+    }
+  ],
+  "leadership_volunteering": [
+    "Santa Fe Institute Complexity Coffee events volunteer (planning, organising, and hosting Complexity Global School alumni community meetings, talks, and online workshops (August 2025 – Present)",
+    "Wolfram Student Ambassador (August 2022 – June 2023)",
+    "President of the College of the Atlantic Programming Club (Dec 2019 – June 2023)",
+    "Set up a free-access community winter food pantry to address food insecurity at College of the Atlantic. Coordinated with other volunteers to collect and distribute food to students and community members. (Dec 2019 – Feb 2020)",
+    "Treasurer of the LGBTQ students’ society of the University of Nantes (Oct 2018 – Dec 2019)"
+  ],
+  "skills": [
+    "ESRI ArcGIS Pro",
+    "QGIS",
+    "GDAL",
+    "R / Tidyverse",
+    "Python / Pandas / NumPy",
+    "PyTorch / Machine Learning",
+    "JavaScript / Node.js",
+    "SQL",
+    "Wolfram Language",
+    "Stella Architect",
+    "Git",
+    "Microsoft Office"
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "proficiency": "Native"
+    },
+    {
+      "language": "French",
+      "proficiency": "Native"
+    },
+    {
+      "language": "Spanish",
+      "proficiency": "Limited conversational"
+    }
+  ],
+  "references": [
+    {
+      "name": "John McNally",
+      "title": "Director of Emerging Markets at Wolfram Research"
+    },
+    {
+      "name": "Gray Cox",
+      "title": "Professor of Philosophy and Peace Studies at College of the Atlantic"
+    },
+    {
+      "name": "Susan Letcher",
+      "title": "Professor of Plant Biology and Biostatistics at College of the Atlantic"
+    },
+    {
+      "name": "Richard Borden",
+      "title": "Society for Human Ecology"
+    },
+    {
+      "name": "David Feldman",
+      "title": "Professor of Physics and Mathematics at College of the Atlantic"
+    }
+  ]
+}

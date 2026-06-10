@@ -237,8 +237,8 @@
 }
 .c-card__image>img {
   display:block;
-  -webkit-transition:all .25s ease-out;
-  transition:all .25s ease-out
+  -webkit-transition:-webkit-transform .25s ease-out;
+  transition:transform .25s ease-out
 }
 .c-card__wrapper {
   padding:0 1.75rem 1.75rem

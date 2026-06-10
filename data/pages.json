@@ -31,15 +31,15 @@
   },
   {
     "slug": "resume-english",
-    "title": "Phileas Dazeley-Gaist",
-    "body_class": "post-template",
-    "main_class": "post"
+    "title": "Resume",
+    "body_class": "resume-body",
+    "main_class": "resume-main"
   },
   {
     "slug": "cv-francais",
-    "title": "Phileas Dazeley-Gaist",
-    "body_class": "post-template",
-    "main_class": "post"
+    "title": "CV",
+    "body_class": "resume-body",
+    "main_class": "resume-main"
   },
   {
     "slug": "inquiries",
