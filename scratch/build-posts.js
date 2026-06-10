@@ -565,6 +565,7 @@ function renderResumeHTML(data) {
     const sectionTitle = isFR ? 'Expérience Professionnelle' : 'Work Experience';
     html.push(`      <section class="resume__section">`);
     html.push(`        <h2 class="resume__section-title">${sectionTitle}</h2>`);
+    html.push('        <div class="resume__timeline">');
     data.work_experience.forEach(job => {
       html.push('        <div class="resume__item">');
       html.push('          <div class="resume__item-header">');
@@ -578,6 +579,7 @@ function renderResumeHTML(data) {
       html.push(`          <p class="resume__item-desc">${job.description}</p>`);
       html.push('        </div>');
     });
+    html.push('        </div>');
     html.push('      </section>');
   }
 
@@ -586,6 +588,7 @@ function renderResumeHTML(data) {
     const sectionTitle = isFR ? 'Formation' : 'Education';
     html.push(`      <section class="resume__section">`);
     html.push(`        <h2 class="resume__section-title">${sectionTitle}</h2>`);
+    html.push('        <div class="resume__timeline">');
     data.education.forEach(edu => {
       html.push('        <div class="resume__item">');
       html.push('          <div class="resume__item-header">');
@@ -605,6 +608,7 @@ function renderResumeHTML(data) {
       }
       html.push('        </div>');
     });
+    html.push('        </div>');
     html.push('      </section>');
   }
 
@@ -613,6 +617,7 @@ function renderResumeHTML(data) {
     const sectionTitle = isFR ? "Expérience d'Enseignement" : 'Teaching Experience';
     html.push(`      <section class="resume__section">`);
     html.push(`        <h2 class="resume__section-title">${sectionTitle}</h2>`);
+    html.push('        <div class="resume__timeline">');
     data.teaching_experience.forEach(teach => {
       html.push('        <div class="resume__item">');
       html.push('          <div class="resume__item-header">');
@@ -621,6 +626,7 @@ function renderResumeHTML(data) {
       html.push('          </div>');
       html.push('        </div>');
     });
+    html.push('        </div>');
     html.push('      </section>');
   }
 

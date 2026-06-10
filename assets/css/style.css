@@ -68,10 +68,10 @@
 
 .resume__tagline {
   font-family: var(--res-font);
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--res-secondary);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.03em;
   text-transform: none;
   margin: 0.35rem 0 0;
 }
@@ -135,7 +135,7 @@
 }
 
 .resume__section {
-  margin-bottom: 1.75rem;
+  margin-bottom: 2.5rem;
 }
 
 .resume__section-title {
@@ -143,7 +143,7 @@
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--res-primary);
-  border-bottom: 1px solid var(--res-border);
+  border-bottom: 2px solid var(--res-secondary);
   padding-bottom: 0.35rem;
   margin-top: 0;
   margin-bottom: 1.25rem;
@@ -153,12 +153,16 @@
 
 .resume__main {
   position: relative;
+}
+
+.resume__timeline {
+  position: relative;
   padding-left: 1.5rem;
   border-left: 1.5px solid var(--res-border);
 }
 
 @media all and (max-width: 48em) {
-  .resume__main {
+  .resume__timeline {
     padding-left: 0;
     border-left: none;
   }
@@ -261,7 +265,6 @@
   border-radius: 4px;
   margin-top: 0.6rem;
   border: 1px solid var(--res-border);
-  border-left: 3px solid var(--res-secondary);
   line-height: 1.45;
 }
 
@@ -392,17 +395,17 @@
   }
   
   .resume__section {
-    margin-bottom: 1.25rem !important;
+    margin-bottom: 1.8rem !important;
   }
   
   .resume__section-title {
     font-size: 10.5pt !important;
-    border-bottom: 1px solid #444444 !important;
+    border-bottom: 1.5px solid #000000 !important;
     color: #000000 !important;
     margin-bottom: 0.75rem !important;
   }
   
-  .resume__main {
+  .resume__timeline {
     padding-left: 1.25rem !important;
     border-left: 1px solid #cccccc !important;
   }
@@ -410,7 +413,7 @@
   .resume__item {
     page-break-inside: avoid;
     break-inside: avoid;
-    margin-bottom: 1rem !important;
+    margin-bottom: 0.9rem !important;
   }
   
   .resume__item::before {
@@ -444,7 +447,6 @@
     background: #ffffff !important;
     color: #222222 !important;
     border: 1px solid #999999 !important;
-    border-left: 3px solid #000000 !important;
     page-break-inside: avoid;
     break-inside: avoid;
     padding: 0.4rem 0.6rem !important;
