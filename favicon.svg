@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <!-- Clip path to keep internal lines and fills perfectly inside the envelope -->
+    <clipPath id="envelope-clip">
+      <path d="M 42,56 C 24,51 24,22 50,22 C 76,22 76,51 58,56 Z" />
+    </clipPath>
+  </defs>
+  <style>
+    .fill-top { fill: #007AA5; }
+    .fill-bottom { fill: #3D8A78; }
+    .fill-basket { fill: #3D8A78; }
+    .stroke-main { fill: none; stroke: #1a1b1e; stroke-width: 4.2; stroke-linecap: round; stroke-linejoin: round; }
+    .stroke-ropes { fill: none; stroke: #1a1b1e; stroke-width: 2.5; stroke-linecap: round; }
+    @media (prefers-color-scheme: dark) {
+      .fill-top { fill: #4fb3d9; }
+      .fill-bottom { fill: #5AAA8A; }
+      .fill-basket { fill: #5AAA8A; }
+      .stroke-main { stroke: #ffffff; }
+      .stroke-ropes { stroke: #ffffff; }
+    }
+  </style>
+
+  <!-- Scaled & Transparent Hot Air Balloon (1.3x Scale centered around 50, 48) -->
+  <g transform="translate(50, 48) scale(1.3) translate(-50, -48)">
+    
+    <!-- Colored Fills (Clipped inside envelope) -->
+    <g clip-path="url(#envelope-clip)">
+      <!-- Top Half Fill (Steel Blue) -->
+      <rect x="10" y="10" width="80" height="80" class="fill-top" />
+      <!-- Bottom Half Fill (Dusty Teal) -->
+      <path d="M 10,43 Q 50,48 90,43 L 90,80 L 10,80 Z" class="fill-bottom" />
+      
+      <!-- Internal Seam & Stripe Outlines -->
+      <path class="stroke-main" d="M 10,42 Q 50,47 90,42" />
+      <path class="stroke-main" d="M 50,22 C 37,22 35,35 41,50" />
+      <path class="stroke-main" d="M 50,22 C 63,22 65,35 59,50" />
+      <path class="stroke-main" d="M 50,22 V 50" />
+    </g>
+
+    <!-- Outer Envelope Outline -->
+    <path class="stroke-main" d="M 42,56 C 24,51 24,22 50,22 C 76,22 76,51 58,56 Z" />
+
+    <!-- Thin Ropes -->
+    <path class="stroke-ropes" d="M 43.5,56 L 45.5,65" />
+    <path class="stroke-ropes" d="M 56.5,56 L 54.5,65" />
+
+    <!-- More Square Basket (Filled and Outlined) -->
+    <rect x="44" y="65" width="12" height="10" rx="1.5" class="fill-basket" />
+    <rect x="44" y="65" width="12" height="10" rx="1.5" class="stroke-main" />
+  </g>
+</svg>
