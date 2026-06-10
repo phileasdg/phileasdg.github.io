@@ -722,14 +722,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const slug = cleanRoute.substring(6);
       const postMeta = posts.find(p => p.slug === slug);
       if (postMeta) {
-        updateStyleSheets('post', 'post-template', slug);
-        document.title = `${postMeta.name} - Phileas Dazeley-Gaist`;
-        document.body.className = 'post-template';
-        mainEl.className = 'post';
         try {
           const contentRes = await fetch(`${basePath}/content/posts/${slug}.html?v=${Date.now()}`);
           if (!contentRes.ok) throw new Error(`Failed to load content for post: ${slug}`);
           const contentHtml = await contentRes.text();
+          updateStyleSheets('post', 'post-template', slug);
+          document.title = `${postMeta.name} - Phileas Dazeley-Gaist`;
+          document.body.className = 'post-template';
+          mainEl.className = 'post';
           mainEl.innerHTML = renderPost(postMeta, contentHtml);
           if (window.Prism) {
             Prism.highlightAllUnder(mainEl);
@@ -737,6 +737,10 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         } catch (err) {
           console.error(err);
+          updateStyleSheets('post', 'post-template', slug);
+          document.title = `${postMeta.name} - Phileas Dazeley-Gaist`;
+          document.body.className = 'post-template';
+          mainEl.className = 'post';
           mainEl.innerHTML = renderPost(postMeta, '<p>Error loading content.</p>');
         }
         handleLazyImages(mainEl);
@@ -748,15 +752,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const slug = cleanRoute.substring(6);
       const page = pages.find(p => p.slug === slug);
       if (page) {
-        const bodyClass = page.body_class || '';
-        updateStyleSheets('page', bodyClass, slug);
-        document.title = `${page.title} - Phileas Dazeley-Gaist`;
-        document.body.className = bodyClass;
-        mainEl.className = page.main_class || '';
         try {
           const contentRes = await fetch(`${basePath}/content/pages/${slug}.html?v=${Date.now()}`);
           if (!contentRes.ok) throw new Error(`Failed to load content for page: ${slug}`);
           let contentHtml = await contentRes.text();
+
+          const bodyClass = page.body_class || '';
+          updateStyleSheets('page', bodyClass, slug);
+          document.title = `${page.title} - Phileas Dazeley-Gaist`;
+          document.body.className = bodyClass;
+          mainEl.className = page.main_class || '';
           mainEl.innerHTML = normalizeContentHTML(contentHtml, `pages/${page.slug}/`);
 
           if (slug === 'playgrounds') {
@@ -898,6 +903,11 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         } catch (err) {
           console.error(err);
+          const bodyClass = page.body_class || '';
+          updateStyleSheets('page', bodyClass, slug);
+          document.title = `${page.title} - Phileas Dazeley-Gaist`;
+          document.body.className = bodyClass;
+          mainEl.className = page.main_class || '';
           mainEl.innerHTML = '<div class="wrapper"><p>Error loading page content.</p></div>';
         }
         handleLazyImages(mainEl);
