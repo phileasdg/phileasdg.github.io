@@ -88,4 +88,4 @@ And you might make a request for AρρEEARS imagery using <code style="font-weig
 
 ## Closing thoughts
 
-If you've read this far, I hope this blog post has inspired you to try [my paclet](https://resources.wolframcloud.com/PacletRepository/resources/PhileasDazeleyGaist/RemoteSensing/) for yourself. Just take a chance to mess around with it! I am actively working to maintain and improve it, and I am always excited to receive [feedback](../../pages/inquiries/) about my work! If you find bugs or have suggestions for its improvement, please don't hesitate to be in touch with me! I look forward to your notes!
+If you've read this far, I hope this blog post has inspired you to try [my paclet](https://resources.wolframcloud.com/PacletRepository/resources/PhileasDazeleyGaist/RemoteSensing/) for yourself. Just take a chance to mess around with it! I am actively working to maintain and improve it, and I am always excited to receive [feedback](../../pages/about/) about my work! If you find bugs or have suggestions for its improvement, please don't hesitate to be in touch with me! I look forward to your notes!

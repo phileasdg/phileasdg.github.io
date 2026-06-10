@@ -34,9 +34,8 @@ class SiteHeader extends HTMLElement {
             <li><a href="${basePath}/pages/guest-lectures-and-public-speaking-events/" target="_self">Public Speaking</a></li>
             <li><a href="${basePath}/pages/playgrounds/" target="_self">Playgrounds</a></li>
             <li><a href="${basePath}/pages/publications/" target="_self">Publications</a></li>
-            <li><a href="${basePath}/pages/a-few-words-about-me/" target="_self">About</a></li>
+            <li><a href="${basePath}/pages/about/" target="_self">About</a></li>
             <li><a href="${basePath}/pages/resume-cv/" target="_self">Resume / CV</a></li>
-            <li><a href="${basePath}/pages/inquiries/" target="_self">Inquiries</a></li>
           </ul>
         </nav>
       </header>
