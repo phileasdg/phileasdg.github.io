@@ -27,7 +27,7 @@ I come from a family of teachers, musicians, and sailors, and I feel a profound 
 ## Contact & Inquiries
 
 For consulting, research collaborations, or other business-related inquiries, please reach out via email or LinkedIn:
-- **Email:** [phileasdg [at] gmail.com](mailto:phileasdg@gmail.com)
+- **Email:** <a href="mailto:phileasdg@gmail.com">phileasdg [at] gmail.com</a>
 - **LinkedIn:** [linkedin.com/in/phileas](https://www.linkedin.com/in/phileas/)
 
 For speaking events, general networking, or other inquiries, feel free to contact me through Instagram:
