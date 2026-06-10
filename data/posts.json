@@ -197,18 +197,6 @@
     "date_published": "2024-05-02T15:44:47+02:00"
   },
   {
-    "id": "wolfram-contributions-and-publications",
-    "name": "Wolfram Contributions and Publications",
-    "slug": "wolfram-contributions-and-publications",
-    "date": "2023-10-10T20:21",
-    "tags": [
-      "Wolfram Language",
-      "Work at Wolfram"
-    ],
-    "thumbnail": "",
-    "hideFromHome": true
-  },
-  {
     "id": "lotka-volterra-models-in-the-wolfram-language",
     "name": "Lotka-Volterra Models in the Wolfram Language",
     "slug": "lotka-volterra-models-in-the-wolfram-language",

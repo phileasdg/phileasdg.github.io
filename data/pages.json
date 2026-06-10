@@ -46,5 +46,11 @@
     "title": "Inquiries",
     "body_class": "post-template",
     "main_class": "post"
+  },
+  {
+    "slug": "wolfram-contributions-and-publications",
+    "title": "Wolfram Contributions and Publications",
+    "body_class": "post-template",
+    "main_class": "post"
   }
 ]

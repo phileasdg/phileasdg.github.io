@@ -1,3 +1,7 @@
+---
+title: Wolfram Contributions and Publications
+---
+
 ## Writing:
 
 - [Technical Articles on Wolfram Community](https://community.wolfram.com/web/phileasdg)
@@ -7,7 +11,7 @@
 Publisher Resource Pages:
 
 - [Professional contributions](https://resources.wolframcloud.com/publishers/resources?PublisherID=PhileasDG)
-- [Personal contributions](https://resources.wolframcloud.com/publishers/resources?PublisherID=PhileasDazeleyGaist)[](https://resources.wolframcloud.com/publishers/resources?PublisherID=PhileasDG)[](https://resources.wolframcloud.com/publishers/resources?PublisherID=PhileasDG)
+- [Personal contributions](https://resources.wolframcloud.com/publishers/resources?PublisherID=PhileasDazeleyGaist)
 
 Other Miscellaneous Functions:
 
@@ -15,14 +19,14 @@ Other Miscellaneous Functions:
 
 ## Wolfram Events:
 
-- [Talk - A constellation of creative projects with Wolfram Language: from video feedback to modeling cultural evolution *- Wolfram Winter School - *January 9 2026](https://www.wolframcloud.com/obj/3edc0140-e52d-4d7c-92dc-e37928fe7b1e)
+- [Talk - A constellation of creative projects with Wolfram Language: from video feedback to modeling cultural evolution - *Wolfram Winter School* - January 9, 2026](https://www.wolframcloud.com/obj/3edc0140-e52d-4d7c-92dc-e37928fe7b1e)
 - [Talk - Networked Creativity: Citation Network Analysis of a Small Artist Community - *2025 Wolfram Technology Conference* - November 2025](https://drive.google.com/file/d/11zREhD44UuKQKP89s87fIfF44yYXn88W/view?usp=sharing)
-- Mentor - *Wolfram Summer School* - June &amp; July 2025
-- [Talk - Wolfram Language for GIS Coursework - *2024 Wolfram Technology Conference *- October 2024](https://www.youtube.com/watch?v=cf-GTAOoiNg)
-- [Talk - Ecological Research with Wolfram Language -* **Wolfram Colloquium Series* - August 2024](https://www.bigmarker.com/wolfram-u/eco-research-aug-2024?utm_bmcr_source=community)
-- Mentor - Wolfram Summer School - June &amp; July 2024
+- Mentor - *Wolfram Summer School* - June & July 2025
+- [Talk - Wolfram Language for GIS Coursework - *2024 Wolfram Technology Conference* - October 2024](https://www.youtube.com/watch?v=cf-GTAOoiNg)
+- [Talk - Ecological Research with Wolfram Language - *Wolfram Colloquium Series* - August 2024](https://www.bigmarker.com/wolfram-u/eco-research-aug-2024?utm_bmcr_source=community)
+- Mentor - Wolfram Summer School - June & July 2024
 - [Talk - Ecological Research with Wolfram Language - *Wolfram Colloquium Series* - April 2024](https://www.youtube.com/watch?v=WgyqZlZI0BE)
-- [Talk - Ecology and Environmental Science Modelling in Wolfram Language - *Wolfram U*](https://www.wolfram.com/wolfram-u/courses/mathematics/ecology-and-environmental-science-modeling-in-wolfram-language/)[](https://www.wolfram.com/wolfram-u/courses/mathematics/ecology-and-environmental-science-modeling-in-wolfram-language/)
+- [Talk - Ecology and Environmental Science Modelling in Wolfram Language - *Wolfram U*](https://www.wolfram.com/wolfram-u/courses/mathematics/ecology-and-environmental-science-modeling-in-wolfram-language/)
 
 ## Wolfram Summer School Mentee Projects:
 
