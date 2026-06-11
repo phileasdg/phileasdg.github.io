@@ -15,6 +15,21 @@
   box-shadow: none !important;
 }
 
+/* Reset hamburger menu toggle styling to be completely transparent with no shadow */
+.navbar .navbar__toggle {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+}
+
+/* Align mobile overlay menu items to the left */
+.navbar_mobile_overlay .navbar__menu li {
+  text-align: left !important;
+}
+
+
+
 /* --- Resume Page Styles --- */
 :root {
   --res-font: var(--body-font);
