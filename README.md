@@ -54,16 +54,16 @@ phileasdg.github.io/
 │   ├── pages/                 # Generated HTML content files of static pages (including JSON-rendered resumes)
 │   └── custom-pages/          # Custom HTML files that are copied directly to output during build
 ├── media/                     # User-uploaded images, videos, and post thumbnails
-└── scratch/                   # Developer scripts and internal utilities
+└── scripts/                   # Developer scripts and internal utilities
     ├── build-posts.js         # The compilation engine (compiles markdown/JSON into HTML/JSON)
     └── validate.js            # The test engine (validates routes, syntax, and asset links)
 ```
 
 ---
 
-## 3. The Build Engine (`scratch/build-posts.js`)
+## 3. The Build Engine (`scripts/build-posts.js`)
 
-The compilation pipeline is powered by a custom Node.js script: [build-posts.js](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/scratch/build-posts.js). Running `npm run build` triggers this script, executing the following phases:
+The compilation pipeline is powered by a custom Node.js script: [build-posts.js](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/scripts/build-posts.js). Running `npm run build` triggers this script, executing the following phases:
 
 1. **Compilation of Posts (`compilePosts`)**:
    * Scans `markdown/posts/*.md` files.
@@ -82,9 +82,9 @@ The compilation pipeline is powered by a custom Node.js script: [build-posts.js]
 
 ---
 
-## 4. The Validation Engine (`scratch/validate.js`)
+## 4. The Validation Engine (`scripts/validate.js`)
 
-Running `npm run test` (or `npm run validate`) executes [validate.js](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/scratch/validate.js) which conducts sanity checks to safeguard the integrity of the website:
+Running `npm run test` (or `npm run validate`) executes [validate.js](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/scripts/validate.js) which conducts sanity checks to safeguard the integrity of the website:
 
 * **JSON Validation:** Validates `data/posts.json` and `data/pages.json` to verify they contain valid syntax.
 * **HTML Integrity:** Iterates through every HTML file inside `content/posts/` and `content/pages/`.

@@ -2,11 +2,11 @@
   "name": "phileasdg-blog",
   "version": "1.0.0",
   "description": "Static blog generation tools",
-  "main": "scratch/build-posts.js",
+  "main": "scripts/build-posts.js",
   "type": "module",
   "scripts": {
-    "build": "node scratch/build-posts.js",
-    "validate": "node scratch/validate.js",
-    "test": "node scratch/validate.js"
+    "build": "node scripts/build-posts.js",
+    "validate": "node scripts/validate.js",
+    "test": "node scripts/validate.js"
   }
 }
