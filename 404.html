@@ -9,11 +9,13 @@
     } else if (cleanPath.indexOf('/phileasdg.github.io') === 0) {
       cleanPath = cleanPath.substring(20);
     }
+    var basePath = pathname.substring(0, pathname.length - cleanPath.length);
     var match = cleanPath.match(/\/(posts|pages|tags|authors)\//);
     if (match) {
       var relativeRoute = cleanPath.substring(match.index);
-      var basePath = pathname.substring(0, pathname.length - cleanPath.length);
       window.location.replace(basePath + '/index.html#' + relativeRoute);
+    } else if (cleanPath !== '/' && cleanPath !== '/index.html') {
+      window.location.replace(basePath + '/index.html#' + cleanPath);
     }
   })();
 </script><title>Error 404 - Phileas Dazeley-Gaist</title><meta content="noindex, follow" name="robots"/><meta content="Publii Open-Source CMS for Static Site" name="generator"/><script async="" src="https://www.googletagmanager.com/gtag/js?id=G-K13VH578CQ" type="text/javascript"></script><script type="text/javascript">window.dataLayer = window.dataLayer || [];

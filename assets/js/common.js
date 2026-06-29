@@ -677,7 +677,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle legacy/fallback hash routing from 404.html redirects
     if (window.location.hash.startsWith('#/')) {
-      const newPath = basePath + window.location.hash.substring(1);
+      const hashPath = window.location.hash.substring(1);
+      const cleanHashPath = hashPath.replace(/^\//, '').replace(/\/$/, '');
+      const posts = await getPostsData();
+      const pages = await getPagesData();
+      
+      let newPath = basePath + hashPath;
+      if (!hashPath.startsWith('/posts/') && !hashPath.startsWith('/pages/') && !hashPath.startsWith('/tags/') && !hashPath.startsWith('/authors/')) {
+         if (posts.find(p => p.slug === cleanHashPath)) {
+            newPath = basePath + '/posts/' + cleanHashPath + '/';
+         } else if (pages.find(p => p.slug === cleanHashPath)) {
+            newPath = basePath + '/pages/' + cleanHashPath + '/';
+         }
+      }
       history.replaceState(null, null, newPath);
     }
 
