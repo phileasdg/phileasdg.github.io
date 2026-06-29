@@ -1030,20 +1030,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Helper to handle the hash redirect from 404.html on initial boot
-  const handleInitialRedirectHash = () => {
-    const hash = window.location.hash;
-    if (hash && hash.startsWith('#/')) {
-      const cleanPath = hash.substring(1); // e.g. "/pages/some-page/"
-      const basePath = getSiteBasePath();
-      const targetUrl = basePath + cleanPath;
-      history.replaceState(null, null, targetUrl);
-    }
-  };
-
   window.spaRoute = route;
   window.addEventListener('popstate', route);
-  handleInitialRedirectHash();
   route();
 });
 
