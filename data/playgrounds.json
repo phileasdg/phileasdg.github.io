@@ -1,5 +1,12 @@
 [
   {
+    "title": "Doodle Canvas",
+    "url": "https://phileasdg.github.io/doodle-canvas/",
+    "thumbnail": "media/imgs/doodle-canvas.png",
+    "description": "A minimal and distraction-free browser-based sketchpad for doodling and exporting vector sketches. Built to be lightweight and responsive. I often use it as a digital whiteboard in meetings.",
+    "tags": []
+  },
+  {
     "title": "Hypergraph Plotter",
     "url": "https://phileasdg.github.io/hypergraph-plotter/",
     "thumbnail": "media/imgs/hypergraph-plotter.png",
