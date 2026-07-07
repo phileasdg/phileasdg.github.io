@@ -20,23 +20,54 @@ First, let's define the GeoServer options to access the WorldCover datasets.
 
 *GeoServer specification for ESA WorldCover 2020:*
 
-![](https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/Screenshot-2026-01-10-at-11.05.11.png =1330x224)
+```mathematica
+worldCover2020 = 
+  StringTemplate[
+   "https://mapproxy.terrascope.be/mapproxy/wmts/esa-worldcover-map-10m-2020-v\
+1_map/webmercator/`1`/`2`/`3`.png"];
+```
 
 *GeoServer specification for ESA WorldCover 2021:*
 
-![](https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/Screenshot-2026-01-10-at-11.05.31.png =1314x220)
+```mathematica
+worldCover2021 = 
+ StringTemplate[
+  "https://mapproxy.terrascope.be/mapproxy/wmts/esa-worldcover-map-10m-2021-v2\
+_map/webmercator/`1`/`2`/`3`.png"]
+```
 
 While we're at it, let's define a legend with which to label our maps.
 
 *Define a WorldCover legend: *
 
-![](https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/Screenshot-2026-01-10-at-11.06.01.png =1278x678)
+```mathematica
+worldCoverLegend = SwatchLegend[
+  {RGBColor[0., 0.39215686274509803`, 0.], RGBColor[
+   1., 0.7333333333333333, 0.13333333333333333`], RGBColor[
+   1., 1., 0.2980392156862745], RGBColor[
+   0.9411764705882353, 0.5882352941176471, 1.], RGBColor[
+   0.9803921568627451, 0., 0.], RGBColor[
+   0.7058823529411765, 0.7058823529411765, 0.7058823529411765], 
+   RGBColor[
+   0.9411764705882353, 0.9411764705882353, 0.9411764705882353], 
+   RGBColor[0., 0.39215686274509803`, 0.7843137254901961], RGBColor[
+   0., 0.5882352941176471, 0.6274509803921569], RGBColor[
+   0., 0.8117647058823529, 0.4588235294117647], RGBColor[
+   0.9803921568627451, 0.9019607843137255, 0.6274509803921569]},
+  {"Tree cover", "Shrubland", "Grassland", "Cropland", "Built-up", 
+   "Bare / sparse vegetation", "Snow and ice", 
+   "Permanent water bodies", "Herbaceous wetland", "Mangroves", 
+   "Moss and lichen"},
+  LegendLayout -> {"Column", 1}]
+```
+
+![](https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/worldcover-legend.png =200x)
 
 We now have all the pieces needed to make WorldCover visualizations. To make a land cover map, simply call specify the region you'd like to plot and the GeoServer specification to use inside GeoGraphics. 
 
 *Map global land cover:*
 
-![](https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/Screenshot-2026-01-10-at-11.06.44.png =553x242)
+![](https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/Screenshot-2026-01-10-at-11.06.44.png =200)
 
 I've specified the [GeoZoomLevel](https://reference.wolfram.com/language/ref/GeoZoomLevel.html) option manually in this example because the default setting results in imagery just below the resolution I want. This is a side-effect of the way the ESA WorldCover data services are set up. Let's come back to that later. For now, we'll keep specifying the zoom level manually.
 

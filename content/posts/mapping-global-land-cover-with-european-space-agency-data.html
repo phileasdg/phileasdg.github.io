@@ -9,15 +9,39 @@
 <h2>Connecting to ESA WorldCover with GeoGraphics</h2>
 <p>First, let's define the GeoServer options to access the WorldCover datasets.</p>
 <p><em>GeoServer specification for ESA WorldCover 2020:</em></p>
-<figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/Screenshot-2026-01-10-at-11.05.11.png" alt="" width="1330" height="224" srcset="https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/responsive/Screenshot-2026-01-10-at-11.05.11-xs.png 300w, https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/responsive/Screenshot-2026-01-10-at-11.05.11-sm.png 480w, https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/responsive/Screenshot-2026-01-10-at-11.05.11-md.png 768w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
+<pre><code class="language-mathematica">worldCover2020 = 
+  StringTemplate[
+   "https://mapproxy.terrascope.be/mapproxy/wmts/esa-worldcover-map-10m-2020-v\
+1_map/webmercator/`1`/`2`/`3`.png"];</code></pre>
 <p><em>GeoServer specification for ESA WorldCover 2021:</em></p>
-<figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/Screenshot-2026-01-10-at-11.05.31.png" alt="" width="1314" height="220" srcset="https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/responsive/Screenshot-2026-01-10-at-11.05.31-xs.png 300w, https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/responsive/Screenshot-2026-01-10-at-11.05.31-sm.png 480w, https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/responsive/Screenshot-2026-01-10-at-11.05.31-md.png 768w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
+<pre><code class="language-mathematica">worldCover2021 = 
+ StringTemplate[
+  "https://mapproxy.terrascope.be/mapproxy/wmts/esa-worldcover-map-10m-2021-v2\
+_map/webmercator/`1`/`2`/`3`.png"]</code></pre>
 <p>While we're at it, let's define a legend with which to label our maps.</p>
 <p><em>Define a WorldCover legend: </em></p>
-<figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/Screenshot-2026-01-10-at-11.06.01.png" alt="" width="1278" height="678" srcset="https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/responsive/Screenshot-2026-01-10-at-11.06.01-xs.png 300w, https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/responsive/Screenshot-2026-01-10-at-11.06.01-sm.png 480w, https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/responsive/Screenshot-2026-01-10-at-11.06.01-md.png 768w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
+<pre><code class="language-mathematica">worldCoverLegend = SwatchLegend[
+  {RGBColor[0., 0.39215686274509803`, 0.], RGBColor[
+   1., 0.7333333333333333, 0.13333333333333333`], RGBColor[
+   1., 1., 0.2980392156862745], RGBColor[
+   0.9411764705882353, 0.5882352941176471, 1.], RGBColor[
+   0.9803921568627451, 0., 0.], RGBColor[
+   0.7058823529411765, 0.7058823529411765, 0.7058823529411765], 
+   RGBColor[
+   0.9411764705882353, 0.9411764705882353, 0.9411764705882353], 
+   RGBColor[0., 0.39215686274509803`, 0.7843137254901961], RGBColor[
+   0., 0.5882352941176471, 0.6274509803921569], RGBColor[
+   0., 0.8117647058823529, 0.4588235294117647], RGBColor[
+   0.9803921568627451, 0.9019607843137255, 0.6274509803921569]},
+  {"Tree cover", "Shrubland", "Grassland", "Cropland", "Built-up", 
+   "Bare / sparse vegetation", "Snow and ice", 
+   "Permanent water bodies", "Herbaceous wetland", "Mangroves", 
+   "Moss and lichen"},
+  LegendLayout -&gt; {"Column", 1}]</code></pre>
+<figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/worldcover-legend.png" alt="" width="200" loading="lazy" /></figure>
 <p>We now have all the pieces needed to make WorldCover visualizations. To make a land cover map, simply call specify the region you'd like to plot and the GeoServer specification to use inside GeoGraphics.</p>
 <p><em>Map global land cover:</em></p>
-<figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/Screenshot-2026-01-10-at-11.06.44.png" alt="" width="553" height="242" srcset="https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/responsive/Screenshot-2026-01-10-at-11.06.44-xs.png 300w, https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/responsive/Screenshot-2026-01-10-at-11.06.44-sm.png 480w, https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/responsive/Screenshot-2026-01-10-at-11.06.44-md.png 768w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
+<figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/Screenshot-2026-01-10-at-11.06.44.png" alt="" srcset="https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/responsive/Screenshot-2026-01-10-at-11.06.44-xs.png 300w, https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/responsive/Screenshot-2026-01-10-at-11.06.44-sm.png 480w, https://phileasdg.github.io/media/posts/mapping-global-land-cover-with-european-space-agency-data/responsive/Screenshot-2026-01-10-at-11.06.44-md.png 768w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
 <p>I've specified the <a href="https://reference.wolfram.com/language/ref/GeoZoomLevel.html">GeoZoomLevel</a> option manually in this example because the default setting results in imagery just below the resolution I want. This is a side-effect of the way the ESA WorldCover data services are set up. Let's come back to that later. For now, we'll keep specifying the zoom level manually.</p>
 <p>To add the legend we defined above to the plot, you can use <a href="https://reference.wolfram.com/language/ref/Labeled.html">Labeled</a>. The main advantage of using Labeled over <a href="https://reference.wolfram.com/language/ref/Legended.html">Legended</a> is that you can control where the legend goes with the third argument. If the example below had resulted in a wide map, for instance, we might have instead chosen to add the legend below the map using <a href="https://reference.wolfram.com/language/ref/Below.html">Below</a> as the third argument to <a href="https://reference.wolfram.com/language/ref/Labeled.html">Labeled</a> instead of <a href="https://reference.wolfram.com/language/ref/Right.html">Right</a>.</p>
 <p><em>Map the land cover in Illinois:</em></p>
