@@ -1,3 +1,4 @@
+console.warn("common.js: Loaded and executing!");
 // Global Click Interception & Routing Helpers
 const getSiteRelativePath = (resolvedPathname) => {
   let path = resolvedPathname;
@@ -120,6 +121,18 @@ document.addEventListener('click', (event) => {
     const url = new URL(anchor.href, window.location.href);
     const isSameOrigin = (url.origin === window.location.origin) || (window.location.protocol === 'file:' && url.protocol === 'file:');
     if (!isSameOrigin) {
+      return;
+    }
+
+    // Don't intercept media/asset links or links that don't match our routing paths
+    const siteRelative = getSiteRelativePath(url.pathname);
+    if (siteRelative.includes('/media/') || 
+        (!siteRelative.startsWith('/posts/') && 
+         !siteRelative.startsWith('/pages/') && 
+         !siteRelative.startsWith('/tags/') && 
+         !siteRelative.startsWith('/authors/') && 
+         siteRelative !== '/' && 
+         siteRelative !== '/index.html')) {
       return;
     }
 
@@ -246,6 +259,10 @@ document.addEventListener("DOMContentLoaded", () => {
       wrapper.appendChild(header);
       wrapper.appendChild(pre);
     });
+
+    if (window.applyWLCustomizations) {
+      window.applyWLCustomizations(container);
+    }
   };
 
 
@@ -518,6 +535,147 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  const initGallery = (container = document) => {
+    console.warn("initGallery: container =", container);
+    const images = container.querySelectorAll('.post__left figure a, .post__right figure a, .post__center figure a, .gallery-item a, .gallery__item a');
+    console.warn("initGallery: Found images =", images.length, images);
+    if (images.length === 0) return;
+
+    const ensureLightboxElement = () => {
+      let dialog = document.getElementById('lightbox-dialog');
+      if (!dialog) {
+        dialog = document.createElement('dialog');
+        dialog.id = 'lightbox-dialog';
+        dialog.className = 'lightbox';
+        dialog.setAttribute('aria-label', 'Image gallery');
+        dialog.innerHTML = `
+          <div class="lightbox__container">
+            <button id="lightbox-close" class="lightbox__close" aria-label="Close gallery">&times;</button>
+            <div id="lightbox-counter" style="position: absolute; top: 1.5rem; left: 1.5rem; color: #fff; opacity: 0.8; font-size: 1rem; z-index: 10; font-family: var(--body-font);"></div>
+            <div class="lightbox__stage" tabindex="0">
+              <button id="lightbox-prev" class="lightbox__nav lightbox__nav--prev" aria-label="Previous image">&#10094;</button>
+              <figure class="lightbox__figure">
+                <img id="lightbox-img" class="lightbox__img" src="" alt="" />
+                <figcaption id="lightbox-caption" class="lightbox__caption"></figcaption>
+              </figure>
+              <button id="lightbox-next" class="lightbox__nav lightbox__nav--next" aria-label="Next image">&#10095;</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(dialog);
+
+        const img = dialog.querySelector('#lightbox-img');
+        const caption = dialog.querySelector('#lightbox-caption');
+        const counter = dialog.querySelector('#lightbox-counter');
+        const closeBtn = dialog.querySelector('#lightbox-close');
+        const prevBtn = dialog.querySelector('#lightbox-prev');
+        const nextBtn = dialog.querySelector('#lightbox-next');
+        const stage = dialog.querySelector('.lightbox__stage');
+
+        const updateImage = () => {
+          const items = dialog._items || [];
+          const idx = dialog._currentIndex || 0;
+          if (items.length === 0) return;
+          const active = items[idx];
+          img.src = active.src;
+          img.alt = active.alt || '';
+          caption.textContent = active.title || '';
+          counter.textContent = `${idx + 1} / ${items.length}`;
+          if (items.length <= 1) {
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+          } else {
+            prevBtn.style.display = '';
+            nextBtn.style.display = '';
+          }
+        };
+
+        const showNext = () => {
+          const items = dialog._items || [];
+          if (items.length === 0) return;
+          dialog._currentIndex = (dialog._currentIndex + 1) % items.length;
+          updateImage();
+        };
+
+        const showPrev = () => {
+          const items = dialog._items || [];
+          if (items.length === 0) return;
+          dialog._currentIndex = (dialog._currentIndex - 1 + items.length) % items.length;
+          updateImage();
+        };
+
+        closeBtn.addEventListener('click', () => dialog.close());
+        
+        prevBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          showPrev();
+        });
+        
+        nextBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          showNext();
+        });
+
+        dialog.addEventListener('click', (e) => {
+          if (e.target === dialog || e.target.classList.contains('lightbox__container') || e.target.classList.contains('lightbox__stage')) {
+            dialog.close();
+          }
+        });
+
+        dialog.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowRight') showNext();
+          if (e.key === 'ArrowLeft') showPrev();
+        });
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+        stage.addEventListener('touchstart', (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        stage.addEventListener('touchend', (e) => {
+          touchEndX = e.changedTouches[0].screenX;
+          const diffX = touchEndX - touchStartX;
+          if (Math.abs(diffX) > 50) {
+            if (diffX < 0) showNext();
+            else showPrev();
+          }
+        }, { passive: true });
+
+        dialog._updateImage = updateImage;
+      }
+      return dialog;
+    };
+
+    const items = Array.from(images).map((el) => {
+      const figure = el.closest('figure');
+      const figcaption = figure ? figure.querySelector('figcaption') : null;
+      const title = figcaption ? figcaption.textContent : '';
+      const imgEl = el.querySelector('img');
+      const alt = imgEl ? imgEl.getAttribute('alt') : '';
+
+      return {
+        src: el.getAttribute('href'),
+        title: title,
+        alt: alt
+      };
+    });
+
+    images.forEach((img, index) => {
+      if (img.dataset.galleryBound) return;
+      img.dataset.galleryBound = 'true';
+
+      img.addEventListener('click', (e) => {
+        e.preventDefault();
+        const dialog = ensureLightboxElement();
+        dialog._items = items;
+        dialog._currentIndex = index;
+        dialog._updateImage();
+        dialog.showModal();
+        dialog.querySelector('.lightbox__stage').focus();
+      });
+    });
+  };
+
   const updateStyleSheets = (routeType, bodyClass, slug) => {
     const basePath = getSiteBasePath();
     const existingPlaygroundsLink = document.querySelector('link[href*="playgrounds.css"]');
@@ -746,6 +904,7 @@ document.addEventListener("DOMContentLoaded", () => {
             Prism.highlightAllUnder(mainEl);
             setupCodeBlocks(mainEl);
           }
+          initGallery(mainEl);
         } catch (err) {
           console.error(err);
           updateStyleSheets('post', 'post-template', slug);
@@ -912,6 +1071,7 @@ document.addEventListener("DOMContentLoaded", () => {
             Prism.highlightAllUnder(mainEl);
             setupCodeBlocks(mainEl);
           }
+          initGallery(mainEl);
         } catch (err) {
           console.error(err);
           const bodyClass = page.body_class || '';
