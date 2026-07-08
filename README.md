@@ -130,3 +130,14 @@ Follow these exact steps when creating or editing components of the website:
 ### Modifying Router or Shell Elements
 * When adding a new item to the navigation bar, update the `connectedCallback` element inside the `SiteHeader` class in [common.js](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/assets/js/common.js).
 * Ensure any custom link element sets `target="_self"` to allow the click interceptor in `common.js` to treat it as an SPA transition.
+
+---
+
+## 6. Development Roadmap & Known Issues
+
+Please refer to [ROADMAP.md](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/ROADMAP.md) for a comprehensive list of planned improvements, feature refactoring, and SEO architectural fixes.
+
+### Developer Gotchas (Current Caveats)
+1. **SPA Routing & SEO:** Currently, direct links to posts (`/posts/...`) are caught by GitHub Pages' 404 handler, loading `404.html` as the SPA shell. This breaks social media preview tags (like Twitter cards and OpenGraph). We plan to implement Static Pre-rendering to fix this (see Roadmap).
+2. **Responsive Images:** The build script looks for `-xs`, `-sm`, `-md`, and `-lg` image suffixes to create responsive `srcset` properties, but **does not generate them**. You must manually resize and rename thumbnail variants until automated image processing is implemented.
+3. **Hardcoded Asset Versions:** Cache-busting strings (e.g., `style.css?v=1.1.6`) in `index.html` must currently be incremented manually whenever you push style or logic changes to production.

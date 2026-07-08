@@ -1,5 +1,7 @@
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
+import sharp from 'sharp';
 import { execSync } from 'child_process';
 
 // --- CONFIGURATION ---
@@ -11,6 +13,54 @@ const PAGES_MARKDOWN_DIR = './markdown/pages';
 const PAGES_OUTPUT_HTML_DIR = './content/pages';
 const PAGES_JSON_PATH = './data/pages.json';
 const CUSTOM_PAGES_DIR = './content/custom-pages';
+const INDEX_HTML_PATH = './index.html';
+
+let indexHtmlTemplate = '';
+try {
+  indexHtmlTemplate = fs.readFileSync(INDEX_HTML_PATH, 'utf8');
+
+  // Perform Cache-Busting on index.html assets
+  const assets = [
+    'assets/css/style.css',
+    'assets/css/wl-customizations.css',
+    'assets/js/wl-customizations.js',
+    'assets/js/common.js',
+    'assets/js/scripts.min.js',
+    'assets/js/masonry.pkgd.min.js',
+    'assets/js/imagesloaded.pkgd.min.js'
+  ];
+
+  let modifiedTemplate = false;
+  assets.forEach(asset => {
+    if (fs.existsSync(asset)) {
+      const content = fs.readFileSync(asset);
+      const hash = crypto.createHash('md5').update(content).digest('hex').substring(0, 8);
+      const regex = new RegExp(asset.replace(/\./g, '\\\\.') + '\\\\?v=[a-zA-Z0-9_.-]+', 'g');
+      const newString = `${asset}?v=${hash}`;
+      
+      const before = indexHtmlTemplate;
+      indexHtmlTemplate = indexHtmlTemplate.replace(regex, newString);
+      
+      if (indexHtmlTemplate === before) {
+        // Handle case without query param
+        const regexNoQuery = new RegExp('"' + asset.replace(/\./g, '\\\\.') + '"', 'g');
+        indexHtmlTemplate = indexHtmlTemplate.replace(regexNoQuery, '"' + newString + '"');
+      }
+      
+      if (indexHtmlTemplate !== before) {
+        modifiedTemplate = true;
+      }
+    }
+  });
+
+  if (modifiedTemplate) {
+    fs.writeFileSync(INDEX_HTML_PATH, indexHtmlTemplate, 'utf8');
+    console.log('Cache busting hashes updated in index.html');
+  }
+
+} catch (e) {
+  console.warn('Warning: index.html not found. Pre-rendering and cache-busting will be disabled.');
+}
 
 let currentBranch = '';
 try {
@@ -299,6 +349,12 @@ function parseMarkdown(md) {
       let heightAttr = '';
       let alignment = 'center';
 
+      if (!alt || alt.trim() === '') {
+        const base = path.basename(imgPath, path.extname(imgPath));
+        alt = base.replace(/[-_]/g, ' ');
+        // Optionally, one could log a warning here if a global reference was available.
+      }
+
       for (let i = 1; i < parts.length; i++) {
         const part = parts[i].trim();
         const sizeMatch = part.match(/^=(\d*)x(\d*)$/);
@@ -491,8 +547,55 @@ function compilePosts() {
     // Merge: frontmatter overrides existing, which overrides defaults
     const mergedData = { ...existingMeta, ...data };
 
-    const htmlContent = parseMarkdown(content);
-    fs.writeFileSync(path.join(POSTS_OUTPUT_HTML_DIR, `${slug}.html`), htmlContent, 'utf8');
+    const finalHtml = parseMarkdown(content);
+    fs.writeFileSync(path.join(PAGES_OUTPUT_HTML_DIR, `${slug}.html`), finalHtml, 'utf8');
+
+    if (indexHtmlTemplate) {
+      let pageShell = indexHtmlTemplate;
+      const title = data.title || slug;
+      pageShell = pageShell.replace(/<title>.*?<\/title>/, `<title>${title} - Phileas Dazeley-Gaist</title>`);
+      pageShell = pageShell.replace(/<meta content="[^"]*" property="og:title"\/>/, `<meta content="${title}" property="og:title"/>`);
+      pageShell = pageShell.replace(/<meta content="[^"]*" name="twitter:title"\/>/, `<meta content="${title}" name="twitter:title"/>`);
+      pageShell = pageShell.replace(/<meta content="[^"]*" property="og:url"\/>/, `<meta content="https://phileasdg.github.io/pages/${slug}/" property="og:url"/>`);
+      
+      const pageDir = `./pages/${slug}`;
+      if (!fs.existsSync(pageDir)) {
+        fs.mkdirSync(pageDir, { recursive: true });
+      }
+      fs.writeFileSync(path.join(pageDir, 'index.html'), pageShell, 'utf8');
+    }
+
+
+    if (indexHtmlTemplate) {
+      let postShell = indexHtmlTemplate;
+      const title = mergedData.title || mergedData.name || slug;
+      postShell = postShell.replace(/<title>.*?<\/title>/, `<title>${title} - Phileas Dazeley-Gaist</title>`);
+      postShell = postShell.replace(/<meta content="[^"]*" property="og:title"\/>/, `<meta content="${title}" property="og:title"/>`);
+      postShell = postShell.replace(/<meta content="[^"]*" name="twitter:title"\/>/, `<meta content="${title}" name="twitter:title"/>`);
+      
+      if (mergedData.excerpt) {
+        const desc = mergedData.excerpt.replace(/"/g, '&quot;');
+        postShell = postShell.replace(/<meta content="[^"]*" property="og:description"\/>/, `<meta content="${desc}" property="og:description"/>`);
+        postShell = postShell.replace(/<meta content="[^"]*" name="twitter:description"\/>/, `<meta content="${desc}" name="twitter:description"/>`);
+      }
+      
+      postShell = postShell.replace(/<meta content="[^"]*" property="og:url"\/>/, `<meta content="https://phileasdg.github.io/posts/${slug}/" property="og:url"/>`);
+      
+      if (mergedData.thumbnail) {
+        const imgUrl = `https://phileasdg.github.io/${mergedData.thumbnail.replace(/^\//, '')}`;
+        postShell = postShell.replace(/<\/head>/, `<meta property="og:image" content="${imgUrl}"/><meta name="twitter:image" content="${imgUrl}"/></head>`);
+      }
+
+      // Add base path script for nested routes so asset paths resolve correctly
+      postShell = postShell.replace(/<head>/, `<head><script>window._PRE_RENDERED = true;</script>`);
+      
+      const postDir = `./posts/${slug}`;
+      if (!fs.existsSync(postDir)) {
+        fs.mkdirSync(postDir, { recursive: true });
+      }
+      fs.writeFileSync(path.join(postDir, 'index.html'), postShell, 'utf8');
+    }
+
 
     const metadata = {
       id: mergedData.id || slug,
@@ -888,7 +991,85 @@ function generateTagsList() {
   console.log('Successfully generated TAGS.md');
 }
 
+async function ensureResponsiveImages() {
+  console.log('Checking and generating missing responsive images...');
+  const sizes = [
+    { suffix: '-xs', width: 300 },
+    { suffix: '-sm', width: 480 },
+    { suffix: '-md', width: 768 },
+    { suffix: '-lg', width: 1200 }
+  ];
+
+  const filesToScan = [];
+  const addFiles = (dir) => {
+    if (fs.existsSync(dir)) {
+      fs.readdirSync(dir).forEach(file => {
+        if (file.endsWith('.md')) filesToScan.push(path.join(dir, file));
+      });
+    }
+  };
+  addFiles(POSTS_MARKDOWN_DIR);
+  addFiles(PAGES_MARKDOWN_DIR);
+
+  const imagesToCheck = new Set();
+  
+  for (const filePath of filesToScan) {
+    const fileContent = fs.readFileSync(filePath, 'utf8');
+    const { data, content } = parseFrontMatter(fileContent);
+    
+    if (data.thumbnail) imagesToCheck.add(data.thumbnail);
+    
+    const imgRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
+    let match;
+    while ((match = imgRegex.exec(content)) !== null) {
+      const parts = match[2].trim().split(/\s+/);
+      imagesToCheck.add(parts[0]);
+    }
+    
+    const htmlImgRegex = /<img[^>]+src="([^">]+)"/gi;
+    while ((match = htmlImgRegex.exec(content)) !== null) {
+      imagesToCheck.add(match[1]);
+    }
+  }
+
+  for (let imgPath of imagesToCheck) {
+    let cleanPath = imgPath.replace(/^https?:\/\/phileasdg\.github\.io\//, '/');
+    cleanPath = cleanPath.replace(/^(\.\.\/)+/, '');
+    if (cleanPath.startsWith('/')) cleanPath = cleanPath.substring(1);
+    
+    const fullLocalPath = path.resolve(cleanPath);
+    if (!fs.existsSync(fullLocalPath)) continue;
+
+    const dir = path.dirname(cleanPath);
+    const ext = path.extname(cleanPath);
+    if (!ext || ext.toLowerCase() === '.svg' || ext.toLowerCase() === '.gif') continue;
+    
+    const base = path.basename(cleanPath, ext);
+    const responsiveDir = path.join(dir, 'responsive');
+    
+    let generatedAny = false;
+    for (const size of sizes) {
+      const outPath = path.join(responsiveDir, `${base}${size.suffix}${ext}`);
+      if (!fs.existsSync(outPath)) {
+        if (!generatedAny) {
+          if (!fs.existsSync(responsiveDir)) {
+            fs.mkdirSync(responsiveDir, { recursive: true });
+          }
+          generatedAny = true;
+        }
+        console.log(`  Generating responsive image: ${outPath}`);
+        try {
+          await sharp(fullLocalPath).resize({ width: size.width, withoutEnlargement: true }).toFile(outPath);
+        } catch (err) {
+          console.error(`  Failed to process ${outPath}:`, err.message);
+        }
+      }
+    }
+  }
+}
+
 // Run compilation
+await ensureResponsiveImages();
 compilePosts();
 compilePages();
 generateTagsList();
