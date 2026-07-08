@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build-posts.js",
+    "dev": "node scripts/server.js",
     "validate": "node scripts/validate.js",
     "test": "node scripts/validate.js"
   }
