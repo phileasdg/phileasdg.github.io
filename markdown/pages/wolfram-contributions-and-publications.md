@@ -57,24 +57,25 @@ The following lists are of projects I collaborated on with my mentees at past Wo
 
 ## Instagram Posts @WolframResearch
 
-### 2025
+<div class="instagram-grid">
+  <a href="https://www.instagram.com/p/DEiitrNRQYr/?img_index=1" class="instagram-card" target="_blank" rel="noopener"><img src="/media/pages/wolfram-contributions-and-publications/instagram/mandala_snowflake.png" alt="Random mandala snowflake animation" loading="lazy"><div class="instagram-card__overlay"><span class="instagram-card__title">Random mandala snowflake animation</span></div></a>
+  <a href="https://www.instagram.com/p/DE5xDspK4SN/" class="instagram-card" target="_blank" rel="noopener"><img src="/media/pages/wolfram-contributions-and-publications/instagram/flocking_boids.png" alt="Two dimensional flocking boids" loading="lazy"><div class="instagram-card__overlay"><span class="instagram-card__title">Two dimensional flocking boids</span></div></a>
+  <a href="https://www.instagram.com/p/DFtDgDdPM49/" class="instagram-card" target="_blank" rel="noopener"><img src="/media/pages/wolfram-contributions-and-publications/instagram/plant_dynamics.png" alt="Klausmeier plant growth dynamics reaction-diffusion equation" loading="lazy"><div class="instagram-card__overlay"><span class="instagram-card__title">Klausmeier plant growth dynamics reaction-diffusion equation</span></div></a>
+  <a href="https://www.instagram.com/p/DHglziosqko/?img_index=1" class="instagram-card" target="_blank" rel="noopener"><img src="/media/pages/wolfram-contributions-and-publications/instagram/soil_moisture.jpg" alt="World map of NASA SMAL root zone soil moisture" loading="lazy"><div class="instagram-card__overlay"><span class="instagram-card__title">World map of NASA SMAL root zone soil moisture</span></div></a>
+  <a href="https://www.instagram.com/p/C-tDs6pvO17/" class="instagram-card" target="_blank" rel="noopener"><img src="/media/pages/wolfram-contributions-and-publications/instagram/spikey_mandelbrot.jpg" alt="Spikey Mandelbrot set" loading="lazy"><div class="instagram-card__overlay"><span class="instagram-card__title">Spikey Mandelbrot set</span></div></a>
+  <a href="https://www.instagram.com/p/C-vmztUP13G/" class="instagram-card" target="_blank" rel="noopener"><img src="/media/pages/wolfram-contributions-and-publications/instagram/terrestrial_biomes.jpg" alt="Terrestrial biomes" loading="lazy"><div class="instagram-card__overlay"><span class="instagram-card__title">Terrestrial biomes</span></div></a>
+  <a href="https://www.instagram.com/p/C_BUdsfJHCD/" class="instagram-card is-hidden" target="_blank" rel="noopener"><img src="/media/pages/wolfram-contributions-and-publications/instagram/computational_flowers.png" alt="Computational flowers animation" loading="lazy"><div class="instagram-card__overlay"><span class="instagram-card__title">Computational flowers animation</span></div></a>
+  <a href="https://www.instagram.com/p/C_JWwA2JGg6/" class="instagram-card is-hidden" target="_blank" rel="noopener"><img src="/media/pages/wolfram-contributions-and-publications/instagram/katherine_johnson.jpg" alt="Katherine Johnson birthday post" loading="lazy"><div class="instagram-card__overlay"><span class="instagram-card__title">Katherine Johnson birthday post</span></div></a>
+  <a href="https://www.instagram.com/p/C_RFHlJu0OJ/" class="instagram-card is-hidden" target="_blank" rel="noopener"><img src="/media/pages/wolfram-contributions-and-publications/instagram/spikey_spikeys.jpg" alt="Spikey made of Spikeys" loading="lazy"><div class="instagram-card__overlay"><span class="instagram-card__title">Spikey made of Spikeys</span></div></a>
+  <a href="https://www.instagram.com/p/C_ggPWYpUex/?img_index=1" class="instagram-card is-hidden" target="_blank" rel="noopener"><img src="/media/pages/wolfram-contributions-and-publications/instagram/inaturalist_bunchberry.jpg" alt="INaturalist bunchberry observations on Mount Desert Island" loading="lazy"><div class="instagram-card__overlay"><span class="instagram-card__title">INaturalist bunchberry observations on Mount Desert Island</span></div></a>
+  <a href="https://www.instagram.com/p/C_ygBJnP0_F/" class="instagram-card is-hidden" target="_blank" rel="noopener"><img src="/media/pages/wolfram-contributions-and-publications/instagram/mathematical_marbling.png" alt="Mathematical marbling animation" loading="lazy"><div class="instagram-card__overlay"><span class="instagram-card__title">Mathematical marbling animation</span></div></a>
+  <a href="https://www.instagram.com/p/DAEnEW5gUvm/" class="instagram-card is-hidden" target="_blank" rel="noopener"><img src="/media/pages/wolfram-contributions-and-publications/instagram/dog_color_vision.png" alt="A colour vision test for dogs" loading="lazy"><div class="instagram-card__overlay"><span class="instagram-card__title">A colour vision test for dogs</span></div></a>
+  <a href="https://www.instagram.com/p/DAjda-OpLEb/" class="instagram-card is-hidden" target="_blank" rel="noopener"><img src="/media/pages/wolfram-contributions-and-publications/instagram/charles_richter.jpg" alt="Charles Richter birthday post" loading="lazy"><div class="instagram-card__overlay"><span class="instagram-card__title">Charles Richter birthday post</span></div></a>
+  <a href="https://www.instagram.com/p/DA9PMegADlj/?img_index=1" class="instagram-card is-hidden" target="_blank" rel="noopener"><img src="/media/pages/wolfram-contributions-and-publications/instagram/colourful_hexagons.jpg" alt="Colourful hexagons and stripy n-gons" loading="lazy"><div class="instagram-card__overlay"><span class="instagram-card__title">Colourful hexagons and stripy n-gons</span></div></a>
+  <a href="https://www.instagram.com/p/DDF1tLexqjh/" class="instagram-card is-hidden" target="_blank" rel="noopener"><img src="/media/pages/wolfram-contributions-and-publications/instagram/planar_waves.png" alt="Planar directional transverse and longitudinal waves" loading="lazy"><div class="instagram-card__overlay"><span class="instagram-card__title">Planar directional transverse and longitudinal waves</span></div></a>
+  <a href="https://www.instagram.com/p/DD-bTMMpXlH/" class="instagram-card is-hidden" target="_blank" rel="noopener"><img src="/media/pages/wolfram-contributions-and-publications/instagram/ndvi_france.png" alt="MODIS Aqua NDVI plant health of France animation" loading="lazy"><div class="instagram-card__overlay"><span class="instagram-card__title">MODIS Aqua NDVI plant health of France animation</span></div></a>
+</div>
 
-- [Random mandala snowflake animation](https://www.instagram.com/p/DEiitrNRQYr/?img_index=1)
-- [Two dimensional flocking boids](https://www.instagram.com/p/DE5xDspK4SN/)
-- [Klausmeier plant growth dynamics reaction-diffusion equation](https://www.instagram.com/p/DFtDgDdPM49/)
-- [World map of NASA SMAL root zone soil moisture](https://www.instagram.com/p/DHglziosqko/?img_index=1)
-
-### 2024
-
-- [Spikey Mandelbrot set](https://www.instagram.com/p/C-tDs6pvO17/)
-- [Terrestrial biomes](https://www.instagram.com/p/C-vmztUP13G/)
-- [Computational flowers animation](https://www.instagram.com/p/C_BUdsfJHCD/)
-- [Katherine Johnson birthday post](https://www.instagram.com/p/C_JWwA2JGg6/)
-- [Spikey made of Spikeys](https://www.instagram.com/p/C_RFHlJu0OJ/)
-- [INaturalist bunchberry observations on Mount Desert Island](https://www.instagram.com/p/C_ggPWYpUex/?img_index=1)
-- [Mathematical marbling animation](https://www.instagram.com/p/C_ygBJnP0_F/)
-- [A colour vision test for dogs](https://www.instagram.com/p/DAEnEW5gUvm/)
-- [Charles Richter birthday post](https://www.instagram.com/p/DAjda-OpLEb/)
-- [Colourful hexagons and stripy n-gons](https://www.instagram.com/p/DA9PMegADlj/?img_index=1)
-- [Planar directional transverse and longitudinal waves](https://www.instagram.com/p/DDF1tLexqjh/)
-- [MODIS Aqua NDVI plant health of France animation](https://www.instagram.com/p/DD-bTMMpXlH/)
+<div class="align-center" style="margin-top: 2rem;">
+  <button class="btn" onclick="const hidden = document.querySelectorAll('.instagram-card.is-hidden'); for(let i=0; i&lt;6 &amp;&amp; i&lt;hidden.length; i++) hidden[i].classList.remove('is-hidden'); if(document.querySelectorAll('.instagram-card.is-hidden').length === 0) this.style.display='none';">Load More</button>
+</div>
