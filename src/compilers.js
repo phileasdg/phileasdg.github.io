@@ -33,6 +33,13 @@ export function compilePosts() {
     const { data, content } = parseFrontMatter(fileContent);
     const slug = path.basename(file, '.md');
 
+    // Ensure media directory exists for this post
+    const mediaDir = path.join('media', 'posts', slug);
+    if (!fs.existsSync(mediaDir)) {
+      fs.mkdirSync(mediaDir, { recursive: true });
+      console.log(`  Created media directory: ${mediaDir}`);
+    }
+
     // Look up existing metadata in posts.json
     const existingIndex = posts.findIndex(p => p.slug === slug);
     const existingMeta = existingIndex > -1 ? posts[existingIndex] : {};
@@ -151,6 +158,13 @@ export function compilePages() {
     const fileContent = fs.readFileSync(filePath, 'utf8');
     const { data, content } = parseFrontMatter(fileContent);
     const slug = path.basename(file, '.md');
+
+    // Ensure media directory exists for this page
+    const mediaDir = path.join('media', 'pages', slug);
+    if (!fs.existsSync(mediaDir)) {
+      fs.mkdirSync(mediaDir, { recursive: true });
+      console.log(`  Created media directory: ${mediaDir}`);
+    }
 
     // Look up existing page metadata
     const existingMeta = existingPages.find(p => p.slug === slug) || {};

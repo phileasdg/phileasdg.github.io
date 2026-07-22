@@ -1,6 +1,58 @@
 import path from 'path';
 import { getResponsiveSrcsetAndSizes } from './images.js';
 
+function processWolframCode(rawCode) {
+  let code = rawCode;
+  const widgets = [];
+  
+  // 1. Entities
+  code = code.replace(/Entity\s*\[\s*"([^"]+)"\s*,\s*"([^"]+)"\s*\]/g, (match, type, name) => {
+    const id = `__WIDGET_ENTITY_${widgets.length}__`;
+    widgets.push({
+      id,
+      html: `<span class="wl-entity-container"><span class="wl-entity-pill" title="Click to copy Wolfram expression: ${match.replace(/"/g, '&quot;')}"><span class="wl-entity-label">${name}</span></span><span class="wl-entity-text" style="display: none !important;">${match}</span></span>`
+    });
+    return id;
+  });
+
+  // 2. RGBColors
+  code = code.replace(/RGBColor\s*\[\s*([0-9.eE\-+]+`?)\s*,\s*([0-9.eE\-+]+`?)\s*,\s*([0-9.eE\-+]+`?)\s*(?:,\s*([0-9.eE\-+]+`?)\s*)?\]/g, (match, r, g, b, a) => {
+    const id = `__WIDGET_COLOR_${widgets.length}__`;
+    const parseWLNumber = (str) => parseFloat(str.replace('`', ''));
+    const r255 = Math.round(parseWLNumber(r) * 255);
+    const g255 = Math.round(parseWLNumber(g) * 255);
+    const b255 = Math.round(parseWLNumber(b) * 255);
+    const alpha = a !== undefined ? parseWLNumber(a) : 1;
+    widgets.push({
+      id,
+      html: `<span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: ${match.replace(/"/g, '&quot;')}" style="background-color: rgba(${r255}, ${g255}, ${b255}, ${alpha})"></span><span class="wl-color-text" style="display: none !important;">${match}</span></span>`
+    });
+    return id;
+  });
+
+  // 3. Iconized (Associations)
+  code = code.replace(/Iconize\s*\[\s*(<\|[\s\S]*?\|>)\s*(?:,\s*"([^"]+)")?\s*\]/g, (match, content, label) => {
+    const id = `__WIDGET_ASSOC_${widgets.length}__`;
+    const lbl = label || "association";
+    widgets.push({
+      id,
+      html: `<span class="wl-assoc-container"><span class="wl-assoc-pill" title="Click to toggle expand/collapse. Alt/Option-click to copy code."><span class="wl-assoc-bracket">&lt;|</span><span class="wl-assoc-label">${lbl}</span><span class="wl-assoc-bracket">|&gt;</span><span class="wl-assoc-divider"></span><span class="wl-assoc-toggle">+</span></span><span class="wl-assoc-content wl-assoc-collapsed" style="display:none;">${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span><span class="wl-assoc-text" style="display: none !important;">${match.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span></span>`
+    });
+    return id;
+  });
+
+  // Escape the rest of the string to avoid HTML injection
+  code = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  // Re-inject the HTML widgets
+  for (const widget of widgets) {
+    code = code.replace(widget.id, widget.html);
+  }
+
+  return code;
+}
+
+
 // Helper to split cells by pipe, ignoring escaped pipes
 export function splitCells(row) {
   const cells = [];
@@ -130,6 +182,7 @@ export function parseMarkdown(md) {
   let inList = false;
   let inCodeBlock = false;
   let codeBlockLines = [];
+  let unescapedCodeBlockLines = [];
   let codeBlockLang = '';
   let inTable = false;
   let tableHeaders = [];
@@ -143,9 +196,18 @@ export function parseMarkdown(md) {
     // Check for code blocks
     if (line.trim().startsWith('```')) {
       if (inCodeBlock) {
-        result.push(`<pre><code class="language-${codeBlockLang}">${codeBlockLines.join('\n')}</code></pre>`);
+        let rawCode = unescapedCodeBlockLines.join('\n');
+        const rawCodeStr = rawCode.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+        
+        let innerHtml = codeBlockLines.join('\n');
+        if (codeBlockLang === 'wl' || codeBlockLang === 'wolfram') {
+           innerHtml = processWolframCode(rawCode);
+        }
+        
+        result.push(`<pre><code class="language-${codeBlockLang}" data-raw-code="${rawCodeStr}">${innerHtml}</code></pre>`);
         inCodeBlock = false;
         codeBlockLines = [];
+        unescapedCodeBlockLines = [];
       } else {
         codeBlockLang = line.trim().slice(3).trim() || 'plaintext';
         inCodeBlock = true;
@@ -160,6 +222,7 @@ export function parseMarkdown(md) {
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
       codeBlockLines.push(escaped);
+      unescapedCodeBlockLines.push(line);
       continue;
     }
 
@@ -316,7 +379,8 @@ export function parseMarkdown(md) {
     result.push(renderTableHTML(tableHeaders, tableAlignments, tableRows));
   }
   if (inCodeBlock) {
-    result.push(`<pre><code class="language-${codeBlockLang}">${codeBlockLines.join('\n')}</code></pre>`);
+    const rawCodeStr = codeBlockLines.join('\n').replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+    result.push(`<pre><code class="language-${codeBlockLang}" data-raw-code="${rawCodeStr}">${codeBlockLines.join('\n')}</code></pre>`);
   }
 
   return result.join('\n');

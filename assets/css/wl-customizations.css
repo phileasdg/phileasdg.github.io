@@ -1,3 +1,11 @@
+code[class*="language-"],
+pre[class*="language-"],
+.code-block-wrapper pre {
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
 .wl-color-swatch {
   display: inline-block;
   width: 12px;
@@ -20,12 +28,159 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
-.wl-color-text {
-  font-size: 0 !important;
-  line-height: 0 !important;
-  color: transparent !important;
+.wl-color-container,
+.wl-entity-container {
+  display: inline-flex !important;
+  align-items: center !important;
+  vertical-align: middle !important;
+}
+
+.wl-assoc-container {
   display: inline !important;
-  white-space: nowrap !important;
+  vertical-align: middle !important;
+}
+
+.wl-color-text,
+.wl-entity-text,
+.wl-assoc-content.wl-assoc-collapsed {
+  display: none !important;
+}
+
+.wl-entity-pill {
+  display: inline-flex;
+  align-items: center;
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 1px 7px;
+  font-size: 0.82em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-weight: 600;
+  line-height: 1.3;
+  vertical-align: baseline;
+  margin: 0 2px;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.15s ease;
+}
+
+.wl-entity-pill:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+}
+
+.wl-entity-label {
+  font-size: 0.85em;
+  color: #334155;
+  white-space: nowrap;
+}
+
+/* Wolfram Association & Iconized Badges */
+.wl-assoc-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  padding: 1px 7px !important;
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 6px !important;
+  font-family: var(--font-mono, SFMono-Regular, Consolas, monospace) !important;
+  font-size: 0.85em !important;
+  font-weight: 600 !important;
+  color: #334155 !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  transition: all 0.15s ease !important;
+  vertical-align: middle !important;
+  margin: 1px 3px !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+}
+
+.wl-assoc-pill:hover {
+  background: #f1f5f9 !important;
+  border-color: #94a3b8 !important;
+  color: #0f172a !important;
+}
+
+.wl-assoc-pill.is-expanded {
+  background: #e0f2fe !important;
+  border-color: #38bdf8 !important;
+}
+
+.wl-assoc-bracket {
+  font-weight: 700 !important;
+  color: #0284c7 !important;
+  font-size: 0.9em !important;
+}
+
+.wl-assoc-label {
+  color: #334155 !important;
+  font-size: 0.9em !important;
+  padding: 0 1px !important;
+}
+
+.wl-assoc-divider {
+  width: 1px !important;
+  height: 14px !important;
+  background: #cbd5e1 !important;
+  margin: 0 4px !important;
+  display: inline-block !important;
+  vertical-align: text-bottom !important;
+}
+
+.wl-assoc-toggle {
+  font-weight: 700 !important;
+  font-size: 0.95em !important;
+  color: #64748b !important;
+  line-height: 1 !important;
+  padding: 1px 4px !important;
+  border-radius: 4px !important;
+  background-color: transparent !important;
+  transition: all 0.15s ease !important;
+}
+
+.wl-assoc-pill:hover .wl-assoc-toggle {
+  background-color: #e2e8f0 !important;
+  color: #475569 !important;
+}
+
+.wl-assoc-pill.is-expanded .wl-assoc-toggle {
+  color: #0284c7 !important;
+  background-color: #bae6fd !important;
+}
+
+.wl-assoc-content.wl-assoc-expanded {
+  display: inline !important;
+}
+
+/* Copy Notification Toast */
+.wl-copy-toast {
+  position: fixed;
+  z-index: 10000;
+  transform: translateX(-50%);
+  background: #0f172a;
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  opacity: 1;
+}
+
+.wl-copy-toast.fade-out {
+  opacity: 0;
+}
+
+.wl-entity-label {
+  color: #1e293b;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 /* Instagram Grid Layout */
@@ -114,3 +269,116 @@
 .instagram-card.is-hidden {
   display: none !important;
 }
+
+/* Wolfram Tabular & Dataset Output Table Styling */
+.post__table-wrapper {
+  width: 100%;
+  max-height: 440px;
+  overflow-x: auto;
+  overflow-y: auto;
+  margin: 1.25rem 0;
+  border: 1px solid #c0c0c0;
+  border-radius: 4px;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+}
+
+.post__table-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 0 !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #111111;
+  border: none;
+}
+
+.post__table-wrapper th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background-color: #ededed !important;
+  color: #111111 !important;
+  font-weight: 500;
+  font-size: 13px;
+  padding: 5px 10px !important;
+  border-bottom: 1px solid #adadad !important;
+  border-right: 1px solid #d4d4d4 !important;
+  white-space: nowrap;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.post__table-wrapper th:last-child {
+  border-right: none !important;
+}
+
+.post__table-wrapper td {
+  padding: 5px 10px !important;
+  border-bottom: 1px solid #e2e2e2 !important;
+  border-right: 1px solid #e2e2e2 !important;
+  vertical-align: middle;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.post__table-wrapper td:last-child {
+  border-right: none !important;
+}
+
+.post__table-wrapper tbody tr:last-child td {
+  border-bottom: none !important;
+}
+
+/* Alignment rules: numbers right-aligned, text left-aligned */
+.post__table-wrapper th:nth-child(n+3),
+.post__table-wrapper td:nth-child(n+3) {
+  text-align: right !important;
+}
+
+.post__table-wrapper th:nth-child(1),
+.post__table-wrapper th:nth-child(2),
+.post__table-wrapper td:nth-child(1),
+.post__table-wrapper td:nth-child(2) {
+  text-align: left !important;
+}
+
+/* Bold for first column items like Wolfram Tabular */
+.post__table-wrapper td:first-child {
+  font-weight: 500;
+  color: #000000;
+}
+
+.post__table-wrapper tbody tr:nth-child(even) td {
+  background-color: #fafafa;
+}
+
+.post__table-wrapper tbody tr:hover td {
+  background-color: #f0f4f8;
+}
+
+/* Custom scrollbars for table wrapper matching Wolfram notebook */
+.post__table-wrapper::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.post__table-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.post__table-wrapper::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.post__table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+

@@ -9,18 +9,42 @@
 <h2>Connecting to ESA WorldCover with GeoGraphics</h2>
 <p>First, let's define the GeoServer options to access the WorldCover datasets.</p>
 <p><em>GeoServer specification for ESA WorldCover 2020:</em></p>
-<pre><code class="language-mathematica">worldCover2020 = 
+<pre><code class="language-mathematica" data-raw-code="worldCover2020 = 
+  StringTemplate[
+   &quot;https://mapproxy.terrascope.be/mapproxy/wmts/esa-worldcover-map-10m-2020-v\
+1_map/webmercator/`1`/`2`/`3`.png&quot;];">worldCover2020 = 
   StringTemplate[
    "https://mapproxy.terrascope.be/mapproxy/wmts/esa-worldcover-map-10m-2020-v\
 1_map/webmercator/`1`/`2`/`3`.png"];</code></pre>
 <p><em>GeoServer specification for ESA WorldCover 2021:</em></p>
-<pre><code class="language-mathematica">worldCover2021 = 
+<pre><code class="language-mathematica" data-raw-code="worldCover2021 = 
+ StringTemplate[
+  &quot;https://mapproxy.terrascope.be/mapproxy/wmts/esa-worldcover-map-10m-2021-v2\
+_map/webmercator/`1`/`2`/`3`.png&quot;]">worldCover2021 = 
  StringTemplate[
   "https://mapproxy.terrascope.be/mapproxy/wmts/esa-worldcover-map-10m-2021-v2\
 _map/webmercator/`1`/`2`/`3`.png"]</code></pre>
 <p>While we're at it, let's define a legend with which to label our maps.</p>
 <p><em>Define a WorldCover legend: </em></p>
-<pre><code class="language-mathematica">worldCoverLegend = SwatchLegend[
+<pre><code class="language-mathematica" data-raw-code="worldCoverLegend = SwatchLegend[
+  {RGBColor[0., 0.39215686274509803`, 0.], RGBColor[
+ 1., 0.7333333333333333, 0.13333333333333333`], RGBColor[
+ 1., 1., 0.2980392156862745], RGBColor[
+ 0.9411764705882353, 0.5882352941176471, 1.], RGBColor[
+ 0.9803921568627451, 0., 0.], RGBColor[
+ 0.7058823529411765, 0.7058823529411765, 
+  0.7058823529411765], RGBColor[
+ 0.9411764705882353, 0.9411764705882353, 
+  0.9411764705882353], RGBColor[
+ 0., 0.39215686274509803`, 0.7843137254901961], RGBColor[
+ 0., 0.5882352941176471, 0.6274509803921569], RGBColor[
+ 0., 0.8117647058823529, 0.4588235294117647], RGBColor[
+ 0.9803921568627451, 0.9019607843137255, 0.6274509803921569]},
+  {&quot;Tree cover&quot;, &quot;Shrubland&quot;, &quot;Grassland&quot;, &quot;Cropland&quot;, &quot;Built-up&quot;, 
+   &quot;Bare / sparse vegetation&quot;, &quot;Snow and ice&quot;, 
+   &quot;Permanent water bodies&quot;, &quot;Herbaceous wetland&quot;, &quot;Mangroves&quot;, 
+   &quot;Moss and lichen&quot;},
+  LegendLayout -> {&quot;Column&quot;, 1}]">worldCoverLegend = SwatchLegend[
   {RGBColor[0., 0.39215686274509803`, 0.], RGBColor[
  1., 0.7333333333333333, 0.13333333333333333`], RGBColor[
  1., 1., 0.2980392156862745], RGBColor[

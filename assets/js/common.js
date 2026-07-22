@@ -242,7 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const copyBtn = header.querySelector('.code-block-copy-btn');
       copyBtn.addEventListener('click', () => {
-        const textToCopy = code.innerText;
+        const textToCopy = code.dataset.rawCode || code.innerText;
         navigator.clipboard.writeText(textToCopy).then(() => {
           copyBtn.textContent = 'Copied!';
           copyBtn.classList.add('copied');
