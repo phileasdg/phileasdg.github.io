@@ -1,8 +1,8 @@
 # Website Development & Build Documentation
 
-Welcome to the development repository for the Phileas Dazeley-Gaist personal blog website. This codebase generates a highly responsive, custom static website designed to behave as a Single Page Application (SPA) for smooth and rich user experiences.
+Welcome to the development repository for the Phileas Dazeley-Gaist personal blog website. This codebase generates a highly responsive, custom static website designed with a **dual-mode architecture**: it functions as a Single Page Application (SPA) for dynamic client-side navigation while serving full, pre-rendered static HTML pages for direct URLs, search engines, and social media preview bots.
 
-This documentation serves as a comprehensive reference guide for human developers and AI assistants (like Antigravity) to understand the site structure, compilation mechanics, validation suite, and standard developer workflows.
+This documentation serves as a comprehensive reference guide for human developers and AI coding assistants (like Antigravity) to understand the site structure, compilation mechanics, Wolfram Language parser engine, validation suite, and standard developer workflows.
 
 > [!IMPORTANT]
 > **Documentation Maintenance:** This documentation is a living document. Any significant changes to the directory layout, build system config/scripts, styling conventions, or routing mechanisms must be immediately updated in this `README.md` to ensure a consistent, accurate source of truth.
@@ -11,11 +11,13 @@ This documentation serves as a comprehensive reference guide for human developer
 
 ## 1. System & Architecture Overview
 
-The website is a static site structured to mimic a modern Single Page Application (SPA).
+The website employs a hybrid architecture combining static pre-rendering with client-side SPA routing:
 
-* **SPA Client-Side Router:** Standard link clicks are intercepted globally via JavaScript in [common.js](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/assets/js/common.js). Instead of a full page refresh, the browser's `history.pushState` is updated, and the site performs a fetch request to retrieve only the HTML partial content (e.g. `content/posts/Lotka-Volterra-models...html`). The router then dynamically updates the `<main>` element, swaps the active class of nav menu links, loads route-specific CSS files, runs syntax highlighting, and configures responsive media elements.
-* **Component-Based Headers/Footers:** To keep layout logic DRY, the `<site-header>` and `<site-footer>` sections are implemented as custom HTML Web Components defined inside [common.js](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/assets/js/common.js).
-* **Masonry Grid:** The home feed leverages `masonry.pkgd.min.js` and `imagesloaded.pkgd.min.js` to construct a dynamic, card-based grid layout that auto-adjusts post positions.
+* **Dual-Mode Static Pre-Rendering & Routing:**
+  * **Direct Page Access & SEO:** Every post and page is pre-rendered at build time into standalone HTML pages (`posts/[slug]/index.html` and `pages/[slug]/index.html`) complete with OpenGraph and Twitter card `<meta>` tags. This ensures social media link previews and search engine crawlers work natively on GitHub Pages without requiring server-side redirects.
+  * **SPA Client-Side Router:** Standard link clicks are intercepted globally via JavaScript in [common.js](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/assets/js/common.js). Instead of a full page refresh, the browser's `history.pushState` is updated, and the site fetches partial HTML content from `content/posts/[slug].html` or `content/pages/[slug].html`. The router dynamically swaps content in the `<main>` element, updates active navigation states, loads route-specific CSS files, triggers syntax highlighting, and configures responsive media elements.
+* **Component-Based Headers & Footers:** Custom HTML Web Components (`<site-header>` and `<site-footer>`) defined in [common.js](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/assets/js/common.js) maintain layout DRYness.
+* **Masonry Grid:** The home feed leverages `masonry.pkgd.min.js` and `imagesloaded.pkgd.min.js` to construct a dynamic, card-based grid layout that auto-adjusts post thumbnail positions.
 
 ---
 
@@ -23,86 +25,114 @@ The website is a static site structured to mimic a modern Single Page Applicatio
 
 ```
 phileasdg.github.io/
-├── index.html                 # Main website shell (SPA entry point)
-├── 404.html                   # Custom error page and legacy router redirect
-├── package.json               # NPM build & validation scripts
-├── README.md                  # This developer guide
-├── TAGS.md                    # Generated list of tags used in posts & playgrounds
-├── assets/                    # Dynamic stylesheets, scripts, and media resources
+├── index.html                 # Main website SPA shell entry point
+├── 404.html                   # Custom 404 error page and legacy router redirect
+├── package.json               # NPM build scripts & Sharp dependencies
+├── README.md                  # Development architecture and workflow guide
+├── ROADMAP.md                 # Development roadmap and status tracker
+├── TAGS.md                    # Generated tag directory across posts & playgrounds
+├── feed.json                  # Generated JSON Feed 1.1 database
+├── feed.xml                   # Generated RSS 2.0 / Atom feed
+├── sitemap.xml                # Generated XML Sitemap
+├── sitemap.xsl                # XSL stylesheet for formatted sitemap rendering
+├── assets/                    # Dynamic stylesheets, scripts, and visual resources
 │   ├── css/
-│   │   ├── style.css          # Main stylesheet (contains general site styles & custom overrides)
+│   │   ├── style.css          # Main stylesheet (global layout, typography, site themes)
 │   │   ├── masonry.css        # Layout styling for the masonry feed grid
 │   │   ├── playgrounds.css    # Interactive playground page styling
-│   │   ├── post.css           # Typography and layout overrides for articles/posts
-│   │   └── speaking.css       # Layout styles for speaking events
+│   │   ├── post.css           # Article typography and responsive media styling
+│   │   ├── speaking.css       # Layout styles for speaking events
+│   │   └── wl-customizations.css # Wolfram Language UI widgets (swatches, pills, associations)
 │   ├── js/
 │   │   ├── common.js          # SPA router, web components, and dynamic page render logic
-│   │   └── scripts.js         # Navigation menu, sticky header, and search popup logic
-│   └── svg/                   # Common vector icons and maps
+│   │   ├── scripts.js         # Navigation menu, sticky header, and search popup logic
+│   │   └── wl-customizations.js # Interactive toggle handlers for Wolfram Language widgets
+│   └── svg/                   # Vector graphics, icons, and maps
 ├── data/                      # Structured JSON metadata databases (source of truth for feed cards)
-│   ├── posts.json             # Merged post details (titles, dates, tags, thumbnails, slugs)
-│   ├── pages.json             # Page attributes (slugs, custom classes)
-│   ├── playgrounds.json       # Interactive project configurations (names, URLs, descriptions)
-│   ├── speaking.json          # Speaking events datasets
-│   ├── resume-en.json         # Source data for the English resume
-│   └── resume-fr.json         # Source data for the French CV
+│   ├── posts.json             # Post metadata index (titles, dates, tags, thumbnails, slugs)
+│   ├── pages.json             # Static page index
+│   ├── playgrounds.json       # Interactive project configurations
+│   ├── speaking.json          # Speaking events dataset
+│   ├── resume-en.json         # Source dataset for English resume
+│   └── resume-fr.json         # Source dataset for French CV
 ├── markdown/                  # Human-writable content sources
 │   ├── posts/                 # Markdown (.md) source files for blog posts
-│   └── pages/                 # Markdown (.md) source files for standard pages (e.g. about, speaking)
-├── content/                   # Output folder for compiled HTML partials (loaded dynamically by router)
-│   ├── posts/                 # Generated HTML content files of blog posts
-│   ├── pages/                 # Generated HTML content files of static pages (including JSON-rendered resumes)
-│   └── custom-pages/          # Custom HTML files that are copied directly to output during build
-├── media/                     # User-uploaded images, videos, and post thumbnails
-└── scripts/                   # Developer scripts and internal utilities
-    ├── build-posts.js         # The compilation engine (compiles markdown/JSON into HTML/JSON)
-    └── validate.js            # The test engine (validates routes, syntax, and asset links)
+│   └── pages/                 # Markdown (.md) source files for static pages
+├── content/                   # Generated HTML partials loaded dynamically by SPA router
+│   ├── posts/                 # Partial HTML files of blog posts
+│   ├── pages/                 # Partial HTML files of static pages (including compiled resumes)
+│   └── custom-pages/          # Raw static HTML files copied directly during build
+├── posts/                     # Pre-rendered static post pages (`posts/[slug]/index.html`) for direct URLs
+├── pages/                     # Pre-rendered static page pages (`pages/[slug]/index.html`) for direct URLs
+├── media/                     # User images, responsive asset variants, videos, and post thumbnails
+├── src/                       # Modular build engine source files
+│   ├── config.js              # Environment settings & automated MD5 asset cache-busting
+│   ├── frontmatter.js         # Frontmatter extraction & parser
+│   ├── images.js              # Sharp-powered responsive image generator & srcset resolver
+│   ├── parser.js              # Markdown-to-HTML & Wolfram Language widget parser engine
+│   ├── renderers.js           # Structured HTML template renderers (Resumes, Feeds, Sitemaps)
+│   └── compilers.js           # Post, page, RSS, and sitemap compilation pipelines
+└── scripts/                   # CLI build scripts & developer tools
+    ├── build-posts.js         # CLI entry point for site compilation (`npm run build`)
+    ├── server.js              # Zero-cache dev server with live rebuild watcher (`npm run dev`)
+    ├── validate.js            # Automated validation test engine (`npm run test`)
+    └── parse-events.js        # Event dataset extraction utility
 ```
 
 ---
 
-## 3. The Build Engine (`scripts/build-posts.js`)
+## 3. The Modular Build Engine (`src/` & `scripts/build-posts.js`)
 
-The compilation pipeline is powered by a custom Node.js script: [build-posts.js](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/scripts/build-posts.js). Running `npm run build` triggers this script, executing the following phases:
+The compilation pipeline is executed via `npm run build` (invoking [scripts/build-posts.js](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/scripts/build-posts.js)), which coordinates modular components in [src/](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/src):
 
-1. **Compilation of Posts (`compilePosts`)**:
-   * Scans `markdown/posts/*.md` files.
-   * Parses **YAML-like frontmatter** (delimited by `---`) using simple string matching to extract variables like `title`, `date`, `tags`, `thumbnail`, and `hideFromHome`.
-   * Standardizes the parsed attributes into metadata blocks.
-   * Translates Markdown lines into HTML code via a custom regex-based inline parser (converting tables, headers, bold, italics, code blocks, images, lists, and links).
-   * Locates local media assets and queries disk sizes to generate responsive `srcset`/`sizes` attributes for images automatically.
-   * Compiles the final HTML file to `content/posts/[slug].html` and updates the compiled array in `data/posts.json` sorted by date descending.
-2. **Compilation of Pages (`compilePages`)**:
-   * Compiles `markdown/pages/*.md` into `content/pages/[slug].html` inside a standard wrapping template container.
-   * Compiles JSON CVs (`data/resume-en.json` and `data/resume-fr.json`) into rich structured HTML resumes using `renderResumeHTML` templates, outputting to `content/pages/resume-english.html` and `content/pages/cv-francais.html`.
-   * Copies raw static HTML files from `content/custom-pages/` directly to `content/pages/`.
-   * Compiles details into `data/pages.json`.
-3. **Generation of Tag List (`generateTagsList`)**:
-   * Scans tags from compiled posts and playgrounds, aggregates occurrences, and auto-generates [TAGS.md](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/TAGS.md).
-
----
-
-## 4. The Validation Engine (`scripts/validate.js`)
-
-Running `npm run test` (or `npm run validate`) executes [validate.js](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/scripts/validate.js) which conducts sanity checks to safeguard the integrity of the website:
-
-* **JSON Validation:** Validates `data/posts.json` and `data/pages.json` to verify they contain valid syntax.
-* **HTML Integrity:** Iterates through every HTML file inside `content/posts/` and `content/pages/`.
-* **Link/Resource Checker:** Parses HTML tags to locate any `href`, `src`, or `srcset` URLs. It verifies that:
-  * External links (using schemas like `http`, `https`, `mailto`, `tel`) are skipped.
-  * Internal links (e.g. `/posts/some-post/`) map to verified compiled slugs in `data/posts.json` or `data/pages.json`.
-  * Physical media files exist on disk at the specified path (handling relative paths relative to the post context as simulated by the SPA router).
-* **Main Shell Validation:** Scans the root-level `index.html` and `404.html` to confirm all referenced CSS, JS, and image assets exist on disk.
+1. **Configuration & Automated Cache-Busting ([src/config.js](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/src/config.js))**:
+   * Reads target CSS and JS assets, computes MD5 hashes of file contents, and automatically updates asset version strings (`?v=hash`) in [index.html](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/index.html) to prevent stale browser caching.
+2. **Automated Responsive Image Generation ([src/images.js](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/src/images.js))**:
+   * Uses **Sharp** (`^0.35.3`) to scan media directories and automatically generate optimized responsive image variants (`-xs`, `-sm`, `-md`, `-lg`) in WebP/PNG formats.
+   * Generates dynamic `srcset` and `sizes` HTML attributes for inline images and thumbnails.
+3. **Wolfram Language UI & Markdown Parser Engine ([src/parser.js](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/src/parser.js))**:
+   * Translates Markdown formatting into semantic HTML.
+   * **Wolfram Language Entity Pills:** Converts `Entity["Category", "Name"]` syntax into interactive `.wl-entity-container` UI pills.
+   * **RGBColor Swatches:** Converts `RGBColor[r, g, b]` expressions into inline interactive `.wl-color-swatch` visual swatches with calculated RGBA background colors.
+   * **Iconize & Association Containers:** Uses depth-aware balanced bracket parsing to convert `Iconize[<|...|>]` and `Iconize[{...}]` expressions into interactive collapsible `<| Association |>` and `{ List }` UI pills.
+   * **Execution Prompt Cleanup:** Strips `In[]:=` execution prompts and standardizes multiline WL code syntax.
+4. **Compilation of Posts & Pages ([src/compilers.js](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/src/compilers.js))**:
+   * Compiles `markdown/posts/*.md` into both partial HTML files (`content/posts/[slug].html`) and full standalone pre-rendered HTML pages (`posts/[slug]/index.html`) with customized OpenGraph and Twitter card `<meta>` tags.
+   * Compiles `markdown/pages/*.md` and custom JSON resumes into static pages (`pages/[slug]/index.html`).
+   * Updates `data/posts.json` and `data/pages.json`.
+5. **Feed & Sitemap Generation**:
+   * Automatically compiles [feed.xml](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/feed.xml) (RSS 2.0 / Atom), [feed.json](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/feed.json) (JSON Feed 1.1), [sitemap.xml](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/sitemap.xml), and updates [TAGS.md](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/TAGS.md).
 
 ---
 
-## 5. Developer & Workflow Guidelines
+## 4. Development Server (`scripts/server.js`)
 
-Follow these exact steps when creating or editing components of the website:
+Running `npm run dev` launches a lightweight Node.js HTTP server at `http://127.0.0.1:8000/`:
+
+* **Live File Watcher:** Recursively monitors `markdown/`, `content/custom-pages/`, and `data/` JSON files for modifications and automatically triggers `npm run build`.
+* **Zero-Cache Response Headers:** Emits `Cache-Control: no-store, no-cache, must-revalidate` headers on all responses so changes reflect immediately in the browser without manual hard refreshes.
+
+---
+
+## 5. The Validation Suite (`scripts/validate.js`)
+
+Executing `npm run test` (or `npm run validate`) runs automated integrity checks:
+
+* **JSON Database Validation:** Verifies `data/posts.json` and `data/pages.json` for structural correctness and valid JSON syntax.
+* **HTML Content Integrity:** Scans all generated HTML partials and pre-rendered pages in `content/` and `posts/`.
+* **Link & Asset Verification:** Parses `href`, `src`, and `srcset` URLs to ensure:
+  * Internal links resolve to valid compiled post/page slugs.
+  * Local media assets exist on disk at the specified paths.
+  * External URLs format correctly.
+* **Shell Validation:** Confirms all CSS, JS, and image dependencies referenced in `index.html` and `404.html` exist on disk.
+
+---
+
+## 6. Developer Workflows & Guidelines
 
 ### Adding or Modifying a Blog Post
-1. Create/edit a `.md` file inside [markdown/posts/](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/markdown/posts).
-2. Set up the frontmatter correctly at the top of the file:
+1. Create or edit a `.md` file inside [markdown/posts/](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/markdown/posts).
+2. Ensure the frontmatter is formatted properly:
    ```yaml
    ---
    title: "Your Post Title"
@@ -112,32 +142,28 @@ Follow these exact steps when creating or editing components of the website:
    hideFromHome: false
    ---
    ```
-3. Write content using standard markdown syntax.
-4. Run the build script to compile:
+3. Run the build script to compile content, generate responsive images, and update metadata:
    ```bash
    npm run build
    ```
-5. Run the validation suite to ensure there are no broken images or invalid markdown links:
+4. Run the validation test suite to confirm asset paths and link integrity:
    ```bash
    npm run test
    ```
 
-### Adjusting Global Styles & Media Queries
-* Keep styles clean and centralized in [style.css](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/assets/css/style.css).
-* Route-specific stylesheets like `post.css`, `speaking.css`, or `playgrounds.css` are loaded dynamically by the router in `common.js` when the matching page is loaded. Place narrow style concerns in these matching stylesheets.
-* Whenever overriding base selectors (like `button` or `input`), ensure overrides do not break layout components by polluting them with generic styling. Reset overrides locally using specific wrapper classes (e.g., using `.navbar .navbar__toggle` with higher specificity/`!important` resets to avoid base styling leakages).
-
-### Modifying Router or Shell Elements
-* When adding a new item to the navigation bar, update the `connectedCallback` element inside the `SiteHeader` class in [common.js](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/assets/js/common.js).
-* Ensure any custom link element sets `target="_self"` to allow the click interceptor in `common.js` to treat it as an SPA transition.
+### Adjusting Styles & Wolfram Language Customizations
+* Global styles belong in [assets/css/style.css](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/assets/css/style.css).
+* Route-specific stylesheets (`post.css`, `speaking.css`, `playgrounds.css`) are loaded dynamically by the router in `common.js` on matching routes.
+* Wolfram Language interactive widgets (swatches, entity pills, collapsible association containers) are styled in [assets/css/wl-customizations.css](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/assets/css/wl-customizations.css) and driven by [assets/js/wl-customizations.js](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/assets/js/wl-customizations.js).
 
 ---
 
-## 6. Development Roadmap & Known Issues
+## 7. Roadmap & Current State Summary
 
-Please refer to [ROADMAP.md](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/ROADMAP.md) for a comprehensive list of planned improvements, feature refactoring, and SEO architectural fixes.
+Please refer to [ROADMAP.md](file:///Users/phileasdazeleygaist/Desktop/My%20Websites/my%20blog/phileasdg.github.io/ROADMAP.md) for full project status.
 
-### Developer Gotchas (Current Caveats)
-1. **SPA Routing & SEO:** Currently, direct links to posts (`/posts/...`) are caught by GitHub Pages' 404 handler, loading `404.html` as the SPA shell. This breaks social media preview tags (like Twitter cards and OpenGraph). We plan to implement Static Pre-rendering to fix this (see Roadmap).
-2. **Responsive Images:** The build script looks for `-xs`, `-sm`, `-md`, and `-lg` image suffixes to create responsive `srcset` properties, but **does not generate them**. You must manually resize and rename thumbnail variants until automated image processing is implemented.
-3. **Hardcoded Asset Versions:** Cache-busting strings (e.g., `style.css?v=1.1.6`) in `index.html` must currently be incremented manually whenever you push style or logic changes to production.
+### Summary of Completed Milestones:
+* **SEO & Static Pre-Rendering:** Resolved. Standalone `posts/[slug]/index.html` and `pages/[slug]/index.html` files provide pre-rendered HTML with full OpenGraph/Twitter meta tags.
+* **Automated Responsive Images:** Resolved. **Sharp** automatically builds optimized multi-resolution image variants (`-xs`, `-sm`, `-md`, `-lg`).
+* **Automated Cache-Busting:** Resolved. MD5 content hashing automatically updates asset URLs in `index.html`.
+* **Modular Engine & Wolfram Language Parser:** Resolved. Code compilation is fully modularized in `src/` with interactive Wolfram UI rendering.
