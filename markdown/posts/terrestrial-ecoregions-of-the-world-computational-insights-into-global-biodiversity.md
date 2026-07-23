@@ -1679,7 +1679,12 @@ For a start, let’s suppose we’d like to plot the footprint of a specific eco
 *Extract and plot ecoregion geometry selected from a row in which the “EcoregionName” column matches a provided name:*
 
 ```wl
-In[]:= ecoregionsTab // Select[#, Function[#&quot;EcoregionName&quot; == &quot;Irrawaddy moist deciduous forests&quot;]] & // First[Normal[Dataset[#][All, &quot;Geometry&quot;]]] & // GeoGraphics // Rasterize
+ecoregionsTab // 
+    Select[#, 
+      Function[#"EcoregionName" == 
+        "Irrawaddy moist deciduous forests"]] & // 
+   First[Normal[Dataset[#][All, "Geometry"]]] & // 
+  GeoGraphics // Rasterize
 ```
 
 ![](https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/0cg3z0mxchqmk.png =438x840)
@@ -1691,10 +1696,17 @@ We may also like to plot several ecoregion footprints. This time, let’s assume
 *Extract and plot ecoregion geometry from rows where the “EcoregionID” column matches one of the IDs in the provided list:*
 
 ```wl
-In[]:= ecoregionsTab // Select[#, Function[MemberQ[{649, 695, 812, 815}, #&quot;EcoregionID&quot;]]] & // Normal[Dataset[#][All, 
-       (*Extract geometry and ecoregion colors, and add tooltips to the footprints:*) {#EcoregionColor, Tooltip[#Geometry, #EcoregionName]} &]] & // Legended[
-     (*Plot the map:*) GeoGraphics[{GeoStyling[Opacity[.6]], #}], 
-     (*Construct the legend:*) SwatchLegend[## & @@ {#1, #2[[All, 2]]} & @@ Transpose[#]]] & // Rasterize
+ecoregionsTab // 
+    Select[#, 
+      Function[MemberQ[{649, 695, 812, 815}, #"EcoregionID"]]] & // 
+   Normal[Dataset[#][All,
+      (*Extract geometry and ecoregion colors, 
+      and add tooltips to the footprints:*){#EcoregionColor, 
+        Tooltip[#Geometry, #EcoregionName]} &]] & // Legended[
+    (*Plot the map:*)GeoGraphics[{GeoStyling[Opacity[.6]], #}],
+    (*Construct the legend:*)
+    SwatchLegend[## & @@ {#1, #2[[All, 2]]} & @@ 
+      Transpose[#]]] & // Rasterize
 ```
 
 ![](https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/08u4lj1xmvw3p.png =1112x840)
@@ -1706,7 +1718,13 @@ To make a world map of terrestrial ecoregions, we simply include all ecoregions 
 *Make a world Ecoregions map:*
 
 ```wl
-In[]:= Rasterize[GeoGraphics[{GeoStyling[Opacity[1]], Values[Normal[Dataset[ConstructColumns[ecoregionsTab, {&quot;EcoregionColor&quot;, &quot;Geometry&quot;}]]]]}, GeoProjection -> &quot;Mercator&quot;, GeoBackground -> White], ImageSize -> Full]
+Rasterize[
+ GeoGraphics[{GeoStyling[Opacity[1]], 
+   Values[Normal[
+     Dataset[ConstructColumns[
+       ecoregionsTab, {"EcoregionColor", "Geometry"}]]]]}, 
+  GeoProjection -> "Mercator", GeoBackground -> White], 
+ ImageSize -> Full]
 ```
 
 ![](https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/0h58k9z8lkdxs.png =1359x1359)
@@ -1718,7 +1736,10 @@ You’re likely to want to select many ecoregions at a time according to logical
 *Find and plot the 3 largest ecoregions:*
 
 ```wl
-In[]:= Take[ReverseSortBy[ecoregionsTab, #&quot;ShapeArea&quot; &], {2, 4}] // ConstructColumns[#, {&quot;EcoregionName&quot;, &quot;Geometry&quot;}] & // MapApply[GeoGraphics[#2, PlotLabel -> #1] &, FromTabular[#, &quot;Matrix&quot;]] &
+Take[ReverseSortBy[ecoregionsTab, #"ShapeArea" &], {2, 4}] // 
+  ConstructColumns[#, {"EcoregionName", "Geometry"}] & // 
+ MapApply[GeoGraphics[#2, PlotLabel -> #1] &, FromTabular[#, "Matrix"]] 
+  &
 ```
 
 ![](https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/0jqvkdooppmyi.png =1137x288)
@@ -1726,8 +1747,14 @@ In[]:= Take[ReverseSortBy[ecoregionsTab, #&quot;ShapeArea&quot; &], {2, 4}] // C
 *Find and plot all ecoregions within a particular biome:*
 
 ```wl
-In[]:= Select[ecoregionsTab, Function[#BiomeName == &quot;Deserts & Xeric Shrublands&quot;]] // Normal[Dataset[#][All, 
-       (*Extract geometry and ecoregion colors, and add tooltips to the footprints:*) {#EcoregionColor, Tooltip[#Geometry, #EcoregionName]} &]] & // GeoGraphics[{GeoStyling[Opacity[.6]], #}, ImageSize -> Large] & // Rasterize
+Select[ecoregionsTab, 
+    Function[#BiomeName == "Deserts & Xeric Shrublands"]] // 
+   Normal[Dataset[#][All,
+      (*Extract geometry and ecoregion colors, 
+      and add tooltips to the footprints:*){#EcoregionColor, 
+        Tooltip[#Geometry, #EcoregionName]} &]] & // 
+  GeoGraphics[{GeoStyling[Opacity[.6]], #}, 
+    ImageSize -> Large] & // Rasterize
 ```
 
 ![](https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/0jw1vmd4pjcrj.png =1152x576)
@@ -1735,8 +1762,13 @@ In[]:= Select[ecoregionsTab, Function[#BiomeName == &quot;Deserts & Xeric Shrubl
 *Find and plot all ecoregions within a particular realm:*
 
 ```wl
-In[]:= Select[ecoregionsTab, Function[#Realm == &quot;Indomalayan&quot;]] // Normal[Dataset[#][All, 
-       (*Extract geometry and ecoregion colors, and add tooltips to the footprints:*) {#EcoregionColor, Tooltip[#Geometry, #EcoregionName]} &]] & // GeoGraphics[{GeoStyling[Opacity[.6]], #}, ImageSize -> Large] & // Rasterize
+Select[ecoregionsTab, Function[#Realm == "Indomalayan"]] // 
+   Normal[Dataset[#][All,
+      (*Extract geometry and ecoregion colors, 
+      and add tooltips to the footprints:*){#EcoregionColor, 
+        Tooltip[#Geometry, #EcoregionName]} &]] & // 
+  GeoGraphics[{GeoStyling[Opacity[.6]], #}, 
+    ImageSize -> Large] & // Rasterize
 ```
 
 ![](https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/19q26rrj2pve0.png =1152x673)
@@ -1744,15 +1776,32 @@ In[]:= Select[ecoregionsTab, Function[#Realm == &quot;Indomalayan&quot;]] // Nor
 *Find and plot all ecoregions whose names contain the word “forest”:*
 
 ```wl
-In[]:= Select[ecoregionsTab, Function[StringContainsQ[ToLowerCase[#EcoregionName], &quot;forest&quot;]]] // Normal[Dataset[#][All, 
-       (*Extract geometry and ecoregion colors, and add tooltips to the footprints:*) {#EcoregionColor, Tooltip[#Geometry, #EcoregionName]} &]] & // GeoGraphics[{GeoStyling[Opacity[.6]], #}, ImageSize -> Large, GeoCenter -> {0, 0}] & // Rasterize
+Select[ecoregionsTab, 
+    Function[
+     StringContainsQ[ToLowerCase[#EcoregionName], "forest"]]] // 
+   Normal[Dataset[#][All,
+      (*Extract geometry and ecoregion colors, 
+      and add tooltips to the footprints:*){#EcoregionColor, 
+        Tooltip[#Geometry, #EcoregionName]} &]] & // 
+  GeoGraphics[{GeoStyling[Opacity[.6]], #}, ImageSize -> Large, 
+    GeoCenter -> {0, 0}] & // Rasterize
 ```
 
 ![](https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/1jt8yiqx0ov1y.png =1152x576)
 
 *Plot protection status of neotropic tropical and subtropical moist broadleaf forests:*
 
-![](https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/1r87ybh8686m1.png =2789x212)
+```wl
+Legended[
+  GeoGraphics[{GeoStyling[Opacity[.6]], 
+    Normal[Values[
+      Dataset[ConstructColumns[
+        Select[ecoregionsTab, 
+         Function[#"Realm" === "Neotropic" && #"BiomeName" === 
+            "Tropical & Subtropical Moist Broadleaf Forests"]], \
+{"ProtectionStatusColor", "Geometry"}]]]]}], 
+  SwatchLegend[{RGBColor[0.1450980392156863, 0.45098039215686275, 0.2235294117647059], RGBColor[0.4823529411764706, 0.7568627450980392, 0.2549019607843137], RGBColor[0.9333333333333333, 0.11764705882352941, 0.13725490196078433], RGBColor[0.9764705882352941, 0.6627450980392157, 0.10588235294117647], RGBColor[0.8862745098039215, 0.8862745098039215, 0.8784313725490196]}, {"Half Protected", "Nature Could Reach Half Protected", "Nature Imperiled", "Nature Could Recover", "N/A"}]] // Rasterize
+```
 
 ![](https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/0jl3eszfxz97s.png =1307x738)
 
@@ -1762,19 +1811,34 @@ For larger maps, assuming you’d like to include every ecoregion in your map’
 
 *Construct a dataset of Ecoregions2017 GeoServers:*
 
-![](https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/060qitwoevl7m.png =1365x85)
+```wl
+ecoGeoServers = 
+  AssociationThread[{"Ecoregions2017", "MajorBiomes", 
+    "EcoregionProtectionStatus"}, Iconize[{{
+    "https://storage.googleapis.com/teow2016/Ecoregions2017ee/`1`/`2`/\
+`3`.png", "Projection" -> "Mercator"}, {
+    "https://storage.googleapis.com/teow2016/Ecoregions2017ee_Biome/`\
+1`/`2`/`3`.png", "Projection" -> "Mercator"}, {
+    "https://storage.googleapis.com/teow2016/Ecoregions2017ee_NNH/`1`/\
+`2`/`3`.png", "Projection" -> "Mercator"}}, "List"]];
+Dataset[ecoGeoServers]
+```
 
 *Create world maps for each GeoServer:*
 
 ```wl
-In[]:= Dataset[GeoGraphics[&quot;World&quot;, GeoServer -> #, GeoZoomLevel -> 1] & /@ ecoGeoServers]
+Dataset[GeoGraphics["World", GeoServer -> #, GeoZoomLevel -> 1] & /@ 
+  ecoGeoServers]
 ```
 
 ![](https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/1jgp7saxb9n8n.png =1399x1360)
 
 *Define the Legends for each map type:*
 
-![](https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/1pt735is35rm6.png =507x41)
+```wl
+ecoGeoServerLegends = 
+ Dataset[Iconize[<|"FreshwaterEcoregions2017" -> SwatchLegend[{RGBColor[0.38823529411764707`, 0.8117647058823529, 0.6705882352941176], RGBColor[0.4392156862745098, 0.6588235294117647, 0.], RGBColor[1., 0.4980392156862745, 0.48627450980392156`], RGBColor[0.9803921568627451, 0.4666666666666667, 0.30196078431372547`], RGBColor[0.2980392156862745, 0.5098039215686274, 0.7137254901960784], RGBColor[0.792156862745098, 0.4, 0.20392156862745098`], RGBColor[0.9882352941176471, 0.6509803921568628, 0.45098039215686275`], RGBColor[0.9882352941176471, 0.9254901960784314, 0.20784313725490197`], RGBColor[0.9764705882352941, 0.6705882352941176, 0.34509803921568627`], RGBColor[0.3803921568627451, 0.8235294117647058, 0.9490196078431372], RGBColor[0.8862745098039215, 0.7803921568627451, 0.9803921568627451], RGBColor[1., 0.4980392156862745, 0.49411764705882355`], RGBColor[0.36470588235294116`, 0.6784313725490196, 0.2980392156862745], RGBColor[0.18823529411764706`, 0.2901960784313726, 0.]}, {"Tropic", "Subtropic", "Temperate", "Boreal", "Polar"}], "MajorBiomes" -> SwatchLegend[{RGBColor[0.1450980392156863, 0.45098039215686275, 0.2235294117647059], RGBColor[0.4823529411764706, 0.7568627450980392, 0.2549019607843137], RGBColor[0.9333333333333333, 0.11764705882352941, 0.13725490196078433], RGBColor[0.9764705882352941, 0.6627450980392157, 0.10588235294117647], RGBColor[0.8862745098039215, 0.8862745098039215, 0.8784313725490196]}, {"Tropical & Subtropical Moist Broadleaf Forests", "Tropical & Subtropical Dry Broadleaf Forests", "Tropical & Subtropical Coniferous Forests", "Temperate Broadleaf & Mixed Forests", "Temperate Conifer Forests"}], "EcoregionProtectionStatus" -> SwatchLegend[{RGBColor[0.1450980392156863, 0.45098039215686275, 0.2235294117647059], RGBColor[0.4823529411764706, 0.7568627450980392, 0.2549019607843137], RGBColor[0.9333333333333333, 0.11764705882352941, 0.13725490196078433], RGBColor[0.9764705882352941, 0.6627450980392157, 0.10588235294117647], RGBColor[0.8862745098039215, 0.8862745098039215, 0.8784313725490196]}, {"Half Protected", "Nature Could Reach Half Protected", "Nature Imperiled", "Nature Could Recover", "N/A"}]|>, "Association"]]
+```
 
 <h4 id="fetching-ecoregion-images">Fetching ecoregion images</h4>
 
@@ -1783,30 +1847,50 @@ The ecoregion descriptions hosted on [www.oneearth.org](http://www.oneearth.org)
 *Define a function to collect ecoregion images:*
 
 ```wl
-In[]:= ClearAll[ecoregionImages] 
-  (*OneEarth page URL input:*)
- ecoregionImages[ecoregionOneEarthPage_URL] := Dataset[Join[
-     (*Import ecoregion page header images (typically landscapes):*) 
-      Cases[
-       Import[ecoregionOneEarthPage, &quot;XMLObject&quot;], XMLElement[&quot;img&quot;, {&quot;src&quot; -> url_, &quot;alt&quot; -> description_, &quot;data-image&quot; -> &quot;data-image&quot;, &quot;v-imageloaded&quot; -> &quot;v-imageloaded&quot;}, _] :> <|&quot;Image&quot; -> Import[url], &quot;ImageDescription&quot; -> description|>, {17}], 
-     (*Import ecoregion page body images (typically animals or landscapes):*) 
-      Cases[
-       Import[ecoregionOneEarthPage, &quot;XMLObject&quot;], XMLElement[&quot;figure&quot;, {}, {XMLElement[&quot;img&quot;, {&quot;src&quot; -> url_}, {}], XMLElement[&quot;figcaption&quot;, {}, {XMLElement[&quot;span&quot;, {&quot;class&quot; -> &quot;caption&quot;}, {}], XMLElement[&quot;p&quot;, {}, {description_}], &quot; &quot;}]}] :> <|&quot;Image&quot; -> Import[url], &quot;ImageDescription&quot; -> description|>, \[Infinity]] 
-     ]] 
-   
-  (*Ecoregion name input:*)
- ecoregionImages[ecoregionName_String] := ecoregionImages[URL[First[Values[Normal[First[
-          ConstructColumns[Select[ecoregionsTab, Function[#EcoregionName == ecoregionName]], &quot;OneEarthPage&quot;]]]]]]] 
-   
-  (*ID input:*)
- ecoregionImages[ecoregionID_Integer] := ecoregionImages[URL[First[Values[Normal[First[
-         ConstructColumns[Select[ecoregionsTab, Function[#EcoregionID == ecoregionID]], &quot;OneEarthPage&quot;]]]]]]]
+ClearAll[ecoregionImages]
+(*OneEarth page URL input:*)
+ecoregionImages[ecoregionOneEarthPage_URL] := Dataset[Join[
+   (*Import ecoregion page header images (typically landscapes):*)
+   Cases[
+    Import[ecoregionOneEarthPage, "XMLObject"], 
+    XMLElement[
+      "img", {"src" -> url_, "alt" -> description_, 
+       "data-image" -> "data-image", 
+       "v-imageloaded" -> "v-imageloaded"}, _] :> <|
+      "Image" -> Import[url], 
+      "ImageDescription" -> description|>, {17}],
+   (*Import ecoregion page body images (typically animals or landscapes):*)
+   Cases[
+    Import[ecoregionOneEarthPage, "XMLObject"], 
+    XMLElement[
+      "figure", {}, {XMLElement["img", {"src" -> url_}, {}], 
+       XMLElement[
+        "figcaption", {}, {XMLElement[
+          "span", {"class" -> "caption"}, {}], 
+         XMLElement["p", {}, {description_}], " "}]}] :> <|
+      "Image" -> Import[url], 
+      "ImageDescription" -> description|>, \[Infinity]]
+   ]]
+
+(*Ecoregion name input:*)
+ecoregionImages[ecoregionName_String] := 
+ ecoregionImages[URL[First[Values[Normal[First[
+       ConstructColumns[
+        Select[ecoregionsTab, 
+         Function[#EcoregionName == ecoregionName]], "OneEarthPage"]]]]]]]
+
+(*ID input:*)
+ecoregionImages[ecoregionID_Integer] := 
+ ecoregionImages[URL[First[Values[Normal[First[
+       ConstructColumns[
+        Select[ecoregionsTab, Function[#EcoregionID == ecoregionID]], 
+        "OneEarthPage"]]]]]]]
 ```
 
 *Fetch images for a specified ecoregion, along with their descriptions:*
 
 ```wl
-In[]:= ecoregionImages[&quot;Myanmar coastal rain forests&quot;]
+ecoregionImages["Myanmar coastal rain forests"]
 ```
 
 ![](https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/0apewhueieqfw.png =1359x507)
@@ -1822,25 +1906,49 @@ Observations shared to the iNaturalist platform can be retrieved using the [INat
 *Define the region in which to search for observations:*
 
 ```wl
-In[]:= region = GeoGroup[Normal[First[Select[ecoregionsTab, Function[#&quot;EcoregionName&quot; == &quot;Puerto Rican moist forests&quot;]]]][&quot;Geometry&quot;]];
+region = 
+  GeoGroup[
+   Normal[First[
+      Select[ecoregionsTab, 
+       Function[#"EcoregionName" == "Puerto Rican moist forests"]]]][
+    "Geometry"]];
 ```
 
 *Plot this region on a map:*
 
 ```wl
-In[]:= GeoGraphics[region] // Rasterize
+GeoGraphics[region] // Rasterize
 ```
 
 ![](https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/090jv8xpyxzy7.png =840x369)
 
 *Fetch observations made within this region and within a specified date range (here, set to the last 10 days at time of computation):*
 
-![](https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/1uroqt2g1edge.png =2339x103)
+```wl
+observations = Select[Tabular[ResourceFunction[
+ResourceObject[<|
+      "Name" -> "INaturalistSearch", "ShortName" -> 
+       "INaturalistSearch", "UUID" -> 
+       "52cc24aa-c5a6-47ca-998f-3e5c08b4ed53", "ResourceType" -> 
+       "Function", "Version" -> "1.1.1", "Description" -> 
+       "Search for iNaturalist observations using the iNaturalist API", "RepositoryLocation" -> 
+       URL["https://www.wolframcloud.com/obj/resourcesystem/api/1.0"],
+        "SymbolName" -> 
+       "FunctionRepository`$2941ab2fbece423cb47ef83042e88aaf`INaturalistSearch", "FunctionLocation" -> 
+       CloudObject[
+        "https://www.wolframcloud.com/obj/56d4026f-00a5-4e4f-b910-6ea80a592d0d"]|>, {
+      ResourceSystemBase -> 
+       "https://www.wolframcloud.com/obj/resourcesystem/api/1.0"}]][
+    All, "Threatened" -> True, 
+    "ObservationGeoRange" -> GeoBounds[region], 
+    "ObservationDateRange" -> {DatePlus[Today, -Quantity[10, "Days"]],
+       Today}]], Function[GeoWithinQ[region, #GeoPosition]]]
+```
 
 *Extract the positions and species names from the resulting dataset, and plot them on a map:*
 
 ```wl
-In[]:= GeoListPlot[Flatten[FromTabular[ConstructColumns[observations, &quot;LabeledPosition&quot; -> Function[Labeled[#&quot;GeoPosition&quot;, #&quot;TaxonName&quot;]]], &quot;Matrix&quot;]], ImageSize -> 850] // Rasterize
+GeoListPlot[Flatten[FromTabular[ConstructColumns[observations, "LabeledPosition" -> Function[Labeled[#"GeoPosition", #"TaxonName"]]], "Matrix"]], ImageSize -> 850] // Rasterize
 ```
 
 ![](https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/0tp97ku72duyh.png =1173x515)

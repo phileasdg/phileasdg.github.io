@@ -30,23 +30,77 @@ function processWolframCode(rawCode) {
     return id;
   });
 
-  // 3. Iconized (Associations)
-  code = code.replace(/Iconize\s*\[\s*(<\|[\s\S]*?\|>)\s*(?:,\s*"([^"]+)")?\s*\]/g, (match, content, label) => {
-    const id = `__WIDGET_ASSOC_${widgets.length}__`;
-    const lbl = label || "association";
-    widgets.push({
-      id,
-      html: `<span class="wl-assoc-container"><span class="wl-assoc-pill" title="Click to toggle expand/collapse. Alt/Option-click to copy code."><span class="wl-assoc-bracket">&lt;|</span><span class="wl-assoc-label">${lbl}</span><span class="wl-assoc-bracket">|&gt;</span><span class="wl-assoc-divider"></span><span class="wl-assoc-toggle">+</span></span><span class="wl-assoc-content wl-assoc-collapsed" style="display:none;">${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span><span class="wl-assoc-text" style="display: none !important;">${match.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span></span>`
-    });
-    return id;
-  });
+  // 3. Iconized (Associations, Lists & Objects) - Bracket-balanced matching
+  let result = '';
+  let i = 0;
+  while (i < code.length) {
+    const matchIndex = code.indexOf('Iconize[', i);
+    if (matchIndex === -1) {
+      result += code.slice(i);
+      break;
+    }
+    result += code.slice(i, matchIndex);
+    
+    let depth = 1;
+    let inString = false;
+    let escape = false;
+    let j = matchIndex + 8; // length of 'Iconize['
+    
+    while (j < code.length && depth > 0) {
+      const char = code[j];
+      if (escape) {
+        escape = false;
+      } else if (char === '\\') {
+        escape = true;
+      } else if (char === '"') {
+        inString = !inString;
+      } else if (!inString) {
+        if (char === '[') depth++;
+        else if (char === ']') depth--;
+      }
+      j++;
+    }
+    
+    if (depth === 0) {
+      const fullMatch = code.slice(matchIndex, j);
+      const argsString = code.slice(matchIndex + 8, j - 1).trim();
+      
+      let content = argsString;
+      let label = null;
+      
+      const labelMatch = argsString.match(/,\s*"([^"]+)"\s*$/);
+      if (labelMatch) {
+        label = labelMatch[1];
+        content = argsString.slice(0, labelMatch.index).trim();
+      }
+      
+      const isList = content.startsWith('{');
+      const lbl = label || (isList ? "List" : "Association");
+      const openB = isList ? "{" : "&lt;|";
+      const closeB = isList ? "}" : "|&gt;";
+      
+      const id = `__WIDGET_ASSOC_${widgets.length}__`;
+      widgets.push({
+        id,
+        html: `<span class="wl-assoc-container"><span class="wl-assoc-pill" title="Click to toggle expand/collapse. Alt/Option-click to copy code."><span class="wl-assoc-bracket">${openB}</span><span class="wl-assoc-label">${lbl}</span><span class="wl-assoc-bracket">${closeB}</span><span class="wl-assoc-divider"></span><span class="wl-assoc-toggle">+</span></span><span class="wl-assoc-content wl-assoc-collapsed" style="display:none;">${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span><span class="wl-assoc-text" style="display: none !important;">${fullMatch.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span></span>`
+      });
+      
+      result += id;
+      i = j;
+    } else {
+      result += 'Iconize[';
+      i = matchIndex + 8;
+    }
+  }
+  code = result;
 
   // Escape the rest of the string to avoid HTML injection
   code = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-  // Re-inject the HTML widgets
-  for (const widget of widgets) {
-    code = code.replace(widget.id, widget.html);
+  // Re-inject the HTML widgets in reverse order to handle nested widgets
+  for (let idx = widgets.length - 1; idx >= 0; idx--) {
+    const widget = widgets[idx];
+    code = code.replaceAll(widget.id, widget.html);
   }
 
   return code;

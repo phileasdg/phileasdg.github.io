@@ -4322,7 +4322,8 @@ forest-mosaic/", "Zapata swamp" -&gt;
   Import[ecoregionsTabPath], {&quot;ObjectID&quot; -> &quot;MachineInteger&quot;, 
    &quot;BiomeNumber&quot; -> &quot;MachineInteger&quot;, 
    &quot;ProtectionStatusID&quot; -> &quot;MachineInteger&quot;, 
-   &quot;EcoregionID&quot; -> &quot;MachineInteger&quot;}]"> CastColumns[
+   &quot;EcoregionID&quot; -> &quot;MachineInteger&quot;}]">ecoregionsTab = 
+ CastColumns[
   Import[ecoregionsTabPath], {"ObjectID" -&gt; "MachineInteger", 
    "BiomeNumber" -&gt; "MachineInteger", 
    "ProtectionStatusID" -&gt; "MachineInteger", 
@@ -4341,8 +4342,7 @@ forest-mosaic/", "Zapata swamp" -&gt;
 <th>ByteCount</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>ObjectID</td>
 <td>Integer64</td>
 <td>847</td>
@@ -4475,110 +4475,315 @@ forest-mosaic/", "Zapata swamp" -&gt;
 <h4 id="producing-ecoregion-maps">Producing ecoregion maps</h4>
 <p>For a start, let’s suppose we’d like to plot the footprint of a specific ecoregion. Here’s one approach:</p>
 <p><em>Extract and plot ecoregion geometry selected from a row in which the “EcoregionName” column matches a provided name:</em></p>
-<pre><code class="language-wl" data-raw-code="In[]:= ecoregionsTab // Select[#, Function[#&amp;quot;EcoregionName&amp;quot; == &amp;quot;Irrawaddy moist deciduous forests&amp;quot;]] &amp; // First[Normal[Dataset[#][All, &amp;quot;Geometry&amp;quot;]]] &amp; // GeoGraphics // Rasterize">In[]:= ecoregionsTab // Select[#, Function[#&amp;quot;EcoregionName&amp;quot; == &amp;quot;Irrawaddy moist deciduous forests&amp;quot;]] &amp; // First[Normal[Dataset[#][All, &amp;quot;Geometry&amp;quot;]]] &amp; // GeoGraphics // Rasterize</code></pre>
+<pre><code class="language-wl" data-raw-code="ecoregionsTab // 
+    Select[#, 
+      Function[#&quot;EcoregionName&quot; == 
+        &quot;Irrawaddy moist deciduous forests&quot;]] &amp; // 
+   First[Normal[Dataset[#][All, &quot;Geometry&quot;]]] &amp; // 
+  GeoGraphics // Rasterize">ecoregionsTab // 
+    Select[#, 
+      Function[#"EcoregionName" == 
+        "Irrawaddy moist deciduous forests"]] &amp; // 
+   First[Normal[Dataset[#][All, "Geometry"]]] &amp; // 
+  GeoGraphics // Rasterize</code></pre>
 <figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/0cg3z0mxchqmk.png" alt="0cg3z0mxchqmk" width="438" height="840" srcset="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0cg3z0mxchqmk-xs.png 300w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0cg3z0mxchqmk-sm.png 480w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0cg3z0mxchqmk-md.png 768w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0cg3z0mxchqmk-lg.png 1200w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
 <p>In case you’re unfamiliar with the notation, “//“ (called <a href="https://reference.wolfram.com/language/ref/Postfix">PostFix</a>) can be read as “and then”, and is one of the ways one can chain together function calls in Wolfram Language. For new WL users coming form scientific backgrounds, this is quite similar to pipes in Python and R.</p>
 <p>We may also like to plot several ecoregion footprints. This time, let’s assume we’re matching to a list of ecoregion IDs.</p>
 <p><em>Extract and plot ecoregion geometry from rows where the “EcoregionID” column matches one of the IDs in the provided list:</em></p>
-<pre><code class="language-wl" data-raw-code="In[]:= ecoregionsTab // Select[#, Function[MemberQ[{649, 695, 812, 815}, #&amp;quot;EcoregionID&amp;quot;]]] &amp; // Normal[Dataset[#][All, 
-       (*Extract geometry and ecoregion colors, and add tooltips to the footprints:*) {#EcoregionColor, Tooltip[#Geometry, #EcoregionName]} &amp;]] &amp; // Legended[
-     (*Plot the map:*) GeoGraphics[{GeoStyling[Opacity[.6]], #}], 
-     (*Construct the legend:*) SwatchLegend[## &amp; @@ {#1, #2[[All, 2]]} &amp; @@ Transpose[#]]] &amp; // Rasterize">In[]:= ecoregionsTab // Select[#, Function[MemberQ[{649, 695, 812, 815}, #&amp;quot;EcoregionID&amp;quot;]]] &amp; // Normal[Dataset[#][All, 
-       (*Extract geometry and ecoregion colors, and add tooltips to the footprints:*) {#EcoregionColor, Tooltip[#Geometry, #EcoregionName]} &amp;]] &amp; // Legended[
-     (*Plot the map:*) GeoGraphics[{GeoStyling[Opacity[.6]], #}], 
-     (*Construct the legend:*) SwatchLegend[## &amp; @@ {#1, #2[[All, 2]]} &amp; @@ Transpose[#]]] &amp; // Rasterize</code></pre>
+<pre><code class="language-wl" data-raw-code="ecoregionsTab // 
+    Select[#, 
+      Function[MemberQ[{649, 695, 812, 815}, #&quot;EcoregionID&quot;]]] &amp; // 
+   Normal[Dataset[#][All,
+      (*Extract geometry and ecoregion colors, 
+      and add tooltips to the footprints:*){#EcoregionColor, 
+        Tooltip[#Geometry, #EcoregionName]} &amp;]] &amp; // Legended[
+    (*Plot the map:*)GeoGraphics[{GeoStyling[Opacity[.6]], #}],
+    (*Construct the legend:*)
+    SwatchLegend[## &amp; @@ {#1, #2[[All, 2]]} &amp; @@ 
+      Transpose[#]]] &amp; // Rasterize">ecoregionsTab // 
+    Select[#, 
+      Function[MemberQ[{649, 695, 812, 815}, #"EcoregionID"]]] &amp; // 
+   Normal[Dataset[#][All,
+      (*Extract geometry and ecoregion colors, 
+      and add tooltips to the footprints:*){#EcoregionColor, 
+        Tooltip[#Geometry, #EcoregionName]} &amp;]] &amp; // Legended[
+    (*Plot the map:*)GeoGraphics[{GeoStyling[Opacity[.6]], #}],
+    (*Construct the legend:*)
+    SwatchLegend[## &amp; @@ {#1, #2[[All, 2]]} &amp; @@ 
+      Transpose[#]]] &amp; // Rasterize</code></pre>
 <figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/08u4lj1xmvw3p.png" alt="08u4lj1xmvw3p" width="1112" height="840" srcset="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/08u4lj1xmvw3p-xs.png 300w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/08u4lj1xmvw3p-sm.png 480w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/08u4lj1xmvw3p-md.png 768w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/08u4lj1xmvw3p-lg.png 1200w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
 <p>Note that in order to share this article online, I’ve had to rasterize these plots, which disables the tooltips. To enable the tooltips in this notebook, simply download it and delete calls to <a href="https://reference.wolfram.com/language/ref/Rasterize">Rasterize</a>.</p>
 <p>To make a world map of terrestrial ecoregions, we simply include all ecoregions in the plot.</p>
 <p><em>Make a world Ecoregions map:</em></p>
-<pre><code class="language-wl" data-raw-code="In[]:= Rasterize[GeoGraphics[{GeoStyling[Opacity[1]], Values[Normal[Dataset[ConstructColumns[ecoregionsTab, {&amp;quot;EcoregionColor&amp;quot;, &amp;quot;Geometry&amp;quot;}]]]]}, GeoProjection -> &amp;quot;Mercator&amp;quot;, GeoBackground -> White], ImageSize -> Full]">In[]:= Rasterize[GeoGraphics[{GeoStyling[Opacity[1]], Values[Normal[Dataset[ConstructColumns[ecoregionsTab, {&amp;quot;EcoregionColor&amp;quot;, &amp;quot;Geometry&amp;quot;}]]]]}, GeoProjection -&gt; &amp;quot;Mercator&amp;quot;, GeoBackground -&gt; White], ImageSize -&gt; Full]</code></pre>
+<pre><code class="language-wl" data-raw-code="Rasterize[
+ GeoGraphics[{GeoStyling[Opacity[1]], 
+   Values[Normal[
+     Dataset[ConstructColumns[
+       ecoregionsTab, {&quot;EcoregionColor&quot;, &quot;Geometry&quot;}]]]]}, 
+  GeoProjection -> &quot;Mercator&quot;, GeoBackground -> White], 
+ ImageSize -> Full]">Rasterize[
+ GeoGraphics[{GeoStyling[Opacity[1]], 
+   Values[Normal[
+     Dataset[ConstructColumns[
+       ecoregionsTab, {"EcoregionColor", "Geometry"}]]]]}, 
+  GeoProjection -&gt; "Mercator", GeoBackground -&gt; White], 
+ ImageSize -&gt; Full]</code></pre>
 <figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/0h58k9z8lkdxs.png" alt="0h58k9z8lkdxs" width="1359" height="1359" srcset="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0h58k9z8lkdxs-xs.png 300w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0h58k9z8lkdxs-sm.png 480w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0h58k9z8lkdxs-md.png 768w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0h58k9z8lkdxs-lg.png 1200w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
 <h4 id="grouping-and-plotting-ecoregions-programmatically">Grouping and plotting ecoregions programmatically</h4>
 <p>You’re likely to want to select many ecoregions at a time according to logical or mathematical criteria. Here are a few examples to get you started:</p>
 <p><em>Find and plot the 3 largest ecoregions:</em></p>
-<pre><code class="language-wl" data-raw-code="In[]:= Take[ReverseSortBy[ecoregionsTab, #&amp;quot;ShapeArea&amp;quot; &amp;], {2, 4}] // ConstructColumns[#, {&amp;quot;EcoregionName&amp;quot;, &amp;quot;Geometry&amp;quot;}] &amp; // MapApply[GeoGraphics[#2, PlotLabel -> #1] &amp;, FromTabular[#, &amp;quot;Matrix&amp;quot;]] &amp;">In[]:= Take[ReverseSortBy[ecoregionsTab, #&amp;quot;ShapeArea&amp;quot; &amp;], {2, 4}] // ConstructColumns[#, {&amp;quot;EcoregionName&amp;quot;, &amp;quot;Geometry&amp;quot;}] &amp; // MapApply[GeoGraphics[#2, PlotLabel -&gt; #1] &amp;, FromTabular[#, &amp;quot;Matrix&amp;quot;]] &amp;</code></pre>
+<pre><code class="language-wl" data-raw-code="Take[ReverseSortBy[ecoregionsTab, #&quot;ShapeArea&quot; &amp;], {2, 4}] // 
+  ConstructColumns[#, {&quot;EcoregionName&quot;, &quot;Geometry&quot;}] &amp; // 
+ MapApply[GeoGraphics[#2, PlotLabel -> #1] &amp;, FromTabular[#, &quot;Matrix&quot;]] 
+  &amp;">Take[ReverseSortBy[ecoregionsTab, #"ShapeArea" &amp;], {2, 4}] // 
+  ConstructColumns[#, {"EcoregionName", "Geometry"}] &amp; // 
+ MapApply[GeoGraphics[#2, PlotLabel -&gt; #1] &amp;, FromTabular[#, "Matrix"]] 
+  &amp;</code></pre>
 <figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/0jqvkdooppmyi.png" alt="0jqvkdooppmyi" width="1137" height="288" srcset="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0jqvkdooppmyi-xs.png 300w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0jqvkdooppmyi-sm.png 480w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0jqvkdooppmyi-md.png 768w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0jqvkdooppmyi-lg.png 1200w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
 <p><em>Find and plot all ecoregions within a particular biome:</em></p>
-<pre><code class="language-wl" data-raw-code="In[]:= Select[ecoregionsTab, Function[#BiomeName == &amp;quot;Deserts &amp; Xeric Shrublands&amp;quot;]] // Normal[Dataset[#][All, 
-       (*Extract geometry and ecoregion colors, and add tooltips to the footprints:*) {#EcoregionColor, Tooltip[#Geometry, #EcoregionName]} &amp;]] &amp; // GeoGraphics[{GeoStyling[Opacity[.6]], #}, ImageSize -> Large] &amp; // Rasterize">In[]:= Select[ecoregionsTab, Function[#BiomeName == &amp;quot;Deserts &amp; Xeric Shrublands&amp;quot;]] // Normal[Dataset[#][All, 
-       (*Extract geometry and ecoregion colors, and add tooltips to the footprints:*) {#EcoregionColor, Tooltip[#Geometry, #EcoregionName]} &amp;]] &amp; // GeoGraphics[{GeoStyling[Opacity[.6]], #}, ImageSize -&gt; Large] &amp; // Rasterize</code></pre>
+<pre><code class="language-wl" data-raw-code="Select[ecoregionsTab, 
+    Function[#BiomeName == &quot;Deserts &amp; Xeric Shrublands&quot;]] // 
+   Normal[Dataset[#][All,
+      (*Extract geometry and ecoregion colors, 
+      and add tooltips to the footprints:*){#EcoregionColor, 
+        Tooltip[#Geometry, #EcoregionName]} &amp;]] &amp; // 
+  GeoGraphics[{GeoStyling[Opacity[.6]], #}, 
+    ImageSize -> Large] &amp; // Rasterize">Select[ecoregionsTab, 
+    Function[#BiomeName == "Deserts &amp; Xeric Shrublands"]] // 
+   Normal[Dataset[#][All,
+      (*Extract geometry and ecoregion colors, 
+      and add tooltips to the footprints:*){#EcoregionColor, 
+        Tooltip[#Geometry, #EcoregionName]} &amp;]] &amp; // 
+  GeoGraphics[{GeoStyling[Opacity[.6]], #}, 
+    ImageSize -&gt; Large] &amp; // Rasterize</code></pre>
 <figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/0jw1vmd4pjcrj.png" alt="0jw1vmd4pjcrj" width="1152" height="576" srcset="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0jw1vmd4pjcrj-xs.png 300w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0jw1vmd4pjcrj-sm.png 480w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0jw1vmd4pjcrj-md.png 768w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0jw1vmd4pjcrj-lg.png 1200w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
 <p><em>Find and plot all ecoregions within a particular realm:</em></p>
-<pre><code class="language-wl" data-raw-code="In[]:= Select[ecoregionsTab, Function[#Realm == &amp;quot;Indomalayan&amp;quot;]] // Normal[Dataset[#][All, 
-       (*Extract geometry and ecoregion colors, and add tooltips to the footprints:*) {#EcoregionColor, Tooltip[#Geometry, #EcoregionName]} &amp;]] &amp; // GeoGraphics[{GeoStyling[Opacity[.6]], #}, ImageSize -> Large] &amp; // Rasterize">In[]:= Select[ecoregionsTab, Function[#Realm == &amp;quot;Indomalayan&amp;quot;]] // Normal[Dataset[#][All, 
-       (*Extract geometry and ecoregion colors, and add tooltips to the footprints:*) {#EcoregionColor, Tooltip[#Geometry, #EcoregionName]} &amp;]] &amp; // GeoGraphics[{GeoStyling[Opacity[.6]], #}, ImageSize -&gt; Large] &amp; // Rasterize</code></pre>
+<pre><code class="language-wl" data-raw-code="Select[ecoregionsTab, Function[#Realm == &quot;Indomalayan&quot;]] // 
+   Normal[Dataset[#][All,
+      (*Extract geometry and ecoregion colors, 
+      and add tooltips to the footprints:*){#EcoregionColor, 
+        Tooltip[#Geometry, #EcoregionName]} &amp;]] &amp; // 
+  GeoGraphics[{GeoStyling[Opacity[.6]], #}, 
+    ImageSize -> Large] &amp; // Rasterize">Select[ecoregionsTab, Function[#Realm == "Indomalayan"]] // 
+   Normal[Dataset[#][All,
+      (*Extract geometry and ecoregion colors, 
+      and add tooltips to the footprints:*){#EcoregionColor, 
+        Tooltip[#Geometry, #EcoregionName]} &amp;]] &amp; // 
+  GeoGraphics[{GeoStyling[Opacity[.6]], #}, 
+    ImageSize -&gt; Large] &amp; // Rasterize</code></pre>
 <figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/19q26rrj2pve0.png" alt="19q26rrj2pve0" width="1152" height="673" srcset="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/19q26rrj2pve0-xs.png 300w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/19q26rrj2pve0-sm.png 480w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/19q26rrj2pve0-md.png 768w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/19q26rrj2pve0-lg.png 1200w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
 <p><em>Find and plot all ecoregions whose names contain the word “forest”:</em></p>
-<pre><code class="language-wl" data-raw-code="In[]:= Select[ecoregionsTab, Function[StringContainsQ[ToLowerCase[#EcoregionName], &amp;quot;forest&amp;quot;]]] // Normal[Dataset[#][All, 
-       (*Extract geometry and ecoregion colors, and add tooltips to the footprints:*) {#EcoregionColor, Tooltip[#Geometry, #EcoregionName]} &amp;]] &amp; // GeoGraphics[{GeoStyling[Opacity[.6]], #}, ImageSize -> Large, GeoCenter -> {0, 0}] &amp; // Rasterize">In[]:= Select[ecoregionsTab, Function[StringContainsQ[ToLowerCase[#EcoregionName], &amp;quot;forest&amp;quot;]]] // Normal[Dataset[#][All, 
-       (*Extract geometry and ecoregion colors, and add tooltips to the footprints:*) {#EcoregionColor, Tooltip[#Geometry, #EcoregionName]} &amp;]] &amp; // GeoGraphics[{GeoStyling[Opacity[.6]], #}, ImageSize -&gt; Large, GeoCenter -&gt; {0, 0}] &amp; // Rasterize</code></pre>
+<pre><code class="language-wl" data-raw-code="Select[ecoregionsTab, 
+    Function[
+     StringContainsQ[ToLowerCase[#EcoregionName], &quot;forest&quot;]]] // 
+   Normal[Dataset[#][All,
+      (*Extract geometry and ecoregion colors, 
+      and add tooltips to the footprints:*){#EcoregionColor, 
+        Tooltip[#Geometry, #EcoregionName]} &amp;]] &amp; // 
+  GeoGraphics[{GeoStyling[Opacity[.6]], #}, ImageSize -> Large, 
+    GeoCenter -> {0, 0}] &amp; // Rasterize">Select[ecoregionsTab, 
+    Function[
+     StringContainsQ[ToLowerCase[#EcoregionName], "forest"]]] // 
+   Normal[Dataset[#][All,
+      (*Extract geometry and ecoregion colors, 
+      and add tooltips to the footprints:*){#EcoregionColor, 
+        Tooltip[#Geometry, #EcoregionName]} &amp;]] &amp; // 
+  GeoGraphics[{GeoStyling[Opacity[.6]], #}, ImageSize -&gt; Large, 
+    GeoCenter -&gt; {0, 0}] &amp; // Rasterize</code></pre>
 <figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/1jt8yiqx0ov1y.png" alt="1jt8yiqx0ov1y" width="1152" height="576" srcset="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1jt8yiqx0ov1y-xs.png 300w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1jt8yiqx0ov1y-sm.png 480w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1jt8yiqx0ov1y-md.png 768w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1jt8yiqx0ov1y-lg.png 1200w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
 <p><em>Plot protection status of neotropic tropical and subtropical moist broadleaf forests:</em></p>
-<figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/1r87ybh8686m1.png" alt="1r87ybh8686m1" width="2789" height="212" srcset="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1r87ybh8686m1-xs.png 300w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1r87ybh8686m1-sm.png 480w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1r87ybh8686m1-md.png 768w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1r87ybh8686m1-lg.png 1200w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
+<pre><code class="language-wl" data-raw-code="Legended[
+  GeoGraphics[{GeoStyling[Opacity[.6]], 
+    Normal[Values[
+      Dataset[ConstructColumns[
+        Select[ecoregionsTab, 
+         Function[#&quot;Realm&quot; === &quot;Neotropic&quot; &amp;&amp; #&quot;BiomeName&quot; === 
+            &quot;Tropical &amp; Subtropical Moist Broadleaf Forests&quot;]], \
+{&quot;ProtectionStatusColor&quot;, &quot;Geometry&quot;}]]]]}], 
+  SwatchLegend[{RGBColor[0.1450980392156863, 0.45098039215686275, 0.2235294117647059], RGBColor[0.4823529411764706, 0.7568627450980392, 0.2549019607843137], RGBColor[0.9333333333333333, 0.11764705882352941, 0.13725490196078433], RGBColor[0.9764705882352941, 0.6627450980392157, 0.10588235294117647], RGBColor[0.8862745098039215, 0.8862745098039215, 0.8784313725490196]}, {&quot;Half Protected&quot;, &quot;Nature Could Reach Half Protected&quot;, &quot;Nature Imperiled&quot;, &quot;Nature Could Recover&quot;, &quot;N/A&quot;}]] // Rasterize">Legended[
+  GeoGraphics[{GeoStyling[Opacity[.6]], 
+    Normal[Values[
+      Dataset[ConstructColumns[
+        Select[ecoregionsTab, 
+         Function[#"Realm" === "Neotropic" &amp;&amp; #"BiomeName" === 
+            "Tropical &amp; Subtropical Moist Broadleaf Forests"]], \
+{"ProtectionStatusColor", "Geometry"}]]]]}], 
+  SwatchLegend[{<span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.1450980392156863, 0.45098039215686275, 0.2235294117647059]" style="background-color: rgba(37, 115, 57, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.1450980392156863, 0.45098039215686275, 0.2235294117647059]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.4823529411764706, 0.7568627450980392, 0.2549019607843137]" style="background-color: rgba(123, 193, 65, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.4823529411764706, 0.7568627450980392, 0.2549019607843137]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.9333333333333333, 0.11764705882352941, 0.13725490196078433]" style="background-color: rgba(238, 30, 35, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.9333333333333333, 0.11764705882352941, 0.13725490196078433]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.9764705882352941, 0.6627450980392157, 0.10588235294117647]" style="background-color: rgba(249, 169, 27, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.9764705882352941, 0.6627450980392157, 0.10588235294117647]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.8862745098039215, 0.8862745098039215, 0.8784313725490196]" style="background-color: rgba(226, 226, 224, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.8862745098039215, 0.8862745098039215, 0.8784313725490196]</span></span>}, {"Half Protected", "Nature Could Reach Half Protected", "Nature Imperiled", "Nature Could Recover", "N/A"}]] // Rasterize</code></pre>
 <figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/0jl3eszfxz97s.png" alt="0jl3eszfxz97s" width="1307" height="738" srcset="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0jl3eszfxz97s-xs.png 300w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0jl3eszfxz97s-sm.png 480w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0jl3eszfxz97s-md.png 768w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0jl3eszfxz97s-lg.png 1200w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
 <h4 id="bonus-ecoregion2017-geoservers"><em>Bonus: Ecoregion2017 GeoServers</em></h4>
 <p>For larger maps, assuming you’d like to include every ecoregion in your map’s geographic range, you may elect to connect to one of the Ecoregions2017 GeoServer services for your plotting. This is generally faster.</p>
 <p><em>Construct a dataset of Ecoregions2017 GeoServers:</em></p>
-<figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/060qitwoevl7m.png" alt="060qitwoevl7m" width="1365" height="85" srcset="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/060qitwoevl7m-xs.png 300w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/060qitwoevl7m-sm.png 480w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/060qitwoevl7m-md.png 768w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/060qitwoevl7m-lg.png 1200w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
+<pre><code class="language-wl" data-raw-code="ecoGeoServers = 
+  AssociationThread[{&quot;Ecoregions2017&quot;, &quot;MajorBiomes&quot;, 
+    &quot;EcoregionProtectionStatus&quot;}, Iconize[{{
+    &quot;https://storage.googleapis.com/teow2016/Ecoregions2017ee/`1`/`2`/\
+`3`.png&quot;, &quot;Projection&quot; -> &quot;Mercator&quot;}, {
+    &quot;https://storage.googleapis.com/teow2016/Ecoregions2017ee_Biome/`\
+1`/`2`/`3`.png&quot;, &quot;Projection&quot; -> &quot;Mercator&quot;}, {
+    &quot;https://storage.googleapis.com/teow2016/Ecoregions2017ee_NNH/`1`/\
+`2`/`3`.png&quot;, &quot;Projection&quot; -> &quot;Mercator&quot;}}, &quot;List&quot;]];
+Dataset[ecoGeoServers]">ecoGeoServers = 
+  AssociationThread[{"Ecoregions2017", "MajorBiomes", 
+    "EcoregionProtectionStatus"}, <span class="wl-assoc-container"><span class="wl-assoc-pill" title="Click to toggle expand/collapse. Alt/Option-click to copy code."><span class="wl-assoc-bracket">{</span><span class="wl-assoc-label">List</span><span class="wl-assoc-bracket">}</span><span class="wl-assoc-divider"></span><span class="wl-assoc-toggle">+</span></span><span class="wl-assoc-content wl-assoc-collapsed" style="display:none;">{{
+    "https://storage.googleapis.com/teow2016/Ecoregions2017ee/`1`/`2`/\
+`3`.png", "Projection" -&gt; "Mercator"}, {
+    "https://storage.googleapis.com/teow2016/Ecoregions2017ee_Biome/`\
+1`/`2`/`3`.png", "Projection" -&gt; "Mercator"}, {
+    "https://storage.googleapis.com/teow2016/Ecoregions2017ee_NNH/`1`/\
+`2`/`3`.png", "Projection" -&gt; "Mercator"}}</span><span class="wl-assoc-text" style="display: none !important;">Iconize[{{
+    "https://storage.googleapis.com/teow2016/Ecoregions2017ee/`1`/`2`/\
+`3`.png", "Projection" -&gt; "Mercator"}, {
+    "https://storage.googleapis.com/teow2016/Ecoregions2017ee_Biome/`\
+1`/`2`/`3`.png", "Projection" -&gt; "Mercator"}, {
+    "https://storage.googleapis.com/teow2016/Ecoregions2017ee_NNH/`1`/\
+`2`/`3`.png", "Projection" -&gt; "Mercator"}}, "List"]</span></span>];
+Dataset[ecoGeoServers]</code></pre>
 <p><em>Create world maps for each GeoServer:</em></p>
-<pre><code class="language-wl" data-raw-code="In[]:= Dataset[GeoGraphics[&amp;quot;World&amp;quot;, GeoServer -> #, GeoZoomLevel -> 1] &amp; /@ ecoGeoServers]">In[]:= Dataset[GeoGraphics[&amp;quot;World&amp;quot;, GeoServer -&gt; #, GeoZoomLevel -&gt; 1] &amp; /@ ecoGeoServers]</code></pre>
+<pre><code class="language-wl" data-raw-code="Dataset[GeoGraphics[&quot;World&quot;, GeoServer -> #, GeoZoomLevel -> 1] &amp; /@ 
+  ecoGeoServers]">Dataset[GeoGraphics["World", GeoServer -&gt; #, GeoZoomLevel -&gt; 1] &amp; /@ 
+  ecoGeoServers]</code></pre>
 <figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/1jgp7saxb9n8n.png" alt="1jgp7saxb9n8n" width="1399" height="1360" srcset="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1jgp7saxb9n8n-xs.png 300w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1jgp7saxb9n8n-sm.png 480w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1jgp7saxb9n8n-md.png 768w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1jgp7saxb9n8n-lg.png 1200w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
 <p><em>Define the Legends for each map type:</em></p>
-<figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/1pt735is35rm6.png" alt="1pt735is35rm6" width="507" height="41" srcset="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1pt735is35rm6-xs.png 300w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1pt735is35rm6-sm.png 480w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1pt735is35rm6-md.png 768w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1pt735is35rm6-lg.png 1200w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
+<pre><code class="language-wl" data-raw-code="ecoGeoServerLegends = 
+ Dataset[Iconize[<|&quot;FreshwaterEcoregions2017&quot; -> SwatchLegend[{RGBColor[0.38823529411764707`, 0.8117647058823529, 0.6705882352941176], RGBColor[0.4392156862745098, 0.6588235294117647, 0.], RGBColor[1., 0.4980392156862745, 0.48627450980392156`], RGBColor[0.9803921568627451, 0.4666666666666667, 0.30196078431372547`], RGBColor[0.2980392156862745, 0.5098039215686274, 0.7137254901960784], RGBColor[0.792156862745098, 0.4, 0.20392156862745098`], RGBColor[0.9882352941176471, 0.6509803921568628, 0.45098039215686275`], RGBColor[0.9882352941176471, 0.9254901960784314, 0.20784313725490197`], RGBColor[0.9764705882352941, 0.6705882352941176, 0.34509803921568627`], RGBColor[0.3803921568627451, 0.8235294117647058, 0.9490196078431372], RGBColor[0.8862745098039215, 0.7803921568627451, 0.9803921568627451], RGBColor[1., 0.4980392156862745, 0.49411764705882355`], RGBColor[0.36470588235294116`, 0.6784313725490196, 0.2980392156862745], RGBColor[0.18823529411764706`, 0.2901960784313726, 0.]}, {&quot;Tropic&quot;, &quot;Subtropic&quot;, &quot;Temperate&quot;, &quot;Boreal&quot;, &quot;Polar&quot;}], &quot;MajorBiomes&quot; -> SwatchLegend[{RGBColor[0.1450980392156863, 0.45098039215686275, 0.2235294117647059], RGBColor[0.4823529411764706, 0.7568627450980392, 0.2549019607843137], RGBColor[0.9333333333333333, 0.11764705882352941, 0.13725490196078433], RGBColor[0.9764705882352941, 0.6627450980392157, 0.10588235294117647], RGBColor[0.8862745098039215, 0.8862745098039215, 0.8784313725490196]}, {&quot;Tropical &amp; Subtropical Moist Broadleaf Forests&quot;, &quot;Tropical &amp; Subtropical Dry Broadleaf Forests&quot;, &quot;Tropical &amp; Subtropical Coniferous Forests&quot;, &quot;Temperate Broadleaf &amp; Mixed Forests&quot;, &quot;Temperate Conifer Forests&quot;}], &quot;EcoregionProtectionStatus&quot; -> SwatchLegend[{RGBColor[0.1450980392156863, 0.45098039215686275, 0.2235294117647059], RGBColor[0.4823529411764706, 0.7568627450980392, 0.2549019607843137], RGBColor[0.9333333333333333, 0.11764705882352941, 0.13725490196078433], RGBColor[0.9764705882352941, 0.6627450980392157, 0.10588235294117647], RGBColor[0.8862745098039215, 0.8862745098039215, 0.8784313725490196]}, {&quot;Half Protected&quot;, &quot;Nature Could Reach Half Protected&quot;, &quot;Nature Imperiled&quot;, &quot;Nature Could Recover&quot;, &quot;N/A&quot;}]|>, &quot;Association&quot;]]">ecoGeoServerLegends = 
+ Dataset[<span class="wl-assoc-container"><span class="wl-assoc-pill" title="Click to toggle expand/collapse. Alt/Option-click to copy code."><span class="wl-assoc-bracket">&lt;|</span><span class="wl-assoc-label">Association</span><span class="wl-assoc-bracket">|&gt;</span><span class="wl-assoc-divider"></span><span class="wl-assoc-toggle">+</span></span><span class="wl-assoc-content wl-assoc-collapsed" style="display:none;">&lt;|"FreshwaterEcoregions2017" -&gt; SwatchLegend[{<span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.38823529411764707`, 0.8117647058823529, 0.6705882352941176]" style="background-color: rgba(99, 207, 171, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.38823529411764707`, 0.8117647058823529, 0.6705882352941176]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.4392156862745098, 0.6588235294117647, 0.]" style="background-color: rgba(112, 168, 0, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.4392156862745098, 0.6588235294117647, 0.]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[1., 0.4980392156862745, 0.48627450980392156`]" style="background-color: rgba(255, 127, 124, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[1., 0.4980392156862745, 0.48627450980392156`]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.9803921568627451, 0.4666666666666667, 0.30196078431372547`]" style="background-color: rgba(250, 119, 77, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.9803921568627451, 0.4666666666666667, 0.30196078431372547`]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.2980392156862745, 0.5098039215686274, 0.7137254901960784]" style="background-color: rgba(76, 130, 182, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.2980392156862745, 0.5098039215686274, 0.7137254901960784]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.792156862745098, 0.4, 0.20392156862745098`]" style="background-color: rgba(202, 102, 52, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.792156862745098, 0.4, 0.20392156862745098`]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.9882352941176471, 0.6509803921568628, 0.45098039215686275`]" style="background-color: rgba(252, 166, 115, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.9882352941176471, 0.6509803921568628, 0.45098039215686275`]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.9882352941176471, 0.9254901960784314, 0.20784313725490197`]" style="background-color: rgba(252, 236, 53, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.9882352941176471, 0.9254901960784314, 0.20784313725490197`]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.9764705882352941, 0.6705882352941176, 0.34509803921568627`]" style="background-color: rgba(249, 171, 88, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.9764705882352941, 0.6705882352941176, 0.34509803921568627`]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.3803921568627451, 0.8235294117647058, 0.9490196078431372]" style="background-color: rgba(97, 210, 242, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.3803921568627451, 0.8235294117647058, 0.9490196078431372]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.8862745098039215, 0.7803921568627451, 0.9803921568627451]" style="background-color: rgba(226, 199, 250, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.8862745098039215, 0.7803921568627451, 0.9803921568627451]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[1., 0.4980392156862745, 0.49411764705882355`]" style="background-color: rgba(255, 127, 126, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[1., 0.4980392156862745, 0.49411764705882355`]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.36470588235294116`, 0.6784313725490196, 0.2980392156862745]" style="background-color: rgba(93, 173, 76, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.36470588235294116`, 0.6784313725490196, 0.2980392156862745]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.18823529411764706`, 0.2901960784313726, 0.]" style="background-color: rgba(48, 74, 0, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.18823529411764706`, 0.2901960784313726, 0.]</span></span>}, {"Tropic", "Subtropic", "Temperate", "Boreal", "Polar"}], "MajorBiomes" -&gt; SwatchLegend[{<span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.1450980392156863, 0.45098039215686275, 0.2235294117647059]" style="background-color: rgba(37, 115, 57, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.1450980392156863, 0.45098039215686275, 0.2235294117647059]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.4823529411764706, 0.7568627450980392, 0.2549019607843137]" style="background-color: rgba(123, 193, 65, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.4823529411764706, 0.7568627450980392, 0.2549019607843137]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.9333333333333333, 0.11764705882352941, 0.13725490196078433]" style="background-color: rgba(238, 30, 35, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.9333333333333333, 0.11764705882352941, 0.13725490196078433]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.9764705882352941, 0.6627450980392157, 0.10588235294117647]" style="background-color: rgba(249, 169, 27, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.9764705882352941, 0.6627450980392157, 0.10588235294117647]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.8862745098039215, 0.8862745098039215, 0.8784313725490196]" style="background-color: rgba(226, 226, 224, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.8862745098039215, 0.8862745098039215, 0.8784313725490196]</span></span>}, {"Tropical & Subtropical Moist Broadleaf Forests", "Tropical & Subtropical Dry Broadleaf Forests", "Tropical & Subtropical Coniferous Forests", "Temperate Broadleaf & Mixed Forests", "Temperate Conifer Forests"}], "EcoregionProtectionStatus" -&gt; SwatchLegend[{<span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.1450980392156863, 0.45098039215686275, 0.2235294117647059]" style="background-color: rgba(37, 115, 57, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.1450980392156863, 0.45098039215686275, 0.2235294117647059]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.4823529411764706, 0.7568627450980392, 0.2549019607843137]" style="background-color: rgba(123, 193, 65, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.4823529411764706, 0.7568627450980392, 0.2549019607843137]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.9333333333333333, 0.11764705882352941, 0.13725490196078433]" style="background-color: rgba(238, 30, 35, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.9333333333333333, 0.11764705882352941, 0.13725490196078433]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.9764705882352941, 0.6627450980392157, 0.10588235294117647]" style="background-color: rgba(249, 169, 27, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.9764705882352941, 0.6627450980392157, 0.10588235294117647]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.8862745098039215, 0.8862745098039215, 0.8784313725490196]" style="background-color: rgba(226, 226, 224, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.8862745098039215, 0.8862745098039215, 0.8784313725490196]</span></span>}, {"Half Protected", "Nature Could Reach Half Protected", "Nature Imperiled", "Nature Could Recover", "N/A"}]|&gt;</span><span class="wl-assoc-text" style="display: none !important;">Iconize[&lt;|"FreshwaterEcoregions2017" -&gt; SwatchLegend[{<span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.38823529411764707`, 0.8117647058823529, 0.6705882352941176]" style="background-color: rgba(99, 207, 171, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.38823529411764707`, 0.8117647058823529, 0.6705882352941176]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.4392156862745098, 0.6588235294117647, 0.]" style="background-color: rgba(112, 168, 0, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.4392156862745098, 0.6588235294117647, 0.]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[1., 0.4980392156862745, 0.48627450980392156`]" style="background-color: rgba(255, 127, 124, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[1., 0.4980392156862745, 0.48627450980392156`]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.9803921568627451, 0.4666666666666667, 0.30196078431372547`]" style="background-color: rgba(250, 119, 77, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.9803921568627451, 0.4666666666666667, 0.30196078431372547`]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.2980392156862745, 0.5098039215686274, 0.7137254901960784]" style="background-color: rgba(76, 130, 182, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.2980392156862745, 0.5098039215686274, 0.7137254901960784]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.792156862745098, 0.4, 0.20392156862745098`]" style="background-color: rgba(202, 102, 52, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.792156862745098, 0.4, 0.20392156862745098`]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.9882352941176471, 0.6509803921568628, 0.45098039215686275`]" style="background-color: rgba(252, 166, 115, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.9882352941176471, 0.6509803921568628, 0.45098039215686275`]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.9882352941176471, 0.9254901960784314, 0.20784313725490197`]" style="background-color: rgba(252, 236, 53, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.9882352941176471, 0.9254901960784314, 0.20784313725490197`]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.9764705882352941, 0.6705882352941176, 0.34509803921568627`]" style="background-color: rgba(249, 171, 88, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.9764705882352941, 0.6705882352941176, 0.34509803921568627`]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.3803921568627451, 0.8235294117647058, 0.9490196078431372]" style="background-color: rgba(97, 210, 242, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.3803921568627451, 0.8235294117647058, 0.9490196078431372]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.8862745098039215, 0.7803921568627451, 0.9803921568627451]" style="background-color: rgba(226, 199, 250, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.8862745098039215, 0.7803921568627451, 0.9803921568627451]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[1., 0.4980392156862745, 0.49411764705882355`]" style="background-color: rgba(255, 127, 126, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[1., 0.4980392156862745, 0.49411764705882355`]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.36470588235294116`, 0.6784313725490196, 0.2980392156862745]" style="background-color: rgba(93, 173, 76, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.36470588235294116`, 0.6784313725490196, 0.2980392156862745]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.18823529411764706`, 0.2901960784313726, 0.]" style="background-color: rgba(48, 74, 0, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.18823529411764706`, 0.2901960784313726, 0.]</span></span>}, {"Tropic", "Subtropic", "Temperate", "Boreal", "Polar"}], "MajorBiomes" -&gt; SwatchLegend[{<span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.1450980392156863, 0.45098039215686275, 0.2235294117647059]" style="background-color: rgba(37, 115, 57, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.1450980392156863, 0.45098039215686275, 0.2235294117647059]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.4823529411764706, 0.7568627450980392, 0.2549019607843137]" style="background-color: rgba(123, 193, 65, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.4823529411764706, 0.7568627450980392, 0.2549019607843137]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.9333333333333333, 0.11764705882352941, 0.13725490196078433]" style="background-color: rgba(238, 30, 35, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.9333333333333333, 0.11764705882352941, 0.13725490196078433]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.9764705882352941, 0.6627450980392157, 0.10588235294117647]" style="background-color: rgba(249, 169, 27, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.9764705882352941, 0.6627450980392157, 0.10588235294117647]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.8862745098039215, 0.8862745098039215, 0.8784313725490196]" style="background-color: rgba(226, 226, 224, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.8862745098039215, 0.8862745098039215, 0.8784313725490196]</span></span>}, {"Tropical & Subtropical Moist Broadleaf Forests", "Tropical & Subtropical Dry Broadleaf Forests", "Tropical & Subtropical Coniferous Forests", "Temperate Broadleaf & Mixed Forests", "Temperate Conifer Forests"}], "EcoregionProtectionStatus" -&gt; SwatchLegend[{<span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.1450980392156863, 0.45098039215686275, 0.2235294117647059]" style="background-color: rgba(37, 115, 57, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.1450980392156863, 0.45098039215686275, 0.2235294117647059]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.4823529411764706, 0.7568627450980392, 0.2549019607843137]" style="background-color: rgba(123, 193, 65, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.4823529411764706, 0.7568627450980392, 0.2549019607843137]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.9333333333333333, 0.11764705882352941, 0.13725490196078433]" style="background-color: rgba(238, 30, 35, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.9333333333333333, 0.11764705882352941, 0.13725490196078433]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.9764705882352941, 0.6627450980392157, 0.10588235294117647]" style="background-color: rgba(249, 169, 27, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.9764705882352941, 0.6627450980392157, 0.10588235294117647]</span></span>, <span class="wl-color-container"><span class="wl-color-swatch" title="Click to copy code: RGBColor[0.8862745098039215, 0.8862745098039215, 0.8784313725490196]" style="background-color: rgba(226, 226, 224, 1)"></span><span class="wl-color-text" style="display: none !important;">RGBColor[0.8862745098039215, 0.8862745098039215, 0.8784313725490196]</span></span>}, {"Half Protected", "Nature Could Reach Half Protected", "Nature Imperiled", "Nature Could Recover", "N/A"}]|&gt;, "Association"]</span></span>]</code></pre>
 <h4 id="fetching-ecoregion-images">Fetching ecoregion images</h4>
 <p>The ecoregion descriptions hosted on <a href="http://www.oneearth.org">www.oneearth.org</a> contain illustrative of ecoregion landscapes and emblematic wildlife. Let’s define a function to fetch these images programmatically:</p>
 <p><em>Define a function to collect ecoregion images:</em></p>
-<pre><code class="language-wl" data-raw-code="In[]:= ClearAll[ecoregionImages] 
-  (*OneEarth page URL input:*)
- ecoregionImages[ecoregionOneEarthPage_URL] := Dataset[Join[
-     (*Import ecoregion page header images (typically landscapes):*) 
-      Cases[
-       Import[ecoregionOneEarthPage, &amp;quot;XMLObject&amp;quot;], XMLElement[&amp;quot;img&amp;quot;, {&amp;quot;src&amp;quot; -> url_, &amp;quot;alt&amp;quot; -> description_, &amp;quot;data-image&amp;quot; -> &amp;quot;data-image&amp;quot;, &amp;quot;v-imageloaded&amp;quot; -> &amp;quot;v-imageloaded&amp;quot;}, _] :> <|&amp;quot;Image&amp;quot; -> Import[url], &amp;quot;ImageDescription&amp;quot; -> description|>, {17}], 
-     (*Import ecoregion page body images (typically animals or landscapes):*) 
-      Cases[
-       Import[ecoregionOneEarthPage, &amp;quot;XMLObject&amp;quot;], XMLElement[&amp;quot;figure&amp;quot;, {}, {XMLElement[&amp;quot;img&amp;quot;, {&amp;quot;src&amp;quot; -> url_}, {}], XMLElement[&amp;quot;figcaption&amp;quot;, {}, {XMLElement[&amp;quot;span&amp;quot;, {&amp;quot;class&amp;quot; -> &amp;quot;caption&amp;quot;}, {}], XMLElement[&amp;quot;p&amp;quot;, {}, {description_}], &amp;quot; &amp;quot;}]}] :> <|&amp;quot;Image&amp;quot; -> Import[url], &amp;quot;ImageDescription&amp;quot; -> description|>, \[Infinity]] 
-     ]] 
-   
-  (*Ecoregion name input:*)
- ecoregionImages[ecoregionName_String] := ecoregionImages[URL[First[Values[Normal[First[
-          ConstructColumns[Select[ecoregionsTab, Function[#EcoregionName == ecoregionName]], &amp;quot;OneEarthPage&amp;quot;]]]]]]] 
-   
-  (*ID input:*)
- ecoregionImages[ecoregionID_Integer] := ecoregionImages[URL[First[Values[Normal[First[
-         ConstructColumns[Select[ecoregionsTab, Function[#EcoregionID == ecoregionID]], &amp;quot;OneEarthPage&amp;quot;]]]]]]]">In[]:= ClearAll[ecoregionImages] 
-  (*OneEarth page URL input:*)
- ecoregionImages[ecoregionOneEarthPage_URL] := Dataset[Join[
-     (*Import ecoregion page header images (typically landscapes):*) 
-      Cases[
-       Import[ecoregionOneEarthPage, &amp;quot;XMLObject&amp;quot;], XMLElement[&amp;quot;img&amp;quot;, {&amp;quot;src&amp;quot; -&gt; url_, &amp;quot;alt&amp;quot; -&gt; description_, &amp;quot;data-image&amp;quot; -&gt; &amp;quot;data-image&amp;quot;, &amp;quot;v-imageloaded&amp;quot; -&gt; &amp;quot;v-imageloaded&amp;quot;}, _] :&gt; &lt;|&amp;quot;Image&amp;quot; -&gt; Import[url], &amp;quot;ImageDescription&amp;quot; -&gt; description|&gt;, {17}], 
-     (*Import ecoregion page body images (typically animals or landscapes):*) 
-      Cases[
-       Import[ecoregionOneEarthPage, &amp;quot;XMLObject&amp;quot;], XMLElement[&amp;quot;figure&amp;quot;, {}, {XMLElement[&amp;quot;img&amp;quot;, {&amp;quot;src&amp;quot; -&gt; url_}, {}], XMLElement[&amp;quot;figcaption&amp;quot;, {}, {XMLElement[&amp;quot;span&amp;quot;, {&amp;quot;class&amp;quot; -&gt; &amp;quot;caption&amp;quot;}, {}], XMLElement[&amp;quot;p&amp;quot;, {}, {description_}], &amp;quot; &amp;quot;}]}] :&gt; &lt;|&amp;quot;Image&amp;quot; -&gt; Import[url], &amp;quot;ImageDescription&amp;quot; -&gt; description|&gt;, \[Infinity]] 
-     ]] 
-   
-  (*Ecoregion name input:*)
- ecoregionImages[ecoregionName_String] := ecoregionImages[URL[First[Values[Normal[First[
-          ConstructColumns[Select[ecoregionsTab, Function[#EcoregionName == ecoregionName]], &amp;quot;OneEarthPage&amp;quot;]]]]]]] 
-   
-  (*ID input:*)
- ecoregionImages[ecoregionID_Integer] := ecoregionImages[URL[First[Values[Normal[First[
-         ConstructColumns[Select[ecoregionsTab, Function[#EcoregionID == ecoregionID]], &amp;quot;OneEarthPage&amp;quot;]]]]]]]</code></pre>
+<pre><code class="language-wl" data-raw-code="ClearAll[ecoregionImages]
+(*OneEarth page URL input:*)
+ecoregionImages[ecoregionOneEarthPage_URL] := Dataset[Join[
+   (*Import ecoregion page header images (typically landscapes):*)
+   Cases[
+    Import[ecoregionOneEarthPage, &quot;XMLObject&quot;], 
+    XMLElement[
+      &quot;img&quot;, {&quot;src&quot; -> url_, &quot;alt&quot; -> description_, 
+       &quot;data-image&quot; -> &quot;data-image&quot;, 
+       &quot;v-imageloaded&quot; -> &quot;v-imageloaded&quot;}, _] :> <|
+      &quot;Image&quot; -> Import[url], 
+      &quot;ImageDescription&quot; -> description|>, {17}],
+   (*Import ecoregion page body images (typically animals or landscapes):*)
+   Cases[
+    Import[ecoregionOneEarthPage, &quot;XMLObject&quot;], 
+    XMLElement[
+      &quot;figure&quot;, {}, {XMLElement[&quot;img&quot;, {&quot;src&quot; -> url_}, {}], 
+       XMLElement[
+        &quot;figcaption&quot;, {}, {XMLElement[
+          &quot;span&quot;, {&quot;class&quot; -> &quot;caption&quot;}, {}], 
+         XMLElement[&quot;p&quot;, {}, {description_}], &quot; &quot;}]}] :> <|
+      &quot;Image&quot; -> Import[url], 
+      &quot;ImageDescription&quot; -> description|>, \[Infinity]]
+   ]]
+
+(*Ecoregion name input:*)
+ecoregionImages[ecoregionName_String] := 
+ ecoregionImages[URL[First[Values[Normal[First[
+       ConstructColumns[
+        Select[ecoregionsTab, 
+         Function[#EcoregionName == ecoregionName]], &quot;OneEarthPage&quot;]]]]]]]
+
+(*ID input:*)
+ecoregionImages[ecoregionID_Integer] := 
+ ecoregionImages[URL[First[Values[Normal[First[
+       ConstructColumns[
+        Select[ecoregionsTab, Function[#EcoregionID == ecoregionID]], 
+        &quot;OneEarthPage&quot;]]]]]]]">ClearAll[ecoregionImages]
+(*OneEarth page URL input:*)
+ecoregionImages[ecoregionOneEarthPage_URL] := Dataset[Join[
+   (*Import ecoregion page header images (typically landscapes):*)
+   Cases[
+    Import[ecoregionOneEarthPage, "XMLObject"], 
+    XMLElement[
+      "img", {"src" -&gt; url_, "alt" -&gt; description_, 
+       "data-image" -&gt; "data-image", 
+       "v-imageloaded" -&gt; "v-imageloaded"}, _] :&gt; &lt;|
+      "Image" -&gt; Import[url], 
+      "ImageDescription" -&gt; description|&gt;, {17}],
+   (*Import ecoregion page body images (typically animals or landscapes):*)
+   Cases[
+    Import[ecoregionOneEarthPage, "XMLObject"], 
+    XMLElement[
+      "figure", {}, {XMLElement["img", {"src" -&gt; url_}, {}], 
+       XMLElement[
+        "figcaption", {}, {XMLElement[
+          "span", {"class" -&gt; "caption"}, {}], 
+         XMLElement["p", {}, {description_}], " "}]}] :&gt; &lt;|
+      "Image" -&gt; Import[url], 
+      "ImageDescription" -&gt; description|&gt;, \[Infinity]]
+   ]]
+
+(*Ecoregion name input:*)
+ecoregionImages[ecoregionName_String] := 
+ ecoregionImages[URL[First[Values[Normal[First[
+       ConstructColumns[
+        Select[ecoregionsTab, 
+         Function[#EcoregionName == ecoregionName]], "OneEarthPage"]]]]]]]
+
+(*ID input:*)
+ecoregionImages[ecoregionID_Integer] := 
+ ecoregionImages[URL[First[Values[Normal[First[
+       ConstructColumns[
+        Select[ecoregionsTab, Function[#EcoregionID == ecoregionID]], 
+        "OneEarthPage"]]]]]]]</code></pre>
 <p><em>Fetch images for a specified ecoregion, along with their descriptions:</em></p>
-<pre><code class="language-wl" data-raw-code="In[]:= ecoregionImages[&amp;quot;Myanmar coastal rain forests&amp;quot;]">In[]:= ecoregionImages[&amp;quot;Myanmar coastal rain forests&amp;quot;]</code></pre>
-<figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/0apewhueieqfw.png" alt="0apewhueieqfw" width="1359" height="507" srcset="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0apewhueieqfw-xs.png 300w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0apewhueieqfw-sm.png 480w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0apewhueieqfw-md.png 768w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0apewhueieqfw-lg.png 1200w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
+<pre><code class="language-wl" data-raw-code="ecoregionImages[&quot;Myanmar coastal rain forests&quot;]">ecoregionImages["Myanmar coastal rain forests"]</code></pre>
 <h3>Searching for iNaturalist Species Observations Within Ecoregions</h3>
 <p>Finally, here’s an example showing one way you might use the ecoregions data explored in this text in combination with other Wolfram Language ecology functionality.</p>
 <p>iNaturalist is a citizen science project and online community of naturalists, biologists, and ordinary people who record and share observations of plants, animals, and other life forms. Users can upload photos and sounds, identify species, and contribute to a global biodiversity database.</p>
 <p>Observations shared to the iNaturalist platform can be retrieved using the <a href="https://resources.wolframcloud.com/FunctionRepository/resources/INaturalistSearch/">INaturalistSearch</a> function from the Wolfram Function Repository. Let’s use this function to fetch species observations from an specified ecoregion.</p>
 <p><em>Define the region in which to search for observations:</em></p>
-<pre><code class="language-wl" data-raw-code="In[]:= region = GeoGroup[Normal[First[Select[ecoregionsTab, Function[#&amp;quot;EcoregionName&amp;quot; == &amp;quot;Puerto Rican moist forests&amp;quot;]]]][&amp;quot;Geometry&amp;quot;]];">In[]:= region = GeoGroup[Normal[First[Select[ecoregionsTab, Function[#&amp;quot;EcoregionName&amp;quot; == &amp;quot;Puerto Rican moist forests&amp;quot;]]]][&amp;quot;Geometry&amp;quot;]];</code></pre>
+<pre><code class="language-wl" data-raw-code="region = 
+  GeoGroup[
+   Normal[First[
+      Select[ecoregionsTab, 
+       Function[#&quot;EcoregionName&quot; == &quot;Puerto Rican moist forests&quot;]]]][
+    &quot;Geometry&quot;]];">region = 
+  GeoGroup[
+   Normal[First[
+      Select[ecoregionsTab, 
+       Function[#"EcoregionName" == "Puerto Rican moist forests"]]]][
+    "Geometry"]];</code></pre>
 <p><em>Plot this region on a map:</em></p>
-<pre><code class="language-wl" data-raw-code="In[]:= GeoGraphics[region] // Rasterize">In[]:= GeoGraphics[region] // Rasterize</code></pre>
+<pre><code class="language-wl" data-raw-code="GeoGraphics[region] // Rasterize">GeoGraphics[region] // Rasterize</code></pre>
 <figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/090jv8xpyxzy7.png" alt="090jv8xpyxzy7" width="840" height="369" srcset="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/090jv8xpyxzy7-xs.png 300w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/090jv8xpyxzy7-sm.png 480w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/090jv8xpyxzy7-md.png 768w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/090jv8xpyxzy7-lg.png 1200w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
 <p><em>Fetch observations made within this region and within a specified date range (here, set to the last 10 days at time of computation):</em></p>
-<figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/1uroqt2g1edge.png" alt="1uroqt2g1edge" width="2339" height="103" srcset="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1uroqt2g1edge-xs.png 300w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1uroqt2g1edge-sm.png 480w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1uroqt2g1edge-md.png 768w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/1uroqt2g1edge-lg.png 1200w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
+<pre><code class="language-wl" data-raw-code="observations = Select[Tabular[ResourceFunction[
+ResourceObject[<|
+      &quot;Name&quot; -> &quot;INaturalistSearch&quot;, &quot;ShortName&quot; -> 
+       &quot;INaturalistSearch&quot;, &quot;UUID&quot; -> 
+       &quot;52cc24aa-c5a6-47ca-998f-3e5c08b4ed53&quot;, &quot;ResourceType&quot; -> 
+       &quot;Function&quot;, &quot;Version&quot; -> &quot;1.1.1&quot;, &quot;Description&quot; -> 
+       &quot;Search for iNaturalist observations using the iNaturalist API&quot;, &quot;RepositoryLocation&quot; -> 
+       URL[&quot;https://www.wolframcloud.com/obj/resourcesystem/api/1.0&quot;],
+        &quot;SymbolName&quot; -> 
+       &quot;FunctionRepository`$2941ab2fbece423cb47ef83042e88aaf`INaturalistSearch&quot;, &quot;FunctionLocation&quot; -> 
+       CloudObject[
+        &quot;https://www.wolframcloud.com/obj/56d4026f-00a5-4e4f-b910-6ea80a592d0d&quot;]|>, {
+      ResourceSystemBase -> 
+       &quot;https://www.wolframcloud.com/obj/resourcesystem/api/1.0&quot;}]][
+    All, &quot;Threatened&quot; -> True, 
+    &quot;ObservationGeoRange&quot; -> GeoBounds[region], 
+    &quot;ObservationDateRange&quot; -> {DatePlus[Today, -Quantity[10, &quot;Days&quot;]],
+       Today}]], Function[GeoWithinQ[region, #GeoPosition]]]">observations = Select[Tabular[ResourceFunction[
+ResourceObject[&lt;|
+      "Name" -&gt; "INaturalistSearch", "ShortName" -&gt; 
+       "INaturalistSearch", "UUID" -&gt; 
+       "52cc24aa-c5a6-47ca-998f-3e5c08b4ed53", "ResourceType" -&gt; 
+       "Function", "Version" -&gt; "1.1.1", "Description" -&gt; 
+       "Search for iNaturalist observations using the iNaturalist API", "RepositoryLocation" -&gt; 
+       URL["https://www.wolframcloud.com/obj/resourcesystem/api/1.0"],
+        "SymbolName" -&gt; 
+       "FunctionRepository`$2941ab2fbece423cb47ef83042e88aaf`INaturalistSearch", "FunctionLocation" -&gt; 
+       CloudObject[
+        "https://www.wolframcloud.com/obj/56d4026f-00a5-4e4f-b910-6ea80a592d0d"]|&gt;, {
+      ResourceSystemBase -&gt; 
+       "https://www.wolframcloud.com/obj/resourcesystem/api/1.0"}]][
+    All, "Threatened" -&gt; True, 
+    "ObservationGeoRange" -&gt; GeoBounds[region], 
+    "ObservationDateRange" -&gt; {DatePlus[Today, -Quantity[10, "Days"]],
+       Today}]], Function[GeoWithinQ[region, #GeoPosition]]]</code></pre>
 <p><em>Extract the positions and species names from the resulting dataset, and plot them on a map:</em></p>
-<pre><code class="language-wl" data-raw-code="In[]:= GeoListPlot[Flatten[FromTabular[ConstructColumns[observations, &amp;quot;LabeledPosition&amp;quot; -> Function[Labeled[#&amp;quot;GeoPosition&amp;quot;, #&amp;quot;TaxonName&amp;quot;]]], &amp;quot;Matrix&amp;quot;]], ImageSize -> 850] // Rasterize">In[]:= GeoListPlot[Flatten[FromTabular[ConstructColumns[observations, &amp;quot;LabeledPosition&amp;quot; -&gt; Function[Labeled[#&amp;quot;GeoPosition&amp;quot;, #&amp;quot;TaxonName&amp;quot;]]], &amp;quot;Matrix&amp;quot;]], ImageSize -&gt; 850] // Rasterize</code></pre>
+<pre><code class="language-wl" data-raw-code="GeoListPlot[Flatten[FromTabular[ConstructColumns[observations, &quot;LabeledPosition&quot; -> Function[Labeled[#&quot;GeoPosition&quot;, #&quot;TaxonName&quot;]]], &quot;Matrix&quot;]], ImageSize -> 850] // Rasterize">GeoListPlot[Flatten[FromTabular[ConstructColumns[observations, "LabeledPosition" -&gt; Function[Labeled[#"GeoPosition", #"TaxonName"]]], "Matrix"]], ImageSize -&gt; 850] // Rasterize</code></pre>
 <figure class="post__image post__image--center"><img src="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/0tp97ku72duyh.png" alt="0tp97ku72duyh" width="1173" height="515" srcset="https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0tp97ku72duyh-xs.png 300w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0tp97ku72duyh-sm.png 480w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0tp97ku72duyh-md.png 768w, https://phileasdg.github.io/media/posts/terrestrial-ecoregions-of-the-world-computational-insights-into-global-biodiversity/responsive/0tp97ku72duyh-lg.png 1200w" sizes="(max-width: 48em) 100vw, 100vw" loading="lazy" /></figure>
 <h2>Conclusion</h2>
 <p>The Ecoregions2017©Resolve dataset lets us explore the incredible variety of ecosystems around the globe. By breaking down Earth’s landscapes into distinct ecological zones, it gives us a fresh perspective on Earth’s diverse habitats and the species that inhabit them. Whether you’re interested in research, conservation, or simply appreciating the beauty and complexity of life on Earth, this dataset offers a clear and engaging way to use computation to explore questions  about ecology, biodiversity, and environmental science.</p>
