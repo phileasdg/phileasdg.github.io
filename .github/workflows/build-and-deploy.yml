@@ -1,13 +1,16 @@
-name: Compile Markdown Posts
+name: Compile & Build Site
 
 on:
   push:
     branches:
+      - master
+      - main
       - development
     paths:
-      - 'markdown/posts/**'
-      - 'markdown/pages/**'
-      - 'scratch/build-posts.js'
+      - 'markdown/**'
+      - 'data/**'
+      - 'scripts/**'
+      - 'src/**'
       - 'package.json'
 
 permissions:
@@ -26,17 +29,21 @@ jobs:
         with:
           node-version: 20
 
-      - name: Build posts and pages
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build site
         run: NODE_ENV=production npm run build
 
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add content/posts/*.html content/pages/*.html data/posts.json data/pages.json
+          git add content/ posts/ pages/ media/ data/ feed.xml feed.json sitemap.xml TAGS.md index.html
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Auto-compile Markdown posts and pages [skip ci]"
+            git commit -m "Auto-compile site assets and pages [skip ci]"
             git push
           fi
+
