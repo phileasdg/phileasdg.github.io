@@ -21,16 +21,17 @@ Other Miscellaneous Functions:
 
 - [Talk - A constellation of creative projects with Wolfram Language: from video feedback to modeling cultural evolution - *Wolfram Winter School* - January 9, 2026](https://www.wolframcloud.com/obj/3edc0140-e52d-4d7c-92dc-e37928fe7b1e)
 - [Talk - Networked Creativity: Citation Network Analysis of a Small Artist Community - *2025 Wolfram Technology Conference* - November 2025](https://drive.google.com/file/d/11zREhD44UuKQKP89s87fIfF44yYXn88W/view?usp=sharing)
-- Mentor - *Wolfram Summer Research Institute* - June & July 2025
+- Mentor - *Wolfram Summer Research Institute* - June & July 2026
 - [Talk - Wolfram Language for GIS Coursework - *2024 Wolfram Technology Conference* - October 2024](https://www.youtube.com/watch?v=cf-GTAOoiNg)
 - [Talk - Ecological Research with Wolfram Language - *Wolfram Colloquium Series* - August 2024](https://www.bigmarker.com/wolfram-u/eco-research-aug-2024?utm_bmcr_source=community)
-- Mentor - Wolfram Summer Research Institute - June & July 2024
+- Mentor - Wolfram Summer School - June & July 2025
+- Mentor - Wolfram Summer School - June & July 2024
 - [Talk - Ecological Research with Wolfram Language - *Wolfram Colloquium Series* - April 2024](https://www.youtube.com/watch?v=WgyqZlZI0BE)
 - [Talk - Ecology and Environmental Science Modelling in Wolfram Language - *Wolfram U*](https://www.wolfram.com/wolfram-u/courses/mathematics/ecology-and-environmental-science-modeling-in-wolfram-language/)
 
 ## Wolfram Summer Research Institute Mentee Projects:
 
-The following lists are of projects I collaborated on with my mentees at past Wolfram Summer Research Institutes. I'm proud to have contributed to each of these projects, and thankful for the time and discussions I've shared with my mentees during each one. Please reward their hard work and creativity by reading, sharing, and interacting with their project articles to show your support.
+The following lists are of projects I collaborated on with my mentees at past Wolfram Summer Research Institutes (formerly named the Wolfram Summer School). I'm proud to have contributed to each of these projects, and thankful for the time and discussions I've shared with my mentees during each one. Please reward their hard work and creativity by reading, sharing, and interacting with their project articles to show your support.
 
 ### 2026
 
@@ -40,14 +41,14 @@ The following lists are of projects I collaborated on with my mentees at past Wo
 - Julian Jacklin (Relay Graduate School of Education): [Modularizing K-12 Instruction in Computational Thinking](https://community.wolfram.com/groups/-/m/t/3762192)
 - Maria Luiza Cordeiro (Federal Rural University of Pernambuco): [Sandpile Model Dynamics on Radial Density Gradients](https://community.wolfram.com/groups/-/m/t/3762924)
 
-### 2025
+### 2025 (Wolfram Summer School)
 
 - Gray Cox (College of the Atlantic): [Exploring CA tools for modeling Dialogical Reasoning](https://community.wolfram.com/groups/-/m/t/3497077?p_p_auth=2QodYZ4S)
 - Robyn Gausman-Burnett (University of Maryland): [No Child's Land: Where Opportunity Falls Off the Map](https://community.wolfram.com/groups/-/m/t/3497120)
 - Luke Weinbach (Yale University): [Assessing LLM Psychology With Personality Vectors](https://community.wolfram.com/groups/-/m/t/3497920)
 - Amaad Zaidi (Pennsylvania State University): [Mapping Solar Shadows and Celestial Objects in the Sky](https://community.wolfram.com/groups/-/m/t/3496335)
 
-### 2024
+### 2024 (Wolfram Summer School)
 
 - Kathryn Cramer (University of Vermont): [Spot a cat: cellular automata edition, or representational images in cellular automata](https://community.wolfram.com/groups/-/m/t/3207689?p_p_auth=2fQ4s6jN)
 - Curran Flanders (Rensselaer Polytechnic Institute): [Robotic arm control using large language models](https://community.wolfram.com/groups/-/m/t/3211121?p_p_auth=iskrU2Uf)

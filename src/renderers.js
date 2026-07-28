@@ -152,19 +152,24 @@ export function renderResumeHTML(data) {
     html.push('      </section>');
   }
 
-  if (data.references && data.references.length > 0) {
+  if (data.references) {
     const isFR = data.title === 'CV';
-    const sectionTitle = isFR ? 'Références (Disponibles sur demande)' : 'References (Available Upon Request)';
+    const sectionTitle = isFR ? 'Références' : 'References';
+    const availableText = isFR ? 'Disponibles sur demande.' : 'Available upon request.';
     html.push(`      <section class="resume__section">`);
     html.push(`        <h2 class="resume__section-title">${sectionTitle}</h2>`);
-    html.push('        <ul class="resume__list-simple">');
-    data.references.forEach(ref => {
-      html.push(`          <li>`);
-      html.push(`            <div class="resume__ref-name">${ref.name}</div>`);
-      html.push(`            <div class="resume__ref-title">${ref.title}</div>`);
-      html.push(`          </li>`);
-    });
-    html.push('        </ul>');
+    if (Array.isArray(data.references) && data.references.length > 0) {
+      html.push('        <ul class="resume__list-simple">');
+      data.references.forEach(ref => {
+        html.push(`          <li>`);
+        html.push(`            <div class="resume__ref-name">${ref.name}</div>`);
+        html.push(`            <div class="resume__ref-title">${ref.title}</div>`);
+        html.push(`          </li>`);
+      });
+      html.push('        </ul>');
+    } else {
+      html.push(`        <p class="resume__item-desc">${availableText}</p>`);
+    }
     html.push('      </section>');
   }
 

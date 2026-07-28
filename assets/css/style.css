@@ -291,11 +291,12 @@ img[loading]{opacity:1}img.is-loaded{opacity:1;transition:opacity 1s cubic-bezie
   margin-bottom: 1.5rem;
 }
 
-.resume__item::before {
+.resume__item-title::before {
   content: '';
   position: absolute;
   left: calc(-1.5rem - 4.75px);
-  top: 6px;
+  top: 50%;
+  transform: translateY(-50%);
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -305,7 +306,7 @@ img[loading]{opacity:1}img.is-loaded{opacity:1;transition:opacity 1s cubic-bezie
   z-index: 2;
 }
 
-.resume__item:hover::before {
+.resume__item:hover .resume__item-title::before {
   background-color: var(--res-secondary);
 }
 
@@ -313,7 +314,7 @@ img[loading]{opacity:1}img.is-loaded{opacity:1;transition:opacity 1s cubic-bezie
   .resume__item {
     margin-bottom: 2rem;
   }
-  .resume__item::before {
+  .resume__item-title::before {
     display: none;
   }
 }
@@ -327,8 +328,10 @@ img[loading]{opacity:1}img.is-loaded{opacity:1;transition:opacity 1s cubic-bezie
 }
 
 .resume__item-title {
+  position: relative;
   font-family: var(--res-font);
   font-size: 1.05rem;
+  line-height: 1.2;
   font-weight: 700;
   color: var(--res-text-dark);
   margin: 0 !important; /* Force margin to be 0 to align with timeline bullet */
@@ -536,6 +539,7 @@ img[loading]{opacity:1}img.is-loaded{opacity:1;transition:opacity 1s cubic-bezie
   
   .resume__item::before {
     left: calc(-1.25rem - 4.25px) !important;
+    top: 10px !important;
     width: 7px !important;
     height: 7px !important;
     border: 1px solid #000000 !important;

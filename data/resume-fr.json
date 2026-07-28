@@ -1,19 +1,46 @@
 {
   "title": "CV",
   "name": "Phileas Dazeley-Gaist",
-  "tagline": "Spécialiste en écologie humaine, data science & programmation scientifique",
+  "tagline": "Spécialiste en Écologie Humaine & Systèmes Complexes ; Chercheur au Wolfram Institute.",
   "contact": {
-    "email": "phileasdg[at]gmail.com",
+    "email": "phileasdg@gmail.com",
     "linkedin": "https://www.linkedin.com/in/phileas/",
     "github": "https://github.com/phileasdg"
   },
   "work_experience": [
     {
+      "role": "Chercheur (Research Fellow)",
+      "company": "Wolfram Institute",
+      "type": "Temps plein",
+      "start_date": "Juin 2026",
+      "end_date": "Présent",
+      "location": "Concord, Massachusetts, États-Unis (Hybride)",
+      "description": "Recherche en biologie computationnelle, systèmes complexes et écologie théorique. Étude des différences entre les systèmes conçus et évolués, de la construction biologique, des défis et limites de la biologie synthétique, ainsi que de l'évolution adaptative ouverte dans des environnements compétitifs et de la dynamique écologique spatiale."
+    },
+    {
+      "role": "Strategic Applications Developer",
+      "company": "Wolfram Research",
+      "type": "Temps plein",
+      "start_date": "Septembre 2025",
+      "end_date": "Présent",
+      "location": "Télétravail",
+      "description": "S'appuyant sur les tâches précédentes avec une plus grande autonomie pour organiser des conférences, des ateliers et des présentations institutionnelles sur les applications du langage Wolfram dans les sciences de l'environnement, l'IA, la géographie computationnelle, la théorie des graphes et la programmation fonctionnelle. Coordination des efforts de verticalisation pour l'AgTech et les sciences de l'environnement, agrégation des ressources techniques et édition de contenu spécifique au domaine pour le site web de Wolfram."
+    },
+    {
+      "role": "Mentor de projet",
+      "company": "Wolfram Summer Research Institute",
+      "type": "Saisonnier",
+      "start_date": "Juin 2024",
+      "end_date": "Présent",
+      "location": "Waltham, Massachusetts, États-Unis",
+      "description": "Mentorat de 13 chercheurs d'été sur 3 ans, guidant des projets ouverts depuis le concept initial jusqu'à la publication d'essais computationnels. Projets des mentorés : https://phileasdg.github.io/pages/wolfram-contributions-and-publications/"
+    },
+    {
       "role": "Academic Innovation Applications Developer",
       "company": "Wolfram Research",
       "type": "Temps plein",
       "start_date": "Août 2024",
-      "end_date": "Présent",
+      "end_date": "Septembre 2025",
       "location": "Salem, Massachusetts, Télétravail",
       "description": "Organisation d'événements de formation, de sensibilisation et de communication scientifique auprès des utilisateurs du langage Wolfram. Participation aux conférences locales et événements liés à la mission de l'équipe de soutien à l'innovation académique. Animation de conférences et de sessions de formation pour promouvoir l'utilisation du langage Wolfram. Intégration des retours utilisateurs et des cas d'usage pour informer le développement de nouvelles démonstrations, de contenus de formation et d'éléments de référentiel. Contribution aux \"projets ouverts\", notamment le Wolfram Function Repository, l'Example Repository, le Paclet Repository, etc. Suivi des tendances académiques identifiées comme pertinentes (ed-tech, SIG, etc.). Conseil auprès du corps professoral, de l'administration et d'autres contacts commerciaux concernant la stack technologique Wolfram. Coordination avec les équipes concernées pour la création de contenu RP pertinent pour les utilisateurs, y compris les publications sur les réseaux sociaux."
     },
@@ -21,8 +48,8 @@
       "role": "Academic Content Developer",
       "company": "Wolfram Research",
       "type": "Temps plein",
-      "start_date": "Juillet 2023",
-      "end_date": "Juillet 2024",
+      "start_date": "Août 2023",
+      "end_date": "Août 2024",
       "location": "Salem, Massachusetts, Télétravail",
       "description": "Développement de projets modèles pour des cours de pensée computationnelle, SIG, écologie, art numérique et humanités numériques utilisant le langage Wolfram. Collaboration avec des organisations externes pour la création de contenu éducatif. Coordination et soutien logistique pour les ateliers de l'équipe Academic Innovation Support dans des contextes universitaires et de recherche. Recherche et suivi de nouvelles opportunités de collaboration pour des ateliers Wolfram Language auprès d'organisations académiques externes, du corps enseignant et des étudiants."
     },
@@ -42,16 +69,25 @@
       "start_date": "Avril 2020",
       "end_date": "Août 2020",
       "location": "Bar Harbor, Maine, États-Unis",
-      "description": "Gestion des mises à jour, de la mise en page et de la coordination du site Web principal de la Société et de ses portails de réseaux numériques."
+      "description": ""
     },
     {
-      "role": "Resident Advisor",
+      "role": "Assistant(e) d'enseignement et de recherche",
+      "company": "College of the Atlantic",
+      "type": "Temps partiel",
+      "start_date": "Janvier 2023",
+      "end_date": "Mai 2023",
+      "location": "Bar Harbor, Maine, États-Unis",
+      "description": ""
+    },
+    {
+      "role": "Conseiller résident (Resident Advisor)",
       "company": "College of the Atlantic",
       "type": "Temps plein",
       "start_date": "Août 2020",
       "end_date": "Juin 2023",
       "location": "Bar Harbor, Maine, États-Unis",
-      "description": "Soutien à la vie résidentielle étudiante, gestion des conflits et organisation d'événements communautaires."
+      "description": ""
     }
   ],
   "education": [
@@ -71,25 +107,24 @@
       "location": "Bar Harbor, Maine, États-Unis",
       "meta": "GPA 3.92",
       "courses": [
-        "Systèmes d'Information Géographique (SIG)",
-        "Apprentissage automatique appliqué aux grands ensembles de données",
-        "Science des données appliquée I & II",
-        "Biostatistiques",
-        "Statistiques et conception de recherche",
-        "Physique et mathématiques de l'énergie durable",
-        "Systèmes dynamiques et équations différentielles",
+        "IA : Études des futurs et philosophie de la technologie",
+        "Data Science appliquée I & II",
         "Chaos et fractales",
-        "Capteurs, contrôleurs et robots",
-        "Chimie analytique",
-        "Histoire environnementale",
+        "Biostatistiques",
+        "Histoire de l'environnement",
+        "Systèmes d'Information Géographique",
+        "Histoire de l'art vidéo",
+        "Génération et édition d'images et d'audio avec Python/C#",
         "Économie",
+        "Introduction aux statistiques et à la conception de la recherche",
         "Séminaire en écologie humaine",
-        "IA : Études prospectives et philosophie de la technologie"
+        "Capteurs, contrôleurs et robots",
+        "Apprentissage automatique appliqué aux grands ensembles de données"
       ]
     },
     {
-      "institution": "Wolfram Summer School 2023",
-      "degree": "Research Fellow",
+      "institution": "Wolfram Summer Research Institute",
+      "degree": "Summer Researcher",
       "start_date": "Juin 2023",
       "end_date": "Juillet 2023",
       "location": "Waltham, Massachusetts, États-Unis"
@@ -97,7 +132,7 @@
     {
       "institution": "Université de Nantes",
       "degree": "Faculté de Sociologie",
-      "start_date": "Sept 2018",
+      "start_date": "Septembre 2018",
       "end_date": "Juin 2019",
       "location": "Nantes, Pays de la Loire, France",
       "courses": [
@@ -120,44 +155,36 @@
       "location": "Fribourg-en-Brisgau, Bade-Wurtemberg, Allemagne"
     }
   ],
-  "teaching_experience": [
-    {
-      "role": "Mentorat Wolfram Summer School (2025)",
-      "dates": "22 Juin 2025 – 13 Juillet 2025"
-    },
-    {
-      "role": "Mentorat Wolfram Summer School (2024)",
-      "dates": "22 Juin 2024 – 13 Juillet 2024"
-    }
-  ],
   "publications": [
     {
-      "citation": "Dazeley-Gaist, Phileas, et Mohammad Bahrami, eds. “RemoteSensing Paclet: GIBS Satellite Imagery and AppEEARS Geographic Data Products.” In Wolfram Summer School Research Reports 2023. Wolfram Summer School Research Reports. Champaign, Illinois: Wolfram Media, 2025."
+      "citation": "Dazeley-Gaist, Phileas, et Mohammad Bahrami, eds. “RemoteSensing Paclet: GIBS Satellite Imagery and AppEEARS Geographic Data Products.” In Wolfram Summer Research Institute Research Reports 2023. Wolfram Summer Research Institute Research Reports. Champaign, Illinois: Wolfram Media, 2025."
     },
     {
       "citation": "Phileas Dazeley-Gaist. “Mathematics as Human Ecology.” In Human Ecology Essay Collection - 2023, 34–39. Human Ecology Essays. College of the Atlantic, 2023."
     }
   ],
   "leadership_volunteering": [
-    "Bénévolat pour les événements \"Complexity Coffee\" du Santa Fe Institute (planification, organisation et animation de réunions, conférences et ateliers en ligne pour la communauté des anciens élèves de la Complexity Global School) (Août 2025 – Présent)",
+    "Membre du comité d'organisation et bénévole pour les événements Complexity Coffee (planification, organisation et animation des réunions, conférences et ateliers en ligne de la communauté des anciens élèves de la Complexity Global School) (Août 2025 – Présent)",
     "Wolfram Student Ambassador (Août 2022 – Juin 2023)",
     "Présidence du Club de Programmation du College of the Atlantic (Déc 2019 – Juin 2023)",
     "Mise en place d'une banque alimentaire d'hiver en accès libre pour lutter contre l'insécurité alimentaire au College of the Atlantic. Coordination avec d'autres bénévoles pour la collecte et la distribution de nourriture aux étudiants et aux membres de la communauté. (Déc 2019 – Fév 2020)",
     "Trésorerie de l'association étudiante LGBTQ de l'Université de Nantes (Oct 2018 – Déc 2019)"
   ],
   "skills": [
+    "Wolfram Language",
+    "Python",
+    "R",
+    "JavaScript",
+    "SQL",
     "ESRI ArcGIS Pro",
     "QGIS",
     "GDAL",
-    "R / Tidyverse",
-    "Python / Pandas / NumPy",
-    "PyTorch / Apprentissage automatique",
-    "JavaScript / Node.js",
-    "SQL",
-    "Langage Wolfram",
     "Stella Architect",
     "Git",
-    "Microsoft Office"
+    "Microsoft Office",
+    "Max/MSP/Jitter",
+    "C#",
+    "C++"
   ],
   "languages": [
     {
@@ -173,26 +200,5 @@
       "proficiency": "Conversationnel limité"
     }
   ],
-  "references": [
-    {
-      "name": "John McNally",
-      "title": "Director of Emerging Markets chez Wolfram Research"
-    },
-    {
-      "name": "Gray Cox",
-      "title": "Professeur de philosophie et d'études sur la paix au College of the Atlantic"
-    },
-    {
-      "name": "Susan Letcher",
-      "title": "Professeure de biologie végétale et de biostatistiques au College of the Atlantic"
-    },
-    {
-      "name": "Richard Borden",
-      "title": "Society for Human Ecology"
-    },
-    {
-      "name": "David Feldman",
-      "title": "Professeur de physique et de mathématiques au College of the Atlantic"
-    }
-  ]
+  "references": []
 }
