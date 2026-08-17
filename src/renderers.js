@@ -96,8 +96,18 @@ export function renderResumeHTML(data) {
     html.push('      </section>');
   }
 
+  const isFR = data.title === 'CV';
+
+  const speakingTitle = 'Public Speaking';
+  const speakingLinkHtml = isFR
+    ? 'Consulter la liste complète de mes interventions sur la <a href="/pages/guest-lectures-and-public-speaking-events/">page Public Speaking</a>.'
+    : 'See my full list of talks, guest lectures, and presentations on the <a href="/pages/guest-lectures-and-public-speaking-events/">Public Speaking page</a>.';
+  html.push(`      <section class="resume__section">`);
+  html.push(`        <h2 class="resume__section-title">${speakingTitle}</h2>`);
+  html.push(`        <p class="resume__item-desc">${speakingLinkHtml}</p>`);
+  html.push('      </section>');
+
   if (data.publications) {
-    const isFR = data.title === 'CV';
     const sectionTitle = 'Publications';
     const linkHtml = isFR
       ? 'Consulter la liste complète sur la <a href="/pages/publications/">page Publications</a>.'
