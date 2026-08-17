@@ -96,16 +96,15 @@ export function renderResumeHTML(data) {
     html.push('      </section>');
   }
 
-  if (data.publications && data.publications.length > 0) {
+  if (data.publications) {
     const isFR = data.title === 'CV';
-    const sectionTitle = isFR ? 'Publications' : 'Publications';
+    const sectionTitle = 'Publications';
+    const linkHtml = isFR
+      ? 'Consulter la liste complète sur la <a href="/pages/publications/">page Publications</a>.'
+      : 'See my full list of publications on the <a href="/pages/publications/">Publications page</a>.';
     html.push(`      <section class="resume__section">`);
     html.push(`        <h2 class="resume__section-title">${sectionTitle}</h2>`);
-    html.push('        <ul class="resume__list">');
-    data.publications.forEach(pub => {
-      html.push(`          <li>${pub.citation}</li>`);
-    });
-    html.push('        </ul>');
+    html.push(`        <p class="resume__item-desc">${linkHtml}</p>`);
     html.push('      </section>');
   }
 
