@@ -138,11 +138,56 @@ export function renderResumeHTML(data) {
   if (data.skills && data.skills.length > 0) {
     const isFR = data.title === 'CV';
     const sectionTitle = isFR ? 'Compétences Clés' : 'Highlighted Skills';
+    const subTitle = isFR 
+      ? 'Cliquer sur une compétence pour voir les travaux associés'
+      : 'Click any skill to view related work samples';
+    
+    const tagMap = {
+      'Wolfram Language': '/tags/wolfram-language/',
+      'Python': '/tags/programming/',
+      'R': '/tags/r/',
+      'JavaScript': '/tags/programming/',
+      'SQL': '/tags/programming/',
+      'ESRI ArcGIS Pro': '/tags/geography-and-gis/',
+      'QGIS': '/tags/geography-and-gis/',
+      'GDAL': '/tags/geography-and-gis/',
+      'Stella Architect': '/tags/modelling/',
+      'Git': '/tags/programming/',
+      'Max/MSP/Jitter': '/tags/max-msp-jitter/',
+      'C#': '/tags/programming/',
+      'C++': '/tags/programming/'
+    };
+
     html.push(`      <section class="resume__section">`);
     html.push(`        <h2 class="resume__section-title">${sectionTitle}</h2>`);
+    html.push(`        <p style="font-size: 0.75rem; color: var(--res-text-light); margin-top: -0.25rem; margin-bottom: 0.5rem; font-style: italic;">${subTitle}</p>`);
     html.push('        <div class="resume__skills-container">');
     data.skills.forEach(skill => {
-      html.push(`          <span class="resume__skill-tag">${skill}</span>`);
+      const url = tagMap[skill];
+      if (url) {
+        html.push(`          <a href="${url}" class="resume__skill-tag">${skill}</a>`);
+      } else {
+        html.push(`          <span class="resume__skill-tag">${skill}</span>`);
+      }
+    });
+    html.push('        </div>');
+    html.push('      </section>');
+
+    const topicTitle = isFR ? 'Domaines & Thématiques' : 'Research & Work Domains';
+    const topics = [
+      { name: isFR ? 'Systèmes Complexes' : 'Complex Systems', url: '/tags/complex-systems/' },
+      { name: isFR ? 'Écologie' : 'Ecology', url: '/tags/ecology/' },
+      { name: isFR ? 'Sciences de l\'Environnement' : 'Environmental Science', url: '/tags/environmental-science/' },
+      { name: isFR ? 'Modélisation' : 'Modelling', url: '/tags/modelling/' },
+      { name: isFR ? 'Science des Réseaux' : 'Network Science', url: '/tags/network-science/' },
+      { name: isFR ? 'Travaux chez Wolfram' : 'Work at Wolfram', url: '/tags/work-at-wolfram/' }
+    ];
+
+    html.push(`      <section class="resume__section">`);
+    html.push(`        <h2 class="resume__section-title">${topicTitle}</h2>`);
+    html.push('        <div class="resume__skills-container">');
+    topics.forEach(topic => {
+      html.push(`          <a href="${topic.url}" class="resume__skill-tag resume__skill-tag--topic">${topic.name}</a>`);
     });
     html.push('        </div>');
     html.push('      </section>');

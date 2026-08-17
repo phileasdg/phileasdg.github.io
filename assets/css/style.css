@@ -438,6 +438,7 @@ img[loading]{opacity:1}img.is-loaded{opacity:1;transition:opacity 1s cubic-bezie
 }
 
 .resume__skill-tag {
+  display: inline-block;
   background-color: var(--res-bg-light);
   color: var(--res-text-dark);
   font-size: 0.775rem;
@@ -447,6 +448,14 @@ img[loading]{opacity:1}img.is-loaded{opacity:1;transition:opacity 1s cubic-bezie
   margin: 0.2rem;
   border: 1px solid var(--res-border);
   letter-spacing: 0.01em;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+a.resume__skill-tag:hover {
+  background-color: var(--res-secondary);
+  color: #ffffff;
+  border-color: var(--res-secondary);
 }
 
 @media print {
