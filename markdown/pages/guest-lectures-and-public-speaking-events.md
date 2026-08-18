@@ -2,6 +2,6 @@
 title: Guest Lectures and Public Speaking Events
 ---
 
-Here is a list of my public speaking events. This list is not exhaustive.
+A selected record of my talks, guest lectures, and research presentations. Where publicly available, I've linked slide notebooks and recordings below.
 
 <div id="speaking-events-container"></div>
