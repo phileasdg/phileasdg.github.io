@@ -2,6 +2,6 @@
 title: Guest Lectures and Public Speaking Events
 ---
 
-Here is a list of my public speaking events. This list is not exhaustive.
+Selected guest lectures, conference presentations, and research seminars. Listed in reverse chronological order.
 
 <div id="speaking-events-container"></div>
