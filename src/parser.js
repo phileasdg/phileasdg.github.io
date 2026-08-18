@@ -243,12 +243,20 @@ export function parseMarkdown(md) {
   let tableAlignments = [];
   let tableRows = [];
   let result = [];
+  let paragraphLines = [];
+  function flushParagraph() {
+    if (paragraphLines.length > 0) {
+      result.push(`<p>${paragraphLines.join('\n')}</p>`);
+      paragraphLines = [];
+    }
+  }
 
   for (let i = 0; i < lines.length; i++) {
     let line = lines[i];
 
     // Check for code blocks
     if (line.trim().startsWith('```')) {
+      flushParagraph();
       if (inCodeBlock) {
         let rawCode = unescapedCodeBlockLines.join('\n');
         const rawCodeStr = rawCode.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
@@ -301,6 +309,7 @@ export function parseMarkdown(md) {
       const nextLine = lines[i + 1];
       const separatorRegex = /^\s*\|?\s*(?:\s*:?-+:?\s*\|)+\s*(?:\s*:?-+:?\s*)?\|?\s*$/;
       if (separatorRegex.test(nextLine)) {
+        flushParagraph();
         inTable = true;
         tableHeaders = splitCells(line);
         tableAlignments = parseAlignments(nextLine);
@@ -315,6 +324,7 @@ export function parseMarkdown(md) {
 
     // Horizontal rule / separator delimiter
     if (processedLine === '---' || processedLine === '***' || processedLine === '___') {
+      flushParagraph();
       result.push('<hr class="separator" />');
       continue;
     }
@@ -347,6 +357,20 @@ export function parseMarkdown(md) {
       const srcsetAttr = srcset ? ' ' + srcset : '';
       const sizesAttr = sizes ? ' ' + sizes : '';
       return `<figure class="post__image post__image--${alignment}"><img src="${imgPath}" alt="${alt}"${widthAttr}${heightAttr}${srcsetAttr}${sizesAttr} loading="lazy" /></figure>`;
+    });
+
+    // Replace Markdown-style HTML comments: <!-- comment -->
+    processedLine = processedLine.replace(/<!--[\s\S]*?-->/g, (match) => match);
+
+    // Escape raw < and > when not part of an HTML tag or comment
+    processedLine = processedLine.replace(/<(?![a-zA-Z0-9_\/!?-])/g, '&lt;').replace(/(?<![a-zA-Z0-9_\/!?-])>/g, '&gt;');
+
+    // 1. Math formulas (Inline $...$ and Display $$...$$)
+    processedLine = processedLine.replace(/\$\$([\s\S]*?)\$\$/g, (match, formula) => {
+      return `<span class="katex-display">${formula.replace(/&lt;/g, '<').replace(/&gt;/g, '>')}</span>`;
+    });
+    processedLine = processedLine.replace(/\$([^\$\n]+?)\$/g, (match, formula) => {
+      return `<span class="katex-inline">${formula.replace(/&lt;/g, '<').replace(/&gt;/g, '>')}</span>`;
     });
 
     // 2. Links (must be BEFORE extracting HTML tags)
@@ -395,6 +419,7 @@ export function parseMarkdown(md) {
     // Check if line is list item
     const listMatch = processedLine.match(/^[\-\*\+]\s+(.*)$/);
     if (listMatch) {
+      flushParagraph();
       if (!inList) {
         result.push('<ul>');
         inList = true;
@@ -407,12 +432,14 @@ export function parseMarkdown(md) {
       }
 
       if (processedLine === '') {
+        flushParagraph();
         continue;
       }
 
       // If it's already an HTML block tag, don't wrap it in <p>
       const isHtmlBlock = /^\s*<\/?(a|table|thead|tbody|tr|th|td|h[1-6]|ul|ol|li|div|p|figure|figcaption|iframe|pre|img|blockquote|hr|aside|section|script|style|details|summary|form|input|button|label)\b/i.test(processedLine) || processedLine.startsWith('<!--');
       if (isHtmlBlock) {
+        flushParagraph();
         if (/^\s*<table\b/i.test(processedLine)) {
           result.push('<div class="post__table-wrapper">');
         }
@@ -421,10 +448,12 @@ export function parseMarkdown(md) {
           result.push('</div>');
         }
       } else {
-        result.push(`<p>${processedLine}</p>`);
+        paragraphLines.push(processedLine);
       }
     }
   }
+
+  flushParagraph();
 
   if (inList) {
     result.push('</ul>');
