@@ -362,9 +362,6 @@ export function parseMarkdown(md) {
     // Replace Markdown-style HTML comments: <!-- comment -->
     processedLine = processedLine.replace(/<!--[\s\S]*?-->/g, (match) => match);
 
-    // Escape raw < and > when not part of an HTML tag or comment
-    processedLine = processedLine.replace(/<(?![a-zA-Z0-9_\/!?-])/g, '&lt;').replace(/(?<![a-zA-Z0-9_\/!?-])>/g, '&gt;');
-
     // 1. Math formulas (Inline $...$ and Display $$...$$)
     processedLine = processedLine.replace(/\$\$([\s\S]*?)\$\$/g, (match, formula) => {
       return `<span class="katex-display">${formula.replace(/&lt;/g, '<').replace(/&gt;/g, '>')}</span>`;
@@ -402,7 +399,10 @@ export function parseMarkdown(md) {
     processedLine = processedLine.replace(/\*(.*?)\*/g, '<em>$1</em>');
     processedLine = processedLine.replace(/_(.*?)_/g, '<em>$1</em>');
 
-    // 8. Restore inline code
+    // 8. Escape any remaining raw < and > in text
+    processedLine = processedLine.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    // 9. Restore inline code
     processedLine = processedLine.replace(/%%CODEPLACEHOLDER(\d+)%%/g, (match, index) => {
       const escapedCode = codeBlocks[Number(index)]
         .replace(/&/g, '&amp;')
@@ -411,7 +411,7 @@ export function parseMarkdown(md) {
       return `<code>${escapedCode}</code>`;
     });
 
-    // 9. Restore HTML tags
+    // 10. Restore HTML tags
     processedLine = processedLine.replace(/%%HTMLTAGPLACEHOLDER(\d+)%%/g, (match, index) => {
       return htmlTags[Number(index)];
     });
