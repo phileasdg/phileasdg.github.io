@@ -246,13 +246,15 @@ export function compilePages() {
   // Sort pages slightly or keep order matching original menu order for nicer list
   const orderMap = {
     'guest-lectures-and-public-speaking-events': 1,
-    'playgrounds': 2,
-    'publications': 3,
-    'a-few-words-about-me': 4,
-    'resume-cv': 5,
-    'resume-english': 6,
-    'cv-francais': 7,
-    'inquiries': 8
+    'publications': 2,
+    'art': 3,
+    'playgrounds': 4,
+    'a-few-words-about-me': 5,
+    'about': 5,
+    'resume-cv': 6,
+    'resume-english': 7,
+    'cv-francais': 8,
+    'inquiries': 9
   };
 
   updatedPages.sort((a, b) => {

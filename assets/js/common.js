@@ -33,10 +33,10 @@ class SiteHeader extends HTMLElement {
           <ul class="navbar__menu">
             <li><a href="${basePath}/" target="_self">Home</a></li>
             <li><a href="${basePath}/pages/guest-lectures-and-public-speaking-events/" target="_self">Public Speaking</a></li>
-            <li><a href="${basePath}/pages/playgrounds/" target="_self">Playgrounds</a></li>
             <li><a href="${basePath}/pages/publications/" target="_self">Publications</a></li>
+            <li><a href="${basePath}/pages/playgrounds/" target="_self">Playgrounds</a></li>
             <li><a href="${basePath}/pages/about/" target="_self">About</a></li>
-            <li><a href="${basePath}/pages/resume-cv/" target="_self">Resume / CV</a></li>
+            <li><a href="${basePath}/pages/resume-cv/" target="_self">CV</a></li>
           </ul>
         </nav>
       </header>
@@ -535,116 +535,119 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  const initGallery = (container = document) => {
-    console.warn("initGallery: container =", container);
-    const images = container.querySelectorAll('.post__left figure a, .post__right figure a, .post__center figure a, .gallery-item a, .gallery__item a');
-    console.warn("initGallery: Found images =", images.length, images);
-    if (images.length === 0) return;
-
-    const ensureLightboxElement = () => {
-      let dialog = document.getElementById('lightbox-dialog');
-      if (!dialog) {
-        dialog = document.createElement('dialog');
-        dialog.id = 'lightbox-dialog';
-        dialog.className = 'lightbox';
-        dialog.setAttribute('aria-label', 'Image gallery');
-        dialog.innerHTML = `
-          <div class="lightbox__container">
-            <button id="lightbox-close" class="lightbox__close" aria-label="Close gallery">&times;</button>
-            <div id="lightbox-counter" style="position: absolute; top: 1.5rem; left: 1.5rem; color: #fff; opacity: 0.8; font-size: 1rem; z-index: 10; font-family: var(--body-font);"></div>
-            <div class="lightbox__stage" tabindex="0">
-              <button id="lightbox-prev" class="lightbox__nav lightbox__nav--prev" aria-label="Previous image">&#10094;</button>
-              <figure class="lightbox__figure">
-                <img id="lightbox-img" class="lightbox__img" src="" alt="" />
-                <figcaption id="lightbox-caption" class="lightbox__caption"></figcaption>
-              </figure>
-              <button id="lightbox-next" class="lightbox__nav lightbox__nav--next" aria-label="Next image">&#10095;</button>
-            </div>
+  const ensureLightboxElement = () => {
+    let dialog = document.getElementById('lightbox-dialog');
+    if (!dialog) {
+      dialog = document.createElement('dialog');
+      dialog.id = 'lightbox-dialog';
+      dialog.className = 'lightbox';
+      dialog.setAttribute('aria-label', 'Image gallery');
+      dialog.innerHTML = `
+        <div class="lightbox__container">
+          <button id="lightbox-close" class="lightbox__close" aria-label="Close gallery">&times;</button>
+          <div id="lightbox-counter" style="position: absolute; top: 1.5rem; left: 1.5rem; color: #fff; opacity: 0.8; font-size: 1rem; z-index: 10; font-family: var(--body-font);"></div>
+          <div class="lightbox__stage" tabindex="0">
+            <button id="lightbox-prev" class="lightbox__nav lightbox__nav--prev" aria-label="Previous image">&#10094;</button>
+            <figure class="lightbox__figure">
+              <img id="lightbox-img" class="lightbox__img" src="" alt="" />
+              <figcaption id="lightbox-caption" class="lightbox__caption"></figcaption>
+            </figure>
+            <button id="lightbox-next" class="lightbox__nav lightbox__nav--next" aria-label="Next image">&#10095;</button>
           </div>
-        `;
-        document.body.appendChild(dialog);
+        </div>
+      `;
+      document.body.appendChild(dialog);
 
-        const img = dialog.querySelector('#lightbox-img');
-        const caption = dialog.querySelector('#lightbox-caption');
-        const counter = dialog.querySelector('#lightbox-counter');
-        const closeBtn = dialog.querySelector('#lightbox-close');
-        const prevBtn = dialog.querySelector('#lightbox-prev');
-        const nextBtn = dialog.querySelector('#lightbox-next');
-        const stage = dialog.querySelector('.lightbox__stage');
+      const img = dialog.querySelector('#lightbox-img');
+      const caption = dialog.querySelector('#lightbox-caption');
+      const counter = dialog.querySelector('#lightbox-counter');
+      const closeBtn = dialog.querySelector('#lightbox-close');
+      const prevBtn = dialog.querySelector('#lightbox-prev');
+      const nextBtn = dialog.querySelector('#lightbox-next');
+      const stage = dialog.querySelector('.lightbox__stage');
 
-        const updateImage = () => {
-          const items = dialog._items || [];
-          const idx = dialog._currentIndex || 0;
-          if (items.length === 0) return;
-          const active = items[idx];
-          img.src = active.src;
-          img.alt = active.alt || '';
+      const updateImage = () => {
+        const items = dialog._items || [];
+        const idx = dialog._currentIndex || 0;
+        if (items.length === 0) return;
+        const active = items[idx];
+        img.src = active.src;
+        img.alt = active.alt || '';
+        if (active.captionHtml) {
+          caption.innerHTML = active.captionHtml;
+        } else {
           caption.textContent = active.title || '';
-          counter.textContent = `${idx + 1} / ${items.length}`;
-          if (items.length <= 1) {
-            prevBtn.style.display = 'none';
-            nextBtn.style.display = 'none';
-          } else {
-            prevBtn.style.display = '';
-            nextBtn.style.display = '';
-          }
-        };
+        }
+        counter.textContent = `${idx + 1} / ${items.length}`;
+        if (items.length <= 1) {
+          prevBtn.style.display = 'none';
+          nextBtn.style.display = 'none';
+        } else {
+          prevBtn.style.display = '';
+          nextBtn.style.display = '';
+        }
+      };
 
-        const showNext = () => {
-          const items = dialog._items || [];
-          if (items.length === 0) return;
-          dialog._currentIndex = (dialog._currentIndex + 1) % items.length;
-          updateImage();
-        };
+      const showNext = () => {
+        const items = dialog._items || [];
+        if (items.length === 0) return;
+        dialog._currentIndex = (dialog._currentIndex + 1) % items.length;
+        updateImage();
+      };
 
-        const showPrev = () => {
-          const items = dialog._items || [];
-          if (items.length === 0) return;
-          dialog._currentIndex = (dialog._currentIndex - 1 + items.length) % items.length;
-          updateImage();
-        };
+      const showPrev = () => {
+        const items = dialog._items || [];
+        if (items.length === 0) return;
+        dialog._currentIndex = (dialog._currentIndex - 1 + items.length) % items.length;
+        updateImage();
+      };
 
-        closeBtn.addEventListener('click', () => dialog.close());
-        
-        prevBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          showPrev();
-        });
-        
-        nextBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          showNext();
-        });
+      closeBtn.addEventListener('click', () => dialog.close());
+      
+      prevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showPrev();
+      });
+      
+      nextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showNext();
+      });
 
-        dialog.addEventListener('click', (e) => {
-          if (e.target === dialog || e.target.classList.contains('lightbox__container') || e.target.classList.contains('lightbox__stage')) {
-            dialog.close();
-          }
-        });
+      dialog.addEventListener('click', (e) => {
+        if (e.target.closest('a')) return;
+        if (e.target === dialog || e.target.classList.contains('lightbox__container') || e.target.classList.contains('lightbox__stage')) {
+          dialog.close();
+        }
+      });
 
-        dialog.addEventListener('keydown', (e) => {
-          if (e.key === 'ArrowRight') showNext();
-          if (e.key === 'ArrowLeft') showPrev();
-        });
+      dialog.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') showNext();
+        if (e.key === 'ArrowLeft') showPrev();
+      });
 
-        let touchStartX = 0;
-        let touchEndX = 0;
-        stage.addEventListener('touchstart', (e) => {
-          touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true });
-        stage.addEventListener('touchend', (e) => {
-          touchEndX = e.changedTouches[0].screenX;
-          const diffX = touchEndX - touchStartX;
-          if (Math.abs(diffX) > 50) {
-            if (diffX < 0) showNext();
-            else showPrev();
-          }
-        }, { passive: true });
+      let touchStartX = 0;
+      let touchEndX = 0;
+      stage.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+      stage.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        const diffX = touchEndX - touchStartX;
+        if (Math.abs(diffX) > 50) {
+          if (diffX < 0) showNext();
+          else showPrev();
+        }
+      }, { passive: true });
 
-        dialog._updateImage = updateImage;
-      }
-      return dialog;
-    };
+      dialog._updateImage = updateImage;
+    }
+    return dialog;
+  };
+
+  const initGallery = (container = document) => {
+    const images = container.querySelectorAll('.post__left figure a, .post__right figure a, .post__center figure a, .gallery-item a, .gallery__item a');
+    if (images.length === 0) return;
 
     const items = Array.from(images).map((el) => {
       const figure = el.closest('figure');
@@ -679,11 +682,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const updateStyleSheets = (routeType, bodyClass, slug) => {
     const basePath = getSiteBasePath();
     const existingPlaygroundsLink = document.querySelector('link[href*="playgrounds.css"]');
+    const existingArtLink = document.querySelector('link[href*="art.css"]');
     const existingMasonryLink = document.querySelector('link[href*="masonry.css"]');
     const existingPostLink = document.querySelector('link[href*="post.css"]');
     const existingSpeakingLink = document.querySelector('link[href*="speaking.css"]');
     
     const loadPlaygrounds = (slug === 'playgrounds' || bodyClass === 'playgrounds-body');
+    const loadArt = (slug === 'art' || bodyClass === 'art-body');
     const loadPostCss = (routeType === 'post' || bodyClass === 'post-template');
     const loadSpeaking = (slug === 'guest-lectures-and-public-speaking-events');
 
@@ -703,6 +708,17 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       if (existingPlaygroundsLink) existingPlaygroundsLink.remove();
       if (existingMasonryLink) existingMasonryLink.remove();
+    }
+
+    if (loadArt) {
+      if (!existingArtLink) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = `${basePath}/assets/css/art.css`;
+        document.head.appendChild(link);
+      }
+    } else {
+      if (existingArtLink) existingArtLink.remove();
     }
 
     if (loadPostCss) {
@@ -965,6 +981,230 @@ document.addEventListener("DOMContentLoaded", () => {
               }
             } catch (err) {
               console.error("Failed to load playgrounds data:", err);
+            }
+          } else if (slug === 'art') {
+            try {
+              const [artRes, postsRes, playgroundsRes] = await Promise.all([
+                fetch(`${basePath}/data/art.json?v=${Date.now()}`),
+                fetch(`${basePath}/data/posts.json?v=${Date.now()}`),
+                fetch(`${basePath}/data/playgrounds.json?v=${Date.now()}`)
+              ]);
+              const artData = await artRes.json();
+              const postsData = await postsRes.json();
+              const playgroundsData = await playgroundsRes.json();
+
+              const artItems = Array.isArray(artData) ? artData : (artData.artworks || []);
+              
+              // Dynamically query posts and playgrounds tagged with "Art"
+              const relatedPosts = (artData.related_posts && artData.related_posts.length > 0)
+                ? artData.related_posts
+                : postsData
+                    .filter(p => p.tags && p.tags.some(t => t.toLowerCase() === 'art'))
+                    .map(p => ({
+                      title: p.name || p.title,
+                      url: `posts/${p.slug}/`,
+                      thumbnail: p.thumbnail,
+                      topic: p.tags ? p.tags.filter(t => t.toLowerCase() !== 'art').slice(0, 3).join(' · ') : ''
+                    }));
+
+              const relatedPlaygrounds = (artData.related_playgrounds && artData.related_playgrounds.length > 0)
+                ? artData.related_playgrounds
+                : playgroundsData.filter(p => (p.tags && p.tags.some(t => t.toLowerCase() === 'art')) || p.isArt);
+
+              const container = mainEl.querySelector('#art-gallery-container');
+              if (container) {
+                const renderCards = (items) => {
+                  if (!items || items.length === 0) {
+                    return `<div class="art-gallery-empty">No artworks found in this category.</div>`;
+                  }
+                  return items.map(item => {
+                    const paperClass = item.isPaper ? 'art-card--paper' : '';
+                    const yearHtml = item.year ? `<span class="art-card__year">${item.year}</span>` : '';
+                    const catLabel = item.categoryLabel || item.category || 'Artwork';
+
+                    const links = [];
+                    let postHref = '';
+                    if (item.post_url) {
+                      postHref = item.post_url.startsWith('http') ? item.post_url : `${basePath}/${item.post_url}`;
+                      const label = item.post_label || 'Read essay';
+                      links.push(`<a href="${postHref}" class="art-card__link">${label} &rarr;</a>`);
+                    }
+                    if (item.playground_url) {
+                      const label = item.playground_label || 'Interactive generator';
+                      links.push(`<a href="${item.playground_url}" target="_blank" rel="noopener noreferrer" class="art-card__link">${label} &nearr;</a>`);
+                    }
+                    const linksHtml = links.length > 0 ? `<div class="art-card__links">${links.join('<span class="art-card__link-sep">&middot;</span>')}</div>` : '';
+
+                    const imgSrc = `${basePath}/${item.thumbnail || item.image}`;
+                    const fullImgSrc = `${basePath}/${item.image || item.thumbnail}`;
+                    const captionText = [item.medium, item.year ? `(${item.year})` : '', item.dimensions].filter(Boolean).join(' — ');
+
+                    let captionHtml = `<strong>${item.title}</strong>`;
+                    if (captionText) captionHtml += `<div style="font-size:0.9rem; opacity:0.85; margin-top:0.25rem;">${captionText}</div>`;
+                    if (postHref) {
+                      captionHtml += `<div style="margin-top:0.4rem;"><a href="${postHref}" style="color:#fff; font-size:0.85rem; text-decoration:underline;">Read companion essay &rarr;</a></div>`;
+                    }
+
+                    return `
+        <figure class="art-card ${paperClass}" data-category="${item.category || 'all'}">
+            <a class="art-card__image-wrap" href="${fullImgSrc}" data-art-lightbox="true" data-title="${item.title}" data-caption-html="${captionHtml.replace(/"/g, '&quot;')}">
+                <img class="art-card__image"
+                    alt="${item.title}"
+                    loading="lazy"
+                    onerror="this.onerror=null;this.src='https://placehold.co/800x600/1a1a1a/ffffff?text=Image+Not+Found';"
+                    src="${imgSrc}" />
+            </a>
+            <figcaption class="art-card__body">
+                <div class="art-card__meta-top">
+                    <span class="art-card__tag">${catLabel}</span>
+                    ${yearHtml}
+                </div>
+                <h2 class="art-card__title">${item.title}</h2>
+                ${item.medium ? `<div class="art-card__medium">${item.medium}</div>` : ''}
+                ${item.description ? `<p class="art-card__description">${item.description}</p>` : ''}
+                ${linksHtml}
+            </figcaption>
+        </figure>
+                    `;
+                  }).join('');
+                };
+
+                container.innerHTML = renderCards(artItems);
+
+                // Build Category Filter Bar dynamically from art.json categories
+                const filterBar = mainEl.querySelector('#art-filter-bar') || mainEl.querySelector('.art-filter-bar');
+                if (filterBar) {
+                  const catMap = new Map();
+                  artItems.forEach(item => {
+                    if (item.category && !catMap.has(item.category)) {
+                      catMap.set(item.category, item.categoryLabel || item.category);
+                    }
+                  });
+
+                  let filterHtml = `<button class="art-filter-btn is-active" type="button" data-filter="all" role="tab" aria-selected="true">All Works</button>`;
+                  catMap.forEach((label, catKey) => {
+                    filterHtml += `<button class="art-filter-btn" type="button" data-filter="${catKey}" role="tab" aria-selected="false">${label}</button>`;
+                  });
+                  filterBar.innerHTML = filterHtml;
+
+                  const filterBtns = filterBar.querySelectorAll('.art-filter-btn');
+                  filterBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                      const filter = btn.dataset.filter;
+                      filterBtns.forEach(b => {
+                        b.classList.remove('is-active');
+                        b.setAttribute('aria-selected', 'false');
+                      });
+                      btn.classList.add('is-active');
+                      btn.setAttribute('aria-selected', 'true');
+
+                      const cards = container.querySelectorAll('.art-card');
+                      cards.forEach(card => {
+                        if (filter === 'all' || card.dataset.category === filter) {
+                          card.classList.remove('is-hidden');
+                        } else {
+                          card.classList.add('is-hidden');
+                        }
+                      });
+                    });
+                  });
+                }
+
+                // Render Bottom Related Section with rich visual cards
+                const bottomSection = mainEl.querySelector('#art-bottom-section');
+                if (bottomSection && (relatedPosts.length > 0 || relatedPlaygrounds.length > 0)) {
+                  let postsHtml = '';
+                  if (relatedPosts.length > 0) {
+                    postsHtml = `
+                      <div class="art-bottom-block">
+                        <h2 class="art-bottom__heading">Related Essays &amp; Research</h2>
+                        <div class="art-bottom-cards-grid">
+                          ${relatedPosts.map(p => {
+                            const postHref = p.url.startsWith('http') ? p.url : `${basePath}/${p.url}`;
+                            const thumbSrc = p.thumbnail ? `${basePath}/${p.thumbnail}` : '';
+                            const thumbHtml = thumbSrc 
+                              ? `<img class="art-related-card__thumb" src="${thumbSrc}" alt="${p.title}" loading="lazy" />`
+                              : '';
+                            return `
+                              <a href="${postHref}" class="art-related-card">
+                                ${thumbHtml}
+                                <div class="art-related-card__body">
+                                  <h3 class="art-related-card__title">${p.title}</h3>
+                                  ${p.topic ? `<p class="art-related-card__desc">${p.topic}</p>` : ''}
+                                </div>
+                              </a>
+                            `;
+                          }).join('')}
+                        </div>
+                      </div>
+                    `;
+                  }
+
+                  let playgroundsHtml = '';
+                  if (relatedPlaygrounds.length > 0) {
+                    playgroundsHtml = `
+                      <div class="art-bottom-block">
+                        <h2 class="art-bottom__heading">Related Interactive Playgrounds</h2>
+                        <div class="art-bottom-cards-grid">
+                          ${relatedPlaygrounds.map(p => {
+                            const thumbSrc = p.thumbnail ? `${basePath}/${p.thumbnail}` : '';
+                            const thumbHtml = thumbSrc 
+                              ? `<img class="art-related-card__thumb" src="${thumbSrc}" alt="${p.title}" loading="lazy" />`
+                              : '';
+                            return `
+                              <a href="${p.url}" target="_blank" rel="noopener noreferrer" class="art-related-card">
+                                ${thumbHtml}
+                                <div class="art-related-card__body">
+                                  <h3 class="art-related-card__title">${p.title}</h3>
+                                  ${p.description ? `<p class="art-related-card__desc">${p.description}</p>` : ''}
+                                </div>
+                              </a>
+                            `;
+                          }).join('')}
+                        </div>
+                      </div>
+                    `;
+                  }
+
+                  bottomSection.innerHTML = `
+                    ${postsHtml}
+                    ${playgroundsHtml}
+                  `;
+                }
+
+                // Attach Lightbox to all artwork images
+                const bindArtLightbox = () => {
+                  const getVisibleArtItems = () => {
+                    const visibleLinks = Array.from(container.querySelectorAll('.art-card:not(.is-hidden) [data-art-lightbox="true"]'));
+                    return visibleLinks.map(link => ({
+                      src: link.getAttribute('href'),
+                      title: link.dataset.title || '',
+                      captionHtml: link.getAttribute('data-caption-html') || '',
+                      alt: link.dataset.title || ''
+                    }));
+                  };
+
+                  container.addEventListener('click', (e) => {
+                    const link = e.target.closest('[data-art-lightbox="true"]');
+                    if (!link) return;
+                    e.preventDefault();
+
+                    const currentVisibleLinks = Array.from(container.querySelectorAll('.art-card:not(.is-hidden) [data-art-lightbox="true"]'));
+                    const visibleIndex = currentVisibleLinks.indexOf(link);
+
+                    const dialog = ensureLightboxElement();
+                    dialog._items = getVisibleArtItems();
+                    dialog._currentIndex = visibleIndex >= 0 ? visibleIndex : 0;
+                    dialog._updateImage();
+                    dialog.showModal();
+                    dialog.querySelector('.lightbox__stage').focus();
+                  });
+                };
+
+                bindArtLightbox();
+              }
+            } catch (err) {
+              console.error("Failed to load art data:", err);
             }
           } else if (slug === 'guest-lectures-and-public-speaking-events') {
             try {

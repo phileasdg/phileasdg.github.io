@@ -6,14 +6,20 @@
     "main_class": "post"
   },
   {
+    "slug": "publications",
+    "title": "Publications & Academic Writing",
+    "body_class": "post-template",
+    "main_class": "post"
+  },
+  {
     "slug": "playgrounds",
     "title": "Digital Playgrounds",
     "body_class": "playgrounds-body",
     "main_class": ""
   },
   {
-    "slug": "publications",
-    "title": "Publications & Academic Writing",
+    "slug": "about",
+    "title": "About",
     "body_class": "post-template",
     "main_class": "post"
   },
@@ -34,12 +40,6 @@
     "title": "CV",
     "body_class": "resume-body",
     "main_class": "resume-main"
-  },
-  {
-    "slug": "about",
-    "title": "About",
-    "body_class": "post-template",
-    "main_class": "post"
   },
   {
     "slug": "wolfram-contributions-and-publications",
