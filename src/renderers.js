@@ -5,9 +5,12 @@ export function renderResumeHTML(data) {
   html.push('<div class="resume">');
   
   html.push('  <header class="resume__header">');
-  html.push(`    <div class="resume__title-group">`);
-  html.push(`      <h1 class="resume__name">${data.name}</h1>`);
-  html.push(`      <p class="resume__tagline">${data.tagline}</p>`);
+  html.push('    <div class="resume__identity">');
+  html.push(`      <img class="resume__avatar" src="../../media/pages/resume-cv/profile-garden.jpg" alt="${data.name}" width="76" height="76" />`);
+  html.push('      <div class="resume__title-group">');
+  html.push(`        <h1 class="resume__name">${data.name}</h1>`);
+  html.push(`        <p class="resume__tagline">${data.tagline}</p>`);
+  html.push('      </div>');
   html.push('    </div>');
   html.push('    <div class="resume__contact">');
   if (data.contact.email) {

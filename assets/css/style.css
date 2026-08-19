@@ -169,8 +169,26 @@ img[loading]{opacity:1}img.is-loaded{opacity:1;transition:opacity 1s cubic-bezie
   gap: 1.5rem;
 }
 
+.resume__identity {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex: 1 1 auto;
+}
+
+.resume__avatar {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 2px solid var(--white);
+  outline: 1px solid var(--res-border);
+}
+
 .resume__title-group {
-  flex: 1 1 300px;
+  flex: 1 1 auto;
 }
 
 .resume__name {
@@ -205,6 +223,18 @@ img[loading]{opacity:1}img.is-loaded{opacity:1;transition:opacity 1s cubic-bezie
 }
 
 @media all and (max-width: 48em) {
+  .resume__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+  .resume__identity {
+    gap: 1rem;
+  }
+  .resume__avatar {
+    width: 64px;
+    height: 64px;
+  }
   .resume__name {
     font-size: 1.8rem;
     white-space: normal;
@@ -494,6 +524,22 @@ a.resume__skill-tag:hover {
     border-bottom: 1.5px solid #000000 !important;
     padding-bottom: 0.75rem !important;
     margin-bottom: 1.25rem !important;
+  }
+
+  .resume__identity {
+    display: flex !important;
+    align-items: center !important;
+    gap: 1rem !important;
+  }
+
+  .resume__avatar {
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    border: 1px solid #cccccc !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
   
   .resume__name {
