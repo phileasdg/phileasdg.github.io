@@ -113,8 +113,8 @@ export function renderResumeHTML(data) {
   if (data.publications) {
     const sectionTitle = 'Publications';
     const linkHtml = isFR
-      ? 'Consulter la liste des publications sur la <a href="/pages/publications/">page Publications</a>.'
-      : 'See publications and citations on the <a href="/pages/publications/">Publications page</a>.';
+      ? 'Consulter une sélection de publications sur la <a href="/pages/publications/">page Publications</a>.'
+      : 'See selected publications and citations on the <a href="/pages/publications/">Publications page</a>.';
     html.push(`      <section class="resume__section">`);
     html.push(`        <h2 class="resume__section-title">${sectionTitle}</h2>`);
     html.push(`        <p class="resume__item-desc">${linkHtml}</p>`);
