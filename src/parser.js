@@ -370,37 +370,37 @@ export function parseMarkdown(md) {
       return `<span class="katex-inline">${formula.replace(/&lt;/g, '<').replace(/&gt;/g, '>')}</span>`;
     });
 
-    // 2. Links (must be BEFORE extracting HTML tags)
-    processedLine = processedLine.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
-
-    // 3. Headers (must match start of line or follow an HTML tag, must be BEFORE extracting HTML tags)
-    processedLine = processedLine.replace(/(^|>)\s*### (.*$)/gim, '$1<h3>$2</h3>');
-    processedLine = processedLine.replace(/(^|>)\s*## (.*$)/gim, '$1<h2>$2</h2>');
-    processedLine = processedLine.replace(/(^|>)\s*# (.*$)/gim, '$1<h1>$2</h1>');
-
-    // 4. Temporarily extract HTML tags (original + newly generated) to prevent modifying them
-    const htmlTags = [];
-    processedLine = processedLine.replace(/<[^>]+>/g, (match) => {
-      htmlTags.push(match);
-      return `%%HTMLTAGPLACEHOLDER${htmlTags.length - 1}%%`;
-    });
-
-    // 5. Temporarily extract inline code to prevent formatting inside backticks
+    // 2. Temporarily extract inline code to prevent formatting inside backticks
     const codeBlocks = [];
     processedLine = processedLine.replace(/`([^`]+)`/g, (match, code) => {
       codeBlocks.push(code);
       return `%%CODEPLACEHOLDER${codeBlocks.length - 1}%%`;
     });
 
-    // 6. Bold
+    // 3. Temporarily extract existing HTML tags to prevent modifying them
+    const htmlTags = [];
+    processedLine = processedLine.replace(/<[^>]+>/g, (match) => {
+      htmlTags.push(match);
+      return `%%HTMLTAGPLACEHOLDER${htmlTags.length - 1}%%`;
+    });
+
+    // 4. Escape any remaining raw < and > in text
+    processedLine = processedLine.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    // 5. Links
+    processedLine = processedLine.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+
+    // 6. Headers
+    processedLine = processedLine.replace(/(^|>)\s*### (.*$)/gim, '$1<h3>$2</h3>');
+    processedLine = processedLine.replace(/(^|>)\s*## (.*$)/gim, '$1<h2>$2</h2>');
+    processedLine = processedLine.replace(/(^|>)\s*# (.*$)/gim, '$1<h1>$2</h1>');
+
+    // 7. Bold
     processedLine = processedLine.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-    // 7. Italic
+    // 8. Italic
     processedLine = processedLine.replace(/\*(.*?)\*/g, '<em>$1</em>');
     processedLine = processedLine.replace(/_(.*?)_/g, '<em>$1</em>');
-
-    // 8. Escape any remaining raw < and > in text
-    processedLine = processedLine.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
     // 9. Restore inline code
     processedLine = processedLine.replace(/%%CODEPLACEHOLDER(\d+)%%/g, (match, index) => {
