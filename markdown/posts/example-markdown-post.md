@@ -2,7 +2,7 @@
 title: "Example Markdown Post: Code, Math, and Media"
 date: "2026-06-07T12:00"
 tags: ["Markdown", "Tutorial", "Web Development", "Showcase"]
-thumbnail: "media/playgrounds/hypergraph-plotter.png"
+thumbnail: "media/pages/playgrounds/hypergraph-plotter.png"
 ---
 
 Welcome to the new Markdown publishing workflow! This example post showcases all the content types and formatting options you might want to use when writing your articles.
@@ -62,15 +62,15 @@ Graph[g,
 You can embed images using simple Markdown syntax. By default, the build system automatically wraps them in a `<figure class="post__image">` container and generates responsive `srcset` and `sizes` attributes if matching sizes are found on disk under the image's `responsive/` directory.
 
 ### Standard Image:
-![Hypergraph Plotter Card Thumbnail](media/playgrounds/hypergraph-plotter.png)
+![Hypergraph Plotter Card Thumbnail](media/pages/playgrounds/hypergraph-plotter.png)
 
 ### Image with Custom Dimensions:
 You can specify the image width and height using the `=widthxheight` syntax (e.g. `=600x380` or `=600x` to specify width only) in the image target brackets:
-![Hypergraph Plotter Card Thumbnail](media/playgrounds/hypergraph-plotter.png =600x380)
+![Hypergraph Plotter Card Thumbnail](media/pages/playgrounds/hypergraph-plotter.png =600x380)
 
 ### Image with Custom Alignment:
 You can also specify the alignment (`left`, `right`, or `center`) by appending it after the image path or size. The default alignment is `center`:
-![Hypergraph Plotter Card Thumbnail](media/playgrounds/hypergraph-plotter.png =300x left)
+![Hypergraph Plotter Card Thumbnail](media/pages/playgrounds/hypergraph-plotter.png =300x left)
 
 This paragraph of text will wrap around the left-aligned image. It showcases how simple it is to lay out dynamic content with varying visual components on your blog using standard Markdown syntax extensions.
 
