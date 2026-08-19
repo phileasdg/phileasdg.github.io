@@ -1,6 +1,6 @@
 I'm a French-British human ecologist, data scientist, and scientific programmer specialized in complex systems and geospatial data.
 
-![About me portrait](../../media/posts/a-few-words-about-me/portrait-new.png =2696x1797)
+![About me portrait](../../media/pages/about/portrait-new.png =2696x1797)
 
 I currently work at Wolfram Research as an Applications Developer.
 
@@ -21,4 +21,4 @@ For consulting, research collaborations, or other business-related inquiries, pl
 For speaking events, general networking, or other inquiries, feel free to contact me through Instagram:
 - **Instagram:** [@phileasdg](https://www.instagram.com/phileasdg/)
 
-![Profile Banner](../../media/posts/inquiries/profile-banner-pier-2.jpg)
+![Profile Banner](../../media/pages/about/profile-banner-pier-2.jpg)

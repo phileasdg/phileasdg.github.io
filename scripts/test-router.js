@@ -36,7 +36,7 @@ testUrls.forEach(urlStr => {
   const basePath = getSiteBasePath(pathname);
   const prefix = basePath ? basePath + '/' : '/';
   
-  const thumbnail = "media/imgs/hypergraph-plotter.png";
+  const thumbnail = "media/playgrounds/hypergraph-plotter.png";
   const postThumbnail = "media/posts/tracking-icebergs/Iceberg_Ilulissat.jpg";
   
   const imgCardUrl = `${prefix}${thumbnail}`;
