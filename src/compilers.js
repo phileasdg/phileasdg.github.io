@@ -51,21 +51,6 @@ export function compilePosts() {
     fs.writeFileSync(path.join(POSTS_OUTPUT_HTML_DIR, `${slug}.html`), finalHtml, 'utf8');
 
     if (indexHtmlTemplate) {
-      let pageShell = indexHtmlTemplate;
-      const title = data.title || slug;
-      pageShell = pageShell.replace(/<title>.*?<\/title>/, `<title>${title} - Phileas Dazeley-Gaist</title>`);
-      pageShell = pageShell.replace(/<meta content="[^"]*" property="og:title"\/>/, `<meta content="${title}" property="og:title"/>`);
-      pageShell = pageShell.replace(/<meta content="[^"]*" name="twitter:title"\/>/, `<meta content="${title}" name="twitter:title"/>`);
-      pageShell = pageShell.replace(/<meta content="[^"]*" property="og:url"\/>/, `<meta content="https://phileasdg.github.io/pages/${slug}/" property="og:url"/>`);
-      
-      const pageDir = `./pages/${slug}`;
-      if (!fs.existsSync(pageDir)) {
-        fs.mkdirSync(pageDir, { recursive: true });
-      }
-      fs.writeFileSync(path.join(pageDir, 'index.html'), pageShell, 'utf8');
-    }
-
-    if (indexHtmlTemplate) {
       let postShell = indexHtmlTemplate;
       const title = mergedData.title || mergedData.name || slug;
       postShell = postShell.replace(/<title>.*?<\/title>/, `<title>${title} - Phileas Dazeley-Gaist</title>`);
@@ -262,6 +247,22 @@ export function compilePages() {
     const orderB = orderMap[b.slug] || 99;
     return orderA - orderB;
   });
+
+  if (indexHtmlTemplate) {
+    updatedPages.forEach(p => {
+      const pageDir = `./pages/${p.slug}`;
+      if (!fs.existsSync(pageDir)) {
+        fs.mkdirSync(pageDir, { recursive: true });
+      }
+      let pageShell = indexHtmlTemplate;
+      pageShell = pageShell.replace(/<title>.*?<\/title>/, `<title>${p.title} - Phileas Dazeley-Gaist</title>`);
+      pageShell = pageShell.replace(/<meta content="[^"]*" property="og:title"\/>/, `<meta content="${p.title}" property="og:title"/>`);
+      pageShell = pageShell.replace(/<meta content="[^"]*" name="twitter:title"\/>/, `<meta content="${p.title}" name="twitter:title"/>`);
+      pageShell = pageShell.replace(/<meta content="[^"]*" property="og:url"\/>/, `<meta content="https://phileasdg.github.io/pages/${p.slug}/" property="og:url"/>`);
+      pageShell = pageShell.replace(/<head>/, `<head><script>window._PRE_RENDERED = true;</script>`);
+      fs.writeFileSync(path.join(pageDir, 'index.html'), pageShell, 'utf8');
+    });
+  }
 
   fs.writeFileSync(PAGES_JSON_PATH, JSON.stringify(updatedPages, null, 2), 'utf8');
   console.log(`Successfully compiled pages and updated: ${PAGES_JSON_PATH}`);

@@ -4,8 +4,10 @@
     "url": "https://phileasdg.github.io/doodle-canvas/",
     "thumbnail": "media/imgs/doodle-canvas.png",
     "description": "A minimal and distraction-free browser-based sketchpad for doodling and exporting vector sketches. Built to be lightweight and responsive. I often use it as a digital whiteboard in meetings.",
+    "date": "2026-07-06",
     "tags": [
-      "Art"
+      "Art",
+      "Programming"
     ]
   },
   {
@@ -13,22 +15,33 @@
     "url": "https://phileasdg.github.io/hypergraph-plotter/",
     "thumbnail": "media/imgs/hypergraph-plotter.png",
     "description": "An interactive, client-side hypergraph visualizer and vector layout engine. Use it to create interactive hypergraphs for your own exploration or classes, or to generate professional plots for your research.",
-    "tags": []
+    "date": "2026-06-05",
+    "tags": [
+      "Complex Systems",
+      "Network Science",
+      "Modelling"
+    ]
   },
   {
     "title": "Complexity Coffee",
     "url": "https://complexitycoffee.org",
     "thumbnail": "media/imgs/complexity-coffee.png",
     "description": "A community-driven virtual series from Complexity Global School alums, dedicated to fostering discussion and sharing new ideas in the field of complexity science.",
-    "tags": []
+    "date": "2025-08-01",
+    "tags": [
+      "Complex Systems"
+    ]
   },
   {
     "title": "Sympoietic Art Organism",
     "url": "https://phileasdg.github.io/sympoietic-art-organism",
     "thumbnail": "media/imgs/sympoietic-organism.png",
     "description": "An exploration of collaborative artmaking and complexity, a co-creative process for growing and evolving a digital lifeform.",
+    "date": "2025-08-12",
     "tags": [
-      "Art"
+      "Art",
+      "Complex Systems",
+      "Modelling"
     ]
   },
   {
@@ -36,22 +49,34 @@
     "url": "https://phileasdg.github.io/global-trade-network",
     "thumbnail": "media/imgs/global-trade-network.png",
     "description": "An online global trade network visualization tool using UN ComTrade and WTO data.",
-    "tags": []
+    "date": "2025-08-17",
+    "tags": [
+      "Economics",
+      "Network Science",
+      "Geography & GIS"
+    ]
   },
   {
     "title": "COA Sunken Garden Explorer",
     "url": "https://phileasdg.github.io/coa-sunken-garden/",
     "thumbnail": "media/imgs/sunken-garden.png",
     "description": "An interactive map and guide to the College of the Atlantic Sunken Garden.",
-    "tags": []
+    "date": "2025-08-16",
+    "tags": [
+      "Ecology",
+      "Geography & GIS",
+      "Environmental Science"
+    ]
   },
   {
     "title": "Marbler",
     "url": "https://phileasdg.github.io/marbler/",
     "thumbnail": "media/imgs/marbler.png",
     "description": "A creative simulation tool that generates fluid, marble-like textures and patterns in the browser.",
+    "date": "2025-09-07",
     "tags": [
-      "Art"
+      "Art",
+      "Modelling"
     ]
   },
   {
@@ -59,15 +84,22 @@
     "url": "https://phileasdg.github.io/boid-ecosystem/",
     "thumbnail": "media/imgs/boid-ecosystem.png",
     "description": "A simple 3D boid simulator based on the 1987 paper by Craig Reynolds.",
-    "tags": []
+    "date": "2025-08-30",
+    "tags": [
+      "Complex Systems",
+      "Modelling",
+      "Ecology"
+    ]
   },
   {
     "title": "Weaver",
     "url": "https://phileasdg.github.io/weaver/",
     "thumbnail": "media/imgs/weaver.png",
     "description": "A creative tool for weaving pattern design and exploration in the browser.",
+    "date": "2025-09-03",
     "tags": [
-      "Art"
+      "Art",
+      "Programming"
     ]
   },
   {
@@ -75,29 +107,41 @@
     "url": "https://phileasdg.github.io/parchment/",
     "thumbnail": "media/imgs/parchment.png",
     "description": "A no fuss Markdown editor with LaTeX and syntax highlighting support.",
-    "tags": []
+    "date": "2025-09-07",
+    "tags": [
+      "Programming"
+    ]
   },
   {
     "title": "Abulafia",
     "url": "https://phileasdg.github.io/abulafia/",
     "thumbnail": "media/imgs/abulafia.png",
     "description": "A device for textual transmutation based on Foucault's Pendulum, by Umberto Eco.",
-    "tags": []
+    "date": "2025-08-31",
+    "tags": [
+      "Programming"
+    ]
   },
   {
     "title": "Synapse: Networked Notes",
     "url": "https://phileasdg.github.io/synapse",
     "thumbnail": "media/imgs/synapse.png",
     "description": "A networked Markdown notetaking tool with some fancy features.",
-    "tags": []
+    "date": "2025-09-07",
+    "tags": [
+      "Network Science",
+      "Programming"
+    ]
   },
   {
     "title": "ASCII3D",
     "url": "https://phileasdg.github.io/ASCII3D/",
     "thumbnail": "media/imgs/ASCII3D.png",
     "description": "A browser-based 3D object ASCII viewer and converter.",
+    "date": "2025-10-01",
     "tags": [
-      "Art"
+      "Art",
+      "Programming"
     ]
   }
 ]

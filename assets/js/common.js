@@ -34,6 +34,7 @@ class SiteHeader extends HTMLElement {
             <li><a href="${basePath}/" target="_self">Home</a></li>
             <li><a href="${basePath}/pages/guest-lectures-and-public-speaking-events/" target="_self">Public Speaking</a></li>
             <li><a href="${basePath}/pages/publications/" target="_self">Publications</a></li>
+            <li><a href="${basePath}/pages/art/" target="_self">Art</a></li>
             <li><a href="${basePath}/pages/playgrounds/" target="_self">Playgrounds</a></li>
             <li><a href="${basePath}/pages/about/" target="_self">About</a></li>
             <li><a href="${basePath}/pages/resume-cv/" target="_self">CV</a></li>
@@ -302,10 +303,10 @@ document.addEventListener("DOMContentLoaded", () => {
     return `srcset="${xs} 300w, ${sm} 480w, ${md} 768w, ${lg} 1200w"`;
   };
 
-  const renderCard = (post, prefix = '') => {
+  const renderCard = (post, prefix = '', showTag = true) => {
     const basePath = getSiteBasePath();
     const primaryTag = post.tags && post.tags.length > 0 ? post.tags[0] : null;
-    const tagHtml = primaryTag 
+    const tagHtml = (showTag && primaryTag) 
       ? `<div class="c-card__tag"><a href="${basePath}/tags/${getTagSlug(primaryTag)}/">${primaryTag}</a></div>`
       : '';
 
@@ -333,12 +334,10 @@ document.addEventListener("DOMContentLoaded", () => {
       ? `<a href="${post.url}" rel="noopener noreferrer" target="_blank" class="invert">${post.name}</a>`
       : `<a href="${basePath}/posts/${post.slug}/" class="invert">${post.name}</a>`;
 
-    const metaHtml = post.isPlayground
-      ? `<div class="c-card__description" style="font-size: 0.8rem; color: #6D6E6F; margin-top: 0.5rem; line-height: 1.5;">${post.description}</div>`
-      : `<footer class="c-card__meta"><time datetime="${post.date}">${formatDate(post.date)}</time></footer>`;
+    const metaHtml = `<footer class="c-card__meta"><time datetime="${post.date}">${formatDate(post.date)}</time></footer>`;
 
     return `
-      <article class="c-card default ${post.isPlayground ? 'playground-card' : ''}">
+      <article class="c-card default ${post.isPlayground ? 'c-card--playground' : ''}">
         ${imageHtml}
         <div class="c-card__wrapper">
           <header class="c-card__header">
@@ -496,7 +495,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  const setupPagination = (posts, container, grid, prefix = '') => {
+  const setupPagination = (posts, container, grid, prefix = '', showTag = true) => {
     if (!container) return;
     container.innerHTML = '';
     
@@ -512,7 +511,7 @@ document.addEventListener("DOMContentLoaded", () => {
         currentIndex += nextChunk.length;
 
         const chunkDiv = document.createElement('div');
-        chunkDiv.innerHTML = nextChunk.map(p => renderCard(p, prefix)).join('');
+        chunkDiv.innerHTML = nextChunk.map(p => renderCard(p, prefix, showTag)).join('');
         const newItems = Array.from(chunkDiv.children);
         newItems.forEach(item => grid.appendChild(item));
         handleLazyImages(grid);
@@ -957,10 +956,6 @@ document.addEventListener("DOMContentLoaded", () => {
               const container = mainEl.querySelector('#playgrounds-container');
               if (container) {
                 container.innerHTML = playgrounds.map(item => {
-                  const primaryTag = item.tags && item.tags.length > 0 ? item.tags[0] : null;
-                  const tagHtml = primaryTag 
-                    ? `<div class="c-card__tag" style="margin-bottom: 0.5rem;"><a href="${basePath}/tags/${getTagSlug(primaryTag)}/"/>${primaryTag}</a></div>`
-                    : '';
                   return `
         <article class="c-card">
             <a class="c-card__image" href="${item.url}" rel="noopener noreferrer" target="_blank">
@@ -970,7 +965,6 @@ document.addEventListener("DOMContentLoaded", () => {
             </a>
             <div class="c-card__wrapper">
                 <header class="c-card__header">
-                    ${tagHtml}
                     <h2 class="c-card__title"><a class="invert" href="${item.url}" rel="noopener noreferrer" target="_blank">${item.title}</a></h2>
                 </header>
                 <p class="c-card__description">${item.description}</p>
@@ -1366,6 +1360,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const filteredPosts = posts.filter(p => p.tags && p.tags.some(t => getTagSlug(t) === slug)).map(p => ({ ...p, isPlayground: false }));
         const filteredPlaygrounds = playgrounds.filter(pg => pg.tags && pg.tags.some(t => getTagSlug(t) === slug)).map(pg => ({ ...pg, isPlayground: true, name: pg.title, slug: pg.id }));
         const combinedItems = [...filteredPosts, ...filteredPlaygrounds];
+        combinedItems.sort((a, b) => new Date(b.date) - new Date(a.date));
         
         document.title = `Tag: ${tagName} - Phileas Dazeley-Gaist`;
         document.body.className = 'tag-template';
@@ -1384,13 +1379,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const grid = mainEl.querySelector('.l-masonry');
         const initialChunk = combinedItems.slice(0, 12);
         const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = initialChunk.map(p => renderCard(p, prefix)).join('');
+        tempDiv.innerHTML = initialChunk.map(p => renderCard(p, prefix, false)).join('');
         Array.from(tempDiv.children).forEach(item => grid.appendChild(item));
         handleLazyImages(grid);
         initGridMasonry(grid);
 
         const paginationContainer = mainEl.querySelector('#pagination-container');
-        setupPagination(combinedItems, paginationContainer, grid, prefix);
+        setupPagination(combinedItems, paginationContainer, grid, prefix, false);
       }
     } else if (cleanRoute.startsWith('authors/')) {
       const slug = cleanRoute.substring(8);
