@@ -42,7 +42,10 @@ export function renderResumeHTML(data) {
       html.push(`            <span class="resume__item-meta">${job.start_date} &ndash; ${job.end_date}</span>`);
       html.push('          </div>');
       html.push('          <div class="resume__item-subheader">');
-      html.push(`            <span class="resume__item-company">${job.company}</span>`);
+      const companyHtml = job.url
+        ? `<a href="${job.url}" target="_blank" rel="noopener noreferrer">${job.company}</a>`
+        : job.company;
+      html.push(`            <span class="resume__item-company">${companyHtml}</span>`);
       html.push(`            <span class="resume__item-location">${job.location} &bull; ${job.type}</span>`);
       html.push('          </div>');
       html.push(`          <p class="resume__item-desc">${job.description}</p>`);
@@ -61,7 +64,10 @@ export function renderResumeHTML(data) {
     data.education.forEach(edu => {
       html.push('        <div class="resume__item">');
       html.push('          <div class="resume__item-header">');
-      html.push(`            <h3 class="resume__item-title">${edu.institution}</h3>`);
+      const titleHtml = edu.url
+        ? `<h3 class="resume__item-title"><a href="${edu.url}" target="_blank" rel="noopener noreferrer">${edu.institution}</a></h3>`
+        : `<h3 class="resume__item-title">${edu.institution}</h3>`;
+      html.push(`            ${titleHtml}`);
       html.push(`            <span class="resume__item-meta">${edu.start_date} &ndash; ${edu.end_date}</span>`);
       html.push('          </div>');
       html.push('          <div class="resume__item-subheader">');

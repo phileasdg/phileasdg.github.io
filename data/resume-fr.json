@@ -11,6 +11,7 @@
     {
       "role": "Chercheur (Research Fellow)",
       "company": "Wolfram Institute",
+      "url": "https://wolframinstitute.org",
       "type": "Temps plein",
       "start_date": "Juin 2026",
       "end_date": "Aujourd'hui",
@@ -20,6 +21,7 @@
     {
       "role": "Strategic Applications Developer",
       "company": "Wolfram Research",
+      "url": "https://www.wolfram.com",
       "type": "Temps plein",
       "start_date": "Septembre 2025",
       "end_date": "Aujourd'hui",
@@ -29,6 +31,7 @@
     {
       "role": "Mentor de projet",
       "company": "Wolfram Summer Research Institute",
+      "url": "https://education.wolfram.com/summer-research-institute/",
       "type": "Mission saisonnière",
       "start_date": "Juin 2024",
       "end_date": "Aujourd'hui",
@@ -38,6 +41,7 @@
     {
       "role": "Academic Innovation Applications Developer",
       "company": "Wolfram Research",
+      "url": "https://www.wolfram.com",
       "type": "Temps plein",
       "start_date": "Août 2024",
       "end_date": "Septembre 2025",
@@ -47,6 +51,7 @@
     {
       "role": "Academic Content Developer",
       "company": "Wolfram Research",
+      "url": "https://www.wolfram.com",
       "type": "Temps plein",
       "start_date": "Août 2023",
       "end_date": "Août 2024",
@@ -56,6 +61,7 @@
     {
       "role": "Stagiaire Data Science",
       "company": "National Oceanic & Atmospheric Administration",
+      "url": "https://www.noaa.gov",
       "type": "Temps plein",
       "start_date": "Mai 2022",
       "end_date": "Octobre 2022",
@@ -65,6 +71,7 @@
     {
       "role": "Responsable du Réseau et du Site Web",
       "company": "Society for Human Ecology",
+      "url": "https://societyforhumanecology.org",
       "type": "Temps partiel",
       "start_date": "Avril 2020",
       "end_date": "Août 2020",
@@ -74,6 +81,7 @@
     {
       "role": "Assistant d'enseignement et de recherche",
       "company": "College of the Atlantic",
+      "url": "https://www.coa.edu",
       "type": "Temps partiel",
       "start_date": "Janvier 2023",
       "end_date": "Mai 2023",
@@ -83,6 +91,7 @@
     {
       "role": "Conseiller résident",
       "company": "College of the Atlantic",
+      "url": "https://www.coa.edu",
       "type": "Temps plein",
       "start_date": "Août 2020",
       "end_date": "Juin 2023",
@@ -92,15 +101,16 @@
   ],
   "education": [
     {
-      "institution": "Santa Fe Institute & Universidad de Los Andes",
-      "degree": "Complexity Global School",
+      "institution": "Complexity Global School (Santa Fe Institute & Universidad de los Andes)",
+      "url": "https://santafe.edu/info/2025-complexity-global-school/overview",
+      "degree": "Chercheur d'été",
       "start_date": "Juillet 2025",
       "end_date": "Novembre 2025",
-      "location": "Bogota, Colombie",
-      "description": "Échanges et collaborations au sein du corps enseignant et des chercheurs en sciences de la complexité. Collaboration avec deux groupes de recherche : l'un analysant l'impact des mutations du réseau commercial mondial sur la centralité économique des nations, l'autre explorant la complexité technique au sein de processus artistiques co-créatifs."
+      "location": "Bogota, Colombie"
     },
     {
       "institution": "College of the Atlantic",
+      "url": "https://www.coa.edu",
       "degree": "Licence en écologie humaine (Bachelor of Arts)",
       "start_date": "Août 2019",
       "end_date": "Juin 2023",
@@ -124,6 +134,7 @@
     },
     {
       "institution": "Wolfram Summer Research Institute",
+      "url": "https://education.wolfram.com/summer-research-institute/",
       "degree": "Summer Researcher",
       "start_date": "Juin 2023",
       "end_date": "Juillet 2023",
@@ -131,6 +142,7 @@
     },
     {
       "institution": "Université de Nantes",
+      "url": "https://www.univ-nantes.fr",
       "degree": "Faculté de Sociologie",
       "start_date": "Septembre 2018",
       "end_date": "Juin 2019",
@@ -149,6 +161,7 @@
     },
     {
       "institution": "United World College Robert Bosch",
+      "url": "https://www.uwcrobertboschcollege.de",
       "degree": "Baccalauréat International",
       "start_date": "Août 2015",
       "end_date": "Juin 2017",
@@ -164,7 +177,7 @@
     }
   ],
   "leadership_volunteering": [
-    "Membre du comité d'organisation et bénévole pour Complexity Coffee (organisation et animation des conférences, ateliers et réunions en ligne de la communauté Complexity Global School) (Août 2025 – Aujourd'hui)",
+    "Membre du comité d'organisation et bénévole pour <a href=\"https://complexitycoffee.org\" target=\"_blank\" rel=\"noopener noreferrer\">Complexity Coffee</a> (organisation et animation des conférences, ateliers et réunions en ligne de la communauté Complexity Global School) (Août 2025 – Aujourd'hui)",
     "Wolfram Student Ambassador (Août 2022 – Juin 2023)",
     "Président du club de programmation du College of the Atlantic (Déc 2019 – Juin 2023)",
     "Mise en place d'une banque alimentaire étudiante en libre accès pour lutter contre la précarité alimentaire au College of the Atlantic. Coordination de la collecte et de la redistribution de denrées alimentaires. (Déc 2019 – Fév 2020)",

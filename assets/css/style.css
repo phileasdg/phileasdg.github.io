@@ -204,12 +204,14 @@ img[loading]{opacity:1}img.is-loaded{opacity:1;transition:opacity 1s cubic-bezie
 
 .resume__tagline {
   font-family: var(--res-font);
-  font-size: 0.95rem;
+  font-size: 0.86rem;
   font-weight: 600;
   color: var(--res-secondary);
-  letter-spacing: 0.03em;
+  letter-spacing: 0.01em;
   text-transform: none;
+  line-height: 1.35;
   margin: 0.35rem 0 0;
+  text-wrap: balance;
 }
 
 .resume__contact {
@@ -368,6 +370,17 @@ img[loading]{opacity:1}img.is-loaded{opacity:1;transition:opacity 1s cubic-bezie
   letter-spacing: -0.01em;
 }
 
+.resume__item-title a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.resume__item-title a:hover {
+  color: var(--res-secondary);
+  text-decoration: underline;
+}
+
 .resume__item-meta {
   font-size: 0.825rem;
   color: var(--res-text-light);
@@ -388,6 +401,16 @@ img[loading]{opacity:1}img.is-loaded{opacity:1;transition:opacity 1s cubic-bezie
 .resume__item-company {
   font-weight: 600;
   color: var(--res-secondary);
+}
+
+.resume__item-company a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.resume__item-company a:hover {
+  text-decoration: underline;
 }
 
 .resume__item-degree {
