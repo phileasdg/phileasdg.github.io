@@ -474,6 +474,380 @@ document.addEventListener("DOMContentLoaded", () => {
     return Object.values(tagsMap).sort((a, b) => a.name.localeCompare(b.name));
   };
 
+  const getTagNetworkData = (posts, playgrounds = []) => {
+    const nodesMap = {};
+    const edgesMap = {};
+    const connectionsMap = {};
+
+    const processItem = item => {
+      if (!item.tags || !Array.isArray(item.tags) || item.tags.length === 0) return;
+      item.tags.forEach(tag => {
+        const slug = getTagSlug(tag);
+        if (!nodesMap[slug]) {
+          nodesMap[slug] = { id: slug, name: tag, count: 0 };
+          connectionsMap[slug] = {};
+        }
+        nodesMap[slug].count++;
+      });
+
+      if (item.tags.length > 1) {
+        for (let i = 0; i < item.tags.length; i++) {
+          const slugA = getTagSlug(item.tags[i]);
+          const nameA = item.tags[i];
+          for (let j = i + 1; j < item.tags.length; j++) {
+            const slugB = getTagSlug(item.tags[j]);
+            const nameB = item.tags[j];
+            if (slugA === slugB) continue;
+
+            const edgeKey = [slugA, slugB].sort().join('___');
+            if (!edgesMap[edgeKey]) {
+              edgesMap[edgeKey] = {
+                id: edgeKey,
+                source: slugA,
+                target: slugB,
+                sourceName: nameA,
+                targetName: nameB,
+                weight: 0
+              };
+            }
+            edgesMap[edgeKey].weight++;
+
+            connectionsMap[slugA][slugB] = (connectionsMap[slugA][slugB] || 0) + 1;
+            connectionsMap[slugB][slugA] = (connectionsMap[slugB][slugA] || 0) + 1;
+          }
+        }
+      }
+    };
+
+    posts.forEach(processItem);
+    playgrounds.forEach(processItem);
+
+    const nodes = Object.values(nodesMap);
+    const edges = Object.values(edgesMap);
+
+    return {
+      nodes,
+      edges,
+      connectionsMap,
+      getConnectedTags: (slug) => {
+        const conns = connectionsMap[slug];
+        if (!conns) return [];
+        return Object.entries(conns)
+          .map(([targetSlug, weight]) => ({
+            slug: targetSlug,
+            name: nodesMap[targetSlug] ? nodesMap[targetSlug].name : targetSlug,
+            count: nodesMap[targetSlug] ? nodesMap[targetSlug].count : 0,
+            weight
+          }))
+          .sort((a, b) => b.weight - a.weight || b.count - a.count);
+      }
+    };
+  };
+
+  const ensureForceGraphLoaded = () => {
+    if (window.ForceGraph) return Promise.resolve(window.ForceGraph);
+    if (window._forceGraphPromise) return window._forceGraphPromise;
+    window._forceGraphPromise = new Promise((resolve, reject) => {
+      const existing = document.querySelector('script[src*="force-graph"]');
+      if (existing && window.ForceGraph) {
+        resolve(window.ForceGraph);
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/force-graph@1.43.5/dist/force-graph.min.js';
+      script.async = true;
+      script.onload = () => resolve(window.ForceGraph);
+      script.onerror = () => {
+        const fallback = document.createElement('script');
+        fallback.src = 'https://cdn.jsdelivr.net/npm/force-graph@1.43.5/dist/force-graph.min.js';
+        fallback.onload = () => resolve(window.ForceGraph);
+        fallback.onerror = (err) => reject(err);
+        document.head.appendChild(fallback);
+      };
+      document.head.appendChild(script);
+    });
+    return window._forceGraphPromise;
+  };
+
+  const initTagNetworkGraph = async (container, options = {}) => {
+    if (!container) return null;
+    const {
+      posts = [],
+      playgrounds = [],
+      activeSlug = null,
+      onSelectNode = null,
+      height = 620
+    } = options;
+
+    try {
+      await ensureForceGraphLoaded();
+    } catch (e) {
+      console.error('Failed to load force-graph library:', e);
+      container.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--gray-2)">Failed to load graph visualizer.</div>';
+      return null;
+    }
+
+    const data = getTagNetworkData(posts, playgrounds);
+    const graphNodes = data.nodes.map(n => ({
+      id: n.id,
+      name: n.name,
+      count: n.count
+    }));
+
+    const graphLinks = data.edges.map(e => ({
+      source: e.source,
+      target: e.target,
+      weight: e.weight
+    }));
+
+    // Leave existing inspector if present, only mount canvas
+    let graphMount = container.querySelector('.c-tag-graph-canvas-mount');
+    if (!graphMount) {
+      graphMount = document.createElement('div');
+      graphMount.className = 'c-tag-graph-canvas-mount';
+      graphMount.style.position = 'absolute';
+      graphMount.style.inset = '0';
+      graphMount.style.width = '100%';
+      graphMount.style.height = '100%';
+      container.prepend(graphMount);
+    }
+
+    // Floating Camera Controls
+    let controls = container.querySelector('.c-tag-graph-controls');
+    if (!controls) {
+      controls = document.createElement('div');
+      controls.className = 'c-tag-graph-controls';
+      controls.innerHTML = `
+        <button type="button" class="c-tag-graph-btn-ctrl" id="js-tg-zoom-in" title="Zoom In">+</button>
+        <button type="button" class="c-tag-graph-btn-ctrl" id="js-tg-zoom-out" title="Zoom Out">&minus;</button>
+        <button type="button" class="c-tag-graph-btn-ctrl" id="js-tg-reset" title="Fit to Screen">&#x21bb;</button>
+      `;
+      container.appendChild(controls);
+    }
+
+    const width = container.clientWidth || 800;
+    const heightPx = container.clientHeight || height || 600;
+
+    const highlightNodes = new Set();
+    const highlightLinks = new Set();
+    let hoveredNode = null;
+    let selectedNode = activeSlug ? graphNodes.find(n => n.id === activeSlug) : null;
+    let searchFilter = '';
+
+    const updateHighlights = (targetNode) => {
+      highlightNodes.clear();
+      highlightLinks.clear();
+      if (targetNode) {
+        highlightNodes.add(targetNode.id);
+        const conns = data.connectionsMap[targetNode.id] || {};
+        Object.keys(conns).forEach(neighborId => highlightNodes.add(neighborId));
+        graphLinks.forEach(link => {
+          const s = typeof link.source === 'object' ? link.source.id : link.source;
+          const t = typeof link.target === 'object' ? link.target.id : link.target;
+          if (s === targetNode.id || t === targetNode.id) {
+            highlightLinks.add(link);
+          }
+        });
+      }
+    };
+
+    if (selectedNode) updateHighlights(selectedNode);
+
+    const isDarkMode = document.documentElement.classList.contains('dark') || document.body.classList.contains('dark-theme');
+
+    const graph = window.ForceGraph()(graphMount)
+      .width(width)
+      .height(heightPx)
+      .graphData({ nodes: graphNodes, links: graphLinks })
+      .backgroundColor('transparent')
+      .nodeId('id')
+      .nodeRelSize(6)
+      .linkWidth(link => {
+        const isHighlighted = highlightLinks.has(link);
+        if (searchFilter) {
+          const sNode = typeof link.source === 'object' ? link.source : graphNodes.find(n => n.id === link.source);
+          const tNode = typeof link.target === 'object' ? link.target : graphNodes.find(n => n.id === link.target);
+          const sMatches = sNode && sNode.name.toLowerCase().includes(searchFilter);
+          const tMatches = tNode && tNode.name.toLowerCase().includes(searchFilter);
+          return (sMatches || tMatches) ? Math.min(2 + link.weight * 0.8, 6) : 0.4;
+        }
+        if (hoveredNode || selectedNode) {
+          return isHighlighted ? Math.min(2.5 + link.weight * 0.9, 7) : 0.6;
+        }
+        return Math.min(1 + link.weight * 0.7, 5);
+      })
+      .linkColor(link => {
+        const isHighlighted = highlightLinks.has(link);
+        if (searchFilter) {
+          const sNode = typeof link.source === 'object' ? link.source : graphNodes.find(n => n.id === link.source);
+          const tNode = typeof link.target === 'object' ? link.target : graphNodes.find(n => n.id === link.target);
+          const sMatches = sNode && sNode.name.toLowerCase().includes(searchFilter);
+          const tMatches = tNode && tNode.name.toLowerCase().includes(searchFilter);
+          return (sMatches || tMatches) ? '#007AA5' : (isDarkMode ? 'rgba(148, 163, 184, 0.05)' : 'rgba(100, 116, 139, 0.05)');
+        }
+        if (hoveredNode || selectedNode) {
+          return isHighlighted ? '#007AA5' : (isDarkMode ? 'rgba(148, 163, 184, 0.08)' : 'rgba(100, 116, 139, 0.08)');
+        }
+        return isDarkMode ? 'rgba(148, 163, 184, 0.35)' : 'rgba(100, 116, 139, 0.35)';
+      })
+      .nodeCanvasObject((node, ctx, globalScale) => {
+        const isSelected = selectedNode && selectedNode.id === node.id;
+        const isHovered = hoveredNode && hoveredNode.id === node.id;
+        const isConnected = highlightNodes.has(node.id);
+        const matchesSearch = searchFilter && node.name.toLowerCase().includes(searchFilter);
+        const isDimmed = searchFilter ? !matchesSearch : ((hoveredNode || selectedNode) && !isConnected && !isHovered && !isSelected);
+
+        const radius = Math.max(10, Math.min(24, 8 + Math.sqrt(node.count) * 4.5));
+        node.__radius = radius;
+
+        ctx.save();
+        ctx.globalAlpha = isDimmed ? 0.15 : 1;
+
+        // Outer glow ring
+        if (isSelected || isHovered || matchesSearch) {
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, radius + (matchesSearch ? 6 : (isSelected ? 6 : 4)), 0, 2 * Math.PI, false);
+          ctx.fillStyle = (isSelected || matchesSearch) ? 'rgba(0, 122, 165, 0.35)' : 'rgba(56, 189, 248, 0.25)';
+          ctx.fill();
+        }
+
+        // Main node circle
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
+        if (isSelected || matchesSearch) {
+          ctx.fillStyle = '#007AA5';
+          ctx.fill();
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 2.5;
+          ctx.stroke();
+        } else if (isHovered) {
+          ctx.fillStyle = '#0284c7';
+          ctx.fill();
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        } else if ((hoveredNode || selectedNode) && isConnected) {
+          ctx.fillStyle = isDarkMode ? '#1e3a5f' : '#e0f2fe';
+          ctx.fill();
+          ctx.strokeStyle = '#0284c7';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        } else {
+          ctx.fillStyle = isDarkMode ? '#1e293b' : '#ffffff';
+          ctx.fill();
+          ctx.strokeStyle = isDarkMode ? '#475569' : '#cbd5e1';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        }
+
+        // Count number inside node
+        ctx.font = `bold ${Math.max(9, Math.min(12, radius * 0.75))}px sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = (isSelected || isHovered || matchesSearch) ? '#ffffff' : (isDarkMode ? '#94a3b8' : '#64748b');
+        ctx.fillText(node.count, node.x, node.y);
+
+        // Label under node
+        const fontSize = Math.max(10, Math.min(14, 11 + radius * 0.12));
+        ctx.font = `${isSelected || isHovered || matchesSearch ? 'bold ' : '600 '}${fontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillStyle = (isSelected || isHovered || matchesSearch) ? '#007AA5' : (isDarkMode ? '#f8fafc' : '#0f172a');
+        ctx.fillText(node.name, node.x, node.y + radius + 4);
+
+        ctx.restore();
+      })
+      .nodePointerAreaPaint((node, color, ctx) => {
+        const radius = node.__radius || 15;
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, radius + 6, 0, 2 * Math.PI, false);
+        ctx.fill();
+      })
+      .onNodeHover(node => {
+        hoveredNode = node || null;
+        if (hoveredNode) {
+          updateHighlights(hoveredNode);
+        } else if (selectedNode) {
+          updateHighlights(selectedNode);
+        } else {
+          highlightNodes.clear();
+          highlightLinks.clear();
+        }
+        graphMount.style.cursor = node ? 'pointer' : 'grab';
+      })
+      .onNodeClick(node => {
+        if (!node || !node.id) return;
+        const basePath = getSiteBasePath();
+        navigateTo(`${basePath}/tags/${node.id}/`);
+      });
+
+    if (graph.d3Force('charge')) graph.d3Force('charge').strength(-240);
+    if (graph.d3Force('link')) graph.d3Force('link').distance(link => Math.max(60, 150 - link.weight * 14));
+
+    const resizeObserver = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        const { width: w, height: h } = entry.contentRect;
+        if (w > 0 && h > 0) {
+          graph.width(w).height(h);
+        }
+      }
+    });
+    resizeObserver.observe(container);
+
+    controls.querySelector('#js-tg-zoom-in').addEventListener('click', () => {
+      graph.zoom(graph.zoom() * 1.3, 300);
+    });
+    controls.querySelector('#js-tg-zoom-out').addEventListener('click', () => {
+      graph.zoom(graph.zoom() * 0.75, 300);
+    });
+    controls.querySelector('#js-tg-reset').addEventListener('click', () => {
+      graph.zoomToFit(400, 30);
+    });
+
+    setTimeout(() => {
+      graph.zoomToFit(400, 30);
+    }, 600);
+
+    return {
+      destroy: () => {
+        resizeObserver.disconnect();
+        if (graph._destructor) graph._destructor();
+      },
+      setSearch: (query) => {
+        searchFilter = query ? query.trim().toLowerCase() : '';
+        // Force canvas redraw
+        graph.nodeRelSize(6);
+        if (searchFilter) {
+          const matches = graphNodes.filter(n => n.name.toLowerCase().includes(searchFilter));
+          if (matches.length === 1 && matches[0].x !== undefined) {
+            graph.centerAt(matches[0].x, matches[0].y, 300);
+          }
+        }
+      },
+      focusNode: (slug) => {
+        if (!slug) {
+          selectedNode = null;
+          highlightNodes.clear();
+          highlightLinks.clear();
+          graph.zoomToFit(400, 30);
+          return;
+        }
+        const target = graphNodes.find(n => n.id === slug);
+        if (target) {
+          selectedNode = target;
+          updateHighlights(selectedNode);
+          setTimeout(() => {
+            if (target.x !== undefined) {
+              graph.centerAt(target.x, target.y, 400);
+              graph.zoom(1.6, 400);
+            }
+          }, 300);
+        }
+      }
+    };
+  };
+
   const initGridMasonry = (grid) => {
     if (!grid) return;
     if (window.msnry) {
@@ -1325,40 +1699,161 @@ document.addEventListener("DOMContentLoaded", () => {
         history.replaceState(null, null, basePath + '/');
         route();
       }
-    } else if (cleanRoute.startsWith('tags/')) {
-      const slug = cleanRoute.substring(5);
+    } else if (cleanRoute === 'tags' || cleanRoute.startsWith('tags/')) {
+      const slug = cleanRoute === 'tags' ? '' : cleanRoute.substring(5);
       updateStyleSheets('tag', 'tags-template', slug);
       if (slug === '') {
         const tagsList = getTagsDataFromPosts(posts, playgrounds);
-        document.title = `All tags - Phileas Dazeley-Gaist`;
+        const networkData = getTagNetworkData(posts, playgrounds);
+        const urlParams = new URLSearchParams(window.location.search);
+        const requestedFocus = urlParams.get('focus') || (window.location.hash ? window.location.hash.replace('#', '') : null);
+
+        document.title = `Tags - Phileas Dazeley-Gaist`;
         document.body.className = 'tags-template';
         mainEl.className = 'page page--tags';
 
-        const tagCardsHtml = tagsList.map(tag => `
-          <li class="c-card">
-            <div class="c-card__wrapper">
-              <div class="c-card__header">
-                <h2 class="c-card__title">
-                  <a class="invert" href="${basePath}/tags/${tag.slug}/">${tag.name} </a><sup>(${tag.count})</sup>
-                </h2>
+        const sortedTags = [...tagsList].sort((a, b) => a.name.localeCompare(b.name));
+
+        const tagCardsHtml = sortedTags.map(tag => {
+          const conns = networkData.getConnectedTags(tag.slug);
+          const topConnsHtml = conns.slice(0, 4).map(c => `
+            <a href="${basePath}/tags/${c.slug}/" class="c-tag-pill c-tag-pill--sm" title="${c.name}: ${c.weight} shared works">
+              <span>${c.name}</span>
+              <span class="c-tag-pill__count">${c.weight}</span>
+            </a>
+          `).join('');
+          return `
+            <li class="c-tag-index-card" data-name="${tag.name.toLowerCase()}">
+              <div class="c-tag-index-card__top">
+                <div class="c-tag-index-card__main">
+                  <a class="c-tag-index-card__title" href="${basePath}/tags/${tag.slug}/">${tag.name}</a>
+                  <span class="c-tag-index-card__badge">${tag.count} ${tag.count === 1 ? 'item' : 'items'}</span>
+                </div>
+                <a href="${basePath}/tags/?focus=${tag.slug}" class="c-tag-index-card__net-btn" title="View ${tag.name} in Network">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"></circle><circle cx="18" cy="6" r="3"></circle><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="8.5" y1="7.5" x2="15.5" y2="16.5"></line><line x1="8.5" y1="16.5" x2="15.5" y2="7.5"></line><line x1="6" y1="9" x2="6" y2="15"></line><line x1="18" y1="9" x2="18" y2="15"></line></svg>
+                  <span>Network</span>
+                </a>
               </div>
-            </div>
-          </li>
-        `).join('');
+              ${conns.length > 0 ? `
+                <div class="c-tag-index-card__conns">
+                  <span class="c-tag-index-card__conns-label">Connected:</span>
+                  <div class="c-tag-index-card__conns-pills">${topConnsHtml}</div>
+                </div>
+              ` : ''}
+            </li>
+          `;
+        }).join('');
 
         mainEl.innerHTML = `
           <div class="wrapper">
-            <div class="hero"><h1>Collection of all tags <sup>(${tagsList.length})</sup></h1></div>
-            <ul class="l-masonry l-masonry--3">
-              <div class="gutter-sizer"></div>
-              ${tagCardsHtml}
-            </ul>
+            <header class="c-tag-network-hero">
+              <div class="c-tag-network-header">
+                <h1 class="c-tag-network-header__title">Tags</h1>
+                <div class="c-tags-view-toggle">
+                  <button type="button" class="c-tags-view-toggle__btn is-active" id="js-view-graph">Network</button>
+                  <button type="button" class="c-tags-view-toggle__btn" id="js-view-grid">Index</button>
+                </div>
+              </div>
+              <div class="c-tag-network-toolbar">
+                <div class="c-tag-search-wrapper">
+                  <svg class="c-tag-search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                  <input type="text" class="c-tag-search-input" id="js-tag-search-input" placeholder="Search tags..." aria-label="Search tags" autocomplete="off">
+                  <button type="button" class="c-tag-search-clear" id="js-tag-search-clear" aria-label="Clear search">&times;</button>
+                </div>
+              </div>
+            </header>
+
+            <div class="c-tag-network-stage" id="js-tag-network-stage">
+              <div class="c-tag-stage-hint" id="js-tag-stage-hint">Scroll to zoom &bull; Drag to explore &bull; Click node to open tag page</div>
+            </div>
+
+            <div class="c-tag-index-container" id="js-tags-grid-view" style="display: none;">
+              <ul class="c-tag-index-grid" id="js-tags-grid-list">
+                ${tagCardsHtml}
+              </ul>
+              <div class="c-tag-index-empty" id="js-tags-empty" style="display: none;">No tags found matching your search.</div>
+            </div>
           </div>
         `;
-        const grid = mainEl.querySelector('.l-masonry');
-        initGridMasonry(grid);
+
+        const stage = mainEl.querySelector('#js-tag-network-stage');
+        const gridView = mainEl.querySelector('#js-tags-grid-view');
+        const gridList = mainEl.querySelector('#js-tags-grid-list');
+        const emptyEl = mainEl.querySelector('#js-tags-empty');
+        const btnGraph = mainEl.querySelector('#js-view-graph');
+        const btnGrid = mainEl.querySelector('#js-view-grid');
+        const searchInput = mainEl.querySelector('#js-tag-search-input');
+        const searchClear = mainEl.querySelector('#js-tag-search-clear');
+
+        let graphInstance = null;
+
+        initTagNetworkGraph(stage, {
+          posts,
+          playgrounds,
+          activeSlug: requestedFocus
+        }).then(inst => {
+          graphInstance = inst;
+          if (requestedFocus) {
+            graphInstance.focusNode(requestedFocus);
+          }
+        });
+
+        const performSearch = (val) => {
+          const query = val.trim().toLowerCase();
+          searchClear.style.display = query ? 'block' : 'none';
+          
+          // Graph search
+          if (graphInstance) graphInstance.setSearch(query);
+
+          // Index card search
+          const cards = gridList.querySelectorAll('.c-tag-index-card');
+          let visibleCount = 0;
+          cards.forEach(card => {
+            const name = card.getAttribute('data-name') || '';
+            const matches = !query || name.includes(query);
+            card.style.display = matches ? '' : 'none';
+            if (matches) visibleCount++;
+          });
+
+          if (emptyEl) {
+            emptyEl.style.display = visibleCount === 0 ? 'block' : 'none';
+          }
+        };
+
+        searchInput.addEventListener('input', () => {
+          performSearch(searchInput.value);
+        });
+
+        searchClear.addEventListener('click', () => {
+          searchInput.value = '';
+          searchInput.focus();
+          performSearch('');
+        });
+
+        searchInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            searchInput.value = '';
+            performSearch('');
+          }
+        });
+
+        // Toggle Grid vs Graph
+        btnGraph.addEventListener('click', () => {
+          btnGraph.classList.add('is-active');
+          btnGrid.classList.remove('is-active');
+          stage.style.display = '';
+          gridView.style.display = 'none';
+        });
+
+        btnGrid.addEventListener('click', () => {
+          btnGrid.classList.add('is-active');
+          btnGraph.classList.remove('is-active');
+          stage.style.display = 'none';
+          gridView.style.display = '';
+        });
       } else {
         const tagsList = getTagsDataFromPosts(posts, playgrounds);
+        const networkData = getTagNetworkData(posts, playgrounds);
         const matchedTag = tagsList.find(t => t.slug === slug);
         const tagName = matchedTag ? matchedTag.name : slug;
         
@@ -1367,13 +1862,42 @@ document.addEventListener("DOMContentLoaded", () => {
         const combinedItems = [...filteredPosts, ...filteredPlaygrounds];
         combinedItems.sort((a, b) => new Date(b.date) - new Date(a.date));
         
+        const connectedTags = networkData.getConnectedTags(slug);
+
         document.title = `Tag: ${tagName} - Phileas Dazeley-Gaist`;
         document.body.className = 'tag-template';
         mainEl.className = 'page page--tag';
 
+        const connectedPillsHtml = connectedTags.length > 0
+          ? `
+            <div class="c-tag-connected">
+              <span class="c-tag-connected__title">Connected:</span>
+              <div class="c-tag-connected__pills">
+                ${connectedTags.slice(0, 6).map(t => `
+                  <a href="${basePath}/tags/${t.slug}/" class="c-tag-pill" title="${t.name}: ${t.weight} shared item${t.weight === 1 ? '' : 's'}">
+                    <span class="c-tag-pill__name">${t.name}</span>
+                    <span class="c-tag-pill__count">${t.weight}</span>
+                  </a>
+                `).join('')}
+              </div>
+            </div>
+          `
+          : '';
+
         mainEl.innerHTML = `
           <div class="wrapper">
-            <div class="hero"><h1>${tagName} <sup>(${combinedItems.length})</sup></h1></div>
+            <div class="hero">
+              <h1>${tagName} <sup>(${combinedItems.length})</sup></h1>
+              <div class="c-tag-header-meta">
+                ${connectedPillsHtml}
+                <div class="c-tag-actions">
+                  <a href="${basePath}/tags/?focus=${slug}" class="c-tag-network-link" title="View ${tagName} in Network">
+                    <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"></circle><circle cx="18" cy="6" r="3"></circle><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="8.5" y1="7.5" x2="15.5" y2="16.5"></line><line x1="8.5" y1="16.5" x2="15.5" y2="7.5"></line><line x1="6" y1="9" x2="6" y2="15"></line><line x1="18" y1="9" x2="18" y2="15"></line></svg>
+                    <span>View in Network &rarr;</span>
+                  </a>
+                </div>
+              </div>
+            </div>
             <div class="l-masonry l-masonry--3">
               <div class="gutter-sizer"></div>
             </div>
@@ -1388,7 +1912,6 @@ document.addEventListener("DOMContentLoaded", () => {
         Array.from(tempDiv.children).forEach(item => grid.appendChild(item));
         handleLazyImages(grid);
         initGridMasonry(grid);
-
         const paginationContainer = mainEl.querySelector('#pagination-container');
         setupPagination(combinedItems, paginationContainer, grid, prefix, false, true);
       }
