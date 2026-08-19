@@ -303,12 +303,15 @@ document.addEventListener("DOMContentLoaded", () => {
     return `srcset="${xs} 300w, ${sm} 480w, ${md} 768w, ${lg} 1200w"`;
   };
 
-  const renderCard = (post, prefix = '', showTag = true) => {
+  const renderCard = (post, prefix = '', showTag = true, showGlyph = false) => {
     const basePath = getSiteBasePath();
     const primaryTag = post.tags && post.tags.length > 0 ? post.tags[0] : null;
     const tagHtml = (showTag && primaryTag) 
       ? `<div class="c-card__tag"><a href="${basePath}/tags/${getTagSlug(primaryTag)}/">${primaryTag}</a></div>`
       : '';
+
+    const postGlyph = showGlyph ? `<span class="c-card__badge-glyph c-card__badge-glyph--post" title="Article" aria-label="Article"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></span>` : '';
+    const playgroundGlyph = showGlyph ? `<span class="c-card__badge-glyph c-card__badge-glyph--playground" title="Playground" aria-label="Playground"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 17a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2z"></path><path d="M12 13V8"></path><circle cx="12" cy="5" r="3"></circle></svg></span>` : '';
 
     let imageHtml = '';
     if (post.thumbnail) {
@@ -316,6 +319,7 @@ document.addEventListener("DOMContentLoaded", () => {
         imageHtml = `
           <a href="${post.url}" rel="noopener noreferrer" target="_blank" class="c-card__image">
             <img src="${prefix}${post.thumbnail}" onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';" loading="lazy" alt="">
+            ${playgroundGlyph}
           </a>
         `;
       } else {
@@ -325,6 +329,7 @@ document.addEventListener("DOMContentLoaded", () => {
         imageHtml = `
           <a href="${basePath}/posts/${post.slug}/" class="c-card__image">
             <img src="${prefix}${post.thumbnail}" ${srcsetHtml} ${widthAttr} ${heightAttr} sizes="(min-width: 56.25em) 100vw, (min-width: 37.5em) 50vw, 100vw" loading="lazy" alt="">
+            ${postGlyph}
           </a>
         `;
       }
@@ -495,7 +500,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  const setupPagination = (posts, container, grid, prefix = '', showTag = true) => {
+  const setupPagination = (posts, container, grid, prefix = '', showTag = true, showGlyph = false) => {
     if (!container) return;
     container.innerHTML = '';
     
@@ -511,7 +516,7 @@ document.addEventListener("DOMContentLoaded", () => {
         currentIndex += nextChunk.length;
 
         const chunkDiv = document.createElement('div');
-        chunkDiv.innerHTML = nextChunk.map(p => renderCard(p, prefix, showTag)).join('');
+        chunkDiv.innerHTML = nextChunk.map(p => renderCard(p, prefix, showTag, showGlyph)).join('');
         const newItems = Array.from(chunkDiv.children);
         newItems.forEach(item => grid.appendChild(item));
         handleLazyImages(grid);
@@ -1379,13 +1384,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const grid = mainEl.querySelector('.l-masonry');
         const initialChunk = combinedItems.slice(0, 12);
         const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = initialChunk.map(p => renderCard(p, prefix, false)).join('');
+        tempDiv.innerHTML = initialChunk.map(p => renderCard(p, prefix, false, true)).join('');
         Array.from(tempDiv.children).forEach(item => grid.appendChild(item));
         handleLazyImages(grid);
         initGridMasonry(grid);
 
         const paginationContainer = mainEl.querySelector('#pagination-container');
-        setupPagination(combinedItems, paginationContainer, grid, prefix, false);
+        setupPagination(combinedItems, paginationContainer, grid, prefix, false, true);
       }
     } else if (cleanRoute.startsWith('authors/')) {
       const slug = cleanRoute.substring(8);

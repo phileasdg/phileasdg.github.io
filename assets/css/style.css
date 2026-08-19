@@ -785,6 +785,53 @@ a.resume__skill-tag:hover {
   transform: scale(1.04);
 }
 
+.c-card--playground .c-card__text {
+  margin-top: 0.75rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--gray-2);
+}
+
+.c-card--playground .c-card__text p {
+  margin: 0;
+}
+
+.c-card__image {
+  position: relative;
+}
+
+.c-card__badge-glyph {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-1, #343435);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  z-index: 2;
+  transition: all 0.2s ease-out;
+  pointer-events: none;
+}
+
+.c-card__badge-glyph svg {
+  display: block;
+  width: 13px;
+  height: 13px;
+}
+
+.c-card:hover .c-card__badge-glyph {
+  background: var(--white);
+  color: var(--color, #007AA5);
+  transform: scale(1.06);
+}
+
 
 
 /* Test cache busting */
