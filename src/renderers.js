@@ -103,8 +103,8 @@ export function renderResumeHTML(data) {
 
   const speakingTitle = 'Public Speaking';
   const speakingLinkHtml = isFR
-    ? 'Consulter la liste complète de mes interventions sur la <a href="/pages/guest-lectures-and-public-speaking-events/">page Public Speaking</a>.'
-    : 'See my full list of talks, guest lectures, and presentations on the <a href="/pages/guest-lectures-and-public-speaking-events/">Public Speaking page</a>.';
+    ? 'Consulter une sélection d’interventions, conférences et séminaires sur la <a href="/pages/guest-lectures-and-public-speaking-events/">page Public Speaking</a>.'
+    : 'See selected talks, guest lectures, and presentations on the <a href="/pages/guest-lectures-and-public-speaking-events/">Public Speaking page</a>.';
   html.push(`      <section class="resume__section">`);
   html.push(`        <h2 class="resume__section-title">${speakingTitle}</h2>`);
   html.push(`        <p class="resume__item-desc">${speakingLinkHtml}</p>`);
@@ -113,8 +113,8 @@ export function renderResumeHTML(data) {
   if (data.publications) {
     const sectionTitle = 'Publications';
     const linkHtml = isFR
-      ? 'Consulter la liste complète sur la <a href="/pages/publications/">page Publications</a>.'
-      : 'See my full list of publications on the <a href="/pages/publications/">Publications page</a>.';
+      ? 'Consulter la liste des publications sur la <a href="/pages/publications/">page Publications</a>.'
+      : 'See publications and citations on the <a href="/pages/publications/">Publications page</a>.';
     html.push(`      <section class="resume__section">`);
     html.push(`        <h2 class="resume__section-title">${sectionTitle}</h2>`);
     html.push(`        <p class="resume__item-desc">${linkHtml}</p>`);
