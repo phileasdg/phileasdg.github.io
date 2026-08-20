@@ -12,6 +12,12 @@
     "main_class": "post"
   },
   {
+    "slug": "art",
+    "title": "Art",
+    "body_class": "art-body",
+    "main_class": "art-main"
+  },
+  {
     "slug": "playgrounds",
     "title": "Digital Playgrounds",
     "body_class": "playgrounds-body",

@@ -116,7 +116,7 @@ export function compilePages() {
   console.log('Compiling pages...');
   const mdFiles = fs.readdirSync(PAGES_MARKDOWN_DIR).filter(file => file.endsWith('.md'));
   const customFiles = fs.existsSync(CUSTOM_PAGES_DIR)
-    ? fs.readdirSync(CUSTOM_PAGES_DIR).filter(file => file.endsWith('.html') && !file.startsWith('_') && file !== 'art.html')
+    ? fs.readdirSync(CUSTOM_PAGES_DIR).filter(file => file.endsWith('.html') && !file.startsWith('_'))
     : [];
 
   let existingPages = [];
