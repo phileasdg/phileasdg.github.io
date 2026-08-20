@@ -1754,7 +1754,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <h1 class="c-tag-network-header__title">Tags</h1>
                 <div class="c-tags-view-toggle">
                   <a href="${basePath}/tags/" class="c-tags-view-toggle__btn is-active">Index</a>
-                  <a href="${basePath}/tags/graph/" class="c-tags-view-toggle__btn">Network &rarr;</a>
+                  <a href="${basePath}/tags/graph/" class="c-tags-view-toggle__btn">Network</a>
                 </div>
               </div>
               <div class="c-tag-network-toolbar">
@@ -1831,9 +1831,9 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="wrapper">
             <header class="c-tag-network-hero">
               <div class="c-tag-network-header">
-                <h1 class="c-tag-network-header__title">Tag Network</h1>
+                <h1 class="c-tag-network-header__title">Tags</h1>
                 <div class="c-tags-view-toggle">
-                  <a href="${basePath}/tags/" class="c-tags-view-toggle__btn">&larr; Tags Index</a>
+                  <a href="${basePath}/tags/" class="c-tags-view-toggle__btn">Index</a>
                   <a href="${basePath}/tags/graph/" class="c-tags-view-toggle__btn is-active">Network</a>
                 </div>
               </div>
