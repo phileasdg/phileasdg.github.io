@@ -11,12 +11,7 @@
     "body_class": "post-template",
     "main_class": "post"
   },
-  {
-    "slug": "art",
-    "title": "Art",
-    "body_class": "post-template",
-    "main_class": "post"
-  },
+
   {
     "slug": "playgrounds",
     "title": "Digital Playgrounds",
