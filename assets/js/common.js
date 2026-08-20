@@ -1699,47 +1699,51 @@ document.addEventListener("DOMContentLoaded", () => {
         route();
       }
     } else if (cleanRoute === 'tags' || cleanRoute.startsWith('tags/')) {
-      const slug = cleanRoute === 'tags' ? '' : cleanRoute.substring(5);
+      const rawSlug = cleanRoute === 'tags' ? '' : cleanRoute.substring(5);
+      const slug = rawSlug.replace(/\/$/, '');
       updateStyleSheets('tag', 'tags-template', slug);
-      if (slug === '') {
-        const tagsList = getTagsDataFromPosts(posts, playgrounds);
-        const networkData = getTagNetworkData(posts, playgrounds);
-        const urlParams = new URLSearchParams(window.location.search);
-        const requestedFocus = urlParams.get('focus') || (window.location.hash ? window.location.hash.replace('#', '') : null);
 
-        document.title = `Tags - Phileas Dazeley-Gaist`;
+      if (slug === '' || slug === 'index') {
+        // --- 1. TAGS INDEX PAGE (/tags/) ---
+        const tagsList = getTagsDataFromPosts(posts, playgrounds);
+        const sortedTags = [...tagsList].sort((a, b) => a.name.localeCompare(b.name));
+
+        // Group tags by starting letter
+        const groupsMap = {};
+        sortedTags.forEach(tag => {
+          const firstChar = tag.name.charAt(0).toUpperCase();
+          const letterKey = /[A-Z]/.test(firstChar) ? firstChar : '#';
+          if (!groupsMap[letterKey]) {
+            groupsMap[letterKey] = [];
+          }
+          groupsMap[letterKey].push(tag);
+        });
+
+        const sortedLetters = Object.keys(groupsMap).sort();
+
+        document.title = `Tags Index - Phileas Dazeley-Gaist`;
         document.body.className = 'tags-template';
         mainEl.className = 'page page--tags';
 
-        const sortedTags = [...tagsList].sort((a, b) => a.name.localeCompare(b.name));
-
-        const tagCardsHtml = sortedTags.map(tag => {
-          const conns = networkData.getConnectedTags(tag.slug);
-          const topConnsHtml = conns.slice(0, 4).map(c => `
-            <a href="${basePath}/tags/${c.slug}/" class="c-tag-pill c-tag-pill--sm" title="${c.name}: ${c.weight} shared works">
-              <span>${c.name}</span>
-              <span class="c-tag-pill__count">${c.weight}</span>
-            </a>
+        const groupsHtml = sortedLetters.map(letter => {
+          const groupTags = groupsMap[letter];
+          const pillsHtml = groupTags.map(tag => `
+            <div class="c-tag-directory-pill" data-name="${tag.name.toLowerCase()}">
+              <a href="${basePath}/tags/${tag.slug}/" class="c-tag-directory-pill__link">
+                <span class="c-tag-directory-pill__name">${tag.name}</span>
+                <span class="c-tag-directory-pill__count">${tag.count}</span>
+              </a>
+              <a href="${basePath}/tags/graph/?focus=${tag.slug}" class="c-tag-directory-pill__graph" title="View ${tag.name} in Network Graph">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"></circle><circle cx="18" cy="6" r="3"></circle><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="8.5" y1="7.5" x2="15.5" y2="16.5"></line><line x1="8.5" y1="16.5" x2="15.5" y2="7.5"></line><line x1="6" y1="9" x2="6" y2="15"></line><line x1="18" y1="9" x2="18" y2="15"></line></svg>
+              </a>
+            </div>
           `).join('');
+
           return `
-            <li class="c-tag-index-card" data-name="${tag.name.toLowerCase()}">
-              <div class="c-tag-index-card__top">
-                <div class="c-tag-index-card__main">
-                  <a class="c-tag-index-card__title" href="${basePath}/tags/${tag.slug}/">${tag.name}</a>
-                  <span class="c-tag-index-card__badge">${tag.count} ${tag.count === 1 ? 'item' : 'items'}</span>
-                </div>
-                <a href="${basePath}/tags/?focus=${tag.slug}" class="c-tag-index-card__net-btn" title="View ${tag.name} in Network">
-                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"></circle><circle cx="18" cy="6" r="3"></circle><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="8.5" y1="7.5" x2="15.5" y2="16.5"></line><line x1="8.5" y1="16.5" x2="15.5" y2="7.5"></line><line x1="6" y1="9" x2="6" y2="15"></line><line x1="18" y1="9" x2="18" y2="15"></line></svg>
-                  <span>Network</span>
-                </a>
-              </div>
-              ${conns.length > 0 ? `
-                <div class="c-tag-index-card__conns">
-                  <span class="c-tag-index-card__conns-label">Connected:</span>
-                  <div class="c-tag-index-card__conns-pills">${topConnsHtml}</div>
-                </div>
-              ` : ''}
-            </li>
+            <div class="c-tag-directory__group" data-letter="${letter}">
+              <div class="c-tag-directory__letter">${letter}</div>
+              <div class="c-tag-directory__pills">${pillsHtml}</div>
+            </div>
           `;
         }).join('');
 
@@ -1749,8 +1753,8 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="c-tag-network-header">
                 <h1 class="c-tag-network-header__title">Tags</h1>
                 <div class="c-tags-view-toggle">
-                  <button type="button" class="c-tags-view-toggle__btn is-active" id="js-view-graph">Network</button>
-                  <button type="button" class="c-tags-view-toggle__btn" id="js-view-grid">Index</button>
+                  <a href="${basePath}/tags/" class="c-tags-view-toggle__btn is-active">Index</a>
+                  <a href="${basePath}/tags/graph/" class="c-tags-view-toggle__btn">Network Graph &rarr;</a>
                 </div>
               </div>
               <div class="c-tag-network-toolbar">
@@ -1762,30 +1766,97 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
             </header>
 
-            <div class="c-tag-network-stage" id="js-tag-network-stage">
-              <div class="c-tag-stage-hint" id="js-tag-stage-hint">Scroll to zoom &bull; Drag to explore &bull; Click node to open tag page</div>
-            </div>
-
-            <div class="c-tag-index-container" id="js-tags-grid-view" style="display: none;">
-              <ul class="c-tag-index-grid" id="js-tags-grid-list">
-                ${tagCardsHtml}
-              </ul>
+            <div class="c-tag-directory" id="js-tags-directory-view">
+              ${groupsHtml}
               <div class="c-tag-index-empty" id="js-tags-empty" style="display: none;">No tags found matching your search.</div>
             </div>
           </div>
         `;
 
-        const stage = mainEl.querySelector('#js-tag-network-stage');
-        const gridView = mainEl.querySelector('#js-tags-grid-view');
-        const gridList = mainEl.querySelector('#js-tags-grid-list');
+        const directoryView = mainEl.querySelector('#js-tags-directory-view');
         const emptyEl = mainEl.querySelector('#js-tags-empty');
-        const btnGraph = mainEl.querySelector('#js-view-graph');
-        const btnGrid = mainEl.querySelector('#js-view-grid');
+        const searchInput = mainEl.querySelector('#js-tag-search-input');
+        const searchClear = mainEl.querySelector('#js-tag-search-clear');
+
+        const performSearch = (val) => {
+          const query = val.trim().toLowerCase();
+          searchClear.style.display = query ? 'block' : 'none';
+
+          let totalVisible = 0;
+          const directoryGroups = directoryView.querySelectorAll('.c-tag-directory__group');
+
+          directoryGroups.forEach(groupEl => {
+            const pills = groupEl.querySelectorAll('.c-tag-directory-pill');
+            let groupVisibleCount = 0;
+
+            pills.forEach(pill => {
+              const name = pill.getAttribute('data-name') || '';
+              const matches = !query || name.includes(query);
+              pill.style.display = matches ? 'inline-flex' : 'none';
+              if (matches) groupVisibleCount++;
+            });
+
+            groupEl.style.display = groupVisibleCount > 0 ? '' : 'none';
+            totalVisible += groupVisibleCount;
+          });
+
+          if (emptyEl) {
+            emptyEl.style.display = totalVisible === 0 ? 'block' : 'none';
+          }
+        };
+
+        searchInput.addEventListener('input', () => performSearch(searchInput.value));
+        searchClear.addEventListener('click', () => {
+          searchInput.value = '';
+          searchInput.focus();
+          performSearch('');
+        });
+        searchInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            searchInput.value = '';
+            performSearch('');
+          }
+        });
+
+      } else if (slug === 'graph' || slug === 'network') {
+        // --- 2. TAGS GRAPH PAGE (/tags/graph/) ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const requestedFocus = urlParams.get('focus') || (window.location.hash ? window.location.hash.replace('#', '') : null);
+
+        document.title = `Tag Network - Phileas Dazeley-Gaist`;
+        document.body.className = 'tags-template';
+        mainEl.className = 'page page--tags';
+
+        mainEl.innerHTML = `
+          <div class="wrapper">
+            <header class="c-tag-network-hero">
+              <div class="c-tag-network-header">
+                <h1 class="c-tag-network-header__title">Tag Network</h1>
+                <div class="c-tags-view-toggle">
+                  <a href="${basePath}/tags/" class="c-tags-view-toggle__btn">&larr; Tags Index</a>
+                  <a href="${basePath}/tags/graph/" class="c-tags-view-toggle__btn is-active">Network Graph</a>
+                </div>
+              </div>
+              <div class="c-tag-network-toolbar">
+                <div class="c-tag-search-wrapper">
+                  <svg class="c-tag-search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                  <input type="text" class="c-tag-search-input" id="js-tag-search-input" placeholder="Search network nodes..." aria-label="Search network nodes" autocomplete="off">
+                  <button type="button" class="c-tag-search-clear" id="js-tag-search-clear" aria-label="Clear search">&times;</button>
+                </div>
+              </div>
+            </header>
+
+            <div class="c-tag-network-stage" id="js-tag-network-stage">
+              <div class="c-tag-stage-hint" id="js-tag-stage-hint">Scroll to zoom &bull; Drag to explore &bull; Click node to open tag page</div>
+            </div>
+          </div>
+        `;
+
+        const stage = mainEl.querySelector('#js-tag-network-stage');
         const searchInput = mainEl.querySelector('#js-tag-search-input');
         const searchClear = mainEl.querySelector('#js-tag-search-clear');
 
         let graphInstance = null;
-
         initTagNetworkGraph(stage, {
           posts,
           playgrounds,
@@ -1800,35 +1871,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const performSearch = (val) => {
           const query = val.trim().toLowerCase();
           searchClear.style.display = query ? 'block' : 'none';
-          
-          // Graph search
           if (graphInstance) graphInstance.setSearch(query);
-
-          // Index card search
-          const cards = gridList.querySelectorAll('.c-tag-index-card');
-          let visibleCount = 0;
-          cards.forEach(card => {
-            const name = card.getAttribute('data-name') || '';
-            const matches = !query || name.includes(query);
-            card.style.display = matches ? '' : 'none';
-            if (matches) visibleCount++;
-          });
-
-          if (emptyEl) {
-            emptyEl.style.display = visibleCount === 0 ? 'block' : 'none';
-          }
         };
 
-        searchInput.addEventListener('input', () => {
-          performSearch(searchInput.value);
-        });
-
+        searchInput.addEventListener('input', () => performSearch(searchInput.value));
         searchClear.addEventListener('click', () => {
           searchInput.value = '';
           searchInput.focus();
           performSearch('');
         });
-
         searchInput.addEventListener('keydown', (e) => {
           if (e.key === 'Escape') {
             searchInput.value = '';
@@ -1836,21 +1887,8 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         });
 
-        // Toggle Grid vs Graph
-        btnGraph.addEventListener('click', () => {
-          btnGraph.classList.add('is-active');
-          btnGrid.classList.remove('is-active');
-          stage.style.display = '';
-          gridView.style.display = 'none';
-        });
-
-        btnGrid.addEventListener('click', () => {
-          btnGrid.classList.add('is-active');
-          btnGraph.classList.remove('is-active');
-          stage.style.display = 'none';
-          gridView.style.display = '';
-        });
       } else {
+        // --- 3. INDIVIDUAL TAG PAGE (/tags/:slug/) ---
         const tagsList = getTagsDataFromPosts(posts, playgrounds);
         const networkData = getTagNetworkData(posts, playgrounds);
         const matchedTag = tagsList.find(t => t.slug === slug);
@@ -1890,7 +1928,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="c-tag-header-meta">
                 ${connectedPillsHtml}
                 <div class="c-tag-actions">
-                  <a href="${basePath}/tags/?focus=${slug}" class="c-tag-network-link" title="View ${tagName} in Network">
+                  <a href="${basePath}/tags/graph/?focus=${slug}" class="c-tag-network-link" title="View ${tagName} in Network Graph">
                     <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"></circle><circle cx="18" cy="6" r="3"></circle><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="8.5" y1="7.5" x2="15.5" y2="16.5"></line><line x1="8.5" y1="16.5" x2="15.5" y2="7.5"></line><line x1="6" y1="9" x2="6" y2="15"></line><line x1="18" y1="9" x2="18" y2="15"></line></svg>
                     <span>View in Network &rarr;</span>
                   </a>

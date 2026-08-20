@@ -1333,17 +1333,113 @@ a.resume__skill-tag:hover {
    Redesigned Tag Index Grid
    ========================================================================== */
 
-.c-tag-index-container {
+.c-tag-directory {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
   margin-bottom: 3.5rem;
 }
 
-.c-tag-index-grid {
+.c-tag-directory__group {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-  gap: 1rem;
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  grid-template-columns: 44px 1fr;
+  align-items: start;
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--gray-4, #e2e8f0);
+}
+
+.c-tag-directory__group:last-child {
+  border-bottom: none;
+}
+
+.c-tag-directory__letter {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color, #007AA5);
+  line-height: 1;
+  padding-top: 0.2rem;
+  font-family: var(--font-heading, inherit);
+  opacity: 0.85;
+}
+
+.c-tag-directory__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 0.75rem;
+  align-items: center;
+}
+
+.c-tag-directory-pill {
+  display: inline-flex;
+  align-items: center;
+  background: var(--c-card-bg, #ffffff);
+  border: 1px solid var(--gray-4, #e2e8f0);
+  border-radius: 9999px;
+  padding: 0.35rem 0.4rem 0.35rem 0.85rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.c-tag-directory-pill:hover {
+  border-color: var(--color, #007AA5);
+  box-shadow: 0 4px 12px rgba(0, 122, 165, 0.12);
+  transform: translateY(-1px);
+}
+
+.c-tag-directory-pill__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  text-decoration: none;
+  color: var(--headings-color, #1a1a1a);
+}
+
+.c-tag-directory-pill__name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--headings-color, #1a1a1a);
+  transition: color 0.15s ease;
+}
+
+.c-tag-directory-pill:hover .c-tag-directory-pill__name {
+  color: var(--color, #007AA5);
+}
+
+.c-tag-directory-pill__count {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gray-2, #64748b);
+  background: rgba(0, 0, 0, 0.05);
+  padding: 0.1rem 0.45rem;
+  border-radius: 9999px;
+  line-height: 1.2;
+}
+
+.c-tag-directory-pill__graph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-left: 0.35rem;
+  border-radius: 50%;
+  color: var(--gray-2, #64748b);
+  background: rgba(0, 0, 0, 0.04);
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.c-tag-directory-pill__graph:hover {
+  background: var(--color, #007AA5);
+  color: #ffffff;
+}
+
+@media (max-width: 600px) {
+  .c-tag-directory__group {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
 }
 
 .c-tag-index-card {

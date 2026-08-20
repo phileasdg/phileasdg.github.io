@@ -305,4 +305,22 @@ export function generateTagsList() {
 
   fs.writeFileSync('./TAGS.md', mdContent, 'utf8');
   console.log('Successfully generated TAGS.md');
+
+  if (indexHtmlTemplate) {
+    const tagsDir = './tags';
+    if (!fs.existsSync(tagsDir)) fs.mkdirSync(tagsDir, { recursive: true });
+    let tagsShell = indexHtmlTemplate
+      .replace(/<title>.*?<\/title>/, `<title>Tags Index - Phileas Dazeley-Gaist</title>`)
+      .replace(/<meta content="[^"]*" property="og:title"\/>/, `<meta content="Tags Index" property="og:title"/>`)
+      .replace(/<meta content="[^"]*" property="og:url"\/>/, `<meta content="https://phileasdg.github.io/tags/" property="og:url"/>`);
+    fs.writeFileSync(path.join(tagsDir, 'index.html'), tagsShell, 'utf8');
+
+    const graphDir = './tags/graph';
+    if (!fs.existsSync(graphDir)) fs.mkdirSync(graphDir, { recursive: true });
+    let graphShell = indexHtmlTemplate
+      .replace(/<title>.*?<\/title>/, `<title>Tag Network - Phileas Dazeley-Gaist</title>`)
+      .replace(/<meta content="[^"]*" property="og:title"\/>/, `<meta content="Tag Network" property="og:title"/>`)
+      .replace(/<meta content="[^"]*" property="og:url"\/>/, `<meta content="https://phileasdg.github.io/tags/graph/" property="og:url"/>`);
+    fs.writeFileSync(path.join(graphDir, 'index.html'), graphShell, 'utf8');
+  }
 }
