@@ -1733,7 +1733,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span class="c-tag-directory-pill__name">${tag.name}</span>
                 <span class="c-tag-directory-pill__count">${tag.count}</span>
               </a>
-              <a href="${basePath}/tags/graph/?focus=${tag.slug}" class="c-tag-directory-pill__graph" title="View ${tag.name} in Network Graph">
+              <a href="${basePath}/tags/graph/?focus=${tag.slug}" class="c-tag-directory-pill__graph" title="View ${tag.name} in Network">
                 <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"></circle><circle cx="18" cy="6" r="3"></circle><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="8.5" y1="7.5" x2="15.5" y2="16.5"></line><line x1="8.5" y1="16.5" x2="15.5" y2="7.5"></line><line x1="6" y1="9" x2="6" y2="15"></line><line x1="18" y1="9" x2="18" y2="15"></line></svg>
               </a>
             </div>
@@ -1754,7 +1754,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <h1 class="c-tag-network-header__title">Tags</h1>
                 <div class="c-tags-view-toggle">
                   <a href="${basePath}/tags/" class="c-tags-view-toggle__btn is-active">Index</a>
-                  <a href="${basePath}/tags/graph/" class="c-tags-view-toggle__btn">Network Graph &rarr;</a>
+                  <a href="${basePath}/tags/graph/" class="c-tags-view-toggle__btn">Network &rarr;</a>
                 </div>
               </div>
               <div class="c-tag-network-toolbar">
@@ -1834,7 +1834,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <h1 class="c-tag-network-header__title">Tag Network</h1>
                 <div class="c-tags-view-toggle">
                   <a href="${basePath}/tags/" class="c-tags-view-toggle__btn">&larr; Tags Index</a>
-                  <a href="${basePath}/tags/graph/" class="c-tags-view-toggle__btn is-active">Network Graph</a>
+                  <a href="${basePath}/tags/graph/" class="c-tags-view-toggle__btn is-active">Network</a>
                 </div>
               </div>
               <div class="c-tag-network-toolbar">
@@ -1928,7 +1928,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="c-tag-header-meta">
                 ${connectedPillsHtml}
                 <div class="c-tag-actions">
-                  <a href="${basePath}/tags/graph/?focus=${slug}" class="c-tag-network-link" title="View ${tagName} in Network Graph">
+                  <a href="${basePath}/tags/graph/?focus=${slug}" class="c-tag-network-link" title="View ${tagName} in Network">
                     <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"></circle><circle cx="18" cy="6" r="3"></circle><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="8.5" y1="7.5" x2="15.5" y2="16.5"></line><line x1="8.5" y1="16.5" x2="15.5" y2="7.5"></line><line x1="6" y1="9" x2="6" y2="15"></line><line x1="18" y1="9" x2="18" y2="15"></line></svg>
                     <span>View in Network &rarr;</span>
                   </a>
