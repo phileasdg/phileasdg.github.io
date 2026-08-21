@@ -287,6 +287,7 @@ export function compilePages() {
   console.log(`Successfully compiled pages and updated: ${PAGES_JSON_PATH}`);
 
   compileMenu(updatedPages);
+  updateReadmeDocs();
 }
 
 export function compileMenu(allPages = []) {
@@ -331,6 +332,64 @@ export function compileMenu(allPages = []) {
     fs.writeFileSync(MENU_JSON_PATH, JSON.stringify(filteredMenu, null, 2), 'utf8');
   } catch (err) {
     console.error('Error compiling menu:', err);
+  }
+}
+
+export function updateReadmeDocs() {
+  const README_PATH = './README.md';
+  const SCRIPTS_JSON_PATH = './data/scripts.json';
+  const PACKAGE_JSON_PATH = './package.json';
+  if (!fs.existsSync(README_PATH)) return;
+
+  // Auto-discover any new scripts added to package.json
+  if (fs.existsSync(PACKAGE_JSON_PATH)) {
+    try {
+      const pkg = JSON.parse(fs.readFileSync(PACKAGE_JSON_PATH, 'utf8'));
+      const pkgScripts = pkg.scripts || {};
+      let scriptsData = [];
+      if (fs.existsSync(SCRIPTS_JSON_PATH)) {
+        scriptsData = JSON.parse(fs.readFileSync(SCRIPTS_JSON_PATH, 'utf8'));
+      }
+
+      let scriptsUpdated = false;
+      Object.keys(pkgScripts).forEach(name => {
+        if (!scriptsData.find(s => s.name === name)) {
+          scriptsData.push({
+            name: name,
+            command: `npm run ${name}`,
+            description: `Executes \`${pkgScripts[name]}\`.`
+          });
+          scriptsUpdated = true;
+        }
+      });
+
+      if (scriptsUpdated) {
+        fs.writeFileSync(SCRIPTS_JSON_PATH, JSON.stringify(scriptsData, null, 2), 'utf8');
+      }
+    } catch (e) {}
+  }
+
+  let readme = fs.readFileSync(README_PATH, 'utf8');
+  let originalReadme = readme;
+
+  if (fs.existsSync(SCRIPTS_JSON_PATH)) {
+    try {
+      const scripts = JSON.parse(fs.readFileSync(SCRIPTS_JSON_PATH, 'utf8'));
+      let tableMd = '| Command | Description |\n| :--- | :--- |\n';
+      scripts.forEach(s => {
+        tableMd += `| \`${s.command}\` | ${s.description} |\n`;
+      });
+
+      const scriptRegex = /<!-- SCRIPTS_TABLE_START -->[\s\S]*?<!-- SCRIPTS_TABLE_END -->/;
+      if (scriptRegex.test(readme)) {
+        readme = readme.replace(scriptRegex, `<!-- SCRIPTS_TABLE_START -->\n${tableMd}<!-- SCRIPTS_TABLE_END -->`);
+      }
+    } catch (e) {}
+  }
+
+  if (readme !== originalReadme) {
+    fs.writeFileSync(README_PATH, readme, 'utf8');
+    console.log('Successfully updated README.md documentation table.');
   }
 }
 

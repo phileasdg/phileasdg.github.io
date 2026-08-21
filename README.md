@@ -23,6 +23,7 @@ The website employs a hybrid architecture combining static pre-rendering with cl
 
 ## 2. Directory Structure Map
 
+<!-- DIR_TREE_START -->
 ```
 phileasdg.github.io/
 ├── index.html                 # Main website SPA shell entry point
@@ -36,48 +37,16 @@ phileasdg.github.io/
 ├── sitemap.xml                # Generated XML Sitemap
 ├── sitemap.xsl                # XSL stylesheet for formatted sitemap rendering
 ├── assets/                    # Dynamic stylesheets, scripts, and visual resources
-│   ├── css/
-│   │   ├── style.css          # Main stylesheet (global layout, typography, site themes)
-│   │   ├── masonry.css        # Layout styling for the masonry feed grid
-│   │   ├── playgrounds.css    # Interactive playground page styling
-│   │   ├── post.css           # Article typography and responsive media styling
-│   │   ├── speaking.css       # Layout styles for speaking events
-│   │   └── wl-customizations.css # Wolfram Language UI widgets (swatches, pills, associations)
-│   ├── js/
-│   │   ├── common.js          # SPA router, web components, and dynamic page render logic
-│   │   ├── scripts.js         # Navigation menu, sticky header, and search popup logic
-│   │   └── wl-customizations.js # Interactive toggle handlers for Wolfram Language widgets
-│   └── svg/                   # Vector graphics, icons, and maps
 ├── data/                      # Structured JSON metadata databases (source of truth for feed cards)
-│   ├── posts.json             # Post metadata index (titles, dates, tags, thumbnails, slugs)
-│   ├── pages.json             # Static page index
-│   ├── playgrounds.json       # Interactive project configurations
-│   ├── speaking.json          # Speaking events dataset
-│   ├── resume-en.json         # Source dataset for English resume
-│   └── resume-fr.json         # Source dataset for French CV
 ├── markdown/                  # Human-writable content sources
-│   ├── posts/                 # Markdown (.md) source files for blog posts
-│   └── pages/                 # Markdown (.md) source files for static pages
 ├── content/                   # Generated HTML partials loaded dynamically by SPA router
-│   ├── posts/                 # Partial HTML files of blog posts
-│   ├── pages/                 # Partial HTML files of static pages (including compiled resumes)
-│   └── custom-pages/          # Raw static HTML files copied directly during build
 ├── posts/                     # Pre-rendered static post pages (`posts/[slug]/index.html`) for direct URLs
 ├── pages/                     # Pre-rendered static page pages (`pages/[slug]/index.html`) for direct URLs
 ├── media/                     # User images, responsive asset variants, videos, and post thumbnails
 ├── src/                       # Modular build engine source files
-│   ├── config.js              # Environment settings & automated MD5 asset cache-busting
-│   ├── frontmatter.js         # Frontmatter extraction & parser
-│   ├── images.js              # Sharp-powered responsive image generator & srcset resolver
-│   ├── parser.js              # Markdown-to-HTML & Wolfram Language widget parser engine
-│   ├── renderers.js           # Structured HTML template renderers (Resumes, Feeds, Sitemaps)
-│   └── compilers.js           # Post, page, RSS, and sitemap compilation pipelines
 └── scripts/                   # CLI build scripts & developer tools
-    ├── build-posts.js         # CLI entry point for site compilation (`npm run build`)
-    ├── server.js              # Zero-cache dev server with live rebuild watcher (`npm run dev`)
-    ├── validate.js            # Automated validation test engine (`npm run test`)
-    └── parse-events.js        # Event dataset extraction utility
 ```
+<!-- DIR_TREE_END -->
 
 ---
 
@@ -111,6 +80,7 @@ The compilation pipeline is executed via `npm run build` (invoking [scripts/buil
 
 ### NPM Commands Reference
 
+<!-- SCRIPTS_TABLE_START -->
 | Command | Description |
 | :--- | :--- |
 | `npm run dev` | Runs the local development server at `http://127.0.0.1:8000/` with live watcher in **Dev Mode** (`releaseMode: false`). |
@@ -118,6 +88,7 @@ The compilation pipeline is executed via `npm run build` (invoking [scripts/buil
 | `npm run toggle-mode` | Flips `releaseMode` between `false` (Dev) and `true` (Release) in `data/settings.json` and rebuilds the site. |
 | `npm run check-release` | Inspects the committed Git tree (`HEAD`) to verify that the latest commit was created in Release Mode (`releaseMode: true`). |
 | `npm run validate` | Runs the automated integrity test suite (validates JSON databases, HTML content, internal routes, and local asset links). |
+<!-- SCRIPTS_TABLE_END -->
 
 ---
 

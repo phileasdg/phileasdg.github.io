@@ -1,0 +1,27 @@
+[
+  {
+    "name": "dev",
+    "command": "npm run dev",
+    "description": "Runs the local development server at `http://127.0.0.1:8000/` with live watcher in **Dev Mode** (`releaseMode: false`)."
+  },
+  {
+    "name": "build",
+    "command": "npm run build",
+    "description": "Compiles site content according to `data/settings.json`."
+  },
+  {
+    "name": "toggle-mode",
+    "command": "npm run toggle-mode",
+    "description": "Flips `releaseMode` between `false` (Dev) and `true` (Release) in `data/settings.json` and rebuilds the site."
+  },
+  {
+    "name": "check-release",
+    "command": "npm run check-release",
+    "description": "Inspects the committed Git tree (`HEAD`) to verify that the latest commit was created in Release Mode (`releaseMode: true`)."
+  },
+  {
+    "name": "validate",
+    "command": "npm run validate",
+    "description": "Runs the automated integrity test suite (validates JSON databases, HTML content, internal routes, and local asset links)."
+  }
+]
