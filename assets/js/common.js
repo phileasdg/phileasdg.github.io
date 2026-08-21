@@ -649,15 +649,21 @@ document.addEventListener("DOMContentLoaded", () => {
       container.prepend(graphMount);
     }
 
-    // Floating Camera Controls
+    // Floating Camera Controls - Center View Button
     let controls = container.querySelector('.c-tag-graph-controls');
     if (!controls) {
       controls = document.createElement('div');
       controls.className = 'c-tag-graph-controls';
       controls.innerHTML = `
-        <button type="button" class="c-tag-graph-btn-ctrl" id="js-tg-zoom-in" title="Zoom In">+</button>
-        <button type="button" class="c-tag-graph-btn-ctrl" id="js-tg-zoom-out" title="Zoom Out">&minus;</button>
-        <button type="button" class="c-tag-graph-btn-ctrl" id="js-tg-reset" title="Fit to Screen">&#x21bb;</button>
+        <button type="button" class="c-tag-graph-btn-ctrl" id="js-tg-reset" title="Center graph" aria-label="Center graph">
+          <svg viewBox="0 0 24 24" width="18" height="18">
+            <circle cx="12" cy="12" r="6" stroke="#111111" stroke-width="2" fill="none" />
+            <line x1="12" y1="2" x2="12" y2="5" stroke="#111111" stroke-width="2" stroke-linecap="round" />
+            <line x1="12" y1="19" x2="12" y2="22" stroke="#111111" stroke-width="2" stroke-linecap="round" />
+            <line x1="2" y1="12" x2="5" y2="12" stroke="#111111" stroke-width="2" stroke-linecap="round" />
+            <line x1="19" y1="12" x2="22" y2="12" stroke="#111111" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
       `;
       container.appendChild(controls);
     }
@@ -695,6 +701,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const graph = window.ForceGraph()(graphMount)
       .width(width)
       .height(heightPx)
+      .enableZoomInteraction(false)
+      .enablePanInteraction(true)
       .graphData({ nodes: graphNodes, links: graphLinks })
       .backgroundColor('transparent')
       .nodeId('id')
@@ -784,24 +792,48 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.fillStyle = (isSelected || isHovered || matchesSearch) ? '#ffffff' : (isDarkMode ? '#94a3b8' : '#64748b');
         ctx.fillText(node.count, node.x, node.y);
 
-        // Label under node
-        const fontSize = Math.max(10, Math.min(14, 11 + radius * 0.12));
+        // Label under node with semi-transparent background pill for crystal clarity
+        const fontSize = Math.max(10, Math.min(13, 11 + radius * 0.1));
         ctx.font = `${isSelected || isHovered || matchesSearch ? 'bold ' : '600 '}${fontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+        const textWidth = ctx.measureText(node.name).width;
+        const padX = 5;
+        const padY = 2;
+        const labelY = node.y + radius + 5;
+
+        ctx.fillStyle = isDarkMode ? 'rgba(15, 23, 42, 0.82)' : 'rgba(255, 255, 255, 0.88)';
+        ctx.beginPath();
+        if (ctx.roundRect) {
+          ctx.roundRect(node.x - textWidth / 2 - padX, labelY - 1, textWidth + padX * 2, fontSize + padY * 2, 4);
+        } else {
+          ctx.rect(node.x - textWidth / 2 - padX, labelY - 1, textWidth + padX * 2, fontSize + padY * 2);
+        }
+        ctx.fill();
+
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
         ctx.fillStyle = (isSelected || isHovered || matchesSearch) ? '#007AA5' : (isDarkMode ? '#f8fafc' : '#0f172a');
-        ctx.fillText(node.name, node.x, node.y + radius + 4);
+        ctx.fillText(node.name, node.x, labelY + 1);
 
         ctx.restore();
       })
       .nodePointerAreaPaint((node, color, ctx) => {
         const radius = node.__radius || 15;
         ctx.fillStyle = color;
+        // Circle hit area
         ctx.beginPath();
-        ctx.arc(node.x, node.y, radius + 6, 0, 2 * Math.PI, false);
+        ctx.arc(node.x, node.y, radius + 8, 0, 2 * Math.PI, false);
         ctx.fill();
+
+        // Label text hit area below circle
+        const fontSize = Math.max(10, Math.min(13, 11 + radius * 0.1));
+        const textWidth = ctx.measureText ? (ctx.measureText(node.name).width || 70) : 70;
+        const padX = 6;
+        const padY = 3;
+        const labelY = node.y + radius + 5;
+        ctx.fillRect(node.x - textWidth / 2 - padX, labelY - 1, textWidth + padX * 2, fontSize + padY * 2);
       })
       .onNodeHover(node => {
+        if (hoveredNode === node) return;
         hoveredNode = node || null;
         if (hoveredNode) {
           updateHighlights(hoveredNode);
@@ -812,15 +844,36 @@ document.addEventListener("DOMContentLoaded", () => {
           highlightLinks.clear();
         }
         graphMount.style.cursor = node ? 'pointer' : 'grab';
+        graph.nodeRelSize(6);
       })
       .onNodeClick(node => {
         if (!node || !node.id) return;
         const basePath = getSiteBasePath();
-        navigateTo(`${basePath}/tags/${node.id}/`);
+        if (selectedNode && selectedNode.id === node.id) {
+          history.pushState(null, null, `${basePath}/tags/${node.id}/`);
+          route();
+        } else {
+          selectedNode = node;
+          updateHighlights(selectedNode);
+          if (options.onNodeSelect) options.onNodeSelect(node.id);
+          graph.nodeRelSize(6);
+        }
+      })
+      .onBackgroundClick(() => {
+        selectedNode = null;
+        highlightNodes.clear();
+        highlightLinks.clear();
+        if (options.onClearFocus) {
+          options.onClearFocus();
+        }
+        graph.nodeRelSize(6);
       });
 
-    if (graph.d3Force('charge')) graph.d3Force('charge').strength(-240);
-    if (graph.d3Force('link')) graph.d3Force('link').distance(link => Math.max(60, 150 - link.weight * 14));
+    if (graph.d3Force('charge')) graph.d3Force('charge').strength(-750);
+    if (graph.d3Force('link')) graph.d3Force('link').distance(link => Math.max(120, 220 - link.weight * 14));
+    if (window.d3 && window.d3.forceCollide) {
+      graph.d3Force('collide', window.d3.forceCollide(node => (node.__radius || 15) + 30));
+    }
 
     const resizeObserver = new ResizeObserver(entries => {
       for (const entry of entries) {
@@ -832,15 +885,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     resizeObserver.observe(container);
 
-    controls.querySelector('#js-tg-zoom-in').addEventListener('click', () => {
-      graph.zoom(graph.zoom() * 1.3, 300);
-    });
-    controls.querySelector('#js-tg-zoom-out').addEventListener('click', () => {
-      graph.zoom(graph.zoom() * 0.75, 300);
-    });
-    controls.querySelector('#js-tg-reset').addEventListener('click', () => {
-      graph.zoomToFit(400, 30);
-    });
+    const resetBtn = controls.querySelector('#js-tg-reset');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        graph.zoomToFit(400, 40);
+      });
+    }
 
     setTimeout(() => {
       graph.zoomToFit(400, 30);
@@ -877,9 +927,9 @@ document.addEventListener("DOMContentLoaded", () => {
           setTimeout(() => {
             if (target.x !== undefined) {
               graph.centerAt(target.x, target.y, 400);
-              graph.zoom(1.6, 400);
+              graph.zoom(1.3, 400);
             }
-          }, 300);
+          }, 150);
         }
       }
     };
@@ -1859,12 +1909,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       } else if (slug === 'graph' || slug === 'network') {
         // --- 2. TAGS GRAPH PAGE (/tags/graph/) ---
+        const tagsList = getTagsDataFromPosts(posts, playgrounds);
         const urlParams = new URLSearchParams(window.location.search);
         const requestedFocus = urlParams.get('focus') || (window.location.hash ? window.location.hash.replace('#', '') : null);
 
         document.title = `Tag Network - Phileas Dazeley-Gaist`;
         document.body.className = 'tags-template';
-        mainEl.className = 'page page--tags';
+        mainEl.className = 'page page--tags page--tags-graph';
 
         mainEl.innerHTML = `
           <div class="wrapper">
@@ -1882,30 +1933,62 @@ document.addEventListener("DOMContentLoaded", () => {
                   <input type="text" class="c-tag-search-input" id="js-tag-search-input" placeholder="Search network nodes..." aria-label="Search network nodes" autocomplete="off">
                   <button type="button" class="c-tag-search-clear" id="js-tag-search-clear" aria-label="Clear search">&times;</button>
                 </div>
+                <div class="c-tag-focus-pill" id="js-tag-focus-pill" style="display: none;">
+                  <span class="c-tag-focus-pill__label">Highlight: <strong id="js-tag-focus-name"></strong></span>
+                  <button type="button" class="c-tag-focus-pill__btn" id="js-tag-focus-clear-btn" title="Clear highlight">&times;</button>
+                </div>
               </div>
             </header>
 
-            <div class="c-tag-network-stage" id="js-tag-network-stage">
-              <div class="c-tag-stage-hint" id="js-tag-stage-hint">Scroll to zoom &bull; Drag to explore &bull; Click node to open tag page</div>
-            </div>
+            <div class="c-tag-network-stage" id="js-tag-network-stage"></div>
           </div>
         `;
 
         const stage = mainEl.querySelector('#js-tag-network-stage');
         const searchInput = mainEl.querySelector('#js-tag-search-input');
         const searchClear = mainEl.querySelector('#js-tag-search-clear');
+        const focusPill = mainEl.querySelector('#js-tag-focus-pill');
+        const focusNameEl = mainEl.querySelector('#js-tag-focus-name');
+        const focusClearBtn = mainEl.querySelector('#js-tag-focus-clear-btn');
+
+        const clearFocus = () => {
+          if (graphInstance) graphInstance.focusNode(null);
+          focusPill.style.display = 'none';
+          if (window.location.search.includes('focus=')) {
+            history.replaceState(null, null, `${basePath}/tags/graph/`);
+          }
+        };
+
+        const setFocusBadge = (slug) => {
+          if (!slug) {
+            clearFocus();
+            return;
+          }
+          const tagObj = tagsList.find(t => t.slug === slug);
+          const name = tagObj ? tagObj.name : slug;
+          focusNameEl.textContent = name;
+          focusPill.style.display = 'inline-flex';
+        };
 
         let graphInstance = null;
         initTagNetworkGraph(stage, {
           posts,
           playgrounds,
-          activeSlug: requestedFocus
+          activeSlug: requestedFocus,
+          onNodeSelect: (slug) => {
+            history.replaceState(null, null, `${basePath}/tags/graph/?focus=${slug}`);
+            setFocusBadge(slug);
+          },
+          onClearFocus: () => clearFocus()
         }).then(inst => {
           graphInstance = inst;
           if (requestedFocus) {
             graphInstance.focusNode(requestedFocus);
+            setFocusBadge(requestedFocus);
           }
         });
+
+        focusClearBtn.addEventListener('click', () => clearFocus());
 
         const performSearch = (val) => {
           const query = val.trim().toLowerCase();
