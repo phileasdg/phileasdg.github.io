@@ -1285,6 +1285,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const prefix = basePath ? basePath + '/' : '/';
     const siteRelativePath = getSiteRelativePath(window.location.pathname);
     const cleanRoute = siteRelativePath.replace(/^\//, '').replace(/\/$/, '');
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
     const posts = await getPostsData();
     const pages = await getPagesData();
@@ -1946,7 +1947,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const connectedPillsHtml = connectedTags.length > 0
           ? `
             <div class="c-tag-connected">
-              <span class="c-tag-connected__title">Connected:</span>
+              <span class="c-tag-connected__title">Connected tags:</span>
               <div class="c-tag-connected__pills">
                 ${connectedTags.slice(0, 6).map(t => `
                   <a href="${basePath}/tags/${t.slug}/" class="c-tag-pill" title="${t.name}: ${t.weight} shared item${t.weight === 1 ? '' : 's'}">

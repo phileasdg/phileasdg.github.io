@@ -859,51 +859,26 @@ a.resume__skill-tag:hover {
    Tag Network Graph & Tag Navigation Styles
    ========================================================================== */
 
-.c-tag-header-meta {
-  display: flex;
-  justify-content: space-between;
+.c-tag-actions {
+  display: inline-flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1.25rem;
-  margin-top: 1.25rem;
-  margin-bottom: 2rem;
-  padding-bottom: 1.25rem;
-  border-bottom: 1px solid var(--gray-4);
+  margin: 0;
 }
-
-.c-tag-connected {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.c-tag-connected__title {
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--gray-2);
-  white-space: nowrap;
-}
-
-/* ==========================================================================
-   Tags & Network View Styles
-   ========================================================================== */
 
 .c-tag-header-meta {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
-  margin: 1rem 0 2rem;
-  padding-bottom: 1.25rem;
+  margin: 0.75rem 0 1.25rem;
+  padding-bottom: 0.75rem;
   border-bottom: 1px solid var(--gray-4);
 }
 
 .c-tag-connected {
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 0.6rem;
   flex-wrap: wrap;
@@ -920,6 +895,7 @@ a.resume__skill-tag:hover {
 
 .c-tag-connected__pills {
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 0.35rem;
   flex-wrap: wrap;
@@ -1039,7 +1015,8 @@ a.resume__skill-tag:hover {
   position: relative;
   display: inline-flex;
   align-items: center;
-  width: 250px;
+  width: 260px;
+  max-width: 100%;
 }
 
 .c-tag-search-input {
@@ -1051,13 +1028,12 @@ a.resume__skill-tag:hover {
   background: var(--white);
   color: var(--headings-color, #1a1a1a);
   outline: none;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .c-tag-search-input:focus {
   border-color: var(--color, #007AA5);
   box-shadow: 0 0 0 3px rgba(0, 122, 165, 0.15);
-  width: 280px;
 }
 
 .c-tag-search-icon {
