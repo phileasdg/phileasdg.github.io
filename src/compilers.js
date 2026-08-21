@@ -216,16 +216,40 @@ export function compilePages() {
     const srcPath = path.join(CUSTOM_PAGES_DIR, file);
     const destPath = path.join(PAGES_OUTPUT_HTML_DIR, file);
 
-    fs.copyFileSync(srcPath, destPath);
-    console.log(`  Copied custom page: ${file} -> ${destPath}`);
+    const fileContent = fs.readFileSync(srcPath, 'utf8');
 
-    const existingMeta = existingPages.find(p => p.slug === slug);
+    const existingMeta = existingPages.find(p => p.slug === slug) || {};
+    let isDraft = Boolean(existingMeta.draft);
+    let pageTitle = existingMeta.title || (slug.charAt(0).toUpperCase() + slug.slice(1));
+    let bodyClass = existingMeta.body_class || 'post-template';
+    let mainClass = existingMeta.main_class || 'post';
+
+    const commentMatch = fileContent.match(/^<!--\s*([\s\S]*?)\s*-->/);
+    if (commentMatch) {
+      const metaLines = commentMatch[1].split('\n');
+      metaLines.forEach(line => {
+        const [key, ...valParts] = line.split(':');
+        if (key && valParts.length > 0) {
+          const val = valParts.join(':').trim();
+          const k = key.trim().toLowerCase();
+          if (k === 'draft') isDraft = (val === 'true' || val === '1');
+          if (k === 'title') pageTitle = val;
+          if (k === 'body_class') bodyClass = val;
+          if (k === 'main_class') mainClass = val;
+        }
+      });
+    }
+
+    const cleanContent = fileContent.replace(/^<!--\s*[\s\S]*?\s*-->\s*/, '');
+    fs.writeFileSync(destPath, cleanContent, 'utf8');
+    console.log(`  Compiled custom page: ${file} -> ${destPath}`);
+
     const metadata = {
       slug: slug,
-      title: existingMeta ? existingMeta.title : (slug.charAt(0).toUpperCase() + slug.slice(1)),
-      body_class: existingMeta ? existingMeta.body_class : 'post-template',
-      main_class: existingMeta ? existingMeta.main_class : 'post',
-      ...(existingMeta && existingMeta.draft && { draft: true })
+      title: pageTitle,
+      body_class: bodyClass,
+      main_class: mainClass,
+      ...(isDraft && { draft: true })
     };
 
     updatedPages.push(metadata);
@@ -283,7 +307,7 @@ export function compilePages() {
     });
   }
 
-  fs.writeFileSync(PAGES_JSON_PATH, JSON.stringify(pagesToPublish, null, 2), 'utf8');
+  fs.writeFileSync(PAGES_JSON_PATH, JSON.stringify(updatedPages, null, 2), 'utf8');
   console.log(`Successfully compiled pages and updated: ${PAGES_JSON_PATH}`);
 
   compileMenu(updatedPages);
@@ -298,7 +322,7 @@ export function compileMenu(allPages = []) {
   console.log(`Compiling menu (${includeDrafts ? 'Dev Mode - including draft items' : 'Release Mode - excluding draft items'})...`);
 
   try {
-    const rawMenu = JSON.parse(fs.readFileSync(MENU_JSON_PATH, 'utf8'));
+    let menu = JSON.parse(fs.readFileSync(MENU_JSON_PATH, 'utf8'));
 
     // Collect draft URLs from pages and posts
     const draftUrls = new Set();
@@ -318,18 +342,35 @@ export function compileMenu(allPages = []) {
       } catch (e) {}
     }
 
-    const filteredMenu = includeDrafts
-      ? rawMenu
-      : rawMenu.filter(item => {
-          if (item.draft) return false;
-          if (item.url && draftUrls.has(item.url)) {
-            console.log(`  [Release Mode] Automatically excluded draft item from navbar: ${item.title} (${item.url})`);
-            return false;
+    if (includeDrafts) {
+      // In Dev Mode: Ensure all pages from allPages exist in menu if not present
+      allPages.forEach(p => {
+        const pageUrl = `/pages/${p.slug}/`;
+        const exists = menu.some(item => item.url === pageUrl || item.url === `/pages/${p.slug}`);
+        const hiddenPages = ['resume-english', 'cv-francais', 'wolfram-contributions-and-publications'];
+        if (!exists && !hiddenPages.includes(p.slug)) {
+          const title = p.slug === 'art' ? 'Art' : (p.title || p.slug);
+          const pubIndex = menu.findIndex(item => item.title === 'Publications');
+          if (pubIndex !== -1) {
+            menu.splice(pubIndex + 1, 0, { title: title, url: pageUrl });
+          } else {
+            menu.push({ title: title, url: pageUrl });
           }
-          return true;
-        });
+        }
+      });
+    } else {
+      // In Release Mode: Exclude draft items
+      menu = menu.filter(item => {
+        if (item.draft) return false;
+        if (item.url && draftUrls.has(item.url)) {
+          console.log(`  [Release Mode] Automatically excluded draft item from navbar: ${item.title} (${item.url})`);
+          return false;
+        }
+        return true;
+      });
+    }
 
-    fs.writeFileSync(MENU_JSON_PATH, JSON.stringify(filteredMenu, null, 2), 'utf8');
+    fs.writeFileSync(MENU_JSON_PATH, JSON.stringify(menu, null, 2), 'utf8');
   } catch (err) {
     console.error('Error compiling menu:', err);
   }

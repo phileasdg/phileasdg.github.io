@@ -19,6 +19,20 @@ const getSiteBasePath = () => {
   return base.endsWith('/') ? base.slice(0, -1) : base;
 };
 
+let _globalMenuData = null;
+const fetchMenuData = async () => {
+  if (!_globalMenuData) {
+    const basePath = getSiteBasePath();
+    try {
+      const res = await fetch(`${basePath}/data/menu.json?v=${Date.now()}`);
+      _globalMenuData = await res.json();
+    } catch (e) {
+      _globalMenuData = [];
+    }
+  }
+  return _globalMenuData;
+};
+
 // Dynamic Header Component
 class SiteHeader extends HTMLElement {
   connectedCallback() {
@@ -43,7 +57,7 @@ class SiteHeader extends HTMLElement {
     `;
 
     // Dynamically update menu from data/menu.json
-    getMenuData().then(menuItems => {
+    fetchMenuData().then(menuItems => {
       const menuEl = this.querySelector('#js-navbar-menu');
       if (menuEl && Array.isArray(menuItems) && menuItems.length > 0) {
         let menuHtml = '';
@@ -59,7 +73,7 @@ class SiteHeader extends HTMLElement {
           window.updateActiveLinks();
         }
       }
-    }).catch(() => {});
+    }).catch(e => {});
 
     if (window.updateActiveLinks) {
       window.updateActiveLinks();
@@ -203,18 +217,8 @@ document.addEventListener("DOMContentLoaded", () => {
     return pagesData;
   };
 
-  let menuData = null;
   const getMenuData = async () => {
-    if (!menuData) {
-      const basePath = getSiteBasePath();
-      try {
-        const res = await fetch(`${basePath}/data/menu.json?v=${Date.now()}`);
-        menuData = await res.json();
-      } catch (e) {
-        menuData = [];
-      }
-    }
-    return menuData;
+    return fetchMenuData();
   };
 
   const getPlaygroundsData = async () => {

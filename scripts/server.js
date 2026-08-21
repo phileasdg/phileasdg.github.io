@@ -93,8 +93,9 @@ if (fs.existsSync(customPagesDir)) {
   });
 }
 
-// Watch manual data files
+// Watch manual data files (source inputs only, avoiding compiled outputs like menu.json or pages.json)
 const manualDataFiles = [
+  'data/settings.json',
   'data/resume-en.json',
   'data/resume-fr.json',
   'data/speaking.json',

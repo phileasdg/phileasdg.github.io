@@ -15,13 +15,14 @@
     "slug": "art",
     "title": "Art",
     "body_class": "post-template",
-    "main_class": "post"
+    "main_class": "post",
+    "draft": true
   },
   {
     "slug": "playgrounds",
     "title": "Digital Playgrounds",
     "body_class": "playgrounds-body",
-    "main_class": ""
+    "main_class": "post"
   },
   {
     "slug": "about",
