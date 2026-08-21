@@ -295,6 +295,53 @@ export function compilePages() {
 
   fs.writeFileSync(PAGES_JSON_PATH, JSON.stringify(pagesToPublish, null, 2), 'utf8');
   console.log(`Successfully compiled pages and updated: ${PAGES_JSON_PATH}`);
+
+  compileMenu(updatedPages);
+}
+
+export function compileMenu(allPages = []) {
+  const MENU_JSON_PATH = './data/menu.json';
+  if (!fs.existsSync(MENU_JSON_PATH)) return;
+
+  const { includeDrafts } = getBuildSettings();
+  console.log(`Compiling menu (${includeDrafts ? 'Dev Mode - including draft items' : 'Release Mode - excluding draft items'})...`);
+
+  try {
+    const rawMenu = JSON.parse(fs.readFileSync(MENU_JSON_PATH, 'utf8'));
+
+    // Collect draft URLs from pages and posts
+    const draftUrls = new Set();
+
+    allPages.filter(p => p.draft).forEach(p => {
+      draftUrls.add(`/pages/${p.slug}/`);
+      draftUrls.add(`/pages/${p.slug}`);
+    });
+
+    if (fs.existsSync(POSTS_JSON_PATH)) {
+      try {
+        const posts = JSON.parse(fs.readFileSync(POSTS_JSON_PATH, 'utf8'));
+        posts.filter(p => p.draft || p.published === false || p.status === 'draft').forEach(p => {
+          draftUrls.add(`/posts/${p.slug}/`);
+          draftUrls.add(`/posts/${p.slug}`);
+        });
+      } catch (e) {}
+    }
+
+    const filteredMenu = includeDrafts
+      ? rawMenu
+      : rawMenu.filter(item => {
+          if (item.draft) return false;
+          if (item.url && draftUrls.has(item.url)) {
+            console.log(`  [Release Mode] Automatically excluded draft item from navbar: ${item.title} (${item.url})`);
+            return false;
+          }
+          return true;
+        });
+
+    fs.writeFileSync(MENU_JSON_PATH, JSON.stringify(filteredMenu, null, 2), 'utf8');
+  } catch (err) {
+    console.error('Error compiling menu:', err);
+  }
 }
 
 export function generateTagsList() {

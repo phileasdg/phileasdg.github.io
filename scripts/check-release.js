@@ -1,46 +1,50 @@
 import fs from 'fs';
-import path from 'path';
+import { execSync } from 'child_process';
 
-const SETTINGS_PATH = './data/settings.json';
-const PAGES_JSON_PATH = './data/pages.json';
-const POSTS_JSON_PATH = './data/posts.json';
+console.log('--- Checking Release Mode Guard (Inspecting HEAD Git Commit Only) ---');
 
-console.log('--- Checking Release Mode Guard ---');
-
-if (!fs.existsSync(SETTINGS_PATH)) {
-  console.error('❌ FAIL: data/settings.json does not exist!');
-  process.exit(1);
-}
-
-let settings = {};
+// 1. Check releaseMode in the latest git commit (HEAD)
 try {
-  settings = JSON.parse(fs.readFileSync(SETTINGS_PATH, 'utf8'));
+  const settingsJson = execSync('git show HEAD:data/settings.json', { stdio: ['pipe', 'pipe', 'ignore'] }).toString();
+  const settings = JSON.parse(settingsJson);
+  if (settings.releaseMode !== true) {
+    console.error('\n❌ BLOCKED: The latest git commit (HEAD) has "releaseMode": false!\n👉 You must compile in Release Mode and create a commit before pushing.\n');
+    process.exit(1);
+  }
 } catch (e) {
-  console.error('❌ FAIL: Could not parse data/settings.json');
+  console.error('\n❌ BLOCKED: data/settings.json is missing from the latest git commit (HEAD)!\n');
   process.exit(1);
 }
 
-if (settings.releaseMode !== true) {
-  console.error('\n❌ BLOCKED: Pushing to remote is forbidden when "releaseMode" is false in data/settings.json!\n👉 Please set "releaseMode": true in data/settings.json (or run npm run toggle-mode) before pushing.\n');
-  process.exit(1);
-}
-
-if (fs.existsSync(PAGES_JSON_PATH)) {
-  const pages = JSON.parse(fs.readFileSync(PAGES_JSON_PATH, 'utf8'));
+// 2. Check pages.json in HEAD for draft pages
+try {
+  const pagesJson = execSync('git show HEAD:data/pages.json', { stdio: ['pipe', 'pipe', 'ignore'] }).toString();
+  const pages = JSON.parse(pagesJson);
   const drafts = pages.filter(p => p.draft);
   if (drafts.length > 0) {
-    console.error(`\n❌ BLOCKED: pages.json still contains draft pages: ${drafts.map(d => d.slug).join(', ')}\n`);
+    console.error(`\n❌ BLOCKED: The committed data/pages.json in HEAD contains draft pages: ${drafts.map(d => d.slug).join(', ')}\n👉 Please build and commit in Release Mode before pushing.\n`);
     process.exit(1);
   }
-}
+} catch (e) {}
 
-if (fs.existsSync(POSTS_JSON_PATH)) {
-  const posts = JSON.parse(fs.readFileSync(POSTS_JSON_PATH, 'utf8'));
+// 3. Check posts.json in HEAD for draft posts
+try {
+  const postsJson = execSync('git show HEAD:data/posts.json', { stdio: ['pipe', 'pipe', 'ignore'] }).toString();
+  const posts = JSON.parse(postsJson);
   const drafts = posts.filter(p => p.draft || p.published === false || p.status === 'draft');
   if (drafts.length > 0) {
-    console.error(`\n❌ BLOCKED: posts.json still contains draft posts: ${drafts.map(d => d.slug).join(', ')}\n`);
+    console.error(`\n❌ BLOCKED: The committed data/posts.json in HEAD contains draft posts: ${drafts.map(d => d.slug).join(', ')}\n`);
     process.exit(1);
   }
-}
+} catch (e) {}
 
-console.log('✅ PASS: releaseMode is true and release build contains zero draft items.');
+// 4. Check if any draft page directories are tracked in HEAD
+try {
+  const trackedPages = execSync('git ls-tree -r --name-only HEAD pages/', { stdio: ['pipe', 'pipe', 'ignore'] }).toString();
+  if (trackedPages.includes('pages/art/')) {
+    console.error('\n❌ BLOCKED: The committed git tree (HEAD) contains draft directory "pages/art/"!\n');
+    process.exit(1);
+  }
+} catch (e) {}
+
+console.log('✅ PASS: The latest git commit (HEAD) has releaseMode: true and zero draft items.');

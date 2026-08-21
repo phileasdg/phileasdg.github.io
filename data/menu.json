@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Home",
+    "url": "/"
+  },
+  {
+    "title": "Public Speaking",
+    "url": "/pages/guest-lectures-and-public-speaking-events/"
+  },
+  {
+    "title": "Publications",
+    "url": "/pages/publications/"
+  },
+  {
+    "title": "Playgrounds",
+    "url": "/pages/playgrounds/"
+  },
+  {
+    "title": "About",
+    "url": "/pages/about/"
+  },
+  {
+    "title": "CV",
+    "url": "/pages/resume-cv/"
+  }
+]

@@ -34,7 +34,6 @@ class SiteHeader extends HTMLElement {
             <li><a href="${basePath}/" target="_self">Home</a></li>
             <li><a href="${basePath}/pages/guest-lectures-and-public-speaking-events/" target="_self">Public Speaking</a></li>
             <li><a href="${basePath}/pages/publications/" target="_self">Publications</a></li>
-            <li><a href="${basePath}/pages/art/" target="_self">Art</a></li>
             <li><a href="${basePath}/pages/playgrounds/" target="_self">Playgrounds</a></li>
             <li><a href="${basePath}/pages/about/" target="_self">About</a></li>
             <li><a href="${basePath}/pages/resume-cv/" target="_self">CV</a></li>
@@ -43,21 +42,18 @@ class SiteHeader extends HTMLElement {
       </header>
     `;
 
-    // Dynamically update menu from data/pages.json
-    getPagesData().then(pages => {
+    // Dynamically update menu from data/menu.json
+    getMenuData().then(menuItems => {
       const menuEl = this.querySelector('#js-navbar-menu');
-      if (menuEl && Array.isArray(pages) && pages.length > 0) {
-        const hiddenPages = ['resume-english', 'cv-francais', 'wolfram-contributions-and-publications'];
-        const navPages = pages.filter(p => !hiddenPages.includes(p.slug));
-        
-        let menuHtml = `<li><a href="${basePath}/" target="_self">Home</a></li>`;
-        navPages.forEach(p => {
-          const title = p.slug === 'guest-lectures-and-public-speaking-events' ? 'Public Speaking' :
-                        p.slug === 'publications' ? 'Publications' :
-                        p.slug === 'resume-cv' ? 'CV' : p.title;
-          menuHtml += `<li><a href="${basePath}/pages/${p.slug}/" target="_self">${title}</a></li>`;
+      if (menuEl && Array.isArray(menuItems) && menuItems.length > 0) {
+        let menuHtml = '';
+        menuItems.forEach(item => {
+          const href = item.url.startsWith('http') || item.url.startsWith('//')
+            ? item.url
+            : `${basePath}${item.url.replace(/^\//, '')}`;
+          const target = item.target || (item.url.startsWith('http') ? '_blank' : '_self');
+          menuHtml += `<li><a href="${href}" target="${target}">${item.title}</a></li>`;
         });
-        
         menuEl.innerHTML = menuHtml;
         if (window.updateActiveLinks) {
           window.updateActiveLinks();
@@ -205,6 +201,20 @@ document.addEventListener("DOMContentLoaded", () => {
       pagesData = await res.json();
     }
     return pagesData;
+  };
+
+  let menuData = null;
+  const getMenuData = async () => {
+    if (!menuData) {
+      const basePath = getSiteBasePath();
+      try {
+        const res = await fetch(`${basePath}/data/menu.json?v=${Date.now()}`);
+        menuData = await res.json();
+      } catch (e) {
+        menuData = [];
+      }
+    }
+    return menuData;
   };
 
   const getPlaygroundsData = async () => {
