@@ -127,14 +127,7 @@ export function getBuildSettings() {
     } catch (e) {}
   }
 
-  let isRelease = Boolean(settings.releaseMode);
-
-  if (process.argv.includes('--release') || process.env.BUILD_MODE === 'release') {
-    isRelease = true;
-  } else if (process.argv.includes('--dev') || process.env.BUILD_MODE === 'dev') {
-    isRelease = false;
-  }
-
+  const isRelease = Boolean(settings.releaseMode);
   return { releaseMode: isRelease, includeDrafts: !isRelease };
 }
 

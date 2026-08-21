@@ -5,14 +5,11 @@
   "main": "scripts/build-posts.js",
   "type": "module",
   "scripts": {
-    "build": "BUILD_MODE=release node scripts/build-posts.js --release",
-    "build:dev": "BUILD_MODE=dev node scripts/build-posts.js --dev",
-    "build:release": "BUILD_MODE=release node scripts/build-posts.js --release",
-    "dev": "BUILD_MODE=dev node scripts/server.js",
+    "dev": "node scripts/server.js",
+    "build": "node scripts/build-posts.js",
     "toggle-mode": "node scripts/toggle-mode.js && node scripts/build-posts.js",
     "check-release": "node scripts/check-release.js",
-    "validate": "node scripts/validate.js",
-    "test": "node scripts/validate.js"
+    "validate": "node scripts/validate.js"
   },
   "dependencies": {
     "sharp": "^0.35.3"

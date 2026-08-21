@@ -105,16 +105,47 @@ The compilation pipeline is executed via `npm run build` (invoking [scripts/buil
 
 ---
 
-## 4. Development Server (`scripts/server.js`)
+---
 
-Running `npm run dev` launches a lightweight Node.js HTTP server at `http://127.0.0.1:8000/`:
+## 4. Development Server & Build Commands
 
-* **Live File Watcher:** Recursively monitors `markdown/`, `content/custom-pages/`, and `data/` JSON files for modifications and automatically triggers `npm run build`.
-* **Zero-Cache Response Headers:** Emits `Cache-Control: no-store, no-cache, must-revalidate` headers on all responses so changes reflect immediately in the browser without manual hard refreshes.
+### NPM Commands Reference
+
+| Command | Description |
+| :--- | :--- |
+| `npm run dev` | Runs the local development server at `http://127.0.0.1:8000/` with live watcher in **Dev Mode** (`releaseMode: false`). |
+| `npm run build` | Compiles site content according to `data/settings.json`. |
+| `npm run toggle-mode` | Flips `releaseMode` between `false` (Dev) and `true` (Release) in `data/settings.json` and rebuilds the site. |
+| `npm run check-release` | Inspects the committed Git tree (`HEAD`) to verify that the latest commit was created in Release Mode (`releaseMode: true`). |
+| `npm run validate` | Runs the automated integrity test suite (validates JSON databases, HTML content, internal routes, and local asset links). |
 
 ---
 
-## 5. The Validation Suite (`scripts/validate.js`)
+## 5. Draft vs. Release System & Navigation
+
+* **`data/settings.json`**:
+  Contains site build mode configuration:
+  ```json
+  {
+    "releaseMode": false
+  }
+  ```
+  * `releaseMode: false` $\rightarrow$ **Dev Mode**: Compiles all draft pages/posts so you can edit and preview them locally.
+  * `releaseMode: true` $\rightarrow$ **Release Mode**: Strips all draft pages, posts, and navigation links.
+
+* **Marking Content as Draft**:
+  * **Pages (`data/pages.json` / frontmatter)**: Add `"draft": true` to the page metadata object.
+  * **Posts (`markdown/posts/*.md`)**: Add `draft: true` or `published: false` in the YAML frontmatter.
+
+* **Data-Driven Menu (`data/menu.json`)**:
+  Customizable site navigation menu. If any item points to an internal page/post marked as a draft, `compileMenu()` automatically filters it out during Release Mode builds.
+
+* **Git Release Safety Guard (`.git/hooks/pre-push` & `scripts/check-release.js`)**:
+  Before any `git push` is executed, Git inspects the latest Git commit (`HEAD`). If the commit was created in Dev Mode (`"releaseMode": false` or containing draft items), the push is automatically blocked to prevent unreleased drafts from being published to GitHub Pages.
+
+---
+
+## 6. The Validation Suite (`scripts/validate.js`)
 
 Executing `npm run test` (or `npm run validate`) runs automated integrity checks:
 
