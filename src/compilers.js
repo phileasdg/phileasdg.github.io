@@ -100,12 +100,12 @@ export function compilePosts() {
   const processedSlugs = new Set(mdFiles.map(file => path.basename(file, '.md')));
   posts = posts.filter(p => processedSlugs.has(p.slug));
 
-  const isReleaseMode = process.env.BUILD_MODE === 'release' || process.argv.includes('--release');
-  if (isReleaseMode) {
+  const { includeDrafts } = getBuildSettings();
+  if (!includeDrafts) {
     posts = posts.filter(p => !p.draft && p.published !== false && p.status !== 'draft');
   }
 
-  if (isProduction || isReleaseMode) {
+  if (isProduction || !includeDrafts) {
     const exampleHtmlPath = path.join(POSTS_OUTPUT_HTML_DIR, 'example-markdown-post.html');
     if (fs.existsSync(exampleHtmlPath)) {
       fs.unlinkSync(exampleHtmlPath);
@@ -118,9 +118,28 @@ export function compilePosts() {
   console.log(`Successfully compiled posts and updated: ${POSTS_JSON_PATH}`);
 }
 
+export function getBuildSettings() {
+  const SETTINGS_PATH = './data/settings.json';
+  let settings = { releaseMode: false };
+  if (fs.existsSync(SETTINGS_PATH)) {
+    try {
+      settings = JSON.parse(fs.readFileSync(SETTINGS_PATH, 'utf8'));
+    } catch (e) {}
+  }
+
+  let isRelease = Boolean(settings.releaseMode);
+
+  if (process.argv.includes('--release') || process.env.BUILD_MODE === 'release') {
+    isRelease = true;
+  } else if (process.argv.includes('--dev') || process.env.BUILD_MODE === 'dev') {
+    isRelease = false;
+  }
+
+  return { releaseMode: isRelease, includeDrafts: !isRelease };
+}
+
 export function compilePages() {
-  const isReleaseMode = process.env.BUILD_MODE === 'release' || process.argv.includes('--release');
-  const includeDrafts = !isReleaseMode;
+  const { mode, includeDrafts } = getBuildSettings();
 
   console.log(`Compiling pages (${includeDrafts ? 'Dev Mode - including drafts' : 'Release Mode - excluding drafts'})...`);
   const mdFiles = fs.readdirSync(PAGES_MARKDOWN_DIR).filter(file => file.endsWith('.md'));
@@ -244,7 +263,7 @@ export function compilePages() {
     ? updatedPages
     : updatedPages.filter(p => !p.draft);
 
-  // In release mode, clean up draft HTML directories
+  // In release mode, clean up draft HTML directories from disk and git tracking
   if (!includeDrafts) {
     updatedPages.filter(p => p.draft).forEach(p => {
       const draftDir = `./pages/${p.slug}`;
@@ -252,6 +271,9 @@ export function compilePages() {
         fs.rmSync(draftDir, { recursive: true, force: true });
         console.log(`  [Release Mode] Excluded draft page directory: ${draftDir}`);
       }
+      try {
+        execSync(`git rm -r --cached ${draftDir}`, { stdio: 'ignore' });
+      } catch (e) {}
     });
   }
 
