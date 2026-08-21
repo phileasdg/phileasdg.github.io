@@ -280,13 +280,18 @@ export function compilePages() {
     ? updatedPages
     : updatedPages.filter(p => !p.draft);
 
-  // In release mode, clean up draft HTML directories from disk and git tracking
+  // In release mode, clean up draft HTML directories and files from disk
   if (!includeDrafts) {
     updatedPages.filter(p => p.draft).forEach(p => {
       const draftDir = `./pages/${p.slug}`;
+      const draftCustomFile = path.join(PAGES_OUTPUT_HTML_DIR, `${p.slug}.html`);
       if (fs.existsSync(draftDir)) {
         fs.rmSync(draftDir, { recursive: true, force: true });
         console.log(`  [Release Mode] Excluded draft page directory from release build: ${draftDir}`);
+      }
+      if (fs.existsSync(draftCustomFile)) {
+        fs.unlinkSync(draftCustomFile);
+        console.log(`  [Release Mode] Excluded draft custom page file from release build: ${draftCustomFile}`);
       }
     });
   }
@@ -307,7 +312,7 @@ export function compilePages() {
     });
   }
 
-  fs.writeFileSync(PAGES_JSON_PATH, JSON.stringify(updatedPages, null, 2), 'utf8');
+  fs.writeFileSync(PAGES_JSON_PATH, JSON.stringify(pagesToPublish, null, 2), 'utf8');
   console.log(`Successfully compiled pages and updated: ${PAGES_JSON_PATH}`);
 
   compileMenu(updatedPages);
