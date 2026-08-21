@@ -52,6 +52,7 @@ export function compilePosts() {
       
       if (mergedData.excerpt) {
         const desc = mergedData.excerpt.replace(/"/g, '&quot;');
+        postShell = postShell.replace(/<meta name="description" content="[^"]*"\/>/, `<meta name="description" content="${desc}"/>`);
         postShell = postShell.replace(/<meta content="[^"]*" property="og:description"\/>/, `<meta content="${desc}" property="og:description"/>`);
         postShell = postShell.replace(/<meta content="[^"]*" name="twitter:description"\/>/, `<meta content="${desc}" name="twitter:description"/>`);
       }
