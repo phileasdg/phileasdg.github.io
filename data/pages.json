@@ -14,8 +14,8 @@
   {
     "slug": "art",
     "title": "Art",
-    "body_class": "art-body",
-    "main_class": "art-main"
+    "body_class": "post-template",
+    "main_class": "post"
   },
   {
     "slug": "playgrounds",

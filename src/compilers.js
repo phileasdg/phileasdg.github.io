@@ -85,7 +85,8 @@ export function compilePosts() {
       ...(mergedData.thumbHeight !== undefined && { thumbHeight: Number(mergedData.thumbHeight) }),
       ...(mergedData.date_modified !== undefined && { date_modified: mergedData.date_modified }),
       ...(mergedData.date_published !== undefined && { date_published: mergedData.date_published }),
-      ...(mergedData.hideFromHome !== undefined && { hideFromHome: mergedData.hideFromHome })
+      ...(mergedData.hideFromHome !== undefined && { hideFromHome: mergedData.hideFromHome }),
+      ...(mergedData.draft && { draft: true })
     };
 
     if (existingIndex > -1) {
@@ -99,7 +100,12 @@ export function compilePosts() {
   const processedSlugs = new Set(mdFiles.map(file => path.basename(file, '.md')));
   posts = posts.filter(p => processedSlugs.has(p.slug));
 
-  if (isProduction) {
+  const isReleaseMode = process.env.BUILD_MODE === 'release' || process.argv.includes('--release');
+  if (isReleaseMode) {
+    posts = posts.filter(p => !p.draft && p.published !== false && p.status !== 'draft');
+  }
+
+  if (isProduction || isReleaseMode) {
     const exampleHtmlPath = path.join(POSTS_OUTPUT_HTML_DIR, 'example-markdown-post.html');
     if (fs.existsSync(exampleHtmlPath)) {
       fs.unlinkSync(exampleHtmlPath);
@@ -113,7 +119,10 @@ export function compilePosts() {
 }
 
 export function compilePages() {
-  console.log('Compiling pages...');
+  const isReleaseMode = process.env.BUILD_MODE === 'release' || process.argv.includes('--release');
+  const includeDrafts = !isReleaseMode;
+
+  console.log(`Compiling pages (${includeDrafts ? 'Dev Mode - including drafts' : 'Release Mode - excluding drafts'})...`);
   const mdFiles = fs.readdirSync(PAGES_MARKDOWN_DIR).filter(file => file.endsWith('.md'));
   const customFiles = fs.existsSync(CUSTOM_PAGES_DIR)
     ? fs.readdirSync(CUSTOM_PAGES_DIR).filter(file => file.endsWith('.html') && !file.startsWith('_'))
@@ -137,14 +146,10 @@ export function compilePages() {
     const { data, content } = parseFrontMatter(fileContent);
     const slug = path.basename(file, '.md');
 
-    // Look up existing page metadata
     const existingMeta = existingPages.find(p => p.slug === slug) || {};
     const mergedData = { ...existingMeta, ...data };
 
-    // Compile markdown body
     const bodyHtml = parseMarkdown(content);
-
-    // Wrap in standard page layout
     const finalHtml = `<div class="wrapper"><article class="content"><header class="content__header"><h1 class="content__title">${mergedData.title || slug}</h1></header><div class="content__inner"><div class="content__entry">${bodyHtml}</div><footer><div class="content__tags-share"><aside class="content__share"></aside></div></footer></div></article></div>`;
 
     fs.writeFileSync(path.join(PAGES_OUTPUT_HTML_DIR, `${slug}.html`), finalHtml, 'utf8');
@@ -153,7 +158,8 @@ export function compilePages() {
       slug: slug,
       title: mergedData.title || slug,
       body_class: mergedData.body_class || 'post-template',
-      main_class: mergedData.main_class || 'post'
+      main_class: mergedData.main_class || 'post',
+      ...(mergedData.draft && { draft: true })
     };
 
     updatedPages.push(metadata);
@@ -198,23 +204,22 @@ export function compilePages() {
     const srcPath = path.join(CUSTOM_PAGES_DIR, file);
     const destPath = path.join(PAGES_OUTPUT_HTML_DIR, file);
 
-    // Copy the custom HTML file
     fs.copyFileSync(srcPath, destPath);
     console.log(`  Copied custom page: ${file} -> ${destPath}`);
 
-    // Lookup metadata in existingPages
     const existingMeta = existingPages.find(p => p.slug === slug);
     const metadata = {
       slug: slug,
       title: existingMeta ? existingMeta.title : (slug.charAt(0).toUpperCase() + slug.slice(1)),
       body_class: existingMeta ? existingMeta.body_class : 'post-template',
-      main_class: existingMeta ? existingMeta.main_class : 'post'
+      main_class: existingMeta ? existingMeta.main_class : 'post',
+      ...(existingMeta && existingMeta.draft && { draft: true })
     };
 
     updatedPages.push(metadata);
   });
 
-  // Sort pages slightly or keep order matching original menu order for nicer list
+  // Sort pages
   const orderMap = {
     'guest-lectures-and-public-speaking-events': 1,
     'publications': 2,
@@ -234,8 +239,24 @@ export function compilePages() {
     return orderA - orderB;
   });
 
+  // Filter pages for publication
+  const pagesToPublish = includeDrafts
+    ? updatedPages
+    : updatedPages.filter(p => !p.draft);
+
+  // In release mode, clean up draft HTML directories
+  if (!includeDrafts) {
+    updatedPages.filter(p => p.draft).forEach(p => {
+      const draftDir = `./pages/${p.slug}`;
+      if (fs.existsSync(draftDir)) {
+        fs.rmSync(draftDir, { recursive: true, force: true });
+        console.log(`  [Release Mode] Excluded draft page directory: ${draftDir}`);
+      }
+    });
+  }
+
   if (indexHtmlTemplate) {
-    updatedPages.forEach(p => {
+    pagesToPublish.forEach(p => {
       const pageDir = `./pages/${p.slug}`;
       if (!fs.existsSync(pageDir)) {
         fs.mkdirSync(pageDir, { recursive: true });
@@ -250,7 +271,7 @@ export function compilePages() {
     });
   }
 
-  fs.writeFileSync(PAGES_JSON_PATH, JSON.stringify(updatedPages, null, 2), 'utf8');
+  fs.writeFileSync(PAGES_JSON_PATH, JSON.stringify(pagesToPublish, null, 2), 'utf8');
   console.log(`Successfully compiled pages and updated: ${PAGES_JSON_PATH}`);
 }
 

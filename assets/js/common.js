@@ -30,11 +30,11 @@ class SiteHeader extends HTMLElement {
           <button class="navbar__toggle js-toggle" aria-label="Menu">
             <span class="navbar__toggle-box"><span class="navbar__toggle-inner">Menu</span></span>
           </button>
-          <ul class="navbar__menu">
+          <ul class="navbar__menu" id="js-navbar-menu">
             <li><a href="${basePath}/" target="_self">Home</a></li>
             <li><a href="${basePath}/pages/guest-lectures-and-public-speaking-events/" target="_self">Public Speaking</a></li>
             <li><a href="${basePath}/pages/publications/" target="_self">Publications</a></li>
-            <li><a href="${basePath}/pages/art/" target="_self">Art</a></li>
+            <li><a href="${basePath}/pages/art/" target="_self">Art <span class="navbar__draft-badge">Draft</span></a></li>
             <li><a href="${basePath}/pages/playgrounds/" target="_self">Playgrounds</a></li>
             <li><a href="${basePath}/pages/about/" target="_self">About</a></li>
             <li><a href="${basePath}/pages/resume-cv/" target="_self">CV</a></li>
@@ -42,6 +42,30 @@ class SiteHeader extends HTMLElement {
         </nav>
       </header>
     `;
+
+    // Dynamically update menu from data/pages.json
+    getPagesData().then(pages => {
+      const menuEl = this.querySelector('#js-navbar-menu');
+      if (menuEl && Array.isArray(pages) && pages.length > 0) {
+        const hiddenPages = ['resume-english', 'cv-francais', 'wolfram-contributions-and-publications'];
+        const navPages = pages.filter(p => !hiddenPages.includes(p.slug));
+        
+        let menuHtml = `<li><a href="${basePath}/" target="_self">Home</a></li>`;
+        navPages.forEach(p => {
+          const title = p.slug === 'guest-lectures-and-public-speaking-events' ? 'Public Speaking' :
+                        p.slug === 'publications' ? 'Publications' :
+                        p.slug === 'resume-cv' ? 'CV' : p.title;
+          const draftBadge = p.draft ? `<span class="navbar__draft-badge">Draft</span>` : '';
+          menuHtml += `<li><a href="${basePath}/pages/${p.slug}/" target="_self">${title}${draftBadge}</a></li>`;
+        });
+        
+        menuEl.innerHTML = menuHtml;
+        if (window.updateActiveLinks) {
+          window.updateActiveLinks();
+        }
+      }
+    }).catch(() => {});
+
     if (window.updateActiveLinks) {
       window.updateActiveLinks();
     }
