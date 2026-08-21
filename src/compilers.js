@@ -262,11 +262,8 @@ export function compilePages() {
       const draftDir = `./pages/${p.slug}`;
       if (fs.existsSync(draftDir)) {
         fs.rmSync(draftDir, { recursive: true, force: true });
-        console.log(`  [Release Mode] Excluded draft page directory: ${draftDir}`);
+        console.log(`  [Release Mode] Excluded draft page directory from release build: ${draftDir}`);
       }
-      try {
-        execSync(`git rm -r --cached ${draftDir}`, { stdio: 'ignore' });
-      } catch (e) {}
     });
   }
 

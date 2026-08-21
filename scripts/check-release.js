@@ -38,11 +38,13 @@ try {
   }
 } catch (e) {}
 
-// 4. Check if any draft page directories are tracked in HEAD
+// 4. Check menu.json in HEAD for draft menu items
 try {
-  const trackedPages = execSync('git ls-tree -r --name-only HEAD pages/', { stdio: ['pipe', 'pipe', 'ignore'] }).toString();
-  if (trackedPages.includes('pages/art/')) {
-    console.error('\n❌ BLOCKED: The committed git tree (HEAD) contains draft directory "pages/art/"!\n');
+  const menuJson = execSync('git show HEAD:data/menu.json', { stdio: ['pipe', 'pipe', 'ignore'] }).toString();
+  const menu = JSON.parse(menuJson);
+  const drafts = menu.filter(item => item.draft);
+  if (drafts.length > 0) {
+    console.error(`\n❌ BLOCKED: The committed data/menu.json in HEAD contains draft items: ${drafts.map(d => d.title).join(', ')}\n`);
     process.exit(1);
   }
 } catch (e) {}
