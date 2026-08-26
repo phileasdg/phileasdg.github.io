@@ -28,7 +28,12 @@
     "year": 2026,
     "status": "past",
     "featured": true,
-    "links": []
+    "links": [
+      {
+        "type": "slides (pdf)",
+        "url": "https://drive.google.com/file/d/11_-zMd48T-J0IH9LuxxHr4PMXRvwJJER/view?usp=sharing"
+      }
+    ]
   },
   {
     "title": "A Crash Course in Data Visualization with Wolfram Language",
