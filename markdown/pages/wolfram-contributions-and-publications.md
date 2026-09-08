@@ -6,12 +6,17 @@ title: Wolfram Contributions and Publications
 
 - [Technical Articles on Wolfram Community](https://community.wolfram.com/web/phileasdg)
 
-## Software:
+## Software & Resources:
 
 Publisher Resource Pages:
 
 - [Professional contributions](https://resources.wolframcloud.com/publishers/resources?PublisherID=PhileasDG)
 - [Personal contributions](https://resources.wolframcloud.com/publishers/resources?PublisherID=PhileasDazeleyGaist)
+
+Wolfram Industry & Field Solutions:
+
+- [Wolfram for Environmental Science](https://www.wolfram.com/for/environmental-science/)
+- [Wolfram for AgTech](https://www.wolfram.com/for/ag-tech/)
 
 Other Miscellaneous Functions:
 

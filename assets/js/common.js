@@ -1687,15 +1687,17 @@ document.addEventListener("DOMContentLoaded", () => {
                         <div class="speaking-list">
                   `;
                   upcoming.forEach(item => {
-                    const linksHtml = item.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener" class="speaking-event__link">${l.type}</a>`).join(' <span class="speaking-event__link-sep">·</span> ');
+                    const linksHtml = item.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener" class="speaking-event__link">${l.type}</a>`).join('');
                     html += `
                       <div class="speaking-event-row">
-                        <div class="speaking-event__title">${item.title}</div>
-                        <div class="speaking-event__meta">
-                          <span class="speaking-event__date">${item.date}</span>
-                          ${item.host ? `<span class="speaking-event__meta-sep">·</span> <span class="speaking-event__host">${item.host}</span>` : ''}
-                          ${linksHtml ? `<span class="speaking-event__meta-sep">·</span> <span class="speaking-event__links">${linksHtml}</span>` : ''}
+                        <div class="speaking-event__content">
+                          <div class="speaking-event__title">${item.title}</div>
+                          <div class="speaking-event__meta">
+                            <span class="speaking-event__date">${item.date}</span>
+                            ${item.host ? `<span class="speaking-event__meta-sep">·</span> <span class="speaking-event__host">${item.host}</span>` : ''}
+                          </div>
                         </div>
+                        ${linksHtml ? `<div class="speaking-event__links">${linksHtml}</div>` : ''}
                       </div>
                     `;
                   });
@@ -1732,15 +1734,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     `;
 
                     yearEvents.forEach(item => {
-                      const linksHtml = item.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener" class="speaking-event__link">${l.type}</a>`).join(' <span class="speaking-event__link-sep">·</span> ');
+                      const linksHtml = item.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener" class="speaking-event__link">${l.type}</a>`).join('');
                       html += `
                         <div class="speaking-event-row">
-                          <div class="speaking-event__title">${item.title}</div>
-                          <div class="speaking-event__meta">
-                            <span class="speaking-event__date">${item.date}</span>
-                            ${item.host ? `<span class="speaking-event__meta-sep">·</span> <span class="speaking-event__host">${item.host}</span>` : ''}
-                            ${linksHtml ? `<span class="speaking-event__meta-sep">·</span> <span class="speaking-event__links">${linksHtml}</span>` : ''}
+                          <div class="speaking-event__content">
+                            <div class="speaking-event__title">${item.title}</div>
+                            <div class="speaking-event__meta">
+                              <span class="speaking-event__date">${item.date}</span>
+                              ${item.host ? `<span class="speaking-event__meta-sep">·</span> <span class="speaking-event__host">${item.host}</span>` : ''}
+                            </div>
                           </div>
+                          ${linksHtml ? `<div class="speaking-event__links">${linksHtml}</div>` : ''}
                         </div>
                       `;
                     });

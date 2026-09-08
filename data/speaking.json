@@ -1,5 +1,22 @@
 [
   {
+    "title": "Sundai Hackathon: AI Agents That Adapt + Evolve with Wolfram Research",
+    "host": "Harvard Innovation Labs & Sundai Club",
+    "date": "September 6, 2026",
+    "year": 2026,
+    "status": "past",
+    "links": [
+      {
+        "type": "event (Harvard i-lab)",
+        "url": "https://innovationlabs.harvard.edu/events/sundai-hackathon-ai-agents-that-adapt-evolve-with-wolfram-research"
+      },
+      {
+        "type": "event (Sundai)",
+        "url": "https://www.sundai.club/events/boston/wolfram-hack"
+      }
+    ]
+  },
+  {
     "title": "Adaptive Evolution of Cellular Automata, a research dialogue (Discussant with Michael Levin, Willem Nielsen, and Ellynne Dec; Wolfram Institute work presented by Willem Nielsen)",
     "host": "Levin Lab (Tufts University) & Wolfram Institute",
     "date": "August 17, 2026",

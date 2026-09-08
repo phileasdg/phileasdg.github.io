@@ -76,12 +76,21 @@
 }
 
 .speaking-event-row {
-  padding: 0.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 0.65rem 0;
   border-bottom: 1px solid var(--lighter, #F3F3F3);
 }
 
 .speaking-event-row:last-child {
   border-bottom: none;
+}
+
+.speaking-event__content {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .speaking-event__title {
@@ -96,14 +105,10 @@
   font-size: 0.825rem;
   color: var(--gray-2, #6D6E6F);
   line-height: 1.4;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
 }
 
 .speaking-event__date,
-.speaking-event__host,
-.speaking-event__links {
+.speaking-event__host {
   display: inline;
 }
 
@@ -113,19 +118,58 @@
   user-select: none;
 }
 
+.speaking-event__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
 .speaking-event__link {
-  color: var(--color, #007AA5);
-  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.78rem;
   font-weight: 500;
+  line-height: 1.3;
+  color: var(--color, #007AA5);
+  background: rgba(0, 122, 165, 0.08);
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.dark .speaking-event__link,
+body.dark-theme .speaking-event__link {
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--color-light, #38bdf8);
 }
 
 .speaking-event__link:hover {
-  text-decoration: underline;
+  background: var(--color, #007AA5);
+  color: #ffffff;
+  text-decoration: none;
 }
 
-.speaking-event__link-sep {
-  color: var(--light, #D5D5D5);
-  margin: 0 0.25rem;
+.dark .speaking-event__link:hover,
+body.dark-theme .speaking-event__link:hover {
+  background: var(--color-light, #38bdf8);
+  color: #0f172a;
+}
+
+@media all and (max-width: 48em) {
+  .speaking-event-row {
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+  .speaking-event__links {
+    justify-content: flex-start;
+    margin-top: 0;
+  }
 }
 
 
