@@ -186,10 +186,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!mainEl) return;
 
   // Cache original home shell
-  const originalMainHTML = mainEl.innerHTML;
-  const originalMainClass = mainEl.className;
-  const originalBodyClass = document.body.className;
-  const originalTitle = document.title;
+  const DEFAULT_HOME_MAIN_HTML = `<div class="wrapper"><div class="hero"><p class="align-center">Check out my work on other platforms:<br/><a href="pages/wolfram-contributions-and-publications/">Wolfram Contributions</a>, <a href="https://github.com/phileasdg">GitHub</a></p></div></div><div class="wrapper"><div class="l-masonry l-masonry--3"><div class="gutter-sizer"></div></div><nav class="pagination desc" id="pagination-container"></nav></div>`;
+  const homeMainHTML = (mainEl.innerHTML && mainEl.innerHTML.includes('l-masonry')) ? mainEl.innerHTML : DEFAULT_HOME_MAIN_HTML;
+  const originalMainHTML = homeMainHTML;
+  const originalMainClass = (mainEl.innerHTML && mainEl.innerHTML.includes('l-masonry')) ? mainEl.className : '';
+  const originalBodyClass = (mainEl.innerHTML && mainEl.innerHTML.includes('l-masonry')) ? document.body.className : 'home-template';
+  const originalTitle = "Phileas Dazeley-Gaist";
 
   let postsData = null;
   let pagesData = null;
@@ -1144,69 +1146,67 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  const updateStyleSheets = (routeType, bodyClass, slug) => {
+  const loadCssFile = (href) => {
+    return new Promise((resolve) => {
+      const fileName = href.split('/').pop().split('?')[0];
+      const existing = document.querySelector(`link[href*="${fileName}"]`);
+      if (existing) {
+        try {
+          if (existing.sheet) {
+            return resolve();
+          }
+        } catch (e) {
+          return resolve();
+        }
+        existing.addEventListener('load', () => resolve(), { once: true });
+        existing.addEventListener('error', () => resolve(), { once: true });
+        setTimeout(resolve, 300);
+        return;
+      }
+
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      link.onload = () => resolve();
+      link.onerror = () => resolve();
+      setTimeout(resolve, 300);
+      document.head.appendChild(link);
+    });
+  };
+
+  const updateStyleSheets = async (routeType, bodyClass, slug) => {
     const basePath = getSiteBasePath();
-    const existingPlaygroundsLink = document.querySelector('link[href*="playgrounds.css"]');
-    const existingArtLink = document.querySelector('link[href*="art.css"]');
-    const existingMasonryLink = document.querySelector('link[href*="masonry.css"]');
-    const existingPostLink = document.querySelector('link[href*="post.css"]');
-    const existingSpeakingLink = document.querySelector('link[href*="speaking.css"]');
     
     const loadPlaygrounds = (slug === 'playgrounds' || bodyClass === 'playgrounds-body');
     const loadArt = (slug === 'art' || bodyClass === 'art-body');
     const loadPostCss = (routeType === 'post' || bodyClass === 'post-template');
     const loadSpeaking = (slug === 'guest-lectures-and-public-speaking-events');
+    const loadPublications = (slug === 'publications');
+
+    const loads = [];
 
     if (loadPlaygrounds) {
-      if (!existingPlaygroundsLink) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = `${basePath}/assets/css/playgrounds.css`;
-        document.head.appendChild(link);
-      }
-      if (!existingMasonryLink) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = `${basePath}/assets/css/masonry.css`;
-        document.head.appendChild(link);
-      }
-    } else {
-      if (existingPlaygroundsLink) existingPlaygroundsLink.remove();
-      if (existingMasonryLink) existingMasonryLink.remove();
+      loads.push(loadCssFile(`${basePath}/assets/css/playgrounds.css`));
+      loads.push(loadCssFile(`${basePath}/assets/css/masonry.css`));
     }
 
     if (loadArt) {
-      if (!existingArtLink) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = `${basePath}/assets/css/art.css`;
-        document.head.appendChild(link);
-      }
-    } else {
-      if (existingArtLink) existingArtLink.remove();
+      loads.push(loadCssFile(`${basePath}/assets/css/art.css`));
     }
 
     if (loadPostCss) {
-      if (!existingPostLink) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = `${basePath}/assets/css/post.css`;
-        document.head.appendChild(link);
-      }
-    } else {
-      if (existingPostLink) existingPostLink.remove();
+      loads.push(loadCssFile(`${basePath}/assets/css/post.css`));
     }
 
     if (loadSpeaking) {
-      if (!existingSpeakingLink) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = `${basePath}/assets/css/speaking.css`;
-        document.head.appendChild(link);
-      }
-    } else {
-      if (existingSpeakingLink) existingSpeakingLink.remove();
+      loads.push(loadCssFile(`${basePath}/assets/css/speaking.css`));
     }
+
+    if (loadPublications) {
+      loads.push(loadCssFile(`${basePath}/assets/css/publications.css`));
+    }
+
+    await Promise.all(loads);
   };
 
   const renderPost = (postMeta, contentHtml) => {
@@ -1346,11 +1346,12 @@ document.addEventListener("DOMContentLoaded", () => {
         history.replaceState(null, null, basePath + '/');
         return;
       }
-      updateStyleSheets('home', originalBodyClass, '');
+      await updateStyleSheets('home', originalBodyClass, '');
       document.title = originalTitle;
       document.body.className = originalBodyClass;
       mainEl.className = originalMainClass;
       mainEl.innerHTML = originalMainHTML;
+      mainEl.setAttribute('data-rendered-route', 'home');
 
       const grid = mainEl.querySelector('.l-masonry');
       const paginationContainer = mainEl.querySelector('#pagination-container');
@@ -1377,11 +1378,12 @@ document.addEventListener("DOMContentLoaded", () => {
           const contentRes = await fetch(`${basePath}/content/posts/${slug}.html?v=${Date.now()}`);
           if (!contentRes.ok) throw new Error(`Failed to load content for post: ${slug}`);
           const contentHtml = await contentRes.text();
-          updateStyleSheets('post', 'post-template', slug);
+          await updateStyleSheets('post', 'post-template', slug);
           document.title = `${postMeta.name} - Phileas Dazeley-Gaist`;
           document.body.className = 'post-template';
           mainEl.className = 'post';
           mainEl.innerHTML = renderPost(postMeta, contentHtml);
+          mainEl.setAttribute('data-rendered-route', `posts/${slug}`);
           if (window.Prism) {
             Prism.highlightAllUnder(mainEl);
             setupCodeBlocks(mainEl);
@@ -1389,11 +1391,12 @@ document.addEventListener("DOMContentLoaded", () => {
           initGallery(mainEl);
         } catch (err) {
           console.error(err);
-          updateStyleSheets('post', 'post-template', slug);
+          await updateStyleSheets('post', 'post-template', slug);
           document.title = `${postMeta.name} - Phileas Dazeley-Gaist`;
           document.body.className = 'post-template';
           mainEl.className = 'post';
           mainEl.innerHTML = renderPost(postMeta, '<p>Error loading content.</p>');
+          mainEl.setAttribute('data-rendered-route', `posts/${slug}`);
         }
         handleLazyImages(mainEl);
       } else {
@@ -1405,23 +1408,26 @@ document.addEventListener("DOMContentLoaded", () => {
       const page = pages.find(p => p.slug === slug);
       if (page) {
         try {
-          const contentRes = await fetch(`${basePath}/content/pages/${slug}.html?v=${Date.now()}`);
-          if (!contentRes.ok) throw new Error(`Failed to load content for page: ${slug}`);
-          let contentHtml = await contentRes.text();
-
           const bodyClass = page.body_class || '';
-          updateStyleSheets('page', bodyClass, slug);
+          await updateStyleSheets('page', bodyClass, slug);
           document.title = `${page.title} - Phileas Dazeley-Gaist`;
           document.body.className = bodyClass;
           mainEl.className = page.main_class || '';
-          mainEl.innerHTML = normalizeContentHTML(contentHtml, `pages/${page.slug}/`);
+
+          if (mainEl.getAttribute('data-rendered-route') !== `pages/${slug}`) {
+            const contentRes = await fetch(`${basePath}/content/pages/${slug}.html?v=${Date.now()}`);
+            if (!contentRes.ok) throw new Error(`Failed to load content for page: ${slug}`);
+            let contentHtml = await contentRes.text();
+            mainEl.innerHTML = normalizeContentHTML(contentHtml, `pages/${page.slug}/`);
+            mainEl.setAttribute('data-rendered-route', `pages/${slug}`);
+          }
 
           if (slug === 'playgrounds') {
             try {
-              const playgroundsRes = await fetch(`${basePath}/data/playgrounds.json?v=${Date.now()}`);
-              const playgrounds = await playgroundsRes.json();
               const container = mainEl.querySelector('#playgrounds-container');
-              if (container) {
+              if (container && container.children.length === 0) {
+                const playgroundsRes = await fetch(`${basePath}/data/playgrounds.json?v=${Date.now()}`);
+                const playgrounds = await playgroundsRes.json();
                 container.innerHTML = playgrounds.map(item => {
                   return `
         <article class="c-card">
@@ -1780,7 +1786,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (err) {
           console.error(err);
           const bodyClass = page.body_class || '';
-          updateStyleSheets('page', bodyClass, slug);
+          await updateStyleSheets('page', bodyClass, slug);
           document.title = `${page.title} - Phileas Dazeley-Gaist`;
           document.body.className = bodyClass;
           mainEl.className = page.main_class || '';
@@ -1794,7 +1800,8 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (cleanRoute === 'tags' || cleanRoute.startsWith('tags/')) {
       const rawSlug = cleanRoute === 'tags' ? '' : cleanRoute.substring(5);
       const slug = rawSlug.replace(/\/$/, '');
-      updateStyleSheets('tag', 'tags-template', slug);
+      await updateStyleSheets('tag', 'tags-template', slug);
+      mainEl.setAttribute('data-rendered-route', `tags/${slug}`);
 
       if (slug === '' || slug === 'index') {
         // --- 1. TAGS INDEX PAGE (/tags/) ---
@@ -2080,7 +2087,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     } else if (cleanRoute.startsWith('authors/')) {
       const slug = cleanRoute.substring(8);
-      updateStyleSheets('author', 'author-template', slug);
+      await updateStyleSheets('author', 'author-template', slug);
+      mainEl.setAttribute('data-rendered-route', `authors/${slug}`);
       document.title = `Author: Phileas Dazeley-Gaist - Phileas Dazeley-Gaist`;
       document.body.className = 'author-template';
       mainEl.className = 'page page--author';

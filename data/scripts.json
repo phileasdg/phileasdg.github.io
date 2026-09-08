@@ -23,5 +23,10 @@
     "name": "validate",
     "command": "npm run validate",
     "description": "Runs the automated integrity test suite (validates JSON databases, HTML content, internal routes, and local asset links)."
+  },
+  {
+    "name": "fetch-orcid",
+    "command": "npm run fetch-orcid",
+    "description": "Executes `node scripts/fetch-orcid.js`."
   }
 ]

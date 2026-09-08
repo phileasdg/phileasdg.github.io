@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "node scripts/server.js",
     "build": "node scripts/build-posts.js",
+    "fetch-orcid": "node scripts/fetch-orcid.js",
     "toggle-mode": "node scripts/toggle-mode.js && node scripts/build-posts.js",
     "check-release": "node scripts/check-release.js",
     "validate": "node scripts/validate.js"

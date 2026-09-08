@@ -241,7 +241,38 @@ export function compilePages() {
       });
     }
 
-    const cleanContent = fileContent.replace(/^<!--\s*[\s\S]*?\s*-->\s*/, '');
+    let cleanContent = fileContent.replace(/^<!--\s*[\s\S]*?\s*-->\s*/, '');
+
+    // Pre-render playground cards if compiling playgrounds page
+    if (slug === 'playgrounds') {
+      try {
+        const playgroundsPath = './data/playgrounds.json';
+        if (fs.existsSync(playgroundsPath)) {
+          const playgrounds = JSON.parse(fs.readFileSync(playgroundsPath, 'utf8'));
+          const cardsHtml = playgrounds.map(item => `
+        <article class="c-card">
+            <a class="c-card__image" href="${item.url}" rel="noopener noreferrer" target="_blank">
+                <img alt="${item.title} Project Thumbnail"
+                    onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
+                    src="${item.thumbnail}" />
+            </a>
+            <div class="c-card__wrapper">
+                <header class="c-card__header">
+                    <h2 class="c-card__title"><a class="invert" href="${item.url}" rel="noopener noreferrer" target="_blank">${item.title}</a></h2>
+                </header>
+                <p class="c-card__description">${item.description}</p>
+            </div>
+        </article>`).join('');
+          cleanContent = cleanContent.replace(
+            /<div class="playgrounds-grid" id="playgrounds-container">[\s\S]*?<\/div>/,
+            `<div class="playgrounds-grid" id="playgrounds-container">${cardsHtml}\n    </div>`
+          );
+        }
+      } catch (err) {
+        console.error('Error pre-rendering playgrounds:', err);
+      }
+    }
+
     fs.writeFileSync(destPath, cleanContent, 'utf8');
     console.log(`  Compiled custom page: ${file} -> ${destPath}`);
 
@@ -308,6 +339,45 @@ export function compilePages() {
       pageShell = pageShell.replace(/<meta content="[^"]*" property="og:title"\/>/, `<meta content="${p.title}" property="og:title"/>`);
       pageShell = pageShell.replace(/<meta content="[^"]*" name="twitter:title"\/>/, `<meta content="${p.title}" name="twitter:title"/>`);
       pageShell = pageShell.replace(/<meta content="[^"]*" property="og:url"\/>/, `<meta content="https://phileasdg.github.io/pages/${p.slug}/" property="og:url"/>`);
+
+      // Determine page-specific stylesheets
+      const extraCss = [];
+      if (p.slug === 'publications') {
+        extraCss.push('<link href="assets/css/publications.css" rel="stylesheet"/>');
+      }
+      if (p.slug === 'playgrounds') {
+        extraCss.push('<link href="assets/css/playgrounds.css" rel="stylesheet"/>');
+        extraCss.push('<link href="assets/css/masonry.css" rel="stylesheet"/>');
+      }
+      if (p.slug === 'art') {
+        extraCss.push('<link href="assets/css/art.css" rel="stylesheet"/>');
+      }
+      if (p.slug === 'guest-lectures-and-public-speaking-events') {
+        extraCss.push('<link href="assets/css/speaking.css" rel="stylesheet"/>');
+      }
+      if (p.body_class === 'post-template' || (p.main_class && p.main_class.includes('post'))) {
+        extraCss.push('<link href="assets/css/post.css" rel="stylesheet"/>');
+      }
+
+      if (extraCss.length > 0) {
+        pageShell = pageShell.replace(/<\/head>/, `${extraCss.join('')}</head>`);
+      }
+
+      const compiledFile = path.join(PAGES_OUTPUT_HTML_DIR, `${p.slug}.html`);
+      let pageBodyHtml = '';
+      if (fs.existsSync(compiledFile)) {
+        pageBodyHtml = fs.readFileSync(compiledFile, 'utf8');
+      }
+
+      pageShell = pageShell.replace(/<body class="[^"]*">/, `<body class="${p.body_class || 'post-template'}">`);
+
+      if (pageBodyHtml) {
+        pageShell = pageShell.replace(
+          /<main>[\s\S]*?<\/main>/,
+          `<main class="${p.main_class || 'post'}" data-rendered-route="pages/${p.slug}">${pageBodyHtml}</main>`
+        );
+      }
+
       pageShell = pageShell.replace(/<head>/, `<head><script>window._PRE_RENDERED = true;</script>`);
       fs.writeFileSync(path.join(pageDir, 'index.html'), pageShell, 'utf8');
     });

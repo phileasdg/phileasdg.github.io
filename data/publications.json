@@ -1,0 +1,108 @@
+[
+  {
+    "putCode": 225897068,
+    "title": "Growing a Sympoietic Art Organism",
+    "subtitle": "An Experiment Tracking the Micro-Dynamics of Cultural Evolution",
+    "type": "Conference Poster",
+    "journalTitle": "NetSci 2026",
+    "publicationDate": "2026-06-01",
+    "year": 2026,
+    "doi": "10.5281/ZENODO.22486241",
+    "doiUrl": "https://doi.org/10.5281/zenodo.22486241",
+    "isbn": null,
+    "url": "https://zenodo.org/doi/10.5281/zenodo.22486241",
+    "contributors": [
+      {
+        "name": "Phileas, Isaac, Louis Dazeley-Gaist",
+        "role": "author"
+      },
+      {
+        "name": "Nadine Abd El Razek",
+        "role": "author"
+      },
+      {
+        "name": "Sara Arango-Franco",
+        "role": "author"
+      },
+      {
+        "name": "Lina Juliana Bulla Casas",
+        "role": "author"
+      },
+      {
+        "name": "Gabriel Camacho Cabrera",
+        "role": "author"
+      },
+      {
+        "name": "Ellynne Dec",
+        "role": "author"
+      },
+      {
+        "name": "Sonal Raghuvanshi",
+        "role": "author"
+      },
+      {
+        "name": "Kyle Thompson",
+        "role": "author"
+      },
+      {
+        "name": "Emerson Paquette",
+        "role": "author"
+      },
+      {
+        "name": "Louison Halgand",
+        "role": "author"
+      }
+    ],
+    "description": "Observational gaps, survival bias, and noise in retrospective reporting often significantly limit empirical tracking of cultural evolution. Empirical data recording how cultural artifacts, motifs, and lineages form in real time are therefore of great benefit and interest in this area of research. To study these dynamics, we present a closed, participatory modeling experiment implemented through a structured collaborative artmaking exercise. Our experimental design attempts to richly capture the bottom-up emergence of a shared cultural heritage in a small, controlled setting, as well as the influences at play throughout its evolution.",
+    "country": "US",
+    "bibtex": "@article{https://doi.org/10.5281/zenodo.22486241,  doi = {10.5281/ZENODO.22486241},  url = {https://zenodo.org/doi/10.5281/zenodo.22486241},  author = {Dazeley-Gaist, Phileas, Isaac, Louis and Abd El Razek, Nadine and Arango-Franco, Sara and Bulla Casas, Lina Juliana and Camacho Cabrera, Gabriel and Dec, Ellynne and Raghuvanshi, Sonal and Thompson, Kyle and Paquette, Emerson and Halgand, Louison},  keywords = {Computational Social Science, Cultural anthropology, Sociology, Cultural Evolution, Network Science, Graph theory, Complex Systems, Digital humanities},  language = {en},  title = {Growing a Sympoietic Art Organism: An Experiment Tracking the Micro-Dynamics of Cultural Evolution},  publisher = {Zenodo},  year = {2026},  copyright = {Creative Commons Attribution 4.0 International}}"
+  },
+  {
+    "putCode": 187803945,
+    "title": "RemoteSensing Paclet: GIBS Satellite Imagery and AppEEARS Geographic Data Products",
+    "subtitle": null,
+    "type": "Conference Paper",
+    "journalTitle": "Wolfram Summer School Research Reports 2023",
+    "publicationDate": "2025",
+    "year": 2025,
+    "doi": null,
+    "doiUrl": null,
+    "isbn": "978-1-944183-98-1",
+    "url": null,
+    "contributors": [
+      {
+        "name": "Dazeley-Gaist, Phileas",
+        "role": "editor"
+      },
+      {
+        "name": "Bahrami, Mohammad",
+        "role": "editor"
+      }
+    ],
+    "description": "Each year, the Wolfram Summer School brings together undergraduate and graduate students, postdoctoral scholars, professors and professionals to develop computational research projects using Wolfram Language. This curated collection of student projects from the 2023 Summer School covers various disciplines, including data science, physics, artificial intelligence, social sciences, computational biology, finance and more.Participants present their methodologies and findings through detailed reports, illustrating how computational tools can advance research across disciplines. These proceedings provide concrete examples of Wolfram technology applications for researchers, educators and practitioners in a wide range of fields.",
+    "country": null,
+    "bibtex": "@inproceedings{dazeley-gaist_remotesensing_2025,location={Champaign, Illinois},title={{RemoteSensing} Paclet: {GIBS} Satellite Imagery and {AppEEARS} Geographic Data Products},isbn={978-1-944183-98-1},series={Wolfram Summer School Research Reports},abstract={Each year, the Wolfram Summer School brings together undergraduate and graduate students, postdoctoral scholars, professors and professionals to develop computational research projects using Wolfram Language. This curated collection of student projects from the 2023 Summer School covers various disciplines, including data science, physics, artificial intelligence, social sciences, computational biology, finance and more.Participants present their methodologies and findings through detailed reports, illustrating how computational tools can advance research across disciplines. These proceedings provide concrete examples of Wolfram technology applications for researchers, educators and practitioners in a wide range of fields.},booktitle={Wolfram Summer School Research Reports 2023},publisher={Wolfram Media},editor={Dazeley-Gaist, Phileas and Bahrami, Mohammad},date={2025}}\n"
+  },
+  {
+    "putCode": 187803909,
+    "title": "Mathematics as Human Ecology",
+    "subtitle": null,
+    "type": "Book Chapter",
+    "journalTitle": "Human Ecology Essay Collection - 2023",
+    "publicationDate": "2023",
+    "year": 2023,
+    "doi": null,
+    "doiUrl": null,
+    "isbn": null,
+    "url": null,
+    "contributors": [
+      {
+        "name": "Phileas Dazeley-Gaist",
+        "role": "author"
+      }
+    ],
+    "description": null,
+    "country": null,
+    "bibtex": "@incollection{phileas_dazeley-gaist_mathematics_2023,title={Mathematics as Human Ecology},series={Human Ecology Essays - College of the Atlantic},pages={34--39},booktitle={Human Ecology Essay Collection - 2023},publisher={College of the Atlantic},author={{Phileas Dazeley-Gaist}},date={2023}}\n"
+  }
+]

@@ -4,14 +4,14 @@
     font-family: var(--body-font);
 }
 
-/* Override main site styles to ensure centering and matching spacing */
-.post__header {
+/* Override main site styles on art page to ensure centering and matching spacing */
+.art-body .post__header {
     text-align: center;
     margin-top: 0;
     margin-bottom: 3rem;
 }
 
-.post__title {
+.art-body .post__title {
     text-align: center;
     margin-top: 0.5rem;
     margin-bottom: 0;

@@ -381,4 +381,13 @@ pre[class*="language-"],
   background: #a8a8a8;
 }
 
-
+/* ORCID Icon sizing fallback */
+.pub-orcid-icon {
+  width: 1.05rem !important;
+  height: 1.05rem !important;
+  max-width: 1.05rem !important;
+  max-height: 1.05rem !important;
+  vertical-align: -0.15rem;
+  display: inline-block;
+  flex-shrink: 0;
+}

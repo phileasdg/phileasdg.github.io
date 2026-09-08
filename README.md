@@ -88,6 +88,7 @@ The compilation pipeline is executed via `npm run build` (invoking [scripts/buil
 | `npm run toggle-mode` | Flips `releaseMode` between `false` (Dev) and `true` (Release) in `data/settings.json` and rebuilds the site. |
 | `npm run check-release` | Inspects the committed Git tree (`HEAD`) to verify that the latest commit was created in Release Mode (`releaseMode: true`). |
 | `npm run validate` | Runs the automated integrity test suite (validates JSON databases, HTML content, internal routes, and local asset links). |
+| `npm run fetch-orcid` | Executes `node scripts/fetch-orcid.js`. |
 <!-- SCRIPTS_TABLE_END -->
 
 ---
