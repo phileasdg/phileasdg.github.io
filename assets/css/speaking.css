@@ -120,10 +120,9 @@
 
 .speaking-event__links {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.35rem;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
   flex-shrink: 0;
   margin-top: 0.15rem;
 }
@@ -167,6 +166,9 @@ body.dark-theme .speaking-event__link:hover {
     gap: 0.45rem;
   }
   .speaking-event__links {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
     justify-content: flex-start;
     margin-top: 0;
   }
