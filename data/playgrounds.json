@@ -23,6 +23,17 @@
     ]
   },
   {
+    "title": "Edge Cases",
+    "url": "https://edgecases2026.org/",
+    "thumbnail": "media/pages/playgrounds/edge-cases.png",
+    "description": "A satellite symposium exploring surprising, creative, and unconventional applications of Network Science at CCS 2026.",
+    "date": "2026-03-01",
+    "tags": [
+      "Complex Systems",
+      "Network Science"
+    ]
+  },
+  {
     "title": "Complexity Coffee",
     "url": "https://complexitycoffee.org",
     "thumbnail": "media/pages/playgrounds/complexity-coffee.png",
