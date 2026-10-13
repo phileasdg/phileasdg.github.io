@@ -28,7 +28,67 @@
             between complexity, art, and computation.</p>
     </header>
     <!-- Main Gallery using the new flexbox grid -->
-    <div class="playgrounds-grid" id="playgrounds-container">
+    
+    <nav class="playgrounds-nav" aria-label="Playground categories">
+        <a href="#events-and-community-initiatives" class="c-tag-pill playgrounds-nav__link"><span class="c-tag-pill__name">Events and community initiatives</span> <span class="c-tag-pill__count playgrounds-nav__count">3</span></a>
+        <a href="#tools" class="c-tag-pill playgrounds-nav__link"><span class="c-tag-pill__name">Tools</span> <span class="c-tag-pill__count playgrounds-nav__count">7</span></a>
+        <a href="#just-for-fun" class="c-tag-pill playgrounds-nav__link"><span class="c-tag-pill__name">Just for fun</span> <span class="c-tag-pill__count playgrounds-nav__count">4</span></a>
+    </nav>
+    <div id="playgrounds-container">
+    <section class="playgrounds-section" id="events-and-community-initiatives">
+        <header class="playgrounds-section__header">
+            <h2 class="playgrounds-section__title">Events and community initiatives <span class="playgrounds-section__count">(3)</span></h2>
+        </header>
+        <div class="playgrounds-grid">
+            
+        <article class="c-card">
+            <a class="c-card__image" href="https://edgecases2026.org/" rel="noopener noreferrer" target="_blank">
+                <img alt="Edge Cases Project Thumbnail"
+                    onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
+                    src="media/pages/playgrounds/edge-cases.png" />
+            </a>
+            <div class="c-card__wrapper">
+                <header class="c-card__header">
+                    <h2 class="c-card__title"><a class="invert" href="https://edgecases2026.org/" rel="noopener noreferrer" target="_blank">Edge Cases</a></h2>
+                </header>
+                <p class="c-card__description">A satellite symposium exploring surprising, creative, and unconventional applications of Network Science at CCS 2026.</p>
+            </div>
+        </article>
+        <article class="c-card">
+            <a class="c-card__image" href="https://phileasdg.github.io/sympoietic-art-organism/" rel="noopener noreferrer" target="_blank">
+                <img alt="Sympoietic Art Organism Project Thumbnail"
+                    onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
+                    src="media/pages/playgrounds/sympoietic-organism.png" />
+            </a>
+            <div class="c-card__wrapper">
+                <header class="c-card__header">
+                    <h2 class="c-card__title"><a class="invert" href="https://phileasdg.github.io/sympoietic-art-organism/" rel="noopener noreferrer" target="_blank">Sympoietic Art Organism</a></h2>
+                </header>
+                <p class="c-card__description">An exploration of collaborative artmaking and complexity, a co-creative process for growing and evolving a digital lifeform.</p>
+            </div>
+        </article>
+        <article class="c-card">
+            <a class="c-card__image" href="https://complexitycoffee.org" rel="noopener noreferrer" target="_blank">
+                <img alt="Complexity Coffee Project Thumbnail"
+                    onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
+                    src="media/pages/playgrounds/complexity-coffee.png" />
+            </a>
+            <div class="c-card__wrapper">
+                <header class="c-card__header">
+                    <h2 class="c-card__title"><a class="invert" href="https://complexitycoffee.org" rel="noopener noreferrer" target="_blank">Complexity Coffee</a></h2>
+                </header>
+                <p class="c-card__description">A community-driven virtual series from Complexity Global School alums, dedicated to fostering discussion and sharing new ideas in the field of complexity science.</p>
+            </div>
+        </article>
+        </div>
+    </section>
+
+    <section class="playgrounds-section" id="tools">
+        <header class="playgrounds-section__header">
+            <h2 class="playgrounds-section__title">Tools <span class="playgrounds-section__count">(7)</span></h2>
+        </header>
+        <div class="playgrounds-grid">
+            
         <article class="c-card">
             <a class="c-card__image" href="https://phileasdg.github.io/doodle-canvas/" rel="noopener noreferrer" target="_blank">
                 <img alt="Doodle Canvas Project Thumbnail"
@@ -56,42 +116,103 @@
             </div>
         </article>
         <article class="c-card">
-            <a class="c-card__image" href="https://edgecases2026.org/" rel="noopener noreferrer" target="_blank">
-                <img alt="Edge Cases Project Thumbnail"
+            <a class="c-card__image" href="https://phileasdg.github.io/ASCII3D/" rel="noopener noreferrer" target="_blank">
+                <img alt="ASCII3D Project Thumbnail"
                     onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
-                    src="media/pages/playgrounds/edge-cases.png" />
+                    src="media/pages/playgrounds/ASCII3D.png" />
             </a>
             <div class="c-card__wrapper">
                 <header class="c-card__header">
-                    <h2 class="c-card__title"><a class="invert" href="https://edgecases2026.org/" rel="noopener noreferrer" target="_blank">Edge Cases</a></h2>
+                    <h2 class="c-card__title"><a class="invert" href="https://phileasdg.github.io/ASCII3D/" rel="noopener noreferrer" target="_blank">ASCII3D</a></h2>
                 </header>
-                <p class="c-card__description">A satellite symposium exploring surprising, creative, and unconventional applications of Network Science at CCS 2026.</p>
+                <p class="c-card__description">A browser-based 3D object ASCII viewer and converter.</p>
             </div>
         </article>
         <article class="c-card">
-            <a class="c-card__image" href="https://complexitycoffee.org" rel="noopener noreferrer" target="_blank">
-                <img alt="Complexity Coffee Project Thumbnail"
+            <a class="c-card__image" href="https://phileasdg.github.io/marbler/" rel="noopener noreferrer" target="_blank">
+                <img alt="Marbler Project Thumbnail"
                     onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
-                    src="media/pages/playgrounds/complexity-coffee.png" />
+                    src="media/pages/playgrounds/marbler.png" />
             </a>
             <div class="c-card__wrapper">
                 <header class="c-card__header">
-                    <h2 class="c-card__title"><a class="invert" href="https://complexitycoffee.org" rel="noopener noreferrer" target="_blank">Complexity Coffee</a></h2>
+                    <h2 class="c-card__title"><a class="invert" href="https://phileasdg.github.io/marbler/" rel="noopener noreferrer" target="_blank">Marbler</a></h2>
                 </header>
-                <p class="c-card__description">A community-driven virtual series from Complexity Global School alums, dedicated to fostering discussion and sharing new ideas in the field of complexity science.</p>
+                <p class="c-card__description">A creative simulation tool that generates fluid, marble-like textures and patterns in the browser.</p>
             </div>
         </article>
         <article class="c-card">
-            <a class="c-card__image" href="https://phileasdg.github.io/sympoietic-art-organism/" rel="noopener noreferrer" target="_blank">
-                <img alt="Sympoietic Art Organism Project Thumbnail"
+            <a class="c-card__image" href="https://phileasdg.github.io/parchment/" rel="noopener noreferrer" target="_blank">
+                <img alt="Parchment Project Thumbnail"
                     onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
-                    src="media/pages/playgrounds/sympoietic-organism.png" />
+                    src="media/pages/playgrounds/parchment.png" />
             </a>
             <div class="c-card__wrapper">
                 <header class="c-card__header">
-                    <h2 class="c-card__title"><a class="invert" href="https://phileasdg.github.io/sympoietic-art-organism/" rel="noopener noreferrer" target="_blank">Sympoietic Art Organism</a></h2>
+                    <h2 class="c-card__title"><a class="invert" href="https://phileasdg.github.io/parchment/" rel="noopener noreferrer" target="_blank">Parchment</a></h2>
                 </header>
-                <p class="c-card__description">An exploration of collaborative artmaking and complexity, a co-creative process for growing and evolving a digital lifeform.</p>
+                <p class="c-card__description">A no fuss Markdown editor with LaTeX and syntax highlighting support.</p>
+            </div>
+        </article>
+        <article class="c-card">
+            <a class="c-card__image" href="https://phileasdg.github.io/synapse/" rel="noopener noreferrer" target="_blank">
+                <img alt="Synapse: Networked Notes Project Thumbnail"
+                    onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
+                    src="media/pages/playgrounds/synapse.png" />
+            </a>
+            <div class="c-card__wrapper">
+                <header class="c-card__header">
+                    <h2 class="c-card__title"><a class="invert" href="https://phileasdg.github.io/synapse/" rel="noopener noreferrer" target="_blank">Synapse: Networked Notes</a></h2>
+                </header>
+                <p class="c-card__description">A networked Markdown notetaking tool with some fancy features.</p>
+            </div>
+        </article>
+        <article class="c-card">
+            <a class="c-card__image" href="https://phileasdg.github.io/weaver/" rel="noopener noreferrer" target="_blank">
+                <img alt="Weaver Project Thumbnail"
+                    onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
+                    src="media/pages/playgrounds/weaver.png" />
+            </a>
+            <div class="c-card__wrapper">
+                <header class="c-card__header">
+                    <h2 class="c-card__title"><a class="invert" href="https://phileasdg.github.io/weaver/" rel="noopener noreferrer" target="_blank">Weaver</a></h2>
+                </header>
+                <p class="c-card__description">A creative tool for weaving pattern design and exploration in the browser.</p>
+            </div>
+        </article>
+        </div>
+    </section>
+
+    <section class="playgrounds-section" id="just-for-fun">
+        <header class="playgrounds-section__header">
+            <h2 class="playgrounds-section__title">Just for fun <span class="playgrounds-section__count">(4)</span></h2>
+        </header>
+        <div class="playgrounds-grid">
+            
+        <article class="c-card">
+            <a class="c-card__image" href="https://phileasdg.github.io/abulafia/" rel="noopener noreferrer" target="_blank">
+                <img alt="Abulafia Project Thumbnail"
+                    onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
+                    src="media/pages/playgrounds/abulafia.png" />
+            </a>
+            <div class="c-card__wrapper">
+                <header class="c-card__header">
+                    <h2 class="c-card__title"><a class="invert" href="https://phileasdg.github.io/abulafia/" rel="noopener noreferrer" target="_blank">Abulafia</a></h2>
+                </header>
+                <p class="c-card__description">A device for textual transmutation based on Foucault's Pendulum, by Umberto Eco.</p>
+            </div>
+        </article>
+        <article class="c-card">
+            <a class="c-card__image" href="https://phileasdg.github.io/boid-ecosystem/" rel="noopener noreferrer" target="_blank">
+                <img alt="Boid Ecosystem Project Thumbnail"
+                    onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
+                    src="media/pages/playgrounds/boid-ecosystem.png" />
+            </a>
+            <div class="c-card__wrapper">
+                <header class="c-card__header">
+                    <h2 class="c-card__title"><a class="invert" href="https://phileasdg.github.io/boid-ecosystem/" rel="noopener noreferrer" target="_blank">Boid Ecosystem</a></h2>
+                </header>
+                <p class="c-card__description">A simple 3D boid simulator based on the 1987 paper by Craig Reynolds.</p>
             </div>
         </article>
         <article class="c-card">
@@ -120,97 +241,8 @@
                 <p class="c-card__description">An interactive map and guide to the College of the Atlantic Sunken Garden.</p>
             </div>
         </article>
-        <article class="c-card">
-            <a class="c-card__image" href="https://phileasdg.github.io/marbler/" rel="noopener noreferrer" target="_blank">
-                <img alt="Marbler Project Thumbnail"
-                    onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
-                    src="media/pages/playgrounds/marbler.png" />
-            </a>
-            <div class="c-card__wrapper">
-                <header class="c-card__header">
-                    <h2 class="c-card__title"><a class="invert" href="https://phileasdg.github.io/marbler/" rel="noopener noreferrer" target="_blank">Marbler</a></h2>
-                </header>
-                <p class="c-card__description">A creative simulation tool that generates fluid, marble-like textures and patterns in the browser.</p>
-            </div>
-        </article>
-        <article class="c-card">
-            <a class="c-card__image" href="https://phileasdg.github.io/boid-ecosystem/" rel="noopener noreferrer" target="_blank">
-                <img alt="Boid Ecosystem Project Thumbnail"
-                    onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
-                    src="media/pages/playgrounds/boid-ecosystem.png" />
-            </a>
-            <div class="c-card__wrapper">
-                <header class="c-card__header">
-                    <h2 class="c-card__title"><a class="invert" href="https://phileasdg.github.io/boid-ecosystem/" rel="noopener noreferrer" target="_blank">Boid Ecosystem</a></h2>
-                </header>
-                <p class="c-card__description">A simple 3D boid simulator based on the 1987 paper by Craig Reynolds.</p>
-            </div>
-        </article>
-        <article class="c-card">
-            <a class="c-card__image" href="https://phileasdg.github.io/weaver/" rel="noopener noreferrer" target="_blank">
-                <img alt="Weaver Project Thumbnail"
-                    onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
-                    src="media/pages/playgrounds/weaver.png" />
-            </a>
-            <div class="c-card__wrapper">
-                <header class="c-card__header">
-                    <h2 class="c-card__title"><a class="invert" href="https://phileasdg.github.io/weaver/" rel="noopener noreferrer" target="_blank">Weaver</a></h2>
-                </header>
-                <p class="c-card__description">A creative tool for weaving pattern design and exploration in the browser.</p>
-            </div>
-        </article>
-        <article class="c-card">
-            <a class="c-card__image" href="https://phileasdg.github.io/parchment/" rel="noopener noreferrer" target="_blank">
-                <img alt="Parchment Project Thumbnail"
-                    onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
-                    src="media/pages/playgrounds/parchment.png" />
-            </a>
-            <div class="c-card__wrapper">
-                <header class="c-card__header">
-                    <h2 class="c-card__title"><a class="invert" href="https://phileasdg.github.io/parchment/" rel="noopener noreferrer" target="_blank">Parchment</a></h2>
-                </header>
-                <p class="c-card__description">A no fuss Markdown editor with LaTeX and syntax highlighting support.</p>
-            </div>
-        </article>
-        <article class="c-card">
-            <a class="c-card__image" href="https://phileasdg.github.io/abulafia/" rel="noopener noreferrer" target="_blank">
-                <img alt="Abulafia Project Thumbnail"
-                    onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
-                    src="media/pages/playgrounds/abulafia.png" />
-            </a>
-            <div class="c-card__wrapper">
-                <header class="c-card__header">
-                    <h2 class="c-card__title"><a class="invert" href="https://phileasdg.github.io/abulafia/" rel="noopener noreferrer" target="_blank">Abulafia</a></h2>
-                </header>
-                <p class="c-card__description">A device for textual transmutation based on Foucault's Pendulum, by Umberto Eco.</p>
-            </div>
-        </article>
-        <article class="c-card">
-            <a class="c-card__image" href="https://phileasdg.github.io/synapse/" rel="noopener noreferrer" target="_blank">
-                <img alt="Synapse: Networked Notes Project Thumbnail"
-                    onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
-                    src="media/pages/playgrounds/synapse.png" />
-            </a>
-            <div class="c-card__wrapper">
-                <header class="c-card__header">
-                    <h2 class="c-card__title"><a class="invert" href="https://phileasdg.github.io/synapse/" rel="noopener noreferrer" target="_blank">Synapse: Networked Notes</a></h2>
-                </header>
-                <p class="c-card__description">A networked Markdown notetaking tool with some fancy features.</p>
-            </div>
-        </article>
-        <article class="c-card">
-            <a class="c-card__image" href="https://phileasdg.github.io/ASCII3D/" rel="noopener noreferrer" target="_blank">
-                <img alt="ASCII3D Project Thumbnail"
-                    onerror="this.onerror=null;this.src='https://placehold.co/600x380/1a1a1a/ffffff?text=Image+Not+Found';"
-                    src="media/pages/playgrounds/ASCII3D.png" />
-            </a>
-            <div class="c-card__wrapper">
-                <header class="c-card__header">
-                    <h2 class="c-card__title"><a class="invert" href="https://phileasdg.github.io/ASCII3D/" rel="noopener noreferrer" target="_blank">ASCII3D</a></h2>
-                </header>
-                <p class="c-card__description">A browser-based 3D object ASCII viewer and converter.</p>
-            </div>
-        </article>
+        </div>
+    </section>
     </div>
 </div></main><site-footer></site-footer><script>window.publiiThemeMenuConfig = {    
         animationSpeed: 300,

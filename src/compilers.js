@@ -249,7 +249,42 @@ export function compilePages() {
         const playgroundsPath = './data/playgrounds.json';
         if (fs.existsSync(playgroundsPath)) {
           const playgrounds = JSON.parse(fs.readFileSync(playgroundsPath, 'utf8'));
-          const cardsHtml = playgrounds.map(item => `
+
+          const categoryOrder = ['Events and community initiatives', 'Tools', 'Just for fun'];
+          const groups = {};
+          playgrounds.forEach(item => {
+            const cat = item.category || 'Just for fun';
+            if (!groups[cat]) groups[cat] = [];
+            groups[cat].push(item);
+          });
+
+          // Sort items in each category newest first
+          Object.keys(groups).forEach(cat => {
+            groups[cat].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+          });
+
+          // Fixed category sequence: Initiatives first, then Tools, then Just for fun
+          const sortedCategories = categoryOrder.filter(cat => groups[cat] && groups[cat].length > 0);
+          Object.keys(groups).forEach(cat => {
+            if (!sortedCategories.includes(cat)) sortedCategories.push(cat);
+          });
+
+          const slugify = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+          const navLinksHtml = sortedCategories.map(cat => {
+            const sectionId = slugify(cat);
+            return `<a href="#${sectionId}" class="c-tag-pill playgrounds-nav__link"><span class="c-tag-pill__name">${cat}</span> <span class="c-tag-pill__count playgrounds-nav__count">${groups[cat].length}</span></a>`;
+          }).join('\n        ');
+
+          const navHtml = `
+    <nav class="playgrounds-nav" aria-label="Playground categories">
+        ${navLinksHtml}
+    </nav>`;
+
+          const sectionsHtml = sortedCategories.map(cat => {
+            const items = groups[cat];
+            const sectionId = slugify(cat);
+            const cardsHtml = items.map(item => `
         <article class="c-card">
             <a class="c-card__image" href="${item.url}" rel="noopener noreferrer" target="_blank">
                 <img alt="${item.title} Project Thumbnail"
@@ -263,9 +298,23 @@ export function compilePages() {
                 <p class="c-card__description">${item.description}</p>
             </div>
         </article>`).join('');
+
+            return `
+    <section class="playgrounds-section" id="${sectionId}">
+        <header class="playgrounds-section__header">
+            <h2 class="playgrounds-section__title">${cat} <span class="playgrounds-section__count">(${items.length})</span></h2>
+        </header>
+        <div class="playgrounds-grid">
+            ${cardsHtml}
+        </div>
+    </section>`;
+          }).join('\n');
+
+          const fullPlaygroundsHtml = `${navHtml}\n    <div id="playgrounds-container">${sectionsHtml}\n    </div>`;
+
           cleanContent = cleanContent.replace(
-            /<div class="playgrounds-grid" id="playgrounds-container">[\s\S]*?<\/div>/,
-            `<div class="playgrounds-grid" id="playgrounds-container">${cardsHtml}\n    </div>`
+            /(<nav class="playgrounds-nav"[\s\S]*?<\/nav>\s*)?(<div class="playgrounds-grid" id="playgrounds-container">[\s\S]*?<\/div>|<div id="playgrounds-container">[\s\S]*?<\/div>)/,
+            fullPlaygroundsHtml
           );
         }
       } catch (err) {

@@ -143,7 +143,22 @@ document.addEventListener('click', (event) => {
   const href = anchor.getAttribute('href');
   if (!href) return;
 
-  if (href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('javascript:')) {
+  if (href.startsWith('#')) {
+    const targetId = href.substring(1);
+    if (!targetId) {
+      event.preventDefault();
+      return;
+    }
+    const targetEl = document.getElementById(targetId);
+    if (targetEl) {
+      event.preventDefault();
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.replaceState(null, null, window.location.pathname + window.location.search + href);
+    }
+    return;
+  }
+
+  if (href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('javascript:')) {
     return;
   }
 
@@ -1442,8 +1457,42 @@ document.addEventListener("DOMContentLoaded", () => {
               if (container && container.children.length === 0) {
                 const playgroundsRes = await fetch(`${basePath}/data/playgrounds.json?v=${Date.now()}`);
                 const playgrounds = await playgroundsRes.json();
-                container.innerHTML = playgrounds.map(item => {
-                  return `
+
+                const categoryOrder = ['Events and community initiatives', 'Tools', 'Just for fun'];
+                const groups = {};
+                playgrounds.forEach(item => {
+                  const cat = item.category || 'Just for fun';
+                  if (!groups[cat]) groups[cat] = [];
+                  groups[cat].push(item);
+                });
+
+                Object.keys(groups).forEach(cat => {
+                  groups[cat].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+                });
+
+                const sortedCategories = categoryOrder.filter(cat => groups[cat] && groups[cat].length > 0);
+                Object.keys(groups).forEach(cat => {
+                  if (!sortedCategories.includes(cat)) sortedCategories.push(cat);
+                });
+
+                const slugify = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+                if (!mainEl.querySelector('.playgrounds-nav')) {
+                  const navLinksHtml = sortedCategories.map(cat => {
+                    const sectionId = slugify(cat);
+                    return `<a href="#${sectionId}" class="c-tag-pill playgrounds-nav__link"><span class="c-tag-pill__name">${cat}</span> <span class="c-tag-pill__count playgrounds-nav__count">${groups[cat].length}</span></a>`;
+                  }).join('\n        ');
+                  const navEl = document.createElement('nav');
+                  navEl.className = 'playgrounds-nav';
+                  navEl.setAttribute('aria-label', 'Playground categories');
+                  navEl.innerHTML = navLinksHtml;
+                  container.parentNode.insertBefore(navEl, container);
+                }
+
+                container.innerHTML = sortedCategories.map(cat => {
+                  const items = groups[cat];
+                  const sectionId = slugify(cat);
+                  const cardsHtml = items.map(item => `
         <article class="c-card">
             <a class="c-card__image" href="${item.url}" rel="noopener noreferrer" target="_blank">
                 <img alt="${item.title} Project Thumbnail"
@@ -1456,9 +1505,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 </header>
                 <p class="c-card__description">${item.description}</p>
             </div>
-        </article>
-                  `;
-                }).join('');
+        </article>`).join('');
+
+                  return `
+    <section class="playgrounds-section" id="${sectionId}">
+        <header class="playgrounds-section__header">
+            <h2 class="playgrounds-section__title">${cat} <span class="playgrounds-section__count">(${items.length})</span></h2>
+        </header>
+        <div class="playgrounds-grid">
+            ${cardsHtml}
+        </div>
+    </section>`;
+                }).join('\n');
               }
             } catch (err) {
               console.error("Failed to load playgrounds data:", err);
@@ -2135,6 +2193,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (window.updateActiveLinks) {
       window.updateActiveLinks();
+    }
+
+    if (window.location.hash && !window.location.hash.startsWith('#/')) {
+      const hashId = window.location.hash.substring(1);
+      const hashEl = document.getElementById(hashId);
+      if (hashEl) {
+        setTimeout(() => {
+          hashEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
     }
   };
 

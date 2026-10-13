@@ -5,6 +5,7 @@
     "thumbnail": "media/pages/playgrounds/doodle-canvas.png",
     "description": "A minimal and distraction-free browser-based sketchpad for doodling and exporting vector sketches. Built to be lightweight and responsive. I often use it as a digital whiteboard in meetings.",
     "date": "2026-07-06",
+    "category": "Tools",
     "tags": [
       "Art",
       "Programming"
@@ -16,6 +17,7 @@
     "thumbnail": "media/pages/playgrounds/hypergraph-plotter.png",
     "description": "An interactive, client-side hypergraph visualizer and vector layout engine. Use it to create interactive hypergraphs for your own exploration or classes, or to generate professional plots for your research.",
     "date": "2026-06-05",
+    "category": "Tools",
     "tags": [
       "Complex Systems",
       "Network Science",
@@ -28,6 +30,7 @@
     "thumbnail": "media/pages/playgrounds/edge-cases.png",
     "description": "A satellite symposium exploring surprising, creative, and unconventional applications of Network Science at CCS 2026.",
     "date": "2026-03-01",
+    "category": "Events and community initiatives",
     "tags": [
       "Complex Systems",
       "Network Science"
@@ -39,6 +42,7 @@
     "thumbnail": "media/pages/playgrounds/complexity-coffee.png",
     "description": "A community-driven virtual series from Complexity Global School alums, dedicated to fostering discussion and sharing new ideas in the field of complexity science.",
     "date": "2025-08-01",
+    "category": "Events and community initiatives",
     "tags": [
       "Complex Systems"
     ]
@@ -49,6 +53,7 @@
     "thumbnail": "media/pages/playgrounds/sympoietic-organism.png",
     "description": "An exploration of collaborative artmaking and complexity, a co-creative process for growing and evolving a digital lifeform.",
     "date": "2025-08-12",
+    "category": "Events and community initiatives",
     "tags": [
       "Art",
       "Complex Systems",
@@ -61,6 +66,7 @@
     "thumbnail": "media/pages/playgrounds/global-trade-network.png",
     "description": "An online global trade network visualization tool using UN ComTrade and WTO data.",
     "date": "2025-08-17",
+    "category": "Just for fun",
     "tags": [
       "Economics",
       "Network Science",
@@ -73,6 +79,7 @@
     "thumbnail": "media/pages/playgrounds/sunken-garden.png",
     "description": "An interactive map and guide to the College of the Atlantic Sunken Garden.",
     "date": "2025-08-16",
+    "category": "Just for fun",
     "tags": [
       "Ecology",
       "Geography & GIS",
@@ -85,6 +92,7 @@
     "thumbnail": "media/pages/playgrounds/marbler.png",
     "description": "A creative simulation tool that generates fluid, marble-like textures and patterns in the browser.",
     "date": "2025-09-07",
+    "category": "Tools",
     "tags": [
       "Art",
       "Modelling"
@@ -96,6 +104,7 @@
     "thumbnail": "media/pages/playgrounds/boid-ecosystem.png",
     "description": "A simple 3D boid simulator based on the 1987 paper by Craig Reynolds.",
     "date": "2025-08-30",
+    "category": "Just for fun",
     "tags": [
       "Complex Systems",
       "Modelling",
@@ -108,6 +117,7 @@
     "thumbnail": "media/pages/playgrounds/weaver.png",
     "description": "A creative tool for weaving pattern design and exploration in the browser.",
     "date": "2025-09-03",
+    "category": "Tools",
     "tags": [
       "Art",
       "Programming"
@@ -119,6 +129,7 @@
     "thumbnail": "media/pages/playgrounds/parchment.png",
     "description": "A no fuss Markdown editor with LaTeX and syntax highlighting support.",
     "date": "2025-09-07",
+    "category": "Tools",
     "tags": [
       "Programming"
     ]
@@ -129,6 +140,7 @@
     "thumbnail": "media/pages/playgrounds/abulafia.png",
     "description": "A device for textual transmutation based on Foucault's Pendulum, by Umberto Eco.",
     "date": "2025-08-31",
+    "category": "Just for fun",
     "tags": [
       "Programming"
     ]
@@ -139,6 +151,7 @@
     "thumbnail": "media/pages/playgrounds/synapse.png",
     "description": "A networked Markdown notetaking tool with some fancy features.",
     "date": "2025-09-07",
+    "category": "Tools",
     "tags": [
       "Network Science",
       "Programming"
@@ -150,6 +163,7 @@
     "thumbnail": "media/pages/playgrounds/ASCII3D.png",
     "description": "A browser-based 3D object ASCII viewer and converter.",
     "date": "2025-10-01",
+    "category": "Tools",
     "tags": [
       "Art",
       "Programming"
