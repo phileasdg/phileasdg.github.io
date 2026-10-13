@@ -1,14 +1,14 @@
-I'm a French-British human ecologist, data scientist, and scientific programmer specialized in complex systems and geospatial data.
+I'm a French-British human ecologist and computational scientist investigating complex systems across biology, society, and technology.
 
 ![About me portrait](../../media/pages/about/portrait-new.png =2696x1797)
 
-I currently work at Wolfram Research as an Applications Developer.
+I am a Research Fellow at the Wolfram Institute, working in theoretical and computational biology, and an Applications Developer at Wolfram Research.
 
 I'm an alum of the 2025 Complexity Global School, co-organized by the Santa Fe Institute and Universidad de Los Andes. Every year since 2024, I've mentored at the Wolfram Summer Research Institute, which I attended as a student in 2023. In 2022, I was a NOAA data science intern and Wolfram Research Student Ambassador. I am a United World Colleges alum from Robert Bosch College, class of 2017.
 
 I have a deep interest in complex systems, social and cognitive sciences, computer science, and process-driven art. My skills are broadly applicable in many scientific fields, and I am a collaborative, meticulous and very fast learner.
 
-I come from a family of teachers, musicians, and sailors, and I feel a profound attachment to education, the arts, and the ocean.
+I come from a family of teachers, artists, and sailors, and I feel a profound attachment to education, the arts, and the ocean.
 
 ---
 

@@ -483,13 +483,27 @@ document.addEventListener("DOMContentLoaded", () => {
     links.forEach(a => {
       let href = a.getAttribute('href');
       if (href) {
-        href = href.replace(/^https?:\/\/phileasdg\.github\.io\//, '');
-        if (!href.startsWith('http') && !href.startsWith('/') && !href.startsWith('#') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
+        // Only strip the site origin if it actually points to an internal route of this blog.
+        // Sibling projects hosted from other repos (e.g. sympoietic-art-organism, doodle-canvas)
+        // must remain absolute external URLs.
+        const isInternalBlogUrl = /^https?:\/\/phileasdg\.github\.io\/(posts|pages|tags|authors|media|assets|data)(\/|$)/.test(href) ||
+                                  /^https?:\/\/phileasdg\.github\.io\/?(#.*)?$/.test(href) ||
+                                  /^https?:\/\/phileasdg\.github\.io\/(index\.html|feed\.xml|feed\.json|favicon\.svg)(\/|$)?/.test(href);
+
+        if (isInternalBlogUrl) {
+          href = href.replace(/^https?:\/\/phileasdg\.github\.io\//, '');
+          if (!href.startsWith('http') && !href.startsWith('/') && !href.startsWith('#') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
+            if (!href.startsWith('media/') && !href.startsWith('assets/') && !href.startsWith('data/')) {
+              href = resolveRelativePath(href, originalPathContext);
+            }
+          }
+          a.setAttribute('href', getAbsoluteUrl(href));
+        } else if (!href.startsWith('http') && !href.startsWith('/') && !href.startsWith('#') && !href.startsWith('mailto:') && !href.startsWith('tel:') && !href.startsWith('javascript:')) {
           if (!href.startsWith('media/') && !href.startsWith('assets/') && !href.startsWith('data/')) {
             href = resolveRelativePath(href, originalPathContext);
           }
+          a.setAttribute('href', getAbsoluteUrl(href));
         }
-        a.setAttribute('href', getAbsoluteUrl(href));
       }
     });
 
