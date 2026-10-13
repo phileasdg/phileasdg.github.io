@@ -302,7 +302,7 @@ export function compilePages() {
             return `
     <section class="playgrounds-section" id="${sectionId}">
         <header class="playgrounds-section__header">
-            <h2 class="playgrounds-section__title">${cat} <span class="playgrounds-section__count">(${items.length})</span></h2>
+            <h2 class="playgrounds-section__title">${cat}</h2>
         </header>
         <div class="playgrounds-grid">
             ${cardsHtml}

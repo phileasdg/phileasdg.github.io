@@ -152,7 +152,38 @@ document.addEventListener('click', (event) => {
     const targetEl = document.getElementById(targetId);
     if (targetEl) {
       event.preventDefault();
-      targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const header = document.getElementById('js-header') || document.querySelector('.header');
+      if (header) {
+        header.classList.remove('is-hidden');
+        header.classList.add('is-visible');
+      }
+      const headerHeight = header ? header.offsetHeight : 70;
+      const targetHeader = targetEl.querySelector('.playgrounds-section__header') || targetEl;
+      const targetY = targetHeader.getBoundingClientRect().top + window.pageYOffset;
+      const scrollPos = Math.max(0, targetY - headerHeight - 12);
+
+      let scrollTimer;
+      const keepVisible = () => {
+        if (header) {
+          header.classList.remove('is-hidden');
+          header.classList.add('is-visible');
+        }
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(() => {
+          window.removeEventListener('scroll', keepVisible);
+          if (header) {
+            header.classList.remove('is-hidden');
+            header.classList.add('is-visible');
+          }
+        }, 500);
+      };
+      window.addEventListener('scroll', keepVisible, { passive: true });
+      keepVisible();
+
+      window.scrollTo({
+        top: scrollPos,
+        behavior: 'smooth'
+      });
       history.replaceState(null, null, window.location.pathname + window.location.search + href);
     }
     return;
@@ -1510,7 +1541,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   return `
     <section class="playgrounds-section" id="${sectionId}">
         <header class="playgrounds-section__header">
-            <h2 class="playgrounds-section__title">${cat} <span class="playgrounds-section__count">(${items.length})</span></h2>
+            <h2 class="playgrounds-section__title">${cat}</h2>
         </header>
         <div class="playgrounds-grid">
             ${cardsHtml}
@@ -2200,8 +2231,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const hashEl = document.getElementById(hashId);
       if (hashEl) {
         setTimeout(() => {
-          hashEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 100);
+          const header = document.getElementById('js-header') || document.querySelector('.header');
+          if (header) {
+            header.classList.remove('is-hidden');
+            header.classList.add('is-visible');
+          }
+          const headerHeight = header ? header.offsetHeight : 70;
+          const targetHeader = hashEl.querySelector('.playgrounds-section__header') || hashEl;
+          const targetY = targetHeader.getBoundingClientRect().top + window.pageYOffset;
+          const scrollPos = Math.max(0, targetY - headerHeight - 12);
+          window.scrollTo({ top: scrollPos, behavior: 'smooth' });
+        }, 150);
       }
     }
   };

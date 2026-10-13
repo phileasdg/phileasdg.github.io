@@ -151,11 +151,12 @@
 /* --- SECTION HEADERS & GROUPINGS --- */
 .playgrounds-section {
     margin-bottom: 5rem;
-    scroll-margin-top: calc(var(--header-height, 4rem) + 1.5rem);
+    scroll-margin-top: calc(var(--header-height, 4rem) + 0.75rem);
 }
 
 .playgrounds-section:last-child {
     margin-bottom: 2rem;
+    min-height: calc(100vh - var(--header-height, 6rem) - 4rem);
 }
 
 .playgrounds-section__header {
