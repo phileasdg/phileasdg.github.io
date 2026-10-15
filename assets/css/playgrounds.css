@@ -22,6 +22,12 @@
     display: flex;
     /* Ensure flex properties for internal layout */
     flex-direction: column;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out;
+}
+
+.playgrounds-grid > .c-card:hover {
+    border-color: rgba(0, 0, 0, 0.14);
 }
 
 /* On screens larger than mobile, create columns */
@@ -45,6 +51,7 @@
     /* Fixed height for the image window */
     overflow: hidden;
     /* Hide image overflow */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .playgrounds-grid .c-card__image img {

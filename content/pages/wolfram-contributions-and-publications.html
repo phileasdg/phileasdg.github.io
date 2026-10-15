@@ -33,12 +33,12 @@
 <p>The following lists are of projects I collaborated on with my mentees at past Wolfram Summer Research Institutes (formerly named the Wolfram Summer School). I'm proud to have contributed to each of these projects, and thankful for the time and discussions I've shared with my mentees during each one. Please reward their hard work and creativity by reading, sharing, and interacting with their project articles to show your support.</p>
 <style>
 <p>.wf-mentee-cards { display: flex; flex-direction: column; gap: 1.25rem; margin: 1.25rem 0 2.75rem 0; }
-.wf-card { display: flex; flex-direction: row; align-items: stretch; max-height: 140px; background: var(--white, #ffffff); border: 1px solid var(--lighter, #EAEAEA); border-radius: var(--border-radius, 8px); overflow: hidden; box-shadow: 1px 16px 18px -6px rgba(0, 0, 0, 0.06); text-decoration: none !important; color: inherit !important; transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out; }
+.wf-card { display: flex; flex-direction: row; align-items: stretch; max-height: 150px; background: var(--white, #ffffff); border: 1px solid var(--lighter, #EAEAEA); border-radius: var(--border-radius, 8px); overflow: hidden; box-shadow: 1px 16px 18px -6px rgba(0, 0, 0, 0.06); text-decoration: none !important; color: inherit !important; transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out; }
 .wf-card:hover { transform: translateY(-2px); box-shadow: 1px 24px 20px -6px rgba(0, 0, 0, 0.1); border-color: rgba(var(--color-rgb, 0, 122, 165), 0.35); }
-.wf-thumb { width: 280px; min-width: 280px; max-width: 280px; height: 140px; max-height: 140px; position: relative; background: #ffffff !important; display: flex; align-items: center; justify-content: center; padding: 0 !important; box-sizing: border-box; overflow: hidden; }
-.wf-thumb img { width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: center !important; display: block !important; transition: transform 0.3s ease-out; }
+.wf-thumb { width: 280px; min-width: 280px; max-width: 280px; height: 150px; max-height: 150px; position: relative; background: #ffffff !important; display: flex; align-items: center; justify-content: center; padding: 0.4rem; box-sizing: border-box; overflow: hidden; }
+.wf-thumb img { width: 100% !important; height: 100% !important; max-width: 100% !important; max-height: 140px !important; object-fit: contain !important; object-position: center !important; display: block !important; transition: transform 0.3s ease-out; }
 .wf-card:hover .wf-thumb img { transform: scale(1.03); }
-.wf-content { flex: 1; min-width: 0; padding: 0.9rem 1.3rem; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+.wf-content { flex: 1; min-width: 0; padding: 1rem 1.3rem; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
 .wf-title { font-family: var(--heading-font); font-size: 1.02rem; font-weight: 600; line-height: 1.35; color: var(--dark, #101011); margin: 0 0 0.35rem 0; transition: color 0.15s ease; }
 .wf-card:hover .wf-title { color: var(--color, #007AA5); }
 .wf-meta { font-size: 0.86rem; color: var(--gray-2, #6D6E6F); display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; margin: 0; line-height: 1.45; }
@@ -47,7 +47,7 @@
 .wf-institution { font-style: italic; color: var(--gray-2, #6D6E6F); }
 @media all and (max-width: 42em) {
 .wf-card { flex-direction: column; max-height: none; }
-.wf-thumb { width: 100%; min-width: 100%; max-width: 100%; height: 160px; max-height: 180px; padding: 0; }
+.wf-thumb { width: 100%; min-width: 100%; max-width: 100%; height: 160px; max-height: 180px; padding: 0.5rem; box-sizing: border-box; }
 .wf-content { padding: 1rem 1.15rem; }
 }
 .dark .wf-card, body.dark-theme .wf-card { background: #1b2636; border-color: #263342; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25); }

@@ -58,11 +58,16 @@ const server = http.createServer((req, res) => {
 });
 
 let buildTimeout;
+let isBuilding = false;
+
 function triggerBuild(filename) {
   clearTimeout(buildTimeout);
   buildTimeout = setTimeout(() => {
+    if (isBuilding) return;
+    isBuilding = true;
     console.log(`\n[Watch] File change detected: ${filename}. Rebuilding...`);
     exec('node scripts/build-posts.js', (err, stdout, stderr) => {
+      isBuilding = false;
       if (err) {
         console.error('[Watch] Build failed:', stderr);
       } else {
@@ -70,7 +75,7 @@ function triggerBuild(filename) {
         console.log('[Watch] Build successful!');
       }
     });
-  }, 100);
+  }, 200);
 }
 
 // Watch markdown directory recursively (native support on macOS)
@@ -83,11 +88,11 @@ if (fs.existsSync(markdownDir)) {
   });
 }
 
-// Watch content/custom-pages recursively
+// Watch content/custom-pages recursively (ignoring generated publications.html to prevent infinite loops)
 const customPagesDir = path.join(baseDir, 'content/custom-pages');
 if (fs.existsSync(customPagesDir)) {
   fs.watch(customPagesDir, { recursive: true }, (eventType, filename) => {
-    if (filename) {
+    if (filename && filename !== 'publications.html' && filename.endsWith('.html')) {
       triggerBuild(`content/custom-pages/${filename}`);
     }
   });

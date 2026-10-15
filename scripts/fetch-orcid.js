@@ -301,6 +301,13 @@ function writePublicationsHtml(works) {
   </article>
 </div>\n`;
 
+  if (fs.existsSync(customPagePath)) {
+    const existing = fs.readFileSync(customPagePath, 'utf8');
+    if (existing === html) {
+      return;
+    }
+  }
+
   fs.writeFileSync(customPagePath, html, 'utf8');
   console.log(`Updated ${customPagePath}`);
 }

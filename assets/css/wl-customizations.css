@@ -583,5 +583,35 @@ body.dark-theme .wf-card__sep {
   color: #475569;
 }
 
+/* --- Card & Tile Outline Styling --- */
+.c-card {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out;
+}
+
+.c-card:hover {
+  border-color: rgba(0, 0, 0, 0.14);
+}
+
+.c-card__image {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.dark .c-card,
+body.dark-theme .c-card {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .c-card:hover,
+body.dark-theme .c-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark .c-card__image,
+body.dark-theme .c-card__image {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+
 
 
