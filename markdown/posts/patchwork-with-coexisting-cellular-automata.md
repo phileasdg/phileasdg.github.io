@@ -1,4 +1,4 @@
-**Note: **This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live code or to download this text alongside the source code, please visit the original post [here](https://community.wolfram.com/groups/-/m/t/3608683?p_p_auth=C3EsWlzT). 
+**Note: **This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live code or to download this text alongside the source code, please visit the original post [here](https://community.wolfram.com/t/patchwork-with-coexisting-cellular-automata/26355). 
 
 ## Introduction
 
@@ -174,7 +174,7 @@ In this section, we explored techniques for confining cellular automata to speci
 
 ### How does it work?
 
-We can use the tools developed above to perform simulations in which several CA rules operate in parallel on non-overlapping regions of the simulation space. I'll refer to simulations like these as Coexisting CAs, and since I'm going to want to experiment with Coexisting CAs a lot, I'll define a *CoexistingCellularAutomata* function to automate the process of setting up and running these simulations. The full function definition can be found in the *Code Initialisation* section at the end of the [Wolfram Community version of this article](https://community.wolfram.com/groups/-/m/t/3608683?p_p_auth=A7Xz7iqu).
+We can use the tools developed above to perform simulations in which several CA rules operate in parallel on non-overlapping regions of the simulation space. I'll refer to simulations like these as Coexisting CAs, and since I'm going to want to experiment with Coexisting CAs a lot, I'll define a *CoexistingCellularAutomata* function to automate the process of setting up and running these simulations. The full function definition can be found in the *Code Initialisation* section at the end of the [Wolfram Community version of this article](https://community.wolfram.com/t/patchwork-with-coexisting-cellular-automata/26355).
 
 The core steps of the process are: 
 
@@ -216,7 +216,7 @@ I'll set constant zero initial conditions across the initial state.
 
 The spatial domains of each CA rule in the simulation must be specified using a single array of integer values corresponding to indices of the supplied rules in the rule list, or zero, meaning "no rules apply here". 
 
-We can arbitrarily partition the simulation space and assign whichever parts we choose to whichever rules we like. Here, I've used a helper function called *generateVoronoiCASpatialDomains* (defined in the *Code Initialisation* section of the [Wolfram Community version of this essay](https://community.wolfram.com/groups/-/m/t/3608683?p_p_auth=A7Xz7iqu)) to generate the rule domain definitions array.
+We can arbitrarily partition the simulation space and assign whichever parts we choose to whichever rules we like. Here, I've used a helper function called *generateVoronoiCASpatialDomains* (defined in the *Code Initialisation* section of the [Wolfram Community version of this essay](https://community.wolfram.com/t/patchwork-with-coexisting-cellular-automata/26355)) to generate the rule domain definitions array.
 
 *Define the spatial domains of each rule in the simulation space:*
 

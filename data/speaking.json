@@ -1,5 +1,22 @@
 [
   {
+    "title": "Tracking the Micro-Dynamics of Cultural Evolution; a Sympoietic Art Organism",
+    "host": "Edge Cases (CCS 2026)",
+    "date": "October 14, 2026",
+    "year": 2026,
+    "status": "past",
+    "links": [
+      {
+        "type": "event",
+        "url": "https://edgecases2026.org/"
+      },
+      {
+        "type": "project",
+        "url": "https://phileasdg.github.io/sympoietic-art-organism/"
+      }
+    ]
+  },
+  {
     "title": "Computational Modeling for Complex Systems",
     "host": "Illinois Tech",
     "date": "September 24, 2026",

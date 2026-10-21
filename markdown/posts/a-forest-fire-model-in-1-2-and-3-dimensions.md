@@ -1,4 +1,4 @@
-**Note: **This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post [here](https://community.wolfram.com/groups/-/m/t/3096615?p_p_auth=jA2YdLGR). 
+**Note: **This post was originally a short technical article I shared on the Wolfram Community forum. For an interactive experience with live demonstrations or to download this text and source code as a Wolfram Notebook, please visit the original post [here](https://community.wolfram.com/t/a-forest-fire-model-in-1-2-and-3-dimensions/23364). 
 
 ## Introduction
 
@@ -79,7 +79,7 @@ Following the convention for 1-dimensional cellular automata, we stack the array
 
 ![](https://phileasdg.github.io/media/posts/a-forest-fire-model-in-1-2-and-3-dimensions/Screenshot-2024-07-26-at-11.54.01.png =530x292)
 
-See some one dimensional trajectories in the animation below, or head to [the original post](https://community.wolfram.com/groups/-/m/t/3096615) to see an interactive example:
+See some one dimensional trajectories in the animation below, or head to [the original post](https://community.wolfram.com/t/a-forest-fire-model-in-1-2-and-3-dimensions/23364) to see an interactive example:
 
 ![](https://phileasdg.github.io/media/posts/a-forest-fire-model-in-1-2-and-3-dimensions/Screenshot-2024-07-26-at-12.07.29.png =609x208)
 ![](https://phileasdg.github.io/media/posts/a-forest-fire-model-in-1-2-and-3-dimensions/ForestFireAnim4-2.gif =434x499)
@@ -87,7 +87,7 @@ See some one dimensional trajectories in the animation below, or head to [the or
 
 In three dimensions, we can also define forested landscapes with more complicated topographies, for example, by layering different cell types. 
 
-The following example is of a forested layer on top of a layer of soil. Both layers vary in thickness (check out [the original post](https://community.wolfram.com/groups/-/m/t/3096615) for the interactive version).
+The following example is of a forested layer on top of a layer of soil. Both layers vary in thickness (check out [the original post](https://community.wolfram.com/t/a-forest-fire-model-in-1-2-and-3-dimensions/23364) for the interactive version).
 
 *Three-dimensional forest fire model trajectories through a dense hilly forest.*
 
