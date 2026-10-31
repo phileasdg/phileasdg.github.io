@@ -1,5 +1,18 @@
 [
   {
+    "title": "Wolfram Language Workshops: Introduction to Wolfram Language, Data Visualization, and Functional Programming",
+    "host": "University of Pennsylvania & Drexel University",
+    "date": "October 27–28, 2026",
+    "year": 2026,
+    "status": "past",
+    "links": [
+      {
+        "type": "slides (nb)",
+        "url": "https://www.wolframcloud.com/obj/23759b72-f065-4b24-a03b-d9dffddca081"
+      }
+    ]
+  },
+  {
     "title": "Tracking the Micro-Dynamics of Cultural Evolution; a Sympoietic Art Organism",
     "host": "Edge Cases (CCS 2026)",
     "date": "October 14, 2026",
